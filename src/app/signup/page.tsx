@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
@@ -26,10 +26,16 @@ const initialValues = {
     username: "",
     password: "",
 };
-
 export default function SignupPage() {
     const router = useRouter();
-    const savedTheme = localStorage.getItem('thememode');
+
+    const [savedTheme, setSavedTheme] = useState("");
+    // To Perform localStorage action on the client side after the window is loaded
+    useEffect(() => {
+        if (localStorage.getItem("thememode") !== null) {
+            setSavedTheme(localStorage.getItem('thememode')!);
+        }
+    }, [])
 
     const formik = useFormik({
         initialValues,
