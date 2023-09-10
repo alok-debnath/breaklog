@@ -50,8 +50,16 @@ export default function SignupPage() {
                 router.push('/login');
             })
             .catch((error) => {
-                if (error.response) {
+                if (error.response.data.error !== undefined) {
                     toast.error(error.response.data.error, {
+                        style: {
+                            padding: '15px',
+                            color: 'white',
+                            backgroundColor: 'rgb(214, 60, 60)',
+                        },
+                    });
+                } else {
+                    toast.error(error.message, {
                         style: {
                             padding: '15px',
                             color: 'white',
