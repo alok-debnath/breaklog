@@ -32,8 +32,11 @@ export default function LoginPage() {
         validationSchema,
         onSubmit: handleSubmit,
     });
-
-    function handleSubmit(values: any) {
+    interface FormValues {
+        email: string;
+        password: string;
+    }
+    function handleSubmit(values: FormValues) {
         axios.post('/api/users/login', values)
             .then((res) => {
                 console.log("Login success: ", res);
@@ -65,8 +68,8 @@ export default function LoginPage() {
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">
                         <h1 className="text-5xl font-bold underline">Breaklog</h1>
-                        <p className="py-6"><span className='text-2xl font-bold'>Welcome back!</span> Let's log you in to get started.</p>
-                        <p>Don't have an account yet? <Link href="/signup" className="font-semibold link link-hover">Sign up</Link></p>
+                        <p className="py-6"><span className='text-2xl font-bold'>Welcome back!</span> Don&apos;t log you in to get started.</p>
+                        <p>Don&apos;t have an account yet? <Link href="/signup" className="font-semibold link link-hover">Sign up</Link></p>
                     </div>
                     <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <div className="card-body">
