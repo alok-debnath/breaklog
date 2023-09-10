@@ -1,78 +1,94 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
+import { useFormik } from "formik";
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+    email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required')
+        .test('valid-email', 'Invalid email address', function (value) {
+            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+        }),
+    username: Yup.string()
+        .min(3, 'Username must be at least 3 characters')
+        .required('Username is required'),
+    password: Yup.string()
+        .min(6, 'Password must be at least 6 characters')
+        .required('Password is required'),
+});
+const initialValues = {
+    email: "",
+    username: "",
+    password: "",
+};
 
 export default function SignupPage() {
     const router = useRouter();
-    const [user, setUser] = React.useState({
-        email: "",
-        username: "",
-        password: "",
-    })
+    const savedTheme = localStorage.getItem('thememode');
 
-    const [buttonDisabled, setButtonDisabled] = React.useState(true);
-    const [loading, setLoading] = React.useState(false);
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        onSubmit: handleSubmit,
+    });
 
-    const onSignup = async () => {
-        try {
-            setLoading(true);
-            const res = await axios.post('/api/users/signup', user);
-            console.log("Signup success: ", res);
-            router.push('/login');
-        } catch (error: any) {
-            // console.log("Signup Failed: ", error.message);
-            toast.error(error.response.data.error, {
-                style: {
-                    padding: '15px',
-                    color: 'white',
-                    backgroundColor: 'rgb(214, 60, 60)',
-                },
+    function handleSubmit(values: any) {
+        axios.post('/api/users/signup', values)
+            .then((res) => {
+                console.log("Signup success: ", res);
+                router.push('/login');
+            })
+            .catch((error) => {
+                if (error.response) {
+                    toast.error(error.response.data.error, {
+                        style: {
+                            padding: '15px',
+                            color: 'white',
+                            backgroundColor: 'rgb(214, 60, 60)',
+                        },
+                    });
+                }
+            })
+            .finally(() => {
+                formik.setSubmitting(false);
             });
-        } finally {
-            setLoading(false);
-        }
     }
-
-    useEffect(() => {
-        if (user.email.length > 0 && user.password.length > 0 && user.username.length > 0) {
-            setButtonDisabled(false);
-        } else {
-            setButtonDisabled(true);
-        }
-    }, [user]);
     return (
         <>
-            <Toaster
-                position="top-left"
-                reverseOrder={false}
-            />
-            <div className="hero min-h-screen bg-base-200">
+            <div className="hero min-h-screen bg-base-200" data-theme={savedTheme}>
+                <Toaster
+                    position="top-left"
+                    reverseOrder={false}
+                />
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">
                         <h1 className="text-5xl font-bold underline">Breaklog</h1>
-                        <p className="py-6"><span className='text-2xl font-bold'>Welcome back!</span> Login or Create a new account to get started.</p>
-                        <Link href="/login">Login Page</Link>
+                        <p className="py-6"><span className='text-2xl font-bold'>Welcome!</span> Create a new account to get started.</p>
+                        <p>Already have an account? <Link href="/login" className="font-semibold link link-hover">Login</Link></p>
                     </div>
                     <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                         <div className="card-body">
-                            <form>
+                            <form onSubmit={formik.handleSubmit}>
                                 <div className="form-control">
                                     <label className="label" htmlFor="username">
                                         <span className="label-text">UserName</span>
                                     </label>
                                     <input
-                                        type="text"
+                                        type="username"
                                         placeholder="username"
-                                        className="input input-bordered"
+                                        className={`input input-bordered ${formik.touched.username && formik.errors.username ? "input-error" : ""}`}
                                         id="username"
                                         name="username"
-                                        value={user.username}
-                                        onChange={(e) => setUser({ ...user, username: e.target.value })}
+                                        value={formik.values.username}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
                                     />
-                                    {/* {errors.username && <div>{errors.username.message}</div>} */}
+                                    {formik.touched.username && formik.errors.username && <div className="error text-red-500 my-1">{formik.errors.username}</div>}
                                 </div>
                                 <div className="form-control">
                                     <label className="label" htmlFor="email">
@@ -81,13 +97,14 @@ export default function SignupPage() {
                                     <input
                                         type="email"
                                         placeholder="email"
-                                        className="input input-bordered"
+                                        className={`input input-bordered ${formik.touched.email && formik.errors.email ? "input-error" : ""}`}
                                         id="email"
                                         name="email"
-                                        value={user.email}
-                                        onChange={(e) => setUser({ ...user, email: e.target.value })}
+                                        value={formik.values.email}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
                                     />
-                                    {/* {errors.email && <div>{errors.email.message}</div>} */}
+                                    {formik.touched.email && formik.errors.email && <div className="error text-red-500 my-1">{formik.errors.email}</div>}
                                 </div>
                                 <div className="form-control">
                                     <label className="label" htmlFor="password">
@@ -96,30 +113,25 @@ export default function SignupPage() {
                                     <input
                                         type="password"
                                         placeholder="password"
-                                        className="input input-bordered"
-                                        id="password" name="password"
-                                        value={user.password}
-                                        onChange={(e) => setUser({ ...user, password: e.target.value })}
+                                        className={`input input-bordered ${formik.touched.password && formik.errors.password ? "input-error" : ""}`}
+                                        id="password"
+                                        name="password"
+                                        value={formik.values.password}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
                                     />
-                                    {/* {errors.password && <div>{errors.password.message}</div>} */}
-                                    {/* <label className="label">
-                                    <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-                                </label> */}
+                                    {formik.touched.password && formik.errors.password && <div className="error text-red-500 my-1">{formik.errors.password}</div>}
                                 </div>
                                 <div className="form-control mt-6">
-                                    <button type='button' className={`btn btn-primary ${buttonDisabled ? "btn-disabled" : ""}`} onClick={onSignup}>
+                                    <button type='submit' className={`btn btn-primary ${!formik.isValid || formik.isSubmitting ? "btn-disabled" : ""}`}>
                                         Next
-                                        {loading ?
-                                            <>
-                                                <span className="loading loading-spinner"></span>
-                                            </>
-                                            :
-                                            <>
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                                                </svg>
-                                            </>
-                                        }
+                                        {formik.isSubmitting ? (
+                                            <span className="loading loading-spinner"></span>
+                                        ) : (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                                            </svg>
+                                        )}
                                     </button>
                                 </div>
                             </form>
