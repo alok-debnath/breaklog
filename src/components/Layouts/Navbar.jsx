@@ -1,4 +1,26 @@
-const Navbar = ({ breaklogMode }) => {
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+
+const Navbar = ({ breaklogMode, userData }) => {
+  const router = useRouter();
+
+  const logout = async () => {
+    try {
+      await axios.get("/api/users/logout");
+      router.push("/login");
+    } catch (error) {
+      // console.log(error.message);
+      toast.error(error.message, {
+        style: {
+          padding: '15px',
+          color: 'white',
+          backgroundColor: 'rgb(214, 60, 60)',
+        },
+      })
+    }
+  }
   return (
     <>
       <div className="navbar bg-base-100 fixed z-10">
@@ -38,7 +60,10 @@ const Navbar = ({ breaklogMode }) => {
           <div className="dropdown dropdown-end">
             <details>
               <summary className="btn rounded-3xl">
-                User Name
+                {userData ? (
+                  userData.username
+                ) : ("Error")
+                }
               </summary>
               <ul tabIndex={0} className="menu menu-lg dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <li>
@@ -48,7 +73,7 @@ const Navbar = ({ breaklogMode }) => {
                   </a>
                 </li>
                 <li onClick={() => window.setting_modal.showModal()}><a>Settings</a></li>
-                <li><a>Logout</a></li>
+                <li><a onClick={logout}>Logout</a></li>
               </ul>
             </details>
           </div>

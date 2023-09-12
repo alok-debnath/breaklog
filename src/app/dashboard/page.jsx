@@ -5,19 +5,38 @@ import Navbar from '@/components/Layouts/Navbar'
 import SettingsModal from '@/components/Layouts/SettingsModal';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
+import axios from 'axios';
 
 const Index = () => {
+    const [userData, setUserData] = useState();
     const [breaklogMode, setBreaklogMode] = useState();
 
     //  For theme //
     const [themeMode, setThemeMode] = useState("night");
 
+    const fetchUserData = async () => {
+        try {
+            const res = await axios.get('/api/users/me');
+            setUserData(res.data.data);
+        } catch (error) {
+            toast.error(error.message, {
+                style: {
+                    padding: '15px',
+                    color: 'white',
+                    backgroundColor: 'rgb(214, 60, 60)',
+                },
+            });
+        }
+    };
     useEffect(() => {
         const savedTheme = localStorage.getItem('thememode');
 
         if (savedTheme) {
             setThemeMode(savedTheme);
         }
+        
+        // fetch user details
+        fetchUserData();
     }, []);
 
     const themeToggle = (themeName) => {
@@ -26,7 +45,7 @@ const Index = () => {
     };
     // END //
 
-    
+
 
 
     return (
@@ -34,6 +53,7 @@ const Index = () => {
             <div data-theme={themeMode}>
                 <div>
                     <Navbar
+                        userData={userData}
                         breaklogMode={breaklogMode}
                     />
                 </div>
@@ -82,8 +102,8 @@ const Index = () => {
                 />
                 <div>
                     <NavbarBottom
-                        // setShowToast={setShowToast}
-                        // fetchLogs={fetchLogs}
+                    // setShowToast={setShowToast}
+                    // fetchLogs={fetchLogs}
                     />
                 </div>
             </div>
