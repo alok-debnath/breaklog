@@ -6,6 +6,7 @@ import axios from "axios";
 import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from "formik";
 import * as Yup from 'yup';
+// import { sendEmail } from "@/helpers/mailer";
 
 const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -15,7 +16,8 @@ const validationSchema = Yup.object().shape({
             return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
         }),
     username: Yup.string()
-        .min(3, 'Username must be at least 3 characters')
+        .matches(/^[a-zA-Z0-9]*$/, 'Username must contain only letters and numbers')
+        .min(4, 'Username must be at least 4 characters')
         .required('Username is required'),
     password: Yup.string()
         .min(6, 'Password must be at least 6 characters')
@@ -43,34 +45,36 @@ export default function SignupPage() {
         onSubmit: handleSubmit,
     });
 
-    function handleSubmit(values: any) {
-        axios.post('/api/users/signup', values)
-            .then((res) => {
-                console.log("Signup success: ", res);
-                router.push('/login');
-            })
-            .catch((error) => {
-                if (error.response.data.error !== undefined) {
-                    toast.error(error.response.data.error, {
-                        style: {
-                            padding: '15px',
-                            color: 'white',
-                            backgroundColor: 'rgb(214, 60, 60)',
-                        },
-                    });
-                } else {
-                    toast.error(error.message, {
-                        style: {
-                            padding: '15px',
-                            color: 'white',
-                            backgroundColor: 'rgb(214, 60, 60)',
-                        },
-                    });
-                }
-            })
-            .finally(() => {
-                formik.setSubmitting(false);
-            });
+    async function handleSubmit(values: any) {
+        try {
+            const res = await axios.post('/api/users/signup', values);
+            alert(res.data.data.id);
+            console.log("Signup success: ", res);
+
+            // send email
+            // await sendEmail({ email: values.email, emailType: "VERIFY", userID: res.data.data.id })
+            router.push('/login');
+        } catch (error: any) {
+            if (error.response.data.error !== undefined) {
+                toast.error(error.response.data.error, {
+                    style: {
+                        padding: '15px',
+                        color: 'white',
+                        backgroundColor: 'rgb(214, 60, 60)',
+                    },
+                });
+            } else {
+                toast.error(error.message, {
+                    style: {
+                        padding: '15px',
+                        color: 'white',
+                        backgroundColor: 'rgb(214, 60, 60)',
+                    },
+                });
+            }
+        } finally {
+            formik.setSubmitting(false);
+        }
     }
     return (
         <>
@@ -98,7 +102,7 @@ export default function SignupPage() {
                                         className={`input input-bordered ${formik.touched.username && formik.errors.username ? "input-error" : ""}`}
                                         id="username"
                                         name="username"
-                                        value={formik.values.username}
+                                        value={formik.values.username.toLowerCase()}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                     />
@@ -114,7 +118,7 @@ export default function SignupPage() {
                                         className={`input input-bordered ${formik.touched.email && formik.errors.email ? "input-error" : ""}`}
                                         id="email"
                                         name="email"
-                                        value={formik.values.email}
+                                        value={formik.values.email.toLowerCase()}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                     />

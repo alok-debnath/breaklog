@@ -98,7 +98,7 @@ export default function LoginPage() {
                                         className={`input input-bordered ${formik.touched.email && formik.errors.email ? "input-error" : ""}`}
                                         id="email"
                                         name="email"
-                                        value={formik.values.email}
+                                        value={formik.values.email.toLowerCase()}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
                                     />

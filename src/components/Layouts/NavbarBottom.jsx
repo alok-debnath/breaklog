@@ -1,21 +1,31 @@
+import axios from 'axios';
 import Button from '../UI/Button'
-// import { addLog } from '../../Utility/indexedDBUtils';
+import { useState } from 'react';
 
-const NavbarBottom = ({ setShowToast, fetchLogs }) => {
+const NavbarBottom = ({ setLoadingDashboard, fetchUserLog }) => {
+    const [loading, setLoading] = useState(false);
     const logEntry = async () => {
-        const newLog = {
-            log_status: 'enter',
-            timestamp: new Date(),
-        };
+        try {
+            setLoading(true);
+            const currentDate = new Date();
+            const utcOffset = 5.5 * 60; // 5 hours and 30 minutes in minutes
+            const localTime = new Date(currentDate.getTime() + utcOffset * 60 * 1000);
+            const values = {
+                datetime: localTime.toISOString(),
+            };
 
-        // try {
-        //     await addLog(newLog);
-        //     setShowToast('Log entry added successfully[success]'); // Show toast message
-        //     fetchLogs();
-        // } catch (error) {
-        //     console.error('Error adding log entry:', error);
-        //     setShowToast('Error adding log entry'); // Show toast message
-        // }
+            const res = await axios.post('/api/users/userlogenter', values);
+            await fetchUserLog();
+            setLoading(false);
+        } catch (error) {
+            toast.error("Error while log entry: ", error.message, {
+                style: {
+                    padding: '15px',
+                    color: 'white',
+                    backgroundColor: 'rgb(214, 60, 60)',
+                },
+            });
+        }
     };
     return (
         <>
@@ -23,7 +33,7 @@ const NavbarBottom = ({ setShowToast, fetchLogs }) => {
                 <div className='cursor-default'>
                     <div className="flex gap-3">
                         <div>
-                            <div className="dropdown dropdown-top">
+                            <div className={`dropdown dropdown-top ${loading ? 'btn-disabled' : ''}`}>
                                 <details>
                                     <summary className='btn btn-fill'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -39,8 +49,15 @@ const NavbarBottom = ({ setShowToast, fetchLogs }) => {
                         </div>
                         <div>
                             <Button
-                                className="btn"
-                                text="Enter log"
+                                className={`btn ${loading ? 'btn-disabled' : ''}`}
+                                text={
+                                    <>
+                                        <p>Enter log</p>
+                                        {loading &&
+                                            <span className="loading loading-ring loading-md"></span>
+                                        }
+
+                                    </>}
                                 onclick={logEntry}
                             />
                         </div>

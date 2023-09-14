@@ -27,6 +27,7 @@ model User {
   forgot_password_token_expiry DateTime?
   verify_token                 String?
   verify_token_expiry          DateTime?
+  isVerified                   Boolean   @default(false)
   logs                         Log[]
 }
 

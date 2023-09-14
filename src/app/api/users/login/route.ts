@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
         }
         // create token
         const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET as string, {
-            expiresIn: "1d"
+            expiresIn: "30d"
         })
         const reponse = NextResponse.json({
             message:"Login successful",
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
         })
         reponse.cookies.set("token", token,{
             httpOnly: true,
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // Expires in 30 days
         })
 
         return reponse;
