@@ -36,7 +36,10 @@ export async function POST(request: NextRequest) {
 
         let logExit = 0;
         let logEnter = 0;
+        let dayStart = 0;
+        let dayEnd = 0;
         let isDayStarted = false;
+        let isDayEnded = false;
 
         let currentBreakTime = null;
         let recentLog = null;
@@ -44,8 +47,12 @@ export async function POST(request: NextRequest) {
         logs.map(log => {
             if (log.log_status === 'day start') {
                 isDayStarted = true;
-
+                dayStart = log.createdAt.getTime();
+            } else if (log.log_status === 'day end') {
+                isDayEnded = true;
+                dayEnd = log.createdAt.getTime();
             }
+
 
             if (isDayStarted) {
                 if (log.log_status === 'exit') {
@@ -59,12 +66,18 @@ export async function POST(request: NextRequest) {
                     logExit = 0;
                     logEnter = 0;
                 }
-                // if (logExit !== 0 && logEnter === 0) {
-                //     currentBreakTime = log.createdAt;
-                // }
             }
 
         })
+        if (isDayStarted) {
+            if (isDayEnded) {
+                workDone = (dayEnd - dayStart) - breakTime;
+            } else {
+                const currDay = new Date();
+                workDone = (currDay.getTime() - dayStart) - breakTime;
+            }
+        }
+
         // Check if the logs array is not empty
         if (logs.length > 0) {
             const lastLog = logs[logs.length - 1];
@@ -84,6 +97,7 @@ export async function POST(request: NextRequest) {
             return `${hours}:${minutes}:${seconds}`;
         };
         const formattedTime = formatTime(breakTime);
+        const formattedWorkDone = formatTime(workDone);
 
         return NextResponse.json({
             message: "Logs fetched successfully",
@@ -94,6 +108,7 @@ export async function POST(request: NextRequest) {
                 breakTime: `${formattedTime}`,
                 currentbreak: currentBreakTime,
                 lastlogstatus: recentLog,
+                workdone: formattedWorkDone
                 // workDone: `${workDoneHours} hours ${workDoneMinutes} minutes`,
             },
         });

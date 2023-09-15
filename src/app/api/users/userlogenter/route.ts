@@ -9,8 +9,9 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const userId = await getDataFromToken(request);
-        // const reqBody = await request.json();
-        // const { datetime } = reqBody;
+        const reqBody = await request.json();
+        const { logtype } = reqBody;
+
         const startOfToday = new Date();
         startOfToday.setUTCHours(0, 0, 0, 0); // Set start time to 00:00:00.000Z
 
@@ -30,15 +31,22 @@ export async function POST(request: NextRequest) {
         })
 
         let logToBeSaved = "";
-        if (recentLog === null) {
-            logToBeSaved = "day start";
-        } else if (recentLog.log_status === "day start") {
-            logToBeSaved = "exit";
-        } else if (recentLog.log_status === "enter") {
-            logToBeSaved = "exit";
-        } else if (recentLog.log_status === "exit") {
-            logToBeSaved = "enter";
+
+        if (logtype === "basic log") {
+            if (recentLog === null) {
+                logToBeSaved = "day start";
+            } else if (recentLog.log_status === "day start") {
+                logToBeSaved = "exit";
+            } else if (recentLog.log_status === "enter") {
+                logToBeSaved = "exit";
+            } else if (recentLog.log_status === "exit") {
+                logToBeSaved = "enter";
+            }
+
+        }else if(logtype === "day end"){
+            logToBeSaved = "day end";
         }
+
 
 
         const log = await prisma.log.create({

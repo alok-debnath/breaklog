@@ -3,40 +3,16 @@ import Button from '../UI/Button'
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
-const NavbarBottom = ({ setLoadingDashboard, fetchUserLog }) => {
-    const [loading, setLoading] = useState(false);
-    const logEntry = async () => {
-        try {
-            setLoading(true);
-            setLoadingDashboard(true);
-            const currentDate = new Date();
-            const utcOffset = 5.5 * 60; // 5 hours and 30 minutes in minutes
-            const localTime = new Date(currentDate.getTime() + utcOffset * 60 * 1000);
-            const values = {
-                datetime: localTime.toISOString(),
-            };
+const NavbarBottom = ({ loading, logEntry, workData }) => {
+    // const [loading, setLoading] = useState(false);
 
-            const res = await axios.post('/api/users/userlogenter', values);
-            await fetchUserLog();
-            setLoading(false);
-            setLoadingDashboard(false);
-        } catch (error) {
-            toast.error("Error while log entry: ", error, {
-                style: {
-                    padding: '15px',
-                    color: 'white',
-                    backgroundColor: 'rgb(214, 60, 60)',
-                },
-            });
-        }
-    };
     return (
         <>
             <div className="btm-nav btm-nav-md">
                 <div className='cursor-default'>
                     <div className="flex gap-3">
                         <div>
-                            <div className={`dropdown dropdown-top ${loading ? 'btn-disabled' : ''}`}>
+                            <div className={`dropdown dropdown-top ${["day end"].includes(workData.lastlogstatus) || loading ? 'btn-disabled' : ''}`}>
                                 <details>
                                     <summary className='btn btn-fill'>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -52,7 +28,7 @@ const NavbarBottom = ({ setLoadingDashboard, fetchUserLog }) => {
                         </div>
                         <div>
                             <Button
-                                className={`btn ${loading ? 'btn-disabled' : ''}`}
+                                className={`btn ${["day end"].includes(workData.lastlogstatus) || loading ? 'btn-disabled' : ''}`}
                                 text={
                                     <>
                                         <p>Enter log</p>
@@ -61,7 +37,7 @@ const NavbarBottom = ({ setLoadingDashboard, fetchUserLog }) => {
                                         }
 
                                     </>}
-                                onclick={logEntry}
+                                onclick={() => logEntry("basic log")}
                             />
                         </div>
                     </div>

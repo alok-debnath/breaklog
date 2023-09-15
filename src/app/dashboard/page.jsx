@@ -38,6 +38,29 @@ const Index = () => {
     //  For theme //
     const [themeMode, setThemeMode] = useState("night");
 
+    const logEntry = async (value) => {
+        try {
+            setLoading(true);
+            // setLoadingDashboard(true);
+            const values = {
+                logtype: value,
+            };
+
+            const res = await axios.post('/api/users/userlogenter', values);
+            await fetchUserLog();
+            setLoading(false);
+            // setLoadingDashboard(false);
+        } catch (error) {
+            toast.error("Error while log entry: ", error, {
+                style: {
+                    padding: '15px',
+                    color: 'white',
+                    backgroundColor: 'rgb(214, 60, 60)',
+                },
+            });
+        }
+    };
+
     const fetchUserData = async () => {
         try {
             const res = await axios.get('/api/users/me');
@@ -120,6 +143,26 @@ const Index = () => {
                                         <p>{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long' })},</p>
                                         <p>{new Date().toLocaleDateString('en-US', { weekday: 'long' })}</p>
                                         <p className='font-medium my-2'>
+                                            {workData.workdone ? (
+                                                <>
+                                                    Work done: {workData.workdone} (hh:mm:ss)
+                                                </>
+                                            ) : (
+                                                <span className="animate-pulse">
+                                                    <span className="flex space-x-4">
+                                                        <span className="flex-1 space-y-9 py-1">
+                                                            <span className="space-y-3">
+                                                                <span className="grid grid-cols-5 gap-3">
+                                                                    <span className="h-2 bg-slate-700 rounded col-span-3"></span>
+                                                                    <span className="h-2 bg-slate-700 rounded col-span-2"></span>
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                            )}
+                                        </p>
+                                        <p className='font-medium my-2'>
                                             {workData.breakTime ? (
                                                 <>
                                                     Break taken: {workData.breakTime} (hh:mm:ss)
@@ -177,6 +220,7 @@ const Index = () => {
                                     <Button
                                         text="End Day"
                                         className={`btn btn-primary w-full rounded-2xl rounded-t-none ${["exit", null, "day end"].includes(workData.lastlogstatus) || loading ? 'btn-disabled' : ''}`}
+                                        onclick={() => logEntry("day end")}
                                     />
                                 </div>
                             </div>
@@ -189,6 +233,12 @@ const Index = () => {
                             </div>
                         </div>
                     }
+                    <div className='fixed bottom-5 right-5 items-center justify-end mb-14'>
+                        <button
+                            class="btn bg-primary/40 shadow-xl backdrop-blur-md"
+                            onClick={() => fetchUserLog()}
+                        >Refresh</button>
+                    </div>
                 </div>
                 <SettingsModal
                     themeToggle={themeToggle}
@@ -199,8 +249,9 @@ const Index = () => {
                 <div>
                     <NavbarBottom
                         // setShowToast={setShowToast}
-                        setLoadingDashboard={setLoading}
-                        fetchUserLog={fetchUserLog}
+                        workData={workData}
+                        loading={loading}
+                        logEntry={logEntry}
                     />
                 </div>
             </div>
