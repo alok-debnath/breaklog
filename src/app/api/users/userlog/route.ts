@@ -38,8 +38,8 @@ export async function POST(request: NextRequest) {
         let logEnter = 0;
         let isDayStarted = false;
 
-
-        let currentBreakTime;
+        let currentBreakTime = null;
+        let recentLog = null;
 
         logs.map(log => {
             if (log.log_status === 'day start') {
@@ -59,9 +59,9 @@ export async function POST(request: NextRequest) {
                     logExit = 0;
                     logEnter = 0;
                 }
-                if (logExit !== 0 && logEnter === 0) {
-                    currentBreakTime = log.createdAt;
-                }
+                // if (logExit !== 0 && logEnter === 0) {
+                //     currentBreakTime = log.createdAt;
+                // }
             }
 
         })
@@ -71,9 +71,8 @@ export async function POST(request: NextRequest) {
 
             if (lastLog.log_status === 'exit') {
                 currentBreakTime = lastLog.createdAt;
-            }else{
-                currentBreakTime = null
             }
+            recentLog = lastLog.log_status;
         }
 
         const formatTime = (milliseconds: any) => {
@@ -94,6 +93,7 @@ export async function POST(request: NextRequest) {
             {
                 breakTime: `${formattedTime}`,
                 currentbreak: currentBreakTime,
+                lastlogstatus: recentLog,
                 // workDone: `${workDoneHours} hours ${workDoneMinutes} minutes`,
             },
         });

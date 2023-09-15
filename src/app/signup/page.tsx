@@ -48,12 +48,14 @@ export default function SignupPage() {
     async function handleSubmit(values: any) {
         try {
             const res = await axios.post('/api/users/signup', values);
-            alert(res.data.data.id);
-            console.log("Signup success: ", res);
+            // alert(res.data.data.id);
+            // console.log("Signup success: ", res);
 
             // send email
             // await sendEmail({ email: values.email, emailType: "VERIFY", userID: res.data.data.id })
-            router.push('/login');
+            if (res.data.success = true) {
+                router.push('/login');
+            }
         } catch (error: any) {
             if (error.response.data.error !== undefined) {
                 toast.error(error.response.data.error, {

@@ -1,12 +1,14 @@
 import axios from 'axios';
 import Button from '../UI/Button'
 import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const NavbarBottom = ({ setLoadingDashboard, fetchUserLog }) => {
     const [loading, setLoading] = useState(false);
     const logEntry = async () => {
         try {
             setLoading(true);
+            setLoadingDashboard(true);
             const currentDate = new Date();
             const utcOffset = 5.5 * 60; // 5 hours and 30 minutes in minutes
             const localTime = new Date(currentDate.getTime() + utcOffset * 60 * 1000);
@@ -17,8 +19,9 @@ const NavbarBottom = ({ setLoadingDashboard, fetchUserLog }) => {
             const res = await axios.post('/api/users/userlogenter', values);
             await fetchUserLog();
             setLoading(false);
+            setLoadingDashboard(false);
         } catch (error) {
-            toast.error("Error while log entry: ", error.message, {
+            toast.error("Error while log entry: ", error, {
                 style: {
                     padding: '15px',
                     color: 'white',

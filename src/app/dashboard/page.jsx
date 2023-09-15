@@ -64,10 +64,10 @@ const Index = () => {
             setWorkData(res.data.workdata);
             if (res.data.workdata.currentbreak !== null) {
                 setCurrBreak(res.data.workdata.currentbreak);
+                console.log(liveBreaks);
             } else {
                 setCurrBreak();
                 setLiveBreaks();
-
             }
         } catch (error) {
             setLoading(false);
@@ -120,9 +120,9 @@ const Index = () => {
                                         <p>{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long' })},</p>
                                         <p>{new Date().toLocaleDateString('en-US', { weekday: 'long' })}</p>
                                         <p className='font-medium my-2'>
-                                            Break taken: {workData.breakTime ? (
+                                            {workData.breakTime ? (
                                                 <>
-                                                    {workData.breakTime} (hh:mm:ss)
+                                                    Break taken: {workData.breakTime} (hh:mm:ss)
                                                 </>
                                             ) : (
                                                 <span className="animate-pulse">
@@ -130,6 +130,7 @@ const Index = () => {
                                                         <span className="flex-1 space-y-9 py-1">
                                                             <span className="space-y-3">
                                                                 <span className="grid grid-cols-5 gap-3">
+                                                                    <span className="h-2 bg-slate-700 rounded col-span-3"></span>
                                                                     <span className="h-2 bg-slate-700 rounded col-span-2"></span>
                                                                 </span>
                                                             </span>
@@ -175,7 +176,7 @@ const Index = () => {
                                 <div className='mb-20'>
                                     <Button
                                         text="End Day"
-                                        className="btn btn-primary w-full rounded-2xl rounded-t-none"
+                                        className={`btn btn-primary w-full rounded-2xl rounded-t-none ${["exit", null, "day end"].includes(workData.lastlogstatus) || loading ? 'btn-disabled' : ''}`}
                                     />
                                 </div>
                             </div>
