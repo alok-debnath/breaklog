@@ -9,65 +9,96 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const userId = await getDataFromToken(request);
-        const reqBody = await request.json();
-        const { datetime } = reqBody;
-
-        const currentDate = new Date(datetime);
-        const currentHour = currentDate.getHours();
-        const currentDay = currentDate.getDate();
 
         const startOfToday = new Date();
-        startOfToday.setUTCHours(6, 0, 0, 0); // Set start time to 6:00:00.000Z
-
-        const startOfYesterday = new Date();
-        startOfYesterday.setDate(startOfYesterday.getDate() - 1);
-        startOfYesterday.setUTCHours(6, 0, 0, 0); // Set start time to 6:00:00.000Z
-
-        let whereCondition = {};
-
-
-        if (
-            (currentHour >= 6 && currentDay === startOfToday.getDate()) ||
-            (currentHour <= 5 && currentDay === startOfYesterday.getDate())
-        ) {
-            // If user logs between 6am and 11:59pm (current day) or between 12:01am and 5:59am (next day), fetch logs accordingly
-            if (currentHour >= 6 && currentDay === startOfToday.getDate()) {
-                whereCondition = {
-                    userId: userId,
-                    createdAt: {
-                        gt: startOfToday,
-                    },
-                };
-            } else if (currentHour <= 5 && currentDay === startOfYesterday.getDate()) {
-                whereCondition = {
-                    userId: userId,
-                    createdAt: {
-                        gt: startOfYesterday,
-                        lt: startOfToday,
-                    },
-                };
-            }
-        }
-
+        startOfToday.setUTCHours(0, 0, 0, 0); // Set start time to 00:00:00.000Z
 
         const logs = await prisma.log.findMany({
-            where: whereCondition,
+            where: {
+                userId: userId,
+                createdAt: {
+                    gte: startOfToday,
+                },
+            },
             select: {
                 id: true,
                 createdAt: true,
                 log_status: true,
             },
             orderBy: {
-                createdAt: 'desc'
-            }
+                createdAt: 'asc',
+            },
         });
+
+        //
+        let breakTime = 0; // in seconds
+        let workDone = 0; // in seconds
+
+        let logExit = 0;
+        let logEnter = 0;
+        let isDayStarted = false;
+
+
+        let currentBreakTime;
+
+        logs.map(log => {
+            if (log.log_status === 'day start') {
+                isDayStarted = true;
+
+            }
+
+            if (isDayStarted) {
+                if (log.log_status === 'exit') {
+                    logExit = log.createdAt.getTime();
+                } else if (log.log_status === 'enter') {
+                    logEnter = log.createdAt.getTime();
+                }
+
+                if (logExit !== 0 && logEnter !== 0) {
+                    breakTime = breakTime + (logEnter - logExit);
+                    logExit = 0;
+                    logEnter = 0;
+                }
+                if (logExit !== 0 && logEnter === 0) {
+                    currentBreakTime = log.createdAt;
+                }
+            }
+
+        })
+        // Check if the logs array is not empty
+        if (logs.length > 0) {
+            const lastLog = logs[logs.length - 1];
+
+            if (lastLog.log_status === 'exit') {
+                currentBreakTime = lastLog.createdAt;
+            }else{
+                currentBreakTime = null
+            }
+        }
+
+        const formatTime = (milliseconds: any) => {
+            const totalSeconds = Math.floor(milliseconds / 1000);
+            const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
+            const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+
+            return `${hours}:${minutes}:${seconds}`;
+        };
+        const formattedTime = formatTime(breakTime);
 
         return NextResponse.json({
             message: "Logs fetched successfully",
-            my: whereCondition,
             data: logs,
+            workdata:
+            // `${formattedTime}`,
+            {
+                breakTime: `${formattedTime}`,
+                currentbreak: currentBreakTime,
+                // workDone: `${workDoneHours} hours ${workDoneMinutes} minutes`,
+            },
         });
-    } catch (error: any) {
+    }
+    catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 400 })
     }
 

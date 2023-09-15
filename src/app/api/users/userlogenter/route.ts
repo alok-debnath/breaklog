@@ -9,8 +9,36 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const userId = await getDataFromToken(request);
-        const reqBody = await request.json();
-        const { datetime } = reqBody;
+        // const reqBody = await request.json();
+        // const { datetime } = reqBody;
+        const startOfToday = new Date();
+        startOfToday.setUTCHours(0, 0, 0, 0); // Set start time to 00:00:00.000Z
+
+        const recentLog = await prisma.log.findFirst({
+            where: {
+                userId: userId,
+                createdAt: {
+                    gte: startOfToday,
+                },
+            },
+            select: {
+                log_status: true,
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        })
+
+        let logToBeSaved = "";
+        if (recentLog === null) {
+            logToBeSaved = "day start";
+        } else if (recentLog.log_status === "day start") {
+            logToBeSaved = "exit";
+        } else if (recentLog.log_status === "enter") {
+            logToBeSaved = "exit";
+        } else if (recentLog.log_status === "exit") {
+            logToBeSaved = "enter";
+        }
 
 
         const log = await prisma.log.create({
@@ -18,8 +46,8 @@ export async function POST(request: NextRequest) {
                 User: {
                     connect: { id: userId },
                 },
-                createdAt: datetime,
-                log_status: "enter",
+                // createdAt: datetime,
+                log_status: logToBeSaved,
             },
         });
 

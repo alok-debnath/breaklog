@@ -11,8 +11,29 @@ import axios from 'axios';
 const Index = () => {
     const [userData, setUserData] = useState();
     const [logs, setLogs] = useState([]);
+    const [workData, setWorkData] = useState([]);
     const [breaklogMode, setBreaklogMode] = useState();
     const [loading, setLoading] = useState(false);
+
+    const [currBreak, setCurrBreak] = useState();
+    const [liveBreaks, setLiveBreaks] = useState(0);
+    const calculateBreakTime = () => {
+        const breakTime = new Date(currBreak);
+        const currentTime = new Date();
+        const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
+        const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
+        setLiveBreaks(diffInMinutes);
+        // console.log(currBreak);
+    };
+    useEffect(() => {
+        calculateBreakTime();
+        const intervalId = setInterval(() => {
+            calculateBreakTime();
+        }, 60000);
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, [currBreak]);
 
     //  For theme //
     const [themeMode, setThemeMode] = useState("night");
@@ -34,17 +55,22 @@ const Index = () => {
     const fetchUserLog = async () => {
         try {
             setLoading(true);
-            const currentDate = new Date();
-            const utcOffset = 5.5 * 60; // 5 hours and 30 minutes in minutes
-            const localTime = new Date(currentDate.getTime() + utcOffset * 60 * 1000);
-            const values = {
-                datetime: localTime.toISOString(),
-            };
 
-            const res = await axios.post('/api/users/userlog', values);
+            const res = await axios.post('/api/users/userlog',
+                // values
+            );
             setLoading(false);
             setLogs(res.data.data);
+            setWorkData(res.data.workdata);
+            if (res.data.workdata.currentbreak !== null) {
+                setCurrBreak(res.data.workdata.currentbreak);
+            } else {
+                setCurrBreak();
+                setLiveBreaks();
+
+            }
         } catch (error) {
+            setLoading(false);
             toast.error(error.message, {
                 style: {
                     padding: '15px',
@@ -86,14 +112,32 @@ const Index = () => {
                         position="top-left"
                         reverseOrder={false}
                     />
-                    <div className="hero-content text-center">
+                    <div className="hero-content text-center mb-14">
                         <div className="max-w-md">
                             <div className="overflow-x-auto">
                                 <div className='bg-base-100 rounded-2xl rounded-b-none py-2.5 px-7 mt-20'>
                                     <div className='text-left font-semibold mb-3'>
-                                        <p>20 / August,</p>
-                                        <p>Sunday</p>
-                                        <p className='font-medium my-2'>Break taken: 00:00:00 (hh:mm:ss)</p>
+                                        <p>{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long' })},</p>
+                                        <p>{new Date().toLocaleDateString('en-US', { weekday: 'long' })}</p>
+                                        <p className='font-medium my-2'>
+                                            Break taken: {workData.breakTime ? (
+                                                <>
+                                                    {workData.breakTime} (hh:mm:ss)
+                                                </>
+                                            ) : (
+                                                <span className="animate-pulse">
+                                                    <span className="flex space-x-4">
+                                                        <span className="flex-1 space-y-9 py-1">
+                                                            <span className="space-y-3">
+                                                                <span className="grid grid-cols-5 gap-3">
+                                                                    <span className="h-2 bg-slate-700 rounded col-span-2"></span>
+                                                                </span>
+                                                            </span>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                            )}
+                                        </p>
                                     </div>
                                     {loading && (
                                         <progress className="progress progress-success"></progress>
@@ -107,17 +151,16 @@ const Index = () => {
                                         </thead>
                                         <tbody>
                                             {logs && (
-                                                logs.map(log => {
+                                                [...logs].reverse().map(log => {
                                                     const createdAt = new Date(log.createdAt);
                                                     const utcFormattedDate = createdAt.toLocaleString('en-US', {
-                                                        timeZone: 'UTC',
+                                                        timeZone: 'Asia/Kolkata',
                                                         hour: 'numeric',
                                                         minute: 'numeric',
                                                         hour12: true,
                                                         month: 'short',
                                                         day: 'numeric'
                                                     });
-
                                                     return (
                                                         <tr key={log.id}>
                                                             <td>{utcFormattedDate}</td>
@@ -138,6 +181,13 @@ const Index = () => {
                             </div>
                         </div>
                     </div>
+                    {!isNaN(liveBreaks) && liveBreaks !== null &&
+                        <div className="toast toast-start mb-14">
+                            <div className=" flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40">
+                                <span className="text-black">~ {liveBreaks}</span>
+                            </div>
+                        </div>
+                    }
                 </div>
                 <SettingsModal
                     themeToggle={themeToggle}
