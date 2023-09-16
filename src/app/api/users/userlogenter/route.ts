@@ -24,11 +24,22 @@ export async function POST(request: NextRequest) {
             },
             select: {
                 log_status: true,
+                id: true,
             },
             orderBy: {
                 createdAt: 'desc',
             },
         });
+
+        if (logtype === 'undo log') {
+            if (recentLog !== null) {
+                await prisma.log.delete({
+                    where: {
+                        id: recentLog.id,
+                    },
+                });
+            }
+        }
 
         let logToBeSaved = '';
 
@@ -46,19 +57,21 @@ export async function POST(request: NextRequest) {
             logToBeSaved = 'day end';
         }
 
-        const log = await prisma.log.create({
-            data: {
-                User: {
-                    connect: { id: userId },
+        if (logToBeSaved !== '') {
+            const log = await prisma.log.create({
+                data: {
+                    User: {
+                        connect: { id: userId },
+                    },
+                    // createdAt: datetime,
+                    log_status: logToBeSaved,
                 },
-                // createdAt: datetime,
-                log_status: logToBeSaved,
-            },
-        });
+            });
+        }
 
         return NextResponse.json({
             message: 'Log fetched successfully',
-            data: log,
+            // data: log,
         });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 400 });
