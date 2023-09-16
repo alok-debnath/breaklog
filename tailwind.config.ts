@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"),'prettier-plugin-tailwindcss'],
   daisyui: {
     themes: ["light", "dark", "night", "synthwave", "cyberpunk"],
   },

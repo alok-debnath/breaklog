@@ -1,7 +1,7 @@
-import { connect } from "@/dbConfig/dbConfig"
-import { getDataFromToken } from "@/helpers/getDataFromToken"
-import { NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client";
+import { connect } from '@/dbConfig/dbConfig';
+import { getDataFromToken } from '@/helpers/getDataFromToken';
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 connect();
@@ -28,26 +28,23 @@ export async function POST(request: NextRequest) {
             orderBy: {
                 createdAt: 'desc',
             },
-        })
+        });
 
-        let logToBeSaved = "";
+        let logToBeSaved = '';
 
-        if (logtype === "basic log") {
+        if (logtype === 'basic log') {
             if (recentLog === null) {
-                logToBeSaved = "day start";
-            } else if (recentLog.log_status === "day start") {
-                logToBeSaved = "exit";
-            } else if (recentLog.log_status === "enter") {
-                logToBeSaved = "exit";
-            } else if (recentLog.log_status === "exit") {
-                logToBeSaved = "enter";
+                logToBeSaved = 'day start';
+            } else if (recentLog.log_status === 'day start') {
+                logToBeSaved = 'exit';
+            } else if (recentLog.log_status === 'enter') {
+                logToBeSaved = 'exit';
+            } else if (recentLog.log_status === 'exit') {
+                logToBeSaved = 'enter';
             }
-
-        }else if(logtype === "day end"){
-            logToBeSaved = "day end";
+        } else if (logtype === 'day end') {
+            logToBeSaved = 'day end';
         }
-
-
 
         const log = await prisma.log.create({
             data: {
@@ -60,11 +57,10 @@ export async function POST(request: NextRequest) {
         });
 
         return NextResponse.json({
-            message: "Log fetched successfully",
+            message: 'Log fetched successfully',
             data: log,
         });
     } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 400 })
+        return NextResponse.json({ error: error.message }, { status: 400 });
     }
-
 }

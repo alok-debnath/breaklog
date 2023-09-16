@@ -1,7 +1,7 @@
-import { connect } from "@/dbConfig/dbConfig"
-import { getDataFromToken } from "@/helpers/getDataFromToken"
-import { NextRequest, NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client";
+import { connect } from '@/dbConfig/dbConfig';
+import { getDataFromToken } from '@/helpers/getDataFromToken';
+import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 connect();
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         let currentBreakTime = null;
         let recentLog = null;
 
-        logs.map(log => {
+        logs.map((log) => {
             if (log.log_status === 'day start') {
                 isDayStarted = true;
                 dayStart = log.createdAt.getTime();
@@ -52,7 +52,6 @@ export async function POST(request: NextRequest) {
                 isDayEnded = true;
                 dayEnd = log.createdAt.getTime();
             }
-
 
             if (isDayStarted) {
                 if (log.log_status === 'exit') {
@@ -67,14 +66,13 @@ export async function POST(request: NextRequest) {
                     logEnter = 0;
                 }
             }
-
-        })
+        });
         if (isDayStarted) {
             if (isDayEnded) {
-                workDone = (dayEnd - dayStart) - breakTime;
+                workDone = dayEnd - dayStart - breakTime;
             } else {
                 const currDay = new Date();
-                workDone = (currDay.getTime() - dayStart) - breakTime;
+                workDone = currDay.getTime() - dayStart - breakTime;
             }
         }
 
@@ -90,8 +88,12 @@ export async function POST(request: NextRequest) {
 
         const formatTime = (milliseconds: any) => {
             const totalSeconds = Math.floor(milliseconds / 1000);
-            const hours = Math.floor(totalSeconds / 3600).toString().padStart(2, '0');
-            const minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
+            const hours = Math.floor(totalSeconds / 3600)
+                .toString()
+                .padStart(2, '0');
+            const minutes = Math.floor((totalSeconds % 3600) / 60)
+                .toString()
+                .padStart(2, '0');
             const seconds = (totalSeconds % 60).toString().padStart(2, '0');
 
             return `${hours}:${minutes}:${seconds}`;
@@ -100,21 +102,19 @@ export async function POST(request: NextRequest) {
         const formattedWorkDone = formatTime(workDone);
 
         return NextResponse.json({
-            message: "Logs fetched successfully",
+            message: 'Logs fetched successfully',
             data: logs,
             workdata:
-            // `${formattedTime}`,
-            {
-                breakTime: `${formattedTime}`,
-                currentbreak: currentBreakTime,
-                lastlogstatus: recentLog,
-                workdone: formattedWorkDone
-                // workDone: `${workDoneHours} hours ${workDoneMinutes} minutes`,
-            },
+                // `${formattedTime}`,
+                {
+                    breakTime: `${formattedTime}`,
+                    currentbreak: currentBreakTime,
+                    lastlogstatus: recentLog,
+                    workdone: formattedWorkDone,
+                    // workDone: `${workDoneHours} hours ${workDoneMinutes} minutes`,
+                },
         });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 400 })
-    }
-
 }

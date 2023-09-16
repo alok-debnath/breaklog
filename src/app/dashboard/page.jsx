@@ -1,6 +1,6 @@
-"use client"
+'use client';
 import { useEffect, useState } from 'react';
-import Navbar from '@/components/Layouts/Navbar'
+import Navbar from '@/components/Layouts/Navbar';
 // import MyModal from '@/components/Layouts/MyModal';
 import SettingsModal from '@/components/Layouts/SettingsModal';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
@@ -36,7 +36,7 @@ const Index = () => {
     }, [currBreak]);
 
     //  For theme //
-    const [themeMode, setThemeMode] = useState("night");
+    const [themeMode, setThemeMode] = useState('night');
 
     const logEntry = async (value) => {
         try {
@@ -51,7 +51,7 @@ const Index = () => {
             setLoading(false);
             // setLoadingDashboard(false);
         } catch (error) {
-            toast.error("Error while log entry: ", error, {
+            toast.error('Error while log entry: ', error, {
                 style: {
                     padding: '15px',
                     color: 'white',
@@ -79,7 +79,8 @@ const Index = () => {
         try {
             setLoading(true);
 
-            const res = await axios.post('/api/users/userlog',
+            const res = await axios.post(
+                '/api/users/userlog'
                 // values
             );
             setLoading(false);
@@ -130,31 +131,39 @@ const Index = () => {
                         breaklogMode={breaklogMode}
                     />
                 </div>
-                <div className="hero min-h-screen bg-base-200">
+                <div className='hero min-h-screen bg-base-200'>
                     <Toaster
-                        position="top-left"
+                        position='top-left'
                         reverseOrder={false}
                     />
-                    <div className="hero-content text-center mb-14">
-                        <div className="max-w-md">
-                            <div className="overflow-x-auto">
+                    <div className='hero-content text-center mb-14'>
+                        <div className='max-w-md'>
+                            <div className='overflow-x-auto'>
                                 <div className='bg-base-100 rounded-2xl rounded-b-none py-2.5 px-7 mt-20'>
                                     <div className='text-left font-semibold mb-3'>
-                                        <p>{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long' })},</p>
-                                        <p>{new Date().toLocaleDateString('en-US', { weekday: 'long' })}</p>
+                                        <p>
+                                            {new Date().toLocaleDateString('en-US', {
+                                                day: 'numeric',
+                                                month: 'long',
+                                            })}
+                                            ,
+                                        </p>
+                                        <p>
+                                            {new Date().toLocaleDateString('en-US', {
+                                                weekday: 'long',
+                                            })}
+                                        </p>
                                         <p className='font-medium my-2'>
                                             {workData.workdone ? (
-                                                <>
-                                                    Work done: {workData.workdone} (hh:mm:ss)
-                                                </>
+                                                <>Work done: {workData.workdone} (hh:mm:ss)</>
                                             ) : (
-                                                <span className="animate-pulse">
-                                                    <span className="flex space-x-4">
-                                                        <span className="flex-1 space-y-9 py-1">
-                                                            <span className="space-y-3">
-                                                                <span className="grid grid-cols-5 gap-3">
-                                                                    <span className="h-2 bg-slate-700 rounded col-span-3"></span>
-                                                                    <span className="h-2 bg-slate-700 rounded col-span-2"></span>
+                                                <span className='animate-pulse'>
+                                                    <span className='flex space-x-4'>
+                                                        <span className='flex-1 space-y-9 py-1'>
+                                                            <span className='space-y-3'>
+                                                                <span className='grid grid-cols-5 gap-3'>
+                                                                    <span className='h-2 bg-slate-700 rounded col-span-3'></span>
+                                                                    <span className='h-2 bg-slate-700 rounded col-span-2'></span>
                                                                 </span>
                                                             </span>
                                                         </span>
@@ -164,17 +173,15 @@ const Index = () => {
                                         </p>
                                         <p className='font-medium my-2'>
                                             {workData.breakTime ? (
-                                                <>
-                                                    Break taken: {workData.breakTime} (hh:mm:ss)
-                                                </>
+                                                <>Break taken: {workData.breakTime} (hh:mm:ss)</>
                                             ) : (
-                                                <span className="animate-pulse">
-                                                    <span className="flex space-x-4">
-                                                        <span className="flex-1 space-y-9 py-1">
-                                                            <span className="space-y-3">
-                                                                <span className="grid grid-cols-5 gap-3">
-                                                                    <span className="h-2 bg-slate-700 rounded col-span-3"></span>
-                                                                    <span className="h-2 bg-slate-700 rounded col-span-2"></span>
+                                                <span className='animate-pulse'>
+                                                    <span className='flex space-x-4'>
+                                                        <span className='flex-1 space-y-9 py-1'>
+                                                            <span className='space-y-3'>
+                                                                <span className='grid grid-cols-5 gap-3'>
+                                                                    <span className='h-2 bg-slate-700 rounded col-span-3'></span>
+                                                                    <span className='h-2 bg-slate-700 rounded col-span-2'></span>
                                                                 </span>
                                                             </span>
                                                         </span>
@@ -184,9 +191,9 @@ const Index = () => {
                                         </p>
                                     </div>
                                     {loading && (
-                                        <progress className="progress progress-success"></progress>
+                                        <progress className='progress progress-success'></progress>
                                     )}
-                                    <table className="table text-center">
+                                    <table className='table text-center'>
                                         <thead>
                                             <tr>
                                                 <th>Time</th>
@@ -194,52 +201,67 @@ const Index = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {logs && (
-                                                [...logs].reverse().map(log => {
+                                            {logs &&
+                                                [...logs].reverse().map((log) => {
                                                     const createdAt = new Date(log.createdAt);
-                                                    const utcFormattedDate = createdAt.toLocaleString('en-US', {
-                                                        timeZone: 'Asia/Kolkata',
-                                                        hour: 'numeric',
-                                                        minute: 'numeric',
-                                                        hour12: true,
-                                                        month: 'short',
-                                                        day: 'numeric'
-                                                    });
+                                                    const utcFormattedDate =
+                                                        createdAt.toLocaleString('en-US', {
+                                                            timeZone: 'Asia/Kolkata',
+                                                            hour: 'numeric',
+                                                            minute: 'numeric',
+                                                            hour12: true,
+                                                            month: 'short',
+                                                            day: 'numeric',
+                                                        });
                                                     return (
                                                         <tr key={log.id}>
                                                             <td>{utcFormattedDate}</td>
                                                             <td>{log.log_status}</td>
                                                         </tr>
                                                     );
-                                                })
-                                            )}
+                                                })}
                                         </tbody>
                                     </table>
                                 </div>
                                 <div className='mb-20'>
                                     <Button
-                                        text="End Day"
-                                        className={`btn btn-primary w-full rounded-2xl rounded-t-none ${["exit", null, "day end"].includes(workData.lastlogstatus) || loading ? 'btn-disabled' : ''}`}
-                                        onclick={() => logEntry("day end")}
+                                        text='End Day'
+                                        className={`btn btn-primary w-full rounded-2xl rounded-t-none ${
+                                            ['exit', null, 'day end'].includes(
+                                                workData.lastlogstatus
+                                            ) || loading
+                                                ? 'btn-disabled'
+                                                : ''
+                                        }`}
+                                        onclick={() => logEntry('day end')}
                                     />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {!isNaN(liveBreaks) && liveBreaks !== null &&
-                        <div className="toast toast-start mb-14">
-                            <div className=" flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40">
-                                <span className="text-black">~ {liveBreaks}</span>
+                    {!isNaN(liveBreaks) && liveBreaks !== null && (
+                        <div className='toast toast-start mb-14'>
+                            <div className='flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
+                                <span className='text-black'>~ {liveBreaks}</span>
                             </div>
                         </div>
-                    }
+                    )}
                     <div className='fixed bottom-5 right-5 items-center justify-end mb-14'>
                         <button
-                            class="btn bg-primary/40 shadow-xl backdrop-blur-md"
-                            onClick={() => fetchUserLog()}
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            class='btn bg-primary/40 shadow-xl backdrop-blur-md'
+                            onClick={() => fetchUserLog()}>
+                            <svg
+                                xmlns='http://www.w3.org/2000/svg'
+                                fill='none'
+                                viewBox='0 0 24 24'
+                                strokeWidth={1.5}
+                                stroke='currentColor'
+                                className='w-6 h-6'>
+                                <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
+                                />
                             </svg>
                         </button>
                         {/* <div className={`dropdown dropdown-top`}>
@@ -271,7 +293,6 @@ const Index = () => {
                 <SettingsModal
                     themeToggle={themeToggle}
                     themeMode={themeMode}
-
                     setBreaklogMode={setBreaklogMode}
                 />
                 <div>
@@ -284,7 +305,7 @@ const Index = () => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
 
-export default Index
+export default Index;
