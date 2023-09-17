@@ -71,6 +71,8 @@ export async function POST(request: NextRequest) {
             }
         }
 
+        // the most recent log
+        const lastLog = logs[logs.length - 1];
         // Calculate work done
         if (isDayStarted) {
             if (isDayEnded) {
@@ -78,12 +80,16 @@ export async function POST(request: NextRequest) {
             } else {
                 const currDay = new Date();
                 workDone = currDay.getTime() - dayStart - breakTime;
+
+                if (lastLog.log_status === 'exit') {
+                    const exitTime = currDay.getTime() - lastLog.createdAt.getTime();
+                    workDone = workDone - exitTime;
+                }
             }
         }
 
         // Determine current break time and recent log status
         if (logs.length > 0) {
-            const lastLog = logs[logs.length - 1];
             if (lastLog.log_status === 'exit') {
                 currentBreakTime = lastLog.createdAt;
             }
