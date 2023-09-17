@@ -14,12 +14,17 @@ const NavbarBottom = ({ loading, logEntry, workData }) => {
                         <div>
                             <div
                                 className={`dropdown dropdown-top ${
-                                    ['day end'].includes(workData.lastlogstatus) || loading
+                                    ['day end'].includes(workData.lastLogStatus) || loading
                                         ? 'btn-disabled'
                                         : ''
                                 }`}>
                                 <details>
-                                    <summary className='btn btn-fill'>
+                                    <summary
+                                        className={`btn btn-fill ${
+                                            workData.lastLogStatus !== null || loading
+                                                ? 'btn-disabled'
+                                                : ''
+                                        }`}>
                                         <svg
                                             xmlns='http://www.w3.org/2000/svg'
                                             fill='none'
@@ -50,7 +55,7 @@ const NavbarBottom = ({ loading, logEntry, workData }) => {
                         <div>
                             <Button
                                 className={`btn ${
-                                    ['day end'].includes(workData.lastlogstatus) || loading
+                                    ['day end'].includes(workData.lastLogStatus) || loading
                                         ? 'btn-disabled'
                                         : ''
                                 }`}

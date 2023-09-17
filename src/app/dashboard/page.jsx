@@ -46,8 +46,8 @@ const Index = () => {
                 logtype: value,
             };
 
-            const res = await axios.post('/api/users/userlogenter', values);
-            await fetchUserLog();
+            const res = await axios.post('/api/users/submitlog', values);
+            await fetchLogFunction();
             setLoading(false);
             // setLoadingDashboard(false);
         } catch (error) {
@@ -61,9 +61,9 @@ const Index = () => {
         }
     };
 
-    const fetchUserData = async () => {
+    const fetchProfileFunction = async () => {
         try {
-            const res = await axios.get('/api/users/me');
+            const res = await axios.get('/api/users/fetchprofile');
             setUserData(res.data.data);
         } catch (error) {
             toast.error(error.message, {
@@ -75,20 +75,20 @@ const Index = () => {
             });
         }
     };
-    const fetchUserLog = async () => {
+    const fetchLogFunction = async () => {
         try {
             setLoading(true);
 
             const res = await axios.post(
-                '/api/users/userlog'
+                '/api/users/fetchlog'
                 // values
             );
             setLoading(false);
             setLogs(res.data.data);
             setWorkData(res.data.workdata);
-            if (res.data.workdata.currentbreak !== null) {
-                setCurrBreak(res.data.workdata.currentbreak);
-                console.log(liveBreaks);
+            if (res.data.workdata.currentBreak !== null) {
+                setCurrBreak(res.data.workdata.currentBreak);
+                // console.log(liveBreaks);
             } else {
                 setCurrBreak();
                 setLiveBreaks();
@@ -112,8 +112,8 @@ const Index = () => {
         }
 
         // fetch user details
-        fetchUserData();
-        fetchUserLog();
+        fetchProfileFunction();
+        fetchLogFunction();
     }, []);
 
     const themeToggle = (themeName) => {
@@ -154,8 +154,8 @@ const Index = () => {
                                             })}
                                         </p>
                                         <p className='font-medium my-2'>
-                                            {workData.workdone ? (
-                                                <>Work done: {workData.workdone} (hh:mm:ss)</>
+                                            {workData.workDone ? (
+                                                <>Work done: {workData.workDone} (hh:mm:ss)</>
                                             ) : (
                                                 <span className='animate-pulse'>
                                                     <span className='flex space-x-4'>
@@ -228,7 +228,7 @@ const Index = () => {
                                         text='End Day'
                                         className={`btn btn-primary w-full rounded-2xl rounded-t-none ${
                                             ['exit', null, 'day end'].includes(
-                                                workData.lastlogstatus
+                                                workData.lastLogStatus
                                             ) || loading
                                                 ? 'btn-disabled'
                                                 : ''
@@ -247,23 +247,6 @@ const Index = () => {
                         </div>
                     )}
                     <div className='fixed bottom-5 right-5 items-center justify-end mb-14'>
-                        {/* <button
-                            class='btn bg-primary/40 shadow-xl backdrop-blur-md'
-                            onClick={() => fetchUserLog()}>
-                            <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                strokeWidth={1.5}
-                                stroke='currentColor'
-                                className='w-6 h-6'>
-                                <path
-                                    strokeLinecap='round'
-                                    strokeLinejoin='round'
-                                    d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
-                                />
-                            </svg>
-                        </button> */}
                         <div className='dropdown dropdown-top dropdown-end'>
                             <details>
                                 <summary className='btn bg-primary/40 shadow-xl backdrop-blur-md'>
@@ -285,7 +268,7 @@ const Index = () => {
                                     tabIndex={0}
                                     className='dropdown-content menu shadow bg-base-100 rounded-box mb-2'>
                                     <li>
-                                        <a onClick={() => fetchUserLog()}>
+                                        <a onClick={() => fetchLogFunction()}>
                                             <svg
                                                 xmlns='http://www.w3.org/2000/svg'
                                                 fill='none'
