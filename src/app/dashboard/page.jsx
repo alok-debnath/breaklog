@@ -41,7 +41,17 @@ const Index = () => {
     const logEntry = async (value) => {
         try {
             setLoading(true);
-            // setLoadingDashboard(true);
+
+            if (value === 'undo log') {
+                const userConfirmed = window.confirm(
+                    'Are you sure you want to undo the log entry?'
+                );
+                if (!userConfirmed) {
+                    setLoading(false);
+                    return;
+                }
+            }
+
             const values = {
                 logtype: value,
             };
