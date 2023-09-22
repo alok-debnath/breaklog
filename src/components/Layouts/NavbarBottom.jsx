@@ -13,43 +13,42 @@ const NavbarBottom = ({ loading, logEntry, workData }) => {
                     <div className='flex gap-3'>
                         <div>
                             <div
-                                className={`dropdown dropdown-top ${
+                                className={`dropdown dropdown-top dropdown-hover ${
                                     ['day end'].includes(workData.lastLogStatus) || loading
                                         ? 'btn-disabled'
                                         : ''
                                 }`}>
-                                <details>
-                                    <summary
-                                        className={`btn btn-fill ${
-                                            workData.lastLogStatus !== null || loading
-                                                ? 'btn-disabled'
-                                                : ''
-                                        }`}>
-                                        <svg
-                                            xmlns='http://www.w3.org/2000/svg'
-                                            fill='none'
-                                            viewBox='0 0 24 24'
-                                            strokeWidth={1.5}
-                                            stroke='currentColor'
-                                            className='w-6 h-6'>
-                                            <path
-                                                strokeLinecap='round'
-                                                strokeLinejoin='round'
-                                                d='M4.5 15.75l7.5-7.5 7.5 7.5'
-                                            />
-                                        </svg>
-                                    </summary>
-                                    <ul
-                                        tabIndex={0}
-                                        className='dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>
-                                        <li>
-                                            <a>Mark as Leave</a>
-                                        </li>
-                                        <li>
-                                            <a>Work From Home</a>
-                                        </li>
-                                    </ul>
-                                </details>
+                                <label
+                                    tabIndex={0}
+                                    className={`btn btn-fill ${
+                                        workData.lastLogStatus !== null || loading
+                                            ? 'btn-disabled'
+                                            : ''
+                                    }`}>
+                                    <svg
+                                        xmlns='http://www.w3.org/2000/svg'
+                                        fill='none'
+                                        viewBox='0 0 24 24'
+                                        strokeWidth={1.5}
+                                        stroke='currentColor'
+                                        className='w-6 h-6'>
+                                        <path
+                                            strokeLinecap='round'
+                                            strokeLinejoin='round'
+                                            d='M4.5 15.75l7.5-7.5 7.5 7.5'
+                                        />
+                                    </svg>
+                                </label>
+                                <ul
+                                    tabIndex={0}
+                                    className='dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>
+                                    <li>
+                                        <a>Mark as Leave</a>
+                                    </li>
+                                    <li>
+                                        <a>Work From Home</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div>

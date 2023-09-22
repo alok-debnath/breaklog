@@ -258,61 +258,61 @@ const Index = () => {
                     )}
                     <div className='fixed bottom-5 right-5 items-center justify-end mb-14'>
                         <div className='dropdown dropdown-top dropdown-end'>
-                            <details>
-                                <summary className='btn bg-primary/40 shadow-xl backdrop-blur-md'>
-                                    <svg
-                                        xmlns='http://www.w3.org/2000/svg'
-                                        fill='none'
-                                        viewBox='0 0 24 24'
-                                        strokeWidth={1.5}
-                                        stroke='currentColor'
-                                        className='w-6 h-6'>
-                                        <path
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                            d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
-                                        />
-                                    </svg>
-                                </summary>
-                                <ul
-                                    tabIndex={0}
-                                    className='dropdown-content menu shadow bg-base-100 rounded-box mb-2'>
-                                    <li>
-                                        <a onClick={() => fetchLogFunction()}>
-                                            <svg
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                fill='none'
-                                                viewBox='0 0 24 24'
-                                                strokeWidth={1.5}
-                                                stroke='currentColor'
-                                                className='w-6 h-6'>
-                                                <path
-                                                    strokeLinecap='round'
-                                                    strokeLinejoin='round'
-                                                    d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
-                                                />
-                                            </svg>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a onClick={() => logEntry('undo log')}>
-                                            <svg
-                                                xmlns='http://www.w3.org/2000/svg'
-                                                fill='none'
-                                                viewBox='0 0 24 24'
-                                                strokeWidth={1.5}
-                                                stroke='currentColor'
-                                                className='w-6 h-6'>
-                                                <path
-                                                    strokeLinecap='round'
-                                                    strokeLinejoin='round'
-                                                    d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3'
-                                                />
-                                            </svg>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </details>
+                            <label
+                                tabIndex={0}
+                                className='btn bg-primary/40 shadow-xl backdrop-blur-md'>
+                                <svg
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    fill='none'
+                                    viewBox='0 0 24 24'
+                                    strokeWidth={1.5}
+                                    stroke='currentColor'
+                                    className='w-6 h-6'>
+                                    <path
+                                        strokeLinecap='round'
+                                        strokeLinejoin='round'
+                                        d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
+                                    />
+                                </svg>
+                            </label>
+                            <ul
+                                tabIndex={0}
+                                className='dropdown-content menu shadow bg-base-100 rounded-box mb-2'>
+                                <li>
+                                    <a onClick={() => fetchLogFunction()}>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            fill='none'
+                                            viewBox='0 0 24 24'
+                                            strokeWidth={1.5}
+                                            stroke='currentColor'
+                                            className='w-6 h-6'>
+                                            <path
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
+                                            />
+                                        </svg>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a onClick={() => logEntry('undo log')}>
+                                        <svg
+                                            xmlns='http://www.w3.org/2000/svg'
+                                            fill='none'
+                                            viewBox='0 0 24 24'
+                                            strokeWidth={1.5}
+                                            stroke='currentColor'
+                                            className='w-6 h-6'>
+                                            <path
+                                                strokeLinecap='round'
+                                                strokeLinejoin='round'
+                                                d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3'
+                                            />
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
