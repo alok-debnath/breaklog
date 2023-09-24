@@ -8,6 +8,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 
 const Index = () => {
+    const isClient = typeof window !== 'undefined';
+
     const [userData, setUserData] = useState();
     // store fetched logs from backend
     const [logs, setLogs] = useState([]);
@@ -15,8 +17,11 @@ const Index = () => {
     const [workData, setWorkData] = useState([]);
     // for breaklogMode
     const [breaklogMode, setBreaklogMode] = useState(() => {
-        const storedBreaklogMode = localStorage.getItem('breaklogMode');
-        return storedBreaklogMode ? JSON.parse(storedBreaklogMode) : true;
+        if (isClient) {
+            const storedBreaklogMode = localStorage.getItem('breaklogMode');
+            return storedBreaklogMode ? JSON.parse(storedBreaklogMode) : true;
+        }
+        return true; // Default value if localStorage is unavailable
     });
     // for setting loader
     const [loading, setLoading] = useState(false);
@@ -25,7 +30,9 @@ const Index = () => {
     const [liveBreaks, setLiveBreaks] = useState(0);
 
     useEffect(() => {
-        localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
+        if (isClient) {
+            localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
+        }
     }, [breaklogMode]);
 
     const calculateBreakTime = () => {
