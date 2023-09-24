@@ -57,6 +57,16 @@ export async function POST(request: NextRequest) {
             logToBeSaved = 'day end';
         }
 
+        if (logtype === 'break log') {
+            if (recentLog === null) {
+                logToBeSaved = 'exit';
+            } else if (recentLog.log_status === 'enter') {
+                logToBeSaved = 'exit';
+            } else if (recentLog.log_status === 'exit') {
+                logToBeSaved = 'enter';
+            }
+        }
+
         if (logToBeSaved !== '') {
             const log = await prisma.log.create({
                 data: {
@@ -70,7 +80,7 @@ export async function POST(request: NextRequest) {
         }
 
         return NextResponse.json({
-            message: 'Log fetched successfully',
+            message: 'Log submitted successfully',
             // data: log,
         });
     } catch (error: any) {

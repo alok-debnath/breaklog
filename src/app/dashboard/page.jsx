@@ -1,7 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Layouts/Navbar';
-// import MyModal from '@/components/Layouts/MyModal';
 import SettingsModal from '@/components/Layouts/SettingsModal';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
@@ -10,13 +9,25 @@ import axios from 'axios';
 
 const Index = () => {
     const [userData, setUserData] = useState();
+    // store fetched logs from backend
     const [logs, setLogs] = useState([]);
+    // store fetched calculated workDone,breakTime,lastLogStatus from backend
     const [workData, setWorkData] = useState([]);
-    const [breaklogMode, setBreaklogMode] = useState();
+    // for breaklogMode
+    const [breaklogMode, setBreaklogMode] = useState(() => {
+        const storedBreaklogMode = localStorage.getItem('breaklogMode');
+        return storedBreaklogMode ? JSON.parse(storedBreaklogMode) : true;
+    });
+    // for setting loader
     const [loading, setLoading] = useState(false);
-
+    // for break time calculation
     const [currBreak, setCurrBreak] = useState();
     const [liveBreaks, setLiveBreaks] = useState(0);
+
+    useEffect(() => {
+        localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
+    }, [breaklogMode]);
+
     const calculateBreakTime = () => {
         const breakTime = new Date(currBreak);
         const currentTime = new Date();
@@ -319,6 +330,7 @@ const Index = () => {
                 <SettingsModal
                     themeToggle={themeToggle}
                     themeMode={themeMode}
+                    breaklogMode={breaklogMode}
                     setBreaklogMode={setBreaklogMode}
                 />
                 <div>
