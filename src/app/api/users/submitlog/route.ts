@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
         let logToBeSaved = '';
 
-        if (logtype === 'basic log') {
+        if (logtype === 'day log') {
             if (recentLog === null) {
                 logToBeSaved = 'day start';
             } else if (recentLog.log_status === 'day start') {

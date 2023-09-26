@@ -257,7 +257,9 @@ const Index = () => {
                                         className={`btn btn-primary w-full rounded-2xl rounded-t-none ${
                                             ['exit', null, 'day end'].includes(
                                                 workData.lastLogStatus
-                                            ) || loading
+                                            ) ||
+                                            loading ||
+                                            breaklogMode
                                                 ? 'btn-disabled'
                                                 : ''
                                         }`}
@@ -343,6 +345,7 @@ const Index = () => {
                 <div>
                     <NavbarBottom
                         // setShowToast={setShowToast}
+                        breaklogMode={breaklogMode}
                         workData={workData}
                         loading={loading}
                         logEntry={logEntry}

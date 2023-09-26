@@ -56,18 +56,16 @@ export async function POST(request: NextRequest) {
                 dayEnd = log.createdAt.getTime();
             }
 
-            if (isDayStarted) {
-                if (log.log_status === 'exit') {
-                    logExit = log.createdAt.getTime();
-                } else if (log.log_status === 'enter') {
-                    logEnter = log.createdAt.getTime();
-                }
-
-                if (logExit !== 0 && logEnter !== 0) {
-                    breakTime += logEnter - logExit;
-                    logExit = 0;
-                    logEnter = 0;
-                }
+            // calculates break time
+            if (log.log_status === 'exit') {
+                logExit = log.createdAt.getTime();
+            } else if (log.log_status === 'enter') {
+                logEnter = log.createdAt.getTime();
+            }
+            if (logExit !== 0 && logEnter !== 0) {
+                breakTime += logEnter - logExit;
+                logExit = 0;
+                logEnter = 0;
             }
         }
 

@@ -3,7 +3,7 @@ import Button from '../UI/Button';
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
-const NavbarBottom = ({ loading, logEntry, workData }) => {
+const NavbarBottom = ({ loading, logEntry, workData, breaklogMode }) => {
     // const [loading, setLoading] = useState(false);
 
     return (
@@ -21,7 +21,7 @@ const NavbarBottom = ({ loading, logEntry, workData }) => {
                                 <label
                                     tabIndex={0}
                                     className={`btn btn-fill ${
-                                        workData.lastLogStatus !== null || loading
+                                        workData.lastLogStatus !== null || loading || breaklogMode
                                             ? 'btn-disabled'
                                             : ''
                                     }`}>
@@ -66,7 +66,9 @@ const NavbarBottom = ({ loading, logEntry, workData }) => {
                                         )}
                                     </>
                                 }
-                                onclick={() => logEntry('basic log')}
+                                onclick={() =>
+                                    breaklogMode ? logEntry('break log') : logEntry('day log')
+                                }
                             />
                         </div>
                     </div>
