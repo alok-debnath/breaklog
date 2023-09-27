@@ -262,7 +262,7 @@ const Index = () => {
           {!isNaN(liveBreaks) && liveBreaks !== null && (
             <div className='toast toast-start mb-14'>
               <div className='flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-                <span className='text-black'>~ {liveBreaks}</span>
+                <span className='text-black'>{liveBreaks} mins</span>
               </div>
             </div>
           )}
@@ -327,6 +327,7 @@ const Index = () => {
           </div>
         </div>
         <SettingsModal
+          logs={logs}
           themeToggle={themeToggle}
           themeMode={themeMode}
           breaklogMode={breaklogMode}

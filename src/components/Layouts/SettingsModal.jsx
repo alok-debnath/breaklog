@@ -3,7 +3,7 @@ import SelectboxText from '../UI/SelectboxText';
 import { ThemeName } from '../Constants/Constant';
 import { useState } from 'react';
 
-const SettingsModal = ({ themeToggle, themeMode, breaklogMode, setBreaklogMode }) => {
+const SettingsModal = ({ themeToggle, themeMode, breaklogMode, setBreaklogMode, logs }) => {
   const handleThemeChange = (event) => {
     themeToggle(event.target.value);
   };
@@ -26,6 +26,7 @@ const SettingsModal = ({ themeToggle, themeMode, breaklogMode, setBreaklogMode }
 
           <ToggleButtonText
             text='BreakLog mode'
+            disabled={logs.length === 0 ? false : true}
             checked={breaklogMode}
             secondaryText='(LOP will be miscalculated once log is saved using this mode)'
             onChange={handleToggleChange}

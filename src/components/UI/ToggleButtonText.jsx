@@ -1,4 +1,4 @@
-const ToggleButtonText = ({ text, secondaryText, checked, onChange }) => {
+const ToggleButtonText = ({ text, secondaryText, checked, onChange, disabled }) => {
   return (
     <>
       <div className='form-control'>
@@ -14,9 +14,10 @@ const ToggleButtonText = ({ text, secondaryText, checked, onChange }) => {
           </div>
           <input
             type='checkbox'
-            className='toggle'
+            className={`toggle`}
             checked={checked}
             onChange={onChange}
+            disabled={disabled}
           />
         </label>
       </div>
