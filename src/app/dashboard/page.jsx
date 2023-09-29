@@ -60,7 +60,7 @@ const Index = () => {
       setLoading(true);
 
       if (value === 'undo log') {
-        const userConfirmed = window.confirm('Are you sure you want to undo the log entry?');
+        const userConfirmed = window.confirm('Are you sure you want to undo the recent log entry?');
         if (!userConfirmed) {
           setLoading(false);
           return;
@@ -177,22 +177,24 @@ const Index = () => {
                       })}
                     </p>
                     <p className='font-medium my-2'>
-                      {workData.workDone ? (
-                        <>Work done: {workData.workDone} (hh:mm:ss)</>
-                      ) : (
-                        <span className='animate-pulse'>
-                          <span className='flex space-x-4'>
-                            <span className='flex-1 space-y-9 py-1'>
-                              <span className='space-y-3'>
-                                <span className='grid grid-cols-5 gap-3'>
-                                  <span className='h-2 bg-slate-700 rounded col-span-3'></span>
-                                  <span className='h-2 bg-slate-700 rounded col-span-2'></span>
+                      {!breaklogMode ? (
+                        workData.workDone ? (
+                          <>Work done: {workData.workDone} (hh:mm:ss)</>
+                        ) : (
+                          <span className='animate-pulse'>
+                            <span className='flex space-x-4'>
+                              <span className='flex-1 space-y-9 py-1'>
+                                <span className='space-y-3'>
+                                  <span className='grid grid-cols-5 gap-3'>
+                                    <span className='h-2 bg-slate-700 rounded col-span-3'></span>
+                                    <span className='h-2 bg-slate-700 rounded col-span-2'></span>
+                                  </span>
                                 </span>
                               </span>
                             </span>
                           </span>
-                        </span>
-                      )}
+                        )
+                      ) : null}
                     </p>
                     <p className='font-medium my-2'>
                       {workData.breakTime ? (
@@ -262,7 +264,7 @@ const Index = () => {
           {!isNaN(liveBreaks) && liveBreaks !== null && (
             <div className='toast toast-start mb-14'>
               <div className='flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-                <span className='text-black'>{liveBreaks} mins</span>
+                <span className='text-black'>{liveBreaks} min</span>
               </div>
             </div>
           )}

@@ -14,12 +14,22 @@ const NavbarBottom = ({ loading, logEntry, workData, breaklogMode }) => {
             <div>
               <div
                 className={`dropdown dropdown-top dropdown-hover ${
-                  ['day end'].includes(workData.lastLogStatus) || loading ? 'btn-disabled' : ''
+                  ['day end'].includes(workData.lastLogStatus) ||
+                  workData.lastLogStatus !== null ||
+                  loading ||
+                  breaklogMode
+                    ? 'btn-disabled'
+                    : ''
                 }`}>
                 <label
                   tabIndex={0}
                   className={`btn btn-fill ${
-                    workData.lastLogStatus !== null || loading || breaklogMode ? 'btn-disabled' : ''
+                    ['day end'].includes(workData.lastLogStatus) ||
+                    workData.lastLogStatus !== null ||
+                    loading ||
+                    breaklogMode
+                      ? 'btn-disabled'
+                      : ''
                   }`}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
