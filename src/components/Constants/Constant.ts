@@ -4,4 +4,5 @@ export const ThemeName = [
   { label: 'light', value: 'light' },
   { label: 'synthwave', value: 'synthwave' },
   { label: 'cyberpunk', value: 'cyberpunk' },
+  { label: 'forest', value: 'forest' },
 ];

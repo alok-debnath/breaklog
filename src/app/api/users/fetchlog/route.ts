@@ -111,9 +111,9 @@ export async function POST(request: NextRequest) {
       data: logs,
       workdata: {
         breakTime: formattedTime,
+        workDone: formattedWorkDone,
         currentBreak: currentBreakTime,
         lastLogStatus: recentLog,
-        workDone: formattedWorkDone,
       },
     });
   } catch (error: any) {
