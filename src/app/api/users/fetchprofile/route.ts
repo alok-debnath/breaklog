@@ -1,8 +1,9 @@
 import { connect } from '@/dbConfig/dbConfig';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+// import { PrismaClient } from '@prisma/client';
+// const prisma = new PrismaClient();
+import prisma from '@/dbConfig/dbConfig';
 
 connect();
 

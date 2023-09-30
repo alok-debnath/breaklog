@@ -1,9 +1,7 @@
 import { connect } from '@/dbConfig/dbConfig';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/dbConfig/dbConfig';
 
 connect();
 
@@ -71,6 +69,11 @@ export async function POST(request: NextRequest) {
 
     // the most recent log
     const lastLog = logs[logs.length - 1];
+    // const firstLog = logs[0].log_status;
+    // console.log(firstLog);
+    
+    
+
     // Calculate work done
     if (isDayStarted) {
       if (isDayEnded) {
@@ -114,6 +117,7 @@ export async function POST(request: NextRequest) {
         workDone: formattedWorkDone,
         currentBreak: currentBreakTime,
         lastLogStatus: recentLog,
+        // firstLogStatus: firstLog,
       },
     });
   } catch (error: any) {

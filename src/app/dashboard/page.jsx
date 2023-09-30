@@ -110,12 +110,15 @@ const Index = () => {
       setLoading(false);
       setLogs(res.data.data);
       setWorkData(res.data.workdata);
+
       if (res.data.workdata.currentBreak !== null) {
         setCurrBreak(res.data.workdata.currentBreak);
-        // console.log(liveBreaks);
       } else {
         setCurrBreak();
         setLiveBreaks();
+      }
+      if (res.data.workdata.firstLogStatus !== 'day start') {
+        setBreaklogMode(false);
       }
     } catch (error) {
       setLoading(false);
