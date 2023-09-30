@@ -1,8 +1,8 @@
 import { connect } from '@/dbConfig/dbConfig';
 import { NextRequest, NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
-import prisma from '@/dbConfig/dbConfig';
 import jwt from 'jsonwebtoken';
+import prisma from '@/dbConfig/dbConfig';
 
 connect();
 
@@ -54,6 +54,6 @@ export async function POST(request: NextRequest) {
 
     return reponse;
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }), { status: 500 };
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
