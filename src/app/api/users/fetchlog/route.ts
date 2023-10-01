@@ -69,10 +69,7 @@ export async function POST(request: NextRequest) {
 
     // the most recent log
     const lastLog = logs[logs.length - 1];
-    // const firstLog = logs[0].log_status;
-    // console.log(firstLog);
-    
-    
+    const firstLog = logs.length > 0 ? logs[0].log_status : null;
 
     // Calculate work done
     if (isDayStarted) {
@@ -117,7 +114,7 @@ export async function POST(request: NextRequest) {
         workDone: formattedWorkDone,
         currentBreak: currentBreakTime,
         lastLogStatus: recentLog,
-        // firstLogStatus: firstLog,
+        firstLogStatus: firstLog,
       },
     });
   } catch (error: any) {

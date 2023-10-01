@@ -117,7 +117,7 @@ const Index = () => {
         setCurrBreak();
         setLiveBreaks();
       }
-      if (res.data.workdata.firstLogStatus !== 'day start') {
+      if (res.data.workdata.firstLogStatus === 'day start') {
         setBreaklogMode(false);
       }
     } catch (error) {
