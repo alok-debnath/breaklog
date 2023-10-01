@@ -117,7 +117,7 @@ const Index = () => {
         setCurrBreak();
         setLiveBreaks();
       }
-      if (res.data.workdata.firstLogStatus === 'day start') {
+      if (res.data.workdata.firstLogStatus !== 'day start') {
         setBreaklogMode(false);
       }
     } catch (error) {
@@ -165,24 +165,44 @@ const Index = () => {
           <div className='hero-content text-center mb-14'>
             <div className='max-w-md'>
               <div className='overflow-x-auto'>
-                <div className='bg-base-100 rounded-2xl rounded-b-none py-2.5 px-7 mt-20'>
-                  <div className='text-left font-semibold mb-3'>
-                    <p>
-                      {new Date().toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                      })}
-                      ,
-                    </p>
-                    <p>
-                      {new Date().toLocaleDateString('en-US', {
-                        weekday: 'long',
-                      })}
-                    </p>
-                    <p className='font-medium my-2'>
-                      {!breaklogMode ? (
-                        workData.workDone ? (
-                          <>Work done: {workData.workDone} (hh:mm:ss)</>
+                <div className='card bg-base-100 rounded-b-none mt-20'>
+                  <div className='card-body'>
+                    <div className='text-left font-semibold mb-3'>
+                      <p>
+                        {new Date().toLocaleDateString('en-US', {
+                          day: 'numeric',
+                          month: 'long',
+                        })}
+                        ,
+                      </p>
+                      <p>
+                        {new Date().toLocaleDateString('en-US', {
+                          weekday: 'long',
+                        })}
+                      </p>
+                      <p className='font-medium my-2'>
+                        {!breaklogMode ? (
+                          workData.workDone ? (
+                            <>Work done: {workData.workDone} (hh:mm:ss)</>
+                          ) : (
+                            <span className='animate-pulse'>
+                              <span className='flex space-x-4'>
+                                <span className='flex-1 space-y-9 py-1'>
+                                  <span className='space-y-3'>
+                                    <span className='grid grid-cols-5 gap-3'>
+                                      <span className='h-2 bg-slate-700 rounded col-span-3'></span>
+                                      <span className='h-2 bg-slate-700 rounded col-span-2'></span>
+                                    </span>
+                                  </span>
+                                </span>
+                              </span>
+                            </span>
+                          )
+                        ) : null}
+                      </p>
+                      <p className='font-medium my-2'>
+                        {workData.breakTime ? (
+                          <>Break taken: {workData.breakTime} (hh:mm:ss)</>
                         ) : (
                           <span className='animate-pulse'>
                             <span className='flex space-x-4'>
@@ -196,62 +216,44 @@ const Index = () => {
                               </span>
                             </span>
                           </span>
-                        )
-                      ) : null}
-                    </p>
-                    <p className='font-medium my-2'>
-                      {workData.breakTime ? (
-                        <>Break taken: {workData.breakTime} (hh:mm:ss)</>
-                      ) : (
-                        <span className='animate-pulse'>
-                          <span className='flex space-x-4'>
-                            <span className='flex-1 space-y-9 py-1'>
-                              <span className='space-y-3'>
-                                <span className='grid grid-cols-5 gap-3'>
-                                  <span className='h-2 bg-slate-700 rounded col-span-3'></span>
-                                  <span className='h-2 bg-slate-700 rounded col-span-2'></span>
-                                </span>
-                              </span>
-                            </span>
-                          </span>
-                        </span>
-                      )}
-                    </p>
+                        )}
+                      </p>
+                    </div>
+                    {loading && <progress className='progress progress-success'></progress>}
+                    <table className='table text-center'>
+                      <thead>
+                        <tr>
+                          <th>Time</th>
+                          <th>Log</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {logs &&
+                          [...logs].reverse().map((log) => {
+                            const createdAt = new Date(log.createdAt);
+                            const utcFormattedDate = createdAt.toLocaleString('en-US', {
+                              timeZone: 'Asia/Kolkata',
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              hour12: true,
+                              month: 'short',
+                              day: 'numeric',
+                            });
+                            return (
+                              <tr key={log.id}>
+                                <td>{utcFormattedDate}</td>
+                                <td>{log.log_status}</td>
+                              </tr>
+                            );
+                          })}
+                      </tbody>
+                    </table>
                   </div>
-                  {loading && <progress className='progress progress-success'></progress>}
-                  <table className='table text-center'>
-                    <thead>
-                      <tr>
-                        <th>Time</th>
-                        <th>Log</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {logs &&
-                        [...logs].reverse().map((log) => {
-                          const createdAt = new Date(log.createdAt);
-                          const utcFormattedDate = createdAt.toLocaleString('en-US', {
-                            timeZone: 'Asia/Kolkata',
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                            month: 'short',
-                            day: 'numeric',
-                          });
-                          return (
-                            <tr key={log.id}>
-                              <td>{utcFormattedDate}</td>
-                              <td>{log.log_status}</td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </table>
                 </div>
                 <div className='mb-20'>
                   <Button
                     text='End Day'
-                    className={`btn btn-primary w-full rounded-2xl rounded-t-none ${
+                    className={`btn btn-primary w-full rounded-t-none ${
                       ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
                       loading ||
                       breaklogMode

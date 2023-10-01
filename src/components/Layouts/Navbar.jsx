@@ -28,7 +28,7 @@ const Navbar = ({ breaklogMode, userData }) => {
           <div className='dropdown'>
             <label
               tabIndex={0}
-              className='btn btn-ghost btn-circle'>
+              className='btn btn-ghost'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 className='h-5 w-5'
@@ -73,7 +73,7 @@ const Navbar = ({ breaklogMode, userData }) => {
           <div className='dropdown dropdown-end'>
             <label
               tabIndex={0}
-              className='btn rounded-3xl'>
+              className='btn '>
               {userData ? (
                 <span className=''>{userData.username}</span>
               ) : (
