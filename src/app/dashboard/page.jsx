@@ -142,7 +142,6 @@ const Index = () => {
     if (savedTheme) {
       setThemeMode(savedTheme);
     }
-
     // fetch user details
     fetchProfileFunction();
     fetchLogFunction();
