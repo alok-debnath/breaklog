@@ -16,24 +16,29 @@ const Index = () => {
   // store fetched calculated workDone,breakTime,lastLogStatus from backend
   const [workData, setWorkData] = useState([]);
   // for breaklogMode
-  const [breaklogMode, setBreaklogMode] = useState(() => {
-    if (isClient) {
-      const storedBreaklogMode = localStorage.getItem('breaklogMode');
-      return storedBreaklogMode ? JSON.parse(storedBreaklogMode) : true;
-    }
-    return true; // Default value if localStorage is unavailable
-  });
+  const [breaklogMode, setBreaklogMode] = useState(true);
   // for setting loader
   const [loading, setLoading] = useState(false);
   // for break time calculation
   const [currBreak, setCurrBreak] = useState();
   const [liveBreaks, setLiveBreaks] = useState(0);
 
+  const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
   useEffect(() => {
     if (isClient) {
+      const storedBreaklogMode = localStorage.getItem('breaklogMode');
+      if (storedBreaklogMode) {
+        setBreaklogMode(JSON.parse(storedBreaklogMode));
+      }
+      setIsFirstEffectCompleted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isClient && isFirstEffectCompleted) {
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
     }
-  }, [breaklogMode]);
+  }, [breaklogMode, isFirstEffectCompleted]);
 
   const calculateBreakTime = () => {
     const breakTime = new Date(currBreak);
@@ -117,7 +122,7 @@ const Index = () => {
         setCurrBreak();
         setLiveBreaks();
       }
-      if (res.data.workdata.firstLogStatus !== 'day start') {
+      if (res.data.workdata.firstLogStatus === 'day start') {
         setBreaklogMode(false);
       }
     } catch (error) {
