@@ -21,7 +21,7 @@ const NavbarBottom = ({ loading, logEntry, workData, breaklogMode }) => {
                     ? 'btn-disabled'
                     : ''
                 }`}>
-                <label
+                {/* <label
                   tabIndex={0}
                   className={`btn btn-fill ${
                     ['day end'].includes(workData.lastLogStatus) ||
@@ -54,7 +54,7 @@ const NavbarBottom = ({ loading, logEntry, workData, breaklogMode }) => {
                   <li>
                     <a>Work From Home</a>
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
             <div>
