@@ -2,9 +2,10 @@ import axios from 'axios';
 import Button from '../UI/Button';
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
+import { useStore } from '@/stores/store';
 
-const NavbarBottom = ({ loading, logEntry, workData, breaklogMode }) => {
-  // const [loading, setLoading] = useState(false);
+const NavbarBottom = ({ logEntry }) => {
+  const { breaklogMode, workData, loading } = useStore();
 
   return (
     <>
@@ -64,7 +65,7 @@ const NavbarBottom = ({ loading, logEntry, workData, breaklogMode }) => {
                 }`}
                 text={
                   <>
-                    <p>Enter log</p>
+                    <p>Enter Log</p>
                     {loading && <span className='loading loading-ring loading-md'></span>}
                   </>
                 }

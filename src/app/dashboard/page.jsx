@@ -7,28 +7,19 @@ import Button from '@/components/UI/Button';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 
-const Index = () => {
-  const isClient = typeof window !== 'undefined';
+import { useStore } from '@/stores/store';
 
-  const [userData, setUserData] = useState();
-  // store fetched logs from backend
-  const [logs, setLogs] = useState([]);
-  // store fetched calculated workDone,breakTime,lastLogStatus from backend
-  const [workData, setWorkData] = useState([]);
-  // for breaklogMode
-  const [breaklogMode, setBreaklogMode] = useState(true);
-  // for setting loader
-  const [loading, setLoading] = useState(false);
-  // for break time calculation
-  const [currBreak, setCurrBreak] = useState();
-  const [liveBreaks, setLiveBreaks] = useState(0);
+const Index = () => {
+  const { themeMode, breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
+
+  const isClient = typeof window !== 'undefined';
 
   const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
   useEffect(() => {
     if (isClient) {
       const storedBreaklogMode = localStorage.getItem('breaklogMode');
       if (storedBreaklogMode) {
-        setBreaklogMode(JSON.parse(storedBreaklogMode));
+        useStore.setState(() => ({ breaklogMode: JSON.parse(storedBreaklogMode) }));
       }
       setIsFirstEffectCompleted(true);
     }
@@ -45,7 +36,8 @@ const Index = () => {
     const currentTime = new Date();
     const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
     const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
-    setLiveBreaks(diffInMinutes);
+
+    useStore.setState(() => ({ liveBreaks: diffInMinutes }));
   };
   useEffect(() => {
     calculateBreakTime();
@@ -57,17 +49,14 @@ const Index = () => {
     };
   }, [currBreak]);
 
-  //  For theme //
-  const [themeMode, setThemeMode] = useState('night');
-
   const logEntry = async (value) => {
     try {
-      setLoading(true);
+      useStore.setState(() => ({ loading: true }));
 
       if (value === 'undo log') {
         const userConfirmed = window.confirm('Are you sure you want to undo the recent log entry?');
         if (!userConfirmed) {
-          setLoading(false);
+          useStore.setState(() => ({ loading: false }));
           return;
         }
       }
@@ -78,7 +67,7 @@ const Index = () => {
 
       const res = await axios.post('/api/users/submitlog', values);
       await fetchLogFunction();
-      setLoading(false);
+      useStore.setState(() => ({ loading: false }));
     } catch (error) {
       toast.error('Error while log entry: ', error, {
         style: {
@@ -93,7 +82,7 @@ const Index = () => {
   const fetchProfileFunction = async () => {
     try {
       const res = await axios.get('/api/users/fetchprofile');
-      setUserData(res.data.data);
+      useStore.setState(() => ({ userData: res.data.data }));
     } catch (error) {
       toast.error(error.message, {
         style: {
@@ -106,27 +95,28 @@ const Index = () => {
   };
   const fetchLogFunction = async () => {
     try {
-      setLoading(true);
+      useStore.setState(() => ({ loading: true }));
 
       const res = await axios.post(
         '/api/users/fetchlog'
         // values
       );
-      setLoading(false);
-      setLogs(res.data.data);
-      setWorkData(res.data.workdata);
+      useStore.setState(() => ({ loading: false }));
+      useStore.setState(() => ({ logs: res.data.data }));
+      useStore.setState(() => ({ workData: res.data.workdata }));
 
       if (res.data.workdata.currentBreak !== null) {
-        setCurrBreak(res.data.workdata.currentBreak);
+        useStore.setState(() => ({ currBreak: res.data.workdata.currentBreak }));
       } else {
-        setCurrBreak();
-        setLiveBreaks();
+        useStore.setState(() => ({ currBreak: null }));
+        useStore.setState(() => ({ liveBreaks: null }));
       }
       if (res.data.workdata.firstLogStatus === 'day start') {
-        setBreaklogMode(false);
+        // setBreaklogMode(false);
+        useStore.setState(() => ({ breaklogMode: false }));
       }
     } catch (error) {
-      setLoading(false);
+      useStore.setState(() => ({ loading: false }));
       toast.error(error.message, {
         style: {
           padding: '15px',
@@ -140,26 +130,18 @@ const Index = () => {
     const savedTheme = localStorage.getItem('thememode');
 
     if (savedTheme) {
-      setThemeMode(savedTheme);
+      useStore.setState(() => ({ themeMode: savedTheme }));
     }
     // fetch user details
     fetchProfileFunction();
     fetchLogFunction();
   }, []);
 
-  const themeToggle = (themeName) => {
-    setThemeMode(themeName);
-    localStorage.setItem('thememode', themeName);
-  };
-
   return (
     <>
       <div data-theme={themeMode}>
         <div>
-          <Navbar
-            userData={userData}
-            breaklogMode={breaklogMode}
-          />
+          <Navbar />
         </div>
         <div className='hero min-h-screen bg-base-200'>
           <Toaster
@@ -257,7 +239,7 @@ const Index = () => {
                 <div className='mb-20'>
                   <Button
                     text='End Day'
-                    className={`btn btn-primary w-full rounded-t-none ${
+                    className={`btn btn-primary w-full rounded-t-none normal-case ${
                       ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
                       loading ||
                       breaklogMode
@@ -337,22 +319,8 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <SettingsModal
-          logs={logs}
-          themeToggle={themeToggle}
-          themeMode={themeMode}
-          breaklogMode={breaklogMode}
-          setBreaklogMode={setBreaklogMode}
-        />
-        <div>
-          <NavbarBottom
-            // setShowToast={setShowToast}
-            breaklogMode={breaklogMode}
-            workData={workData}
-            loading={loading}
-            logEntry={logEntry}
-          />
-        </div>
+        <SettingsModal />
+        <NavbarBottom logEntry={logEntry} />
       </div>
     </>
   );

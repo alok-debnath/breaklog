@@ -2,8 +2,11 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
+import { useStore } from '@/stores/store';
 
-const Navbar = ({ breaklogMode, userData }) => {
+const Navbar = () => {
+  const { breaklogMode, userData } = useStore();
+  
   const router = useRouter();
   const logout = async () => {
     try {
@@ -73,8 +76,8 @@ const Navbar = ({ breaklogMode, userData }) => {
           <div className='dropdown dropdown-end'>
             <label
               tabIndex={0}
-              className='btn '>
-              {userData ? (
+              className='btn normal-case'>
+              {userData.username !== undefined ? (
                 <span className=''>{userData.username}</span>
               ) : (
                 <>
