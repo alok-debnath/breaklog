@@ -1,7 +1,6 @@
 import ToggleButtonText from '../UI/ToggleButtonText';
 import SelectboxText from '../UI/SelectboxText';
 import { ThemeName } from '../Constants/Constant';
-import { useState } from 'react';
 import { useStore } from '@/stores/store';
 
 const SettingsModal = () => {
@@ -14,7 +13,6 @@ const SettingsModal = () => {
 
   const handleToggleChange = (event) => {
     useStore.setState(() => ({ breaklogMode: event.target.checked }));
-    // setBreaklogMode(event.target.checked);
   };
 
   return (

@@ -6,7 +6,6 @@ import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
-
 import { useStore } from '@/stores/store';
 
 const Index = () => {
@@ -32,12 +31,14 @@ const Index = () => {
   }, [breaklogMode, isFirstEffectCompleted]);
 
   const calculateBreakTime = () => {
-    const breakTime = new Date(currBreak);
-    const currentTime = new Date();
-    const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
-    const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
+    if (currBreak !== null) {
+      const breakTime = new Date(currBreak);
+      const currentTime = new Date();
+      const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
+      const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
 
-    useStore.setState(() => ({ liveBreaks: diffInMinutes }));
+      useStore.setState(() => ({ liveBreaks: diffInMinutes }));
+    }
   };
   useEffect(() => {
     calculateBreakTime();
@@ -49,7 +50,7 @@ const Index = () => {
     };
   }, [currBreak]);
 
-  const logEntry = async (value) => {
+  const logEntry = async (value: string) => {
     try {
       useStore.setState(() => ({ loading: true }));
 
@@ -67,9 +68,10 @@ const Index = () => {
 
       const res = await axios.post('/api/users/submitlog', values);
       await fetchLogFunction();
+
       useStore.setState(() => ({ loading: false }));
-    } catch (error) {
-      toast.error('Error while log entry: ', error, {
+    } catch (error: any) {
+      toast.error('Error while log entry: ' + error.message, {
         style: {
           padding: '15px',
           color: 'white',
@@ -83,7 +85,7 @@ const Index = () => {
     try {
       const res = await axios.get('/api/users/fetchprofile');
       useStore.setState(() => ({ userData: res.data.data }));
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message, {
         style: {
           padding: '15px',
@@ -101,21 +103,24 @@ const Index = () => {
         '/api/users/fetchlog'
         // values
       );
-      useStore.setState(() => ({ loading: false }));
-      useStore.setState(() => ({ logs: res.data.data }));
-      useStore.setState(() => ({ workData: res.data.workdata }));
+      useStore.setState(() => ({
+        loading: false,
+        logs: res.data.data,
+        workData: res.data.workdata,
+      }));
 
       if (res.data.workdata.currentBreak !== null) {
         useStore.setState(() => ({ currBreak: res.data.workdata.currentBreak }));
       } else {
-        useStore.setState(() => ({ currBreak: null }));
-        useStore.setState(() => ({ liveBreaks: null }));
+        useStore.setState(() => ({
+          currBreak: null,
+          liveBreaks: 0,
+        }));
       }
       if (res.data.workdata.firstLogStatus === 'day start') {
-        // setBreaklogMode(false);
         useStore.setState(() => ({ breaklogMode: false }));
       }
-    } catch (error) {
+    } catch (error: any) {
       useStore.setState(() => ({ loading: false }));
       toast.error(error.message, {
         style: {
@@ -252,7 +257,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-          {!isNaN(liveBreaks) && liveBreaks !== null && (
+          {currBreak !== null && (
             <div className='toast toast-start mb-14'>
               <div className='flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
                 <span className='text-black'>{liveBreaks} min</span>

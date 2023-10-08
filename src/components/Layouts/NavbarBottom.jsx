@@ -1,7 +1,4 @@
-import axios from 'axios';
 import Button from '../UI/Button';
-import { useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 
 const NavbarBottom = ({ logEntry }) => {
