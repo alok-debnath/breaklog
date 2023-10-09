@@ -2,10 +2,11 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { useStore } from '@/stores/store';
+import Link from 'next/link';
 
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
-  
+
   const router = useRouter();
   const logout = async () => {
     try {
@@ -97,10 +98,12 @@ const Navbar = () => {
               tabIndex={0}
               className='menu menu-lg dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52'>
               <li>
-                <a className='justify-between'>
+                <Link
+                  href='/dashboard/profile'
+                  className='justify-between'>
                   Profile
                   <span className='badge'>New</span>
-                </a>
+                </Link>
               </li>
               <li onClick={() => window.setting_modal.showModal()}>
                 <a>Settings</a>

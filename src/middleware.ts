@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { useStore } from '@/stores/store';
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
@@ -19,9 +20,11 @@ export function middleware(request: NextRequest) {
   if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
+
+  useStore.setState(() => ({ currentPage: path }));
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/', '/dashboard', '/login', '/signup'],
+  matcher: ['/', '/dashboard', '/dashboard/profile', '/login', '/signup'],
 };
