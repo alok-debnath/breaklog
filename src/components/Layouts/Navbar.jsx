@@ -79,7 +79,7 @@ const Navbar = () => {
               ) : (
                 <>
                   <div>
-                    <span className='line-through'>Break</span>DayLog.v4
+                    DayLog.v4
                   </div>
                 </>
               )}
