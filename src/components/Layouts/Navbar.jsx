@@ -1,11 +1,25 @@
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
+
+  const [backPath, setBackPath] = useState('');
+  const pathname = usePathname();
+  useEffect(() => {
+    if (pathname !== '/dashboard') {
+      const parts = pathname.split('/');
+      parts.pop();
+      const modifiedPath = parts.join('/');
+      setBackPath(modifiedPath);
+    } else {
+      setBackPath('');
+    }
+  }, [pathname]);
 
   const router = useRouter();
   const logout = async () => {
@@ -73,6 +87,25 @@ const Navbar = () => {
           </div>
         </div>
         <div className='navbar-end gap-2'>
+          {backPath !== '' && (
+            <Link
+              href={backPath}
+              className='btn'>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth={2}
+                stroke='currentColor'
+                className='w-6 h-6'>
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M15.75 19.5L8.25 12l7.5-7.5'
+                />
+              </svg>
+            </Link>
+          )}
           <div className='dropdown dropdown-end'>
             <label
               tabIndex={0}

@@ -14,7 +14,6 @@ interface StoreState {
   loading: boolean;
   currBreak: null | Date; // Change 'null' to 'null | Date' for date type
   liveBreaks: number;
-  currentPage: string,
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -30,5 +29,4 @@ export const useStore = create<StoreState>((set) => ({
   loading: false,
   currBreak: null,
   liveBreaks: 0,
-  currentPage: '',
 }));
