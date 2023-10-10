@@ -86,11 +86,11 @@ const Navbar = () => {
             </a>
           </div>
         </div>
-        <div className='navbar-end gap-2'>
+        <div className='navbar-end gap-1 join'>
           {backPath !== '' && (
             <Link
               href={backPath}
-              className='btn'>
+              className='btn btn-neutral join-item join-horizontal'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
@@ -109,7 +109,7 @@ const Navbar = () => {
           <div className='dropdown dropdown-end'>
             <label
               tabIndex={0}
-              className='btn normal-case'>
+              className='btn normal-case join-item'>
               {userData.username !== undefined ? (
                 <span className=''>{userData.username}</span>
               ) : (
