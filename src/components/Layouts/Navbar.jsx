@@ -86,7 +86,7 @@ const Navbar = () => {
                 <>BreakLog.v4</>
               ) : (
                 <>
-                  <div>DayL☀️g.v4</div>
+                  <div className="whitespace-nowrap">DayL☀️g.v4</div>
                 </>
               )}
             </a>
