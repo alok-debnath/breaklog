@@ -2,13 +2,32 @@
 
 import Navbar from '@/components/Layouts/Navbar';
 import SettingsModal from '@/components/Layouts/SettingsModal';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from '@/stores/store';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 
 const ProfilePage = () => {
-  const { themeMode } = useStore();
+  const { themeMode, breaklogMode } = useStore();
+
+  const isClient = typeof window !== 'undefined';
+
+  const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
+  useEffect(() => {
+    if (isClient) {
+      const storedBreaklogMode = localStorage.getItem('breaklogMode');
+      if (storedBreaklogMode) {
+        useStore.setState(() => ({ breaklogMode: JSON.parse(storedBreaklogMode) }));
+      }
+      setIsFirstEffectCompleted(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isClient && isFirstEffectCompleted) {
+      localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
+    }
+  }, [breaklogMode, isFirstEffectCompleted]);
 
   const fetchProfileFunction = async () => {
     try {
@@ -51,6 +70,7 @@ const ProfilePage = () => {
                     <input
                       type='text'
                       id='username'
+                      name='username'
                       placeholder='Type here'
                       className='input input-bordered w-full max-w-md'
                     />
@@ -64,8 +84,9 @@ const ProfilePage = () => {
                     <input
                       type='email'
                       id='email'
+                      name='email'
                       placeholder='Type here'
-                      className='input input-bordered w-full max-w-xs'
+                      className='input input-bordered w-full max-w-md'
                     />
                   </div>
                   <div className='form-control'>
@@ -77,8 +98,9 @@ const ProfilePage = () => {
                     <input
                       type='text'
                       id='name'
+                      name='name'
                       placeholder='Type here'
-                      className='input input-bordered w-full max-w-xs'
+                      className='input input-bordered w-full max-w-md'
                     />
                   </div>
                   <div className='form-control mt-6'>
