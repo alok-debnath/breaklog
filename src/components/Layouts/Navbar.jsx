@@ -64,10 +64,18 @@ const Navbar = () => {
               tabIndex={0}
               className='menu menu-lg dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52'>
               <li>
-                <a className='focus'>Homepage</a>
+                <Link
+                  href='/dashboard'
+                  className={`${pathname === '/dashboard' ? 'focus' : ''}`}>
+                  Homepage
+                </Link>
               </li>
               <li>
-                <a>History</a>
+              <Link
+                  href='/dashboard'
+                  className={`${pathname === '/history' ? 'focus' : ''}`}>
+                  History
+                </Link>
               </li>
               {/* <li><a>About</a></li> */}
             </ul>
@@ -78,9 +86,7 @@ const Navbar = () => {
                 <>BreakLog.v4</>
               ) : (
                 <>
-                  <div>
-                    DayLog.v4
-                  </div>
+                  <div>☀️ DayLog.v4</div>
                 </>
               )}
             </a>
