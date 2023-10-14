@@ -27,7 +27,6 @@ const Navbar = () => {
       await axios.get('/api/users/logout');
       router.push('/login');
     } catch (error) {
-      // console.log(error.message);
       toast.error(error.message, {
         style: {
           padding: '15px',
@@ -71,7 +70,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-              <Link
+                <Link
                   href='/dashboard'
                   className={`${pathname === '/history' ? 'focus' : ''}`}>
                   History
@@ -86,7 +85,7 @@ const Navbar = () => {
                 <>BreakLog.v4</>
               ) : (
                 <>
-                  <div className="whitespace-nowrap">DayL☀️g.v4</div>
+                  <div className='whitespace-nowrap'>DayL☀️g.v4</div>
                 </>
               )}
             </a>
