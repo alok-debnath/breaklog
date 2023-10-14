@@ -1,58 +1,16 @@
 'use client';
-
 import Navbar from '@/components/Layouts/Navbar';
 import SettingsModal from '@/components/Layouts/SettingsModal';
-import { useEffect, useState } from 'react';
 import { useStore } from '@/stores/store';
 import { toast } from 'react-hot-toast';
-import axios from 'axios';
+import InitialFetch from '@/components/common/InitialFetch';
 
 const ProfilePage = () => {
-  const { themeMode, breaklogMode } = useStore();
+  const { themeMode } = useStore();
 
-  const isClient = typeof window !== 'undefined';
-
-  const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
-  useEffect(() => {
-    if (isClient) {
-      const storedBreaklogMode = localStorage.getItem('breaklogMode');
-      if (storedBreaklogMode) {
-        useStore.setState(() => ({ breaklogMode: JSON.parse(storedBreaklogMode) }));
-      }
-      setIsFirstEffectCompleted(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isClient && isFirstEffectCompleted) {
-      localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
-    }
-  }, [breaklogMode, isFirstEffectCompleted]);
-
-  const fetchProfileFunction = async () => {
-    try {
-      const res = await axios.get('/api/users/fetchprofile');
-      useStore.setState(() => ({ userData: res.data.data }));
-    } catch (error: any) {
-      toast.error(error.message, {
-        style: {
-          padding: '15px',
-          color: 'white',
-          backgroundColor: 'rgb(214, 60, 60)',
-        },
-      });
-    }
-  };
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('thememode');
-
-    if (savedTheme) {
-      useStore.setState(() => ({ themeMode: savedTheme }));
-    }
-    fetchProfileFunction();
-  }, []);
   return (
     <>
+      <InitialFetch />
       <div data-theme={themeMode}>
         <Navbar />
         <div className='hero min-h-screen bg-base-200'>

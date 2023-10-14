@@ -2,13 +2,14 @@ import ToggleButtonText from '../UI/ToggleButtonText';
 import SelectboxText from '../UI/SelectboxText';
 import { ThemeName } from '../../Constants/Constant';
 import { useStore } from '@/stores/store';
+import { useEffect } from 'react';
 
 const SettingsModal = () => {
   const { breaklogMode, logs, themeMode } = useStore();
+  const isClient = typeof window !== 'undefined';
 
   const handleThemeChange = (event) => {
     useStore.setState(() => ({ themeMode: event.target.value }));
-    localStorage.setItem('thememode', event.target.value);
   };
 
   const handleToggleChange = (event) => {

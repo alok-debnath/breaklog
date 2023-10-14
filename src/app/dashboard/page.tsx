@@ -7,28 +7,12 @@ import Button from '@/components/UI/Button';
 import toast, { Toaster } from 'react-hot-toast';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
+import InitialFetch from '@/components/common/InitialFetch';
 
 const Index = () => {
   const { themeMode, breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
 
   const isClient = typeof window !== 'undefined';
-
-  const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
-  useEffect(() => {
-    if (isClient) {
-      const storedBreaklogMode = localStorage.getItem('breaklogMode');
-      if (storedBreaklogMode) {
-        useStore.setState(() => ({ breaklogMode: JSON.parse(storedBreaklogMode) }));
-      }
-      setIsFirstEffectCompleted(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isClient && isFirstEffectCompleted) {
-      localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
-    }
-  }, [breaklogMode, isFirstEffectCompleted]);
 
   const calculateBreakTime = () => {
     if (currBreak !== null) {
@@ -71,30 +55,18 @@ const Index = () => {
 
       useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
-      toast.error('Error while log entry: ' + error.message, {
-        style: {
-          padding: '15px',
-          color: 'white',
-          backgroundColor: 'rgb(214, 60, 60)',
-        },
-      });
+      if (error.name !== 'AbortError') {
+        toast.error('Error while log entry: ' + error.message, {
+          style: {
+            padding: '15px',
+            color: 'white',
+            backgroundColor: 'rgb(214, 60, 60)',
+          },
+        });
+      }
     }
   };
 
-  const fetchProfileFunction = async () => {
-    try {
-      const res = await axios.get('/api/users/fetchprofile');
-      useStore.setState(() => ({ userData: res.data.data }));
-    } catch (error: any) {
-      toast.error(error.message, {
-        style: {
-          padding: '15px',
-          color: 'white',
-          backgroundColor: 'rgb(214, 60, 60)',
-        },
-      });
-    }
-  };
   const fetchLogFunction = async () => {
     try {
       useStore.setState(() => ({ loading: true }));
@@ -121,30 +93,28 @@ const Index = () => {
         useStore.setState(() => ({ breaklogMode: false }));
       }
     } catch (error: any) {
-      useStore.setState(() => ({ loading: false }));
-      toast.error(error.message, {
-        style: {
-          padding: '15px',
-          color: 'white',
-          backgroundColor: 'rgb(214, 60, 60)',
-        },
-      });
+      if (error.name !== 'AbortError') {
+        useStore.setState(() => ({ loading: false }));
+        toast.error(error.message, {
+          style: {
+            padding: '15px',
+            color: 'white',
+            backgroundColor: 'rgb(214, 60, 60)',
+          },
+        });
+      }
     }
   };
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('thememode');
 
-    if (savedTheme) {
-      useStore.setState(() => ({ themeMode: savedTheme }));
-    }
+  useEffect(() => {
     // fetch user details
-    fetchProfileFunction();
     fetchLogFunction();
   }, []);
 
   return (
     <>
       <div data-theme={themeMode}>
+        <InitialFetch />
         <div>
           <Navbar />
         </div>
