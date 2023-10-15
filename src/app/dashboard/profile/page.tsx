@@ -73,7 +73,6 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
-        <SettingsModal />
       </div>
     </>
   );

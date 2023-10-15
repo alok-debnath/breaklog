@@ -115,9 +115,7 @@ const Index = () => {
     <>
       <div data-theme={themeMode}>
         <InitialFetch />
-        <div>
-          <Navbar />
-        </div>
+        <Navbar />
         <div className='hero min-h-screen bg-base-200'>
           <Toaster
             position='top-left'
@@ -294,7 +292,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <SettingsModal />
         <NavbarBottom logEntry={logEntry} />
       </div>
     </>

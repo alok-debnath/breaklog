@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import SettingsModal from './SettingsModal';
 
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
@@ -71,8 +72,8 @@ const Navbar = () => {
               </li>
               <li>
                 <Link
-                  href='/dashboard'
-                  className={`${pathname === '/history' ? 'focus' : ''}`}>
+                  href='/dashboard/history'
+                  className={`${pathname === '/dashboard/history' ? 'focus' : ''}`}>
                   History
                 </Link>
               </li>
@@ -153,6 +154,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      <SettingsModal />
     </>
   );
 };
