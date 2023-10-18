@@ -50,9 +50,6 @@ const HistoryPage = () => {
 
       const res = await axios.post('/api/users/fetchlog/fetchdynamiclog', values);
 
-      useStore.setState(() => ({ monthLogs: res.data.data }));
-      useStore.setState(() => ({ loading: false }));
-
       if (res.data.status === 200) {
         setCollapseBoxState(true);
       } else {
@@ -65,6 +62,9 @@ const HistoryPage = () => {
           },
         });
       }
+
+      useStore.setState(() => ({ monthLogs: res.data.data }));
+      useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
       if (error.name !== 'AbortError') {
         toast.error('Error while log entry: ' + error.message, {
@@ -128,22 +128,22 @@ const HistoryPage = () => {
                             </option>
                           ))}
                         </select>
-                        
                       </div>
                       <div className='mt-3'>
-                          <button
-                            className='btn'
-                            onClick={() => {
-                              handleSearch();
-                            }}>
-                            Search
-                          </button>
-                        </div>
+                        <button
+                          className='btn'
+                          onClick={() => {
+                            handleSearch();
+                          }}>
+                          Search
+                        </button>
+                      </div>
                     </div>
                     <div className='collapse bg-base-200'>
                       <input
                         type='checkbox'
-                        defaultChecked={collapseBoxState}
+                        checked={collapseBoxState}
+                        readOnly
                         hidden
                       />
                       <div className='collapse-content'>
