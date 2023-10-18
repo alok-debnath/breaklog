@@ -8,6 +8,7 @@ interface WorkData {
 interface StoreState {
   themeMode: string;
   logs: any[];
+  monthLogs: any[];
   userData: any[];
   breaklogMode: boolean;
   workData: WorkData; // Replace 'any' with the actual type of workData
@@ -19,6 +20,7 @@ interface StoreState {
 export const useStore = create<StoreState>((set) => ({
   themeMode: 'night',
   logs: [],
+  monthLogs: [],
   userData: [],
   breaklogMode: true,
   workData: {
