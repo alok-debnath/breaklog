@@ -121,7 +121,7 @@ const Index = () => {
             position='top-left'
             reverseOrder={false}
           />
-          <div className='hero-content text-center mb-14'>
+          <div className='hero-content text-center'>
             <div className='max-w-md'>
               <div className='overflow-x-auto'>
                 <div className='card bg-base-100 rounded-b-none mt-20'>

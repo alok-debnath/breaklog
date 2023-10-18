@@ -54,7 +54,8 @@ export async function POST(request: NextRequest) {
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
       const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
       const seconds = String(totalSeconds % 60).padStart(2, '0');
-      return `${hours}:${minutes}:${seconds}`;
+      // return `${hours}:${minutes}:${seconds}`;
+      return `${hours}:${minutes}`;
     };
 
     const dateMetrics = [];
@@ -119,8 +120,13 @@ export async function POST(request: NextRequest) {
             const formattedBreakTime = formatTime(breakTime);
             const formattedWorkDone = formatTime(workDone);
 
+            const parsedDate = new Date(date);
+            const day = String(parsedDate.getDate()).padStart(2, '0');
+            const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+            const year = parsedDate.getFullYear().toString().slice(-2);
+            const formattedDate = `${day}-${month}-${year}`;
             dateMetrics.push({
-              date,
+              date: formattedDate,
               breakTime: breakTime,
               workDone: workDone,
               formattedBreakTime: formattedBreakTime,
