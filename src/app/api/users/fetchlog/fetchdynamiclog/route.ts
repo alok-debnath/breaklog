@@ -54,8 +54,8 @@ export async function POST(request: NextRequest) {
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
       const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
       const seconds = String(totalSeconds % 60).padStart(2, '0');
-      // return `${hours}:${minutes}:${seconds}`;
-      return `${hours}:${minutes}`;
+      return `${hours}:${minutes}:${seconds}`;
+      // return `${hours}:${minutes}`;
     };
 
     const dateMetrics = [];
@@ -137,10 +137,42 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Initialize the summary object.
+    let summary = {};
+    if (dateMetrics.length > 0) {
+      // Initialize variables to store the totals and count.
+      let totalBreakTime = 0;
+      let totalWorkDone = 0;
+      let numberOfDays = dateMetrics.length;
+
+      // Iterate through the data to calculate totals.
+      for (const metrics of dateMetrics) {
+        totalBreakTime += metrics.breakTime;
+        totalWorkDone += metrics.workDone;
+      }
+
+      // Calculate the expected work hours.
+      const expectedWorkHours = 8 * numberOfDays;
+
+      // Format the total break time and total work done.
+      const formattedTotalBreakTime = formatTime(totalBreakTime);
+      const formattedTotalWorkDone = formatTime(totalWorkDone);
+
+      // Store the formatted totals, number of days, and expected vs. actual work.
+      summary = {
+        formattedTotalBreakTime,
+        formattedTotalWorkDone,
+        numberOfDays,
+        expectedWorkHours,
+        // actualWorkHours: (totalWorkDone / 3600000).toFixed(2),
+      };
+    }
+
     return NextResponse.json({
       message: 'Logs fetched successfully',
       status: logs.length === 0 ? 'No logs found' : 200,
       data: logs.length === 0 ? 'No logs found' : dateMetrics,
+      summary: summary,
       // workdata: {
       //   breakTime: formattedTime,
       //   workDone: formattedWorkDone,

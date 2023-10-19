@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 const HistoryPage = () => {
-  const { themeMode, loading, monthLogs } = useStore();
+  const { themeMode, loading, monthLogs, summary } = useStore();
   const [collapseBoxState, setCollapseBoxState] = useState(false);
 
   // Initialize selectedMonth and selectedYear with the current month and year.
@@ -52,6 +52,10 @@ const HistoryPage = () => {
 
       if (res.data.status === 200) {
         setCollapseBoxState(true);
+
+        useStore.setState(() => ({ monthLogs: res.data.data }));
+        useStore.setState(() => ({ loading: false }));
+        useStore.setState(() => ({ summary: res.data.summary }));
       } else {
         setCollapseBoxState(false);
         toast.error('Error: ' + res.data.status, {
@@ -62,9 +66,6 @@ const HistoryPage = () => {
           },
         });
       }
-
-      useStore.setState(() => ({ monthLogs: res.data.data }));
-      useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
       if (error.name !== 'AbortError') {
         toast.error('Error while log entry: ' + error.message, {
@@ -148,12 +149,43 @@ const HistoryPage = () => {
                       />
                       <div className='collapse-content'>
                         <div className='pt-4'>
-                          <table className='table text-center text-sm'>
+                          <div className='card bg-base-100'>
+                            <div className='card-body text-sm'>
+                              <p>
+                                Total Work hours:{' '}
+                                <span className='font-semibold'>{summary.expectedWorkHours}</span>{' '}
+                                hr
+                              </p>
+                              <p>
+                                Total Work Done:{' '}
+                                <span className='font-semibold'>{summary.formattedTotalWorkDone}</span> hr
+                              </p>
+                              <div className='divider my-1'></div>
+                              <p>
+                                No.of Days Logged:{' '}
+                                <span className='font-semibold'>{summary.numberOfDays}</span>{' '}
+                                days
+                              </p>
+                              <p>
+                                Total Break Taken:{' '}
+                                <span className='font-semibold'>{summary.formattedTotalBreakTime}</span> hr
+                              </p>
+                            </div>
+                          </div>
+                          <table className='table table-xs text-center'>
                             <thead>
                               <tr>
                                 <th>Date</th>
-                                <th>Break</th>
-                                <th>Work</th>
+                                <th>
+                                  Break
+                                  <br />
+                                  hh:mm:ss
+                                </th>
+                                <th>
+                                  Work
+                                  <br />
+                                  hh:mm:ss
+                                </th>
                               </tr>
                             </thead>
                             <tbody>

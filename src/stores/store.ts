@@ -5,11 +5,19 @@ interface WorkData {
   breakTime: string;
   workDone: string;
 }
+interface summary {
+  formattedTotalBreakTime: string;
+  formattedTotalWorkDone: string;
+  numberOfDays: string;
+  expectedWorkHours: string;
+  // actualWorkHours: string;
+}
 interface StoreState {
   themeMode: string;
   logs: any[];
   monthLogs: any[];
   userData: any[];
+  summary: summary;
   breaklogMode: boolean;
   workData: WorkData; // Replace 'any' with the actual type of workData
   loading: boolean;
@@ -22,6 +30,13 @@ export const useStore = create<StoreState>((set) => ({
   logs: [],
   monthLogs: [],
   userData: [],
+  summary: {
+    formattedTotalBreakTime: "",
+    formattedTotalWorkDone: "",
+    numberOfDays: "",
+    expectedWorkHours: "",
+    // actualWorkHours: "",
+  },
   breaklogMode: true,
   workData: {
     lastLogStatus: '',
