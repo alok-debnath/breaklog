@@ -41,7 +41,7 @@ const HistoryPage = () => {
 
     try {
       setCollapseBoxState(false);
-      useStore.setState(() => ({ loading: true }));
+      // useStore.setState(() => ({ loading: true }));
 
       const values = {
         monthStart: monthStart,
@@ -54,7 +54,7 @@ const HistoryPage = () => {
         setCollapseBoxState(true);
 
         useStore.setState(() => ({ monthLogs: res.data.data }));
-        useStore.setState(() => ({ loading: false }));
+        // useStore.setState(() => ({ loading: false }));
         useStore.setState(() => ({ summary: res.data.summary }));
       } else {
         setCollapseBoxState(false);
@@ -68,7 +68,7 @@ const HistoryPage = () => {
       }
     } catch (error: any) {
       if (error.name !== 'AbortError') {
-        toast.error('Error while log entry: ' + error.message, {
+        toast.error('Error: ' + error.message, {
           style: {
             padding: '15px',
             color: 'white',
@@ -96,10 +96,10 @@ const HistoryPage = () => {
           <div className='hero-content text-center'>
             <div className='max-w-md'>
               <div className='overflow-x-auto'>
-                <div className='card bg-base-100 mt-20'>
+                <div className='card bg-base-100 my-20'>
                   <div className='card-body'>
                     <h3 className='text-md font-semibold text-left'>Fetch the data you need</h3>
-                    <div className='my-5'>
+                    <div className='mt-5 mb-2'>
                       <div className='join'>
                         <select
                           className='select select-bordered join-item'
@@ -147,32 +147,45 @@ const HistoryPage = () => {
                         readOnly
                         hidden
                       />
-                      <div className='collapse-content'>
-                        <div className='pt-4'>
+                      <div className='collapse-content px-2'>
+                        <div className='pt-2'>
                           <div className='card bg-base-100'>
-                            <div className='card-body text-sm'>
+                            <div className='card-body text-sm py-5'>
                               <p>
-                                Total Work hours:{' '}
+                                Work Required:{' '}
                                 <span className='font-semibold'>{summary.expectedWorkHours}</span>{' '}
                                 hr
                               </p>
                               <p>
-                                Total Work Done:{' '}
-                                <span className='font-semibold'>{summary.formattedTotalWorkDone}</span> hr
+                                Work Done:{' '}
+                                <span
+                                  className={`font-semibold ${
+                                    summary.totalWorkDone >= summary.expectedWorkHours * 3600000
+                                      ? 'text-success'
+                                      : 'text-error'
+                                  }`}>
+                                  {summary.formattedTotalWorkDone}
+                                </span>{' '}
+                                hr
                               </p>
                               <div className='divider my-1'></div>
                               <p>
-                                No.of Days Logged:{' '}
-                                <span className='font-semibold'>{summary.numberOfDays}</span>{' '}
-                                days
+                                Days Logged:{' '}
+                                <span className='font-semibold text-success'>
+                                  {summary.numberOfDays}
+                                </span>{' '}
+                                day
                               </p>
                               <p>
-                                Total Break Taken:{' '}
-                                <span className='font-semibold'>{summary.formattedTotalBreakTime}</span> hr
+                                Break Taken:{' '}
+                                <span className='font-semibold text-success'>
+                                  {summary.formattedTotalBreakTime}
+                                </span>{' '}
+                                hr
                               </p>
                             </div>
                           </div>
-                          <table className='table table-xs text-center'>
+                          <table className='table table-xs text-center mt-3'>
                             <thead>
                               <tr>
                                 <th>Date</th>

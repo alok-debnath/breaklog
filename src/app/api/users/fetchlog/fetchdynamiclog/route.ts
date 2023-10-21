@@ -160,6 +160,7 @@ export async function POST(request: NextRequest) {
 
       // Store the formatted totals, number of days, and expected vs. actual work.
       summary = {
+        totalWorkDone,
         formattedTotalBreakTime,
         formattedTotalWorkDone,
         numberOfDays,
@@ -170,8 +171,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       message: 'Logs fetched successfully',
-      status: logs.length === 0 ? 'No logs found' : 200,
-      data: logs.length === 0 ? 'No logs found' : dateMetrics,
+      status: dateMetrics.length === 0 ? 'No Fullday logs found' : 200,
+      data: dateMetrics.length === 0 ? '' : dateMetrics,
       summary: summary,
       // workdata: {
       //   breakTime: formattedTime,

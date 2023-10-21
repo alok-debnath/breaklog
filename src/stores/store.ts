@@ -6,10 +6,11 @@ interface WorkData {
   workDone: string;
 }
 interface summary {
+  totalWorkDone: number;
   formattedTotalBreakTime: string;
   formattedTotalWorkDone: string;
   numberOfDays: string;
-  expectedWorkHours: string;
+  expectedWorkHours: number;
   // actualWorkHours: string;
 }
 interface StoreState {
@@ -31,10 +32,11 @@ export const useStore = create<StoreState>((set) => ({
   monthLogs: [],
   userData: [],
   summary: {
-    formattedTotalBreakTime: "",
-    formattedTotalWorkDone: "",
-    numberOfDays: "",
-    expectedWorkHours: "",
+    totalWorkDone: 0,
+    formattedTotalBreakTime: '',
+    formattedTotalWorkDone: '',
+    numberOfDays: '',
+    expectedWorkHours: 0,
     // actualWorkHours: "",
   },
   breaklogMode: true,
