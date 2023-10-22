@@ -20,7 +20,7 @@ const SettingsModal = () => {
     <>
       <dialog
         id='setting_modal'
-        className='modal modal-bottom sm:modal-middle'>
+        className='modal modal-bottom sm:modal-middle backdrop-blur-sm'>
         <form
           method='dialog'
           className='modal-box'>
