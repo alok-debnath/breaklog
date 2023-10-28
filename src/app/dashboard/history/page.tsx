@@ -185,7 +185,7 @@ const HistoryPage = () => {
                               </p>
                             </div>
                           </div>
-                          <table className='table table-xs text-center mt-3'>
+                          <table className='table md:table-md table-xs text-center mt-3'>
                             <thead>
                               <tr>
                                 <th>Date</th>
