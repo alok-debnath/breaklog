@@ -4,7 +4,7 @@ import InitialFetch from '@/components/common/InitialFetch';
 import { useStore } from '@/stores/store';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 
 const HistoryPage = () => {
   const { themeMode, loading, monthLogs, summary } = useStore();
@@ -89,10 +89,6 @@ const HistoryPage = () => {
       <div data-theme={themeMode}>
         <Navbar />
         <div className='hero min-h-screen min-w-fit bg-base-200'>
-          <Toaster
-            position='top-left'
-            reverseOrder={false}
-          />
           <div className='hero-content text-center'>
             <div className='max-w-md'>
               <div className='overflow-x-auto'>

@@ -63,7 +63,7 @@ const NavbarBottom = ({ logEntry }) => {
                 text={
                   <>
                     <p>Enter Log</p>
-                    {loading && <span className='loading loading-ring loading-md'></span>}
+                    {/* {loading && <span className='loading loading-ring loading-md'></span>} */}
                   </>
                 }
                 onclick={() => (breaklogMode ? logEntry('break log') : logEntry('day log'))}

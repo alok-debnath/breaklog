@@ -2,17 +2,16 @@ import ToggleButtonText from '../UI/ToggleButtonText';
 import SelectboxText from '../UI/SelectboxText';
 import { ThemeName } from '../../Constants/Constant';
 import { useStore } from '@/stores/store';
-import { useEffect } from 'react';
 
 const SettingsModal = () => {
   const { breaklogMode, logs, themeMode } = useStore();
   const isClient = typeof window !== 'undefined';
 
-  const handleThemeChange = (event) => {
+  const handleThemeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     useStore.setState(() => ({ themeMode: event.target.value }));
   };
 
-  const handleToggleChange = (event) => {
+  const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     useStore.setState(() => ({ breaklogMode: event.target.checked }));
   };
 
@@ -40,6 +39,7 @@ const SettingsModal = () => {
             OptionValue={ThemeName}
             checked={themeMode}
             onChange={handleThemeChange}
+            secondaryText={''}
           />
 
           <div className='modal-action'>

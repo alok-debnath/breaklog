@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useRouter, usePathname } from 'next/navigation';
-import { toast } from 'react-hot-toast';
+import { Toaster, toast } from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -154,6 +154,11 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      <Toaster
+        containerClassName='mt-16'
+        position='top-left'
+        reverseOrder={false}
+      />
       <SettingsModal />
     </>
   );

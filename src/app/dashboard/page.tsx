@@ -4,7 +4,7 @@ import Navbar from '@/components/Layouts/Navbar';
 import SettingsModal from '@/components/Layouts/SettingsModal';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
 import InitialFetch from '@/components/common/InitialFetch';
@@ -117,10 +117,6 @@ const Index = () => {
         <InitialFetch />
         <Navbar />
         <div className='hero min-h-screen bg-base-200'>
-          <Toaster
-            position='top-left'
-            reverseOrder={false}
-          />
           <div className='hero-content text-center'>
             <div className='max-w-md'>
               <div className='overflow-x-auto'>

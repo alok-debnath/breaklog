@@ -1,4 +1,18 @@
-const SelectboxText = ({ text, secondaryText, checked, OptionValue, onChange }) => {
+interface SelectboxTextProps {
+  text: string;
+  secondaryText: string;
+  checked: string;
+  OptionValue: { value: string; label: string }[];
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+const SelectboxText: React.FC<SelectboxTextProps> = ({
+  text,
+  secondaryText,
+  checked,
+  OptionValue,
+  onChange,
+}) => {
   const OptionData = OptionValue.map((data, index) => {
     const isSelected = checked === data.value;
     return (
