@@ -171,7 +171,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       message: 'Logs fetched successfully',
-      status: dateMetrics.length === 0 ? 'No Fullday logs found' : 200,
+      status: dateMetrics.length === 0 ? 'No fullday logs found' : 200,
       data: dateMetrics.length === 0 ? '' : dateMetrics,
       summary: summary,
       // workdata: {
