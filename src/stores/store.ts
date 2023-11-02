@@ -13,11 +13,14 @@ interface summary {
   expectedWorkHours: number;
   // actualWorkHours: string;
 }
+interface userData {
+  username: string;
+}
 interface StoreState {
   themeMode: string;
   logs: any[];
   monthLogs: any[];
-  userData: any[];
+  userData: userData;
   summary: summary;
   breaklogMode: boolean;
   workData: WorkData; // Replace 'any' with the actual type of workData
@@ -30,7 +33,9 @@ export const useStore = create<StoreState>((set) => ({
   themeMode: 'night',
   logs: [],
   monthLogs: [],
-  userData: [],
+  userData: {
+    username: '',
+  },
   summary: {
     totalWorkDone: 0,
     formattedTotalBreakTime: '',

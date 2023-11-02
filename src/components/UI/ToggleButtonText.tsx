@@ -1,4 +1,17 @@
-const ToggleButtonText = ({ text, secondaryText, checked, onChange, disabled }) => {
+interface ToggleButtonTextProps {
+  text: string;
+  secondaryText?: string; // This prop is optional
+  checked: boolean;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean; // This prop is optional
+}
+const ToggleButtonText: React.FC<ToggleButtonTextProps> = ({
+  text,
+  secondaryText,
+  checked,
+  onChange,
+  disabled,
+}) => {
   return (
     <>
       <div className='form-control'>

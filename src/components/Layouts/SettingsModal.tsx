@@ -39,7 +39,6 @@ const SettingsModal = () => {
             OptionValue={ThemeName}
             checked={themeMode}
             onChange={handleThemeChange}
-            secondaryText={''}
           />
 
           <div className='modal-action'>

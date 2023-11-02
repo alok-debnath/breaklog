@@ -41,7 +41,7 @@ const HistoryPage = () => {
 
     try {
       setCollapseBoxState(false);
-      // useStore.setState(() => ({ loading: true }));
+      useStore.setState(() => ({ loading: true }));
 
       const values = {
         monthStart: monthStart,
@@ -54,10 +54,11 @@ const HistoryPage = () => {
         setCollapseBoxState(true);
 
         useStore.setState(() => ({ monthLogs: res.data.data }));
-        // useStore.setState(() => ({ loading: false }));
+        useStore.setState(() => ({ loading: false }));
         useStore.setState(() => ({ summary: res.data.summary }));
       } else {
         setCollapseBoxState(false);
+        useStore.setState(() => ({ loading: false }));
         toast.error('Error: ' + res.data.status, {
           style: {
             padding: '15px',
@@ -128,11 +129,12 @@ const HistoryPage = () => {
                       </div>
                       <div className='mt-3'>
                         <button
-                          className='btn'
+                          className={`btn ${loading ? 'btn-disabled' : ''}`}
                           onClick={() => {
                             handleSearch();
                           }}>
-                          Search
+                          Search{' '}
+                          {loading && <span className='loading loading-ring loading-md'></span>}
                         </button>
                       </div>
                     </div>

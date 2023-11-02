@@ -1,7 +1,6 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Navbar from '@/components/Layouts/Navbar';
-import SettingsModal from '@/components/Layouts/SettingsModal';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
 import toast from 'react-hot-toast';

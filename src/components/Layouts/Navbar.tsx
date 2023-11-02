@@ -6,6 +6,14 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SettingsModal from './SettingsModal';
 
+declare global {
+  interface Window {
+    setting_modal: {
+      showModal: () => void;
+      // Add any other properties and methods here if necessary
+    };
+  }
+}
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
 
@@ -27,7 +35,7 @@ const Navbar = () => {
     try {
       await axios.get('/api/users/logout');
       router.push('/login');
-    } catch (error) {
+    } catch (error:any) {
       toast.error(error.message, {
         style: {
           padding: '15px',

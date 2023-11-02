@@ -1,7 +1,10 @@
 import Button from '../UI/Button';
 import { useStore } from '@/stores/store';
 
-const NavbarBottom = ({ logEntry }) => {
+interface NavbarBottomProps {
+  logEntry: (value: string) => void; // logEntry is a function that accepts a string
+}
+const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
   const { breaklogMode, workData, loading } = useStore();
 
   return (

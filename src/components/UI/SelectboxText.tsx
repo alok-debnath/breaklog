@@ -1,6 +1,6 @@
 interface SelectboxTextProps {
   text: string;
-  secondaryText: string;
+  secondaryText?: string; // optional
   checked: string;
   OptionValue: { value: string; label: string }[];
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;

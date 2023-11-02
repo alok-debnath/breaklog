@@ -1,8 +1,6 @@
 'use client';
 import Navbar from '@/components/Layouts/Navbar';
-import SettingsModal from '@/components/Layouts/SettingsModal';
 import { useStore } from '@/stores/store';
-import { toast } from 'react-hot-toast';
 import InitialFetch from '@/components/common/InitialFetch';
 
 const ProfilePage = () => {
