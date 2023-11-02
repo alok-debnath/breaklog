@@ -1,34 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# BreakLog
+
+[![GitHub License](https://img.shields.io/github/license/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/network)
+
+![Project Logo](your-logo.png) <!-- If you have a project logo, include it here -->
+
+## Introduction
+
+BreakLog is a Next.js project hosted on Vercel that allows you to efficiently log your daily work activities, including day start, exit, enter, day end, and break times. It provides insights into your workday by calculating the total break time and work done for that particular day. Additionally, it offers the functionality to retrieve monthly logged data with useful information. If you only need to track break times, BreakLog can handle that too, without requiring day start and day end entries.
+
+## Features
+
+- Log your daily work activities:
+  - Day start
+  - Exit
+  - Enter
+  - Day end
+- Calculate and display:
+  - Total break time
+  - Work done for the day
+- Retrieve monthly work data with insights
+- Track break times independently
 
 ## Getting Started
 
-First, run the development server:
+To start using BreakLog, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+1. Clone the repository:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+   ```bash
+   git clone https://github.com/yourusername/BreakLog.git
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Navigate to the project directory:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   cd breaklog
+   ```
