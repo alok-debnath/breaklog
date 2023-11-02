@@ -39,3 +39,29 @@ To start using BreakLog, follow these steps:
    ```bash
    cd breaklog
    ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+4. Run the development server:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+5. Open http://localhost:3000 with your web browser to use BreakLog.
+
+## Acknowledgments
+
+We would like to thank the Next.js and Vercel communities for their amazing tools and resources that made this project possible.
