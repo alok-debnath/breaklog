@@ -31,7 +31,7 @@ To start using BreakLog, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/BreakLog.git
+   https://github.com/alok-debnath/breaklog.git
    ```
 
 2. Navigate to the project directory:
@@ -64,4 +64,9 @@ To start using BreakLog, follow these steps:
 
 ## Acknowledgments
 
-We would like to thank the Next.js and Vercel communities for their amazing tools and resources that made this project possible.
+I would like to thank the Next.js and Vercel communities for their amazing tools and resources that made this project possible. Additionally, I'm grateful to the following libraries that played a key role in this project:
+
+- [DaisyUI](https://daisyui.com/)
+- [Zustand](https://github.com/pmndrs/zustand)
+
+These libraries have been instrumental in creating a seamless and efficient user experience.
