@@ -1,9 +1,9 @@
 # BreakLog
 
-[![GitHub License](https://img.shields.io/github/license/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/LICENSE)
-[![GitHub Issues](https://img.shields.io/github/issues/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/yourusername/BreakLog)](https://github.com/yourusername/BreakLog/network)
+[![GitHub License](https://img.shields.io/github/license/alok-debnath/BreakLog)](https://github.com/alok-debnath/BreakLog/LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/alok-debnath/BreakLog)](https://github.com/alok-debnath/BreakLog/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/alok-debnath/BreakLog)](https://github.com/alok-debnath/BreakLog/stargazers)
+[![GitHub Forks](https://img.shields.io/github/forks/alok-debnath/BreakLog)](https://github.com/alok-debnath/BreakLog/network)
 
 ![Project Logo](your-logo.png) <!-- If you have a project logo, include it here -->
 
