@@ -1,15 +1,13 @@
 'use client';
 import { useEffect } from 'react';
-import Navbar from '@/components/Layouts/Navbar';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
-import InitialFetch from '@/components/common/InitialFetch';
 
 const Index = () => {
-  const { themeMode, breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
+  const { breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
 
   const isClient = typeof window !== 'undefined';
 

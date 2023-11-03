@@ -1,10 +1,4 @@
-'use client';
-import Navbar from '@/components/Layouts/Navbar';
-import { useStore } from '@/stores/store';
-import InitialFetch from '@/components/common/InitialFetch';
-
 const ProfilePage = () => {
-  const { themeMode } = useStore();
 
   return (
     <>

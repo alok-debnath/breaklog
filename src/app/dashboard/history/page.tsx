@@ -1,13 +1,11 @@
 'use client';
-import Navbar from '@/components/Layouts/Navbar';
-import InitialFetch from '@/components/common/InitialFetch';
 import { useStore } from '@/stores/store';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 const HistoryPage = () => {
-  const { themeMode, loading, monthLogs, summary } = useStore();
+  const { loading, monthLogs, summary } = useStore();
   const [collapseBoxState, setCollapseBoxState] = useState(false);
 
   // Initialize selectedMonth and selectedYear with the current month and year.

@@ -7,7 +7,6 @@ export function middleware(request: NextRequest) {
 
   const isPublicPath = path === '/login' || path === '/signup' || path === '/';
 
-  // redirecting from '/' to '/login'
   if (path === '/') {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
