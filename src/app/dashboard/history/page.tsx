@@ -206,7 +206,14 @@ const HistoryPage = () => {
                                     <tr key={index}>
                                       <td>{log.date}</td>
                                       <td>{log.formattedBreakTime}</td>
-                                      <td>{log.formattedWorkDone}</td>
+                                      <td
+                                        className={`${
+                                          log.workDone >= 8 * 3600000
+                                            ? 'text-success'
+                                            : 'text-error'
+                                        }`}>
+                                        {log.formattedWorkDone}
+                                      </td>
                                     </tr>
                                   );
                                 })}

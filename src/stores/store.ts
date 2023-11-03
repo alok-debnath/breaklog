@@ -16,10 +16,17 @@ interface summary {
 interface userData {
   username: string;
 }
+interface MonthLogData {
+  date: string;
+  breakTime: number;
+  workDone: number;
+  formattedBreakTime: string;
+  formattedWorkDone: string;
+}
 interface StoreState {
   themeMode: string;
   logs: any[];
-  monthLogs: any[];
+  monthLogs: MonthLogData[];
   userData: userData;
   summary: summary;
   breaklogMode: boolean;
@@ -32,7 +39,13 @@ interface StoreState {
 export const useStore = create<StoreState>((set) => ({
   themeMode: 'night',
   logs: [],
-  monthLogs: [],
+  monthLogs: [{
+    date: '',
+    breakTime: 0,
+    workDone: 0,
+    formattedBreakTime: '',
+    formattedWorkDone: '',
+  }],
   userData: {
     username: '',
   },
