@@ -13,21 +13,24 @@ const Index = () => {
 
   const isClient = typeof window !== 'undefined';
 
-  const calculateBreakTime = () => {
-    if (currBreak !== null) {
-      const breakTime = new Date(currBreak);
-      const currentTime = new Date();
-      const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
-      const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
-
-      useStore.setState(() => ({ liveBreaks: diffInMinutes }));
-    }
-  };
   useEffect(() => {
-    calculateBreakTime();
+    const calculateBreakTime = () => {
+      if (currBreak !== null) {
+        const breakTime = new Date(currBreak);
+        const currentTime = new Date();
+        const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
+        const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
+
+        useStore.setState(() => ({ liveBreaks: diffInMinutes }));
+      }
+    };
+
+    calculateBreakTime(); // Call it immediately
+
     const intervalId = setInterval(() => {
       calculateBreakTime();
     }, 60000);
+
     return () => {
       clearInterval(intervalId);
     };
