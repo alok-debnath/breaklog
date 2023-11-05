@@ -34,7 +34,7 @@ export default function SpecificDayLog({ params }: any) {
     };
 
     fetchLogFunction();
-  }, []);
+  }, [params.date]);
 
   return (
     <>
