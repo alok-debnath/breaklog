@@ -35,7 +35,7 @@ const Navbar = () => {
     try {
       await axios.get('/api/users/logout');
       router.push('/login');
-    } catch (error:any) {
+    } catch (error: any) {
       toast.error(error.message, {
         style: {
           padding: '15px',
@@ -89,7 +89,9 @@ const Navbar = () => {
             </ul>
           </div>
           <div className='flex-1'>
-            <a className='btn btn-ghost normal-case text-xl gap-1'>
+            <Link
+              href='/dashboard'
+              className='btn btn-ghost normal-case text-xl gap-1'>
               {breaklogMode ? (
                 <>BreakLog.v4</>
               ) : (
@@ -97,7 +99,7 @@ const Navbar = () => {
                   <div className='whitespace-nowrap'>DayL☀️g.v4</div>
                 </>
               )}
-            </a>
+            </Link>
           </div>
         </div>
         <div className='navbar-end gap-1 join'>

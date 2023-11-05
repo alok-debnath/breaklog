@@ -1,5 +1,4 @@
 const ProfilePage = () => {
-
   return (
     <>
       <div className='hero min-h-screen min-w-fit bg-base-200'>
@@ -10,6 +9,20 @@ const ProfilePage = () => {
                 <form className='card-body grid gap-y-3 w-full max-w-xl'>
                   <h3 className='text-2xl font-bold text-left'>Update your data</h3>
                   <div className='form-control'>
+                    <label
+                      className='label'
+                      htmlFor='work_required'>
+                      <span className='label-text'>Daily work hour required</span>
+                    </label>
+                    <input
+                      type='number'
+                      id='work_required'
+                      name='work_required'
+                      placeholder='Type here'
+                      className='input input-bordered w-full max-w-md'
+                    />
+                  </div>
+                  {/* <div className='form-control'>
                     <label
                       className='label'
                       htmlFor='username'>
@@ -50,7 +63,7 @@ const ProfilePage = () => {
                       placeholder='Type here'
                       className='input input-bordered w-full max-w-md'
                     />
-                  </div>
+                  </div> */}
                   <div className='form-control mt-6'>
                     <button
                       type='submit'

@@ -1,6 +1,7 @@
 'use client';
 import { useStore } from '@/stores/store';
 import axios from 'axios';
+import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -87,136 +88,138 @@ const HistoryPage = () => {
       <div className='hero min-h-screen min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            <div className='overflow-x-auto'>
-              <div className='card bg-base-100 my-20'>
-                <div className='card-body'>
-                  <h3 className='text-md font-semibold text-left'>Fetch the data you need</h3>
-                  <div className='mt-5 mb-2'>
-                    <div className='join'>
-                      <select
-                        className='select select-bordered join-item'
-                        value={selectedMonth.toString()} // Convert to string for consistency
-                        onChange={(e) => setSelectedMonth(+e.target.value)} // Convert to number
-                      >
-                        {months.map((month, index) => (
-                          <option
-                            key={index}
-                            value={(index + 1).toString()} // Convert to string
-                            disabled={index + 1 === selectedMonth ? true : undefined}>
-                            {month}
-                          </option>
-                        ))}
-                      </select>
-                      <select
-                        className='select select-bordered join-item'
-                        value={selectedYear.toString()} // Convert to string for consistency
-                        onChange={(e) => setSelectedYear(+e.target.value)} // Convert to number
-                      >
-                        {years.map((year, index) => (
-                          <option
-                            key={index}
-                            value={year.toString()} // Convert to string
-                            disabled={year === selectedYear ? true : undefined}>
-                            {year}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className='mt-3'>
-                      <button
-                        className={`btn ${loading ? 'btn-disabled' : ''}`}
-                        onClick={() => {
-                          handleSearch();
-                        }}>
-                        Search{' '}
-                        {loading && <span className='loading loading-ring loading-md'></span>}
-                      </button>
-                    </div>
+            {/* <div className='overflow-x-auto'> */}
+            <div className='card bg-base-100 my-20 shadow-xl'>
+              <div className='card-body'>
+                <h3 className='text-md font-semibold text-left'>Fetch the data you need</h3>
+                <div className='mt-5 mb-2'>
+                  <div className='join'>
+                    <select
+                      className='select select-bordered join-item'
+                      value={selectedMonth.toString()} // Convert to string for consistency
+                      onChange={(e) => setSelectedMonth(+e.target.value)} // Convert to number
+                    >
+                      {months.map((month, index) => (
+                        <option
+                          key={index}
+                          value={(index + 1).toString()} // Convert to string
+                          disabled={index + 1 === selectedMonth ? true : undefined}>
+                          {month}
+                        </option>
+                      ))}
+                    </select>
+                    <select
+                      className='select select-bordered join-item'
+                      value={selectedYear.toString()} // Convert to string for consistency
+                      onChange={(e) => setSelectedYear(+e.target.value)} // Convert to number
+                    >
+                      {years.map((year, index) => (
+                        <option
+                          key={index}
+                          value={year.toString()} // Convert to string
+                          disabled={year === selectedYear ? true : undefined}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  <div className='collapse bg-base-200'>
-                    <input
-                      type='checkbox'
-                      checked={collapseBoxState}
-                      readOnly
-                      hidden
-                    />
-                    <div className='collapse-content px-2'>
-                      <div className='pt-2'>
-                        <div className='card bg-base-100'>
-                          <div className='card-body text-sm py-5'>
-                            <p>
-                              Work Required:{' '}
-                              <span className='font-semibold'>{summary.expectedWorkHours}</span> hr
-                            </p>
-                            <p>
-                              Work Done:{' '}
-                              <span
-                                className={`font-semibold ${
-                                  summary.totalWorkDone >= summary.expectedWorkHours * 3600000
-                                    ? 'text-success'
-                                    : 'text-error'
-                                }`}>
-                                {summary.formattedTotalWorkDone}
-                              </span>{' '}
-                              hr
-                            </p>
-                            <div className='divider my-1'></div>
-                            <p>
-                              Days Logged:{' '}
-                              <span className='font-semibold text-success'>
-                                {summary.numberOfDays}
-                              </span>{' '}
-                              day
-                            </p>
-                            <p>
-                              Break Taken:{' '}
-                              <span className='font-semibold text-success'>
-                                {summary.formattedTotalBreakTime}
-                              </span>{' '}
-                              hr
-                            </p>
-                          </div>
+                  <div className='mt-3'>
+                    <button
+                      className={`btn ${loading ? 'btn-disabled' : ''}`}
+                      onClick={() => {
+                        handleSearch();
+                      }}>
+                      Search {loading && <span className='loading loading-ring loading-md'></span>}
+                    </button>
+                  </div>
+                </div>
+                <div className='collapse bg-base-200'>
+                  <input
+                    type='checkbox'
+                    checked={collapseBoxState}
+                    readOnly
+                    hidden
+                  />
+                  <div className='collapse-content px-2'>
+                    <div className='pt-2'>
+                      <div className='card bg-base-100'>
+                        <div className='card-body text-sm py-5'>
+                          <p>
+                            Work Required:{' '}
+                            <span className='font-semibold'>{summary.expectedWorkHours}</span> hr
+                          </p>
+                          <p>
+                            Work Done:{' '}
+                            <span
+                              className={`font-semibold ${
+                                summary.totalWorkDone >= summary.expectedWorkHours * 3600000
+                                  ? 'text-success'
+                                  : 'text-error'
+                              }`}>
+                              {summary.formattedTotalWorkDone}
+                            </span>{' '}
+                            hr
+                          </p>
+                          <div className='divider my-1'></div>
+                          <p>
+                            Days Logged:{' '}
+                            <span className='font-semibold text-success'>
+                              {summary.numberOfDays}
+                            </span>{' '}
+                            day
+                          </p>
+                          <p>
+                            Break Taken:{' '}
+                            <span className='font-semibold text-success'>
+                              {summary.formattedTotalBreakTime}
+                            </span>{' '}
+                            hr
+                          </p>
                         </div>
-                        <table className='table md:table-md table-xs text-center mt-3'>
-                          <thead>
-                            <tr>
-                              <th>Date</th>
-                              <th>
-                                Break
-                                <br />
-                                hh:mm:ss
-                              </th>
-                              <th>
-                                Work
-                                <br />
-                                hh:mm:ss
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {monthLogs &&
-                              [...monthLogs].reverse().map((log, index) => {
-                                return (
-                                  <tr key={index}>
-                                    <td>{log.date}</td>
-                                    <td>{log.formattedBreakTime}</td>
-                                    <td
-                                      className={`${
-                                        log.workDone >= 8 * 3600000 ? 'text-success' : 'text-error'
-                                      }`}>
-                                      {log.formattedWorkDone}
-                                    </td>
-                                  </tr>
-                                );
-                              })}
-                          </tbody>
-                        </table>
                       </div>
+                      <table className='table md:table-md table-xs text-center mt-3'>
+                        <thead>
+                          <tr>
+                            <th>Date</th>
+                            <th>
+                              Break
+                              <br />
+                              hh:mm:ss
+                            </th>
+                            <th>
+                              Work
+                              <br />
+                              hh:mm:ss
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {monthLogs &&
+                            [...monthLogs].reverse().map((log, index) => {
+                              return (
+                                <tr key={index}>
+                                  <td>
+                                    <Link
+                                      href={`/dashboard/history/${log.date}`}
+                                      className={`btn btn-sm ${
+                                        log.workDone >= 8 * 3600000 ? 'btn-success' : 'btn-error'
+                                      }`}>
+                                      {log.date}
+                                    </Link>
+                                  </td>
+                                  <td>{log.formattedBreakTime}</td>
+                                  <td>{log.formattedWorkDone}</td>
+                                </tr>
+                              );
+                            })}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            {/* </div> */}
           </div>
         </div>
       </div>

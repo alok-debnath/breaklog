@@ -10,9 +10,26 @@ export async function POST(request: NextRequest) {
     // Get user ID from token
     const userId = await getDataFromToken(request);
 
+    const reqBody = await request.json();
+    const { date } = reqBody;
+
     // Calculate the start of today in UTC time
-    const startOfToday = new Date();
+    let startOfToday = new Date();
     startOfToday.setUTCHours(0, 0, 0, 0);
+    // Calculate the end of today in UTC time
+    let endOfToday = new Date();
+    endOfToday.setUTCHours(23, 59, 59, 999);
+
+    if (date !== undefined) {
+      const parts = date.split('-');
+      const correctedDate = `20${parts[2]}-${parts[1]}-${parts[0]}`;
+      startOfToday = new Date(correctedDate);
+      startOfToday.setUTCHours(0, 0, 0, 0);
+
+      // Calculate the end of the specific date in UTC time
+      endOfToday = new Date(correctedDate);
+      endOfToday.setUTCHours(23, 59, 59, 999);
+    }
 
     // Fetch logs for the current day
     const logs = await prisma.log.findMany({
@@ -20,6 +37,7 @@ export async function POST(request: NextRequest) {
         userId,
         createdAt: {
           gte: startOfToday,
+          lte: endOfToday,
         },
       },
       select: {
