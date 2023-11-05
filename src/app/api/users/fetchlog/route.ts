@@ -130,6 +130,7 @@ export async function POST(request: NextRequest) {
       workdata: {
         breakTime: formattedTime,
         workDone: formattedWorkDone,
+        unformattedWorkDone: workDone,
         currentBreak: currentBreakTime,
         lastLogStatus: recentLog,
         firstLogStatus: firstLog,

@@ -193,7 +193,7 @@ const HistoryPage = () => {
                             </th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className='text-left'>
                           {monthLogs &&
                             [...monthLogs].reverse().map((log, index) => {
                               return (

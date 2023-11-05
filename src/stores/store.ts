@@ -4,6 +4,7 @@ interface WorkData {
   lastLogStatus: string;
   breakTime: string;
   workDone: string;
+  unformattedWorkDone: number;
 }
 interface summary {
   totalWorkDone: number;
@@ -39,13 +40,15 @@ interface StoreState {
 export const useStore = create<StoreState>((set) => ({
   themeMode: 'night',
   logs: [],
-  monthLogs: [{
-    date: '',
-    breakTime: 0,
-    workDone: 0,
-    formattedBreakTime: '',
-    formattedWorkDone: '',
-  }],
+  monthLogs: [
+    {
+      date: '',
+      breakTime: 0,
+      workDone: 0,
+      formattedBreakTime: '',
+      formattedWorkDone: '',
+    },
+  ],
   userData: {
     username: '',
   },
@@ -62,6 +65,7 @@ export const useStore = create<StoreState>((set) => ({
     lastLogStatus: '',
     breakTime: '',
     workDone: '',
+    unformattedWorkDone: 0,
   },
   loading: false,
   currBreak: null,

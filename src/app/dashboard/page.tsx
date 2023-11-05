@@ -175,7 +175,7 @@ const Index = () => {
                       <th>Log</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className='text-left'>
                     {logs &&
                       [...logs].reverse().map((log) => {
                         const createdAt = new Date(log.createdAt);

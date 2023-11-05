@@ -7,32 +7,32 @@ import { useStore } from '@/stores/store';
 export default function SpecificDayLog({ params }: any) {
   const { logs, workData, loading } = useStore();
 
-  const fetchLogFunction = async () => {
-    try {
-      useStore.setState(() => ({ loading: true }));
-      const values = { date: params.date };
-      const res = await axios.post('/api/users/fetchlog', values);
-
-      useStore.setState(() => ({
-        loading: false,
-        logs: res.data.data,
-        workData: res.data.workdata,
-      }));
-    } catch (error: any) {
-      useStore.setState(() => ({ loading: false }));
-      if (error.name !== 'AbortError') {
-        toast.error(error.message, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
-        });
-      }
-    }
-  };
-
   useEffect(() => {
+    const fetchLogFunction = async () => {
+      try {
+        useStore.setState(() => ({ loading: true }));
+        const values = { date: params.date };
+        const res = await axios.post('/api/users/fetchlog', values);
+
+        useStore.setState(() => ({
+          loading: false,
+          logs: res.data.data,
+          workData: res.data.workdata,
+        }));
+      } catch (error: any) {
+        useStore.setState(() => ({ loading: false }));
+        if (error.name !== 'AbortError') {
+          toast.error(error.message, {
+            style: {
+              padding: '15px',
+              color: 'white',
+              backgroundColor: 'rgb(214, 60, 60)',
+            },
+          });
+        }
+      }
+    };
+
     fetchLogFunction();
   }, []);
 
@@ -43,7 +43,12 @@ export default function SpecificDayLog({ params }: any) {
           <div className='card bg-base-100 my-20 shadow-xl'>
             <div className='card-body'>
               <div className='text-left font-semibold mb-2 block'>
-                <p className='btn btn-sm btn-error underline no-animation'>Data from past</p>
+                <p
+                  className={`btn btn-sm underline no-animation ${
+                    workData.unformattedWorkDone >= 8 * 3600000 ? 'btn-success' : 'btn-error'
+                  }`}>
+                  Data from past
+                </p>
               </div>
               <div className='text-left font-semibold mb-3'>
                 {logs.length > 0 && (
@@ -94,7 +99,7 @@ export default function SpecificDayLog({ params }: any) {
                     <th>Log</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className='text-left'>
                   {logs &&
                     [...logs].reverse().map((log) => {
                       const createdAt = new Date(log.createdAt);
