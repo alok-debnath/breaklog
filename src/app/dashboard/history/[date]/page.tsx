@@ -19,6 +19,16 @@ export default function SpecificDayLog({ params }: any) {
           logs: res.data.data,
           workData: res.data.workdata,
         }));
+
+        if (res.data.status === 404) {
+          toast.error(res.data.message, {
+            style: {
+              padding: '15px',
+              color: 'white',
+              backgroundColor: 'rgb(214, 60, 60)',
+            },
+          });
+        }
       } catch (error: any) {
         useStore.setState(() => ({ loading: false }));
         if (error.name !== 'AbortError') {

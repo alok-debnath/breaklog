@@ -125,7 +125,8 @@ export async function POST(request: NextRequest) {
     const formattedWorkDone = formatTime(workDone);
 
     return NextResponse.json({
-      message: 'Logs fetched successfully',
+      message: logs.length === 0 ? 'No logs found' : 'Logs fetched successfully',
+      status: logs.length === 0 ? 404 : 200,
       data: logs,
       workdata: {
         breakTime: formattedTime,

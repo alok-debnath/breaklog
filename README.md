@@ -1,6 +1,6 @@
 # BreakLog
 
-[![GitHub License](https://img.shields.io/github/license/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/LICENSE)
+[![GitHub License](https://img.shields.io/github/license/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/blob/main/LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/network)
@@ -46,20 +46,12 @@ To start using BreakLog, follow these steps:
 
    ```bash
    npm install
-   # or
-   yarn install
-   # or
-   pnpm install
    ```
 
 4. Run the development server:
 
    ```bash
    npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
    ```
 
 5. Open http://localhost:3000 with your web browser to use BreakLog.

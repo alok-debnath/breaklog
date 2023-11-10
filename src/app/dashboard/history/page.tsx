@@ -88,10 +88,9 @@ const HistoryPage = () => {
       <div className='hero min-h-screen min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            {/* <div className='overflow-x-auto'> */}
             <div className='card bg-base-100 my-20 shadow-xl'>
               <div className='card-body'>
-                <h3 className='text-md font-semibold text-left'>Fetch the data you need</h3>
+                <h3 className='text-md font-semibold text-left'>Fetch required data</h3>
                 <div className='mt-5 mb-2'>
                   <div className='join'>
                     <select
@@ -240,7 +239,6 @@ const HistoryPage = () => {
                 </div>
               </div>
             </div>
-            {/* </div> */}
           </div>
         </div>
       </div>
