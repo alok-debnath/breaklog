@@ -9,7 +9,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
 
   return (
     <>
-      <div className='btm-nav btm-nav-md'>
+      <div className='btm-nav btm-nav-md shadow-md'>
         <div className='cursor-default'>
           <div className='flex gap-3'>
             <div>

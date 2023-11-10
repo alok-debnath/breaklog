@@ -113,7 +113,10 @@ const Index = () => {
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            <div className='card bg-base-100 rounded-b-none mt-20'>
+            <div
+              className={`card bg-base-100 rounded-b-none mt-20 ${
+                workData.unformattedWorkDone >= 8 * 3600000 ? 'border-2 border-success' : ''
+              }`}>
               <div className='card-body'>
                 <div className='text-left font-semibold mb-3'>
                   <p>
@@ -206,6 +209,10 @@ const Index = () => {
                   loading ||
                   breaklogMode
                     ? 'btn-disabled'
+                    : ''
+                } ${
+                  workData.unformattedWorkDone >= 8 * 3600000
+                    ? 'btn-outline btn-success border-2 border-t-0'
                     : ''
                 }`}
                 onclick={() => logEntry('day end')}
