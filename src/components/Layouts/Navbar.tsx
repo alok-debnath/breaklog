@@ -33,7 +33,7 @@ const Navbar = () => {
   const router = useRouter();
   const logout = async () => {
     try {
-      await axios.get('/api/users/logout');
+      await axios.get('/api/auth/logout');
       router.push('/login');
     } catch (error: any) {
       toast.error(error.message, {

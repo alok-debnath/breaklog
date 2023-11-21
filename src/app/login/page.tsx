@@ -36,7 +36,7 @@ export default function LoginPage() {
   }
   function handleSubmit(values: FormValues) {
     axios
-      .post('/api/users/login', values)
+      .post('/api/auth/login', values)
       .then((res) => {
         console.log('Login success: ', res);
         router.push('/dashboard');

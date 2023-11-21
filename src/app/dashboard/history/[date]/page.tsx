@@ -50,9 +50,10 @@ export default function SpecificDayLog({ params }: any) {
     <>
       <div className='hero min-h-screen min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
-          <div className={`card border-2 border-${
-                    workData.unformattedWorkDone >= 8 * 3600000 ? 'success' : 'error'
-                  } bg-base-100 my-20 shadow-xl`}>
+          <div
+            className={`card border-2 ${
+              workData.unformattedWorkDone >= 8 * 3600000 ? 'border-success' : 'border-error'
+            } bg-base-100 my-20 shadow-xl`}>
             <div className='card-body'>
               <div className='text-left font-semibold mb-2 block'>
                 <p

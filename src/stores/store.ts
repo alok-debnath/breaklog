@@ -16,6 +16,7 @@ interface summary {
 }
 interface userData {
   username: string;
+  dailyWorkRequired: number;
 }
 interface MonthLogData {
   date: string;
@@ -51,6 +52,7 @@ export const useStore = create<StoreState>((set) => ({
   ],
   userData: {
     username: '',
+    dailyWorkRequired: 0,
   },
   summary: {
     totalWorkDone: 0,
