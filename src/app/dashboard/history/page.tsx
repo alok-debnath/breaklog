@@ -1,4 +1,5 @@
 'use client';
+import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useStore } from '@/stores/store';
 import axios from 'axios';
 import Link from 'next/link';
@@ -67,15 +68,7 @@ const HistoryPage = () => {
         });
       }
     } catch (error: any) {
-      if (error.name !== 'AbortError') {
-        toast.error('Error: ' + error.message, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
-        });
-      }
+      handleError(error);
     }
   };
 

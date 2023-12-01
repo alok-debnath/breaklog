@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { handleError } from '@/components/common/CommonCodeBlocks';
 
 const validationSchema = Yup.object().shape({
   work_required: Yup.number()
@@ -40,25 +41,7 @@ const ProfilePage = () => {
         });
       }
     } catch (error: any) {
-      if (error.name !== 'AbortError') {
-        // if (error.response.data.error !== undefined) {
-        //   toast.error(error.response.data.error, {
-        //     style: {
-        //       padding: '15px',
-        //       color: 'white',
-        //       backgroundColor: 'rgb(214, 60, 60)',
-        //     },
-        //   });
-        // } else {
-        toast.error(error.message, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
-        });
-        // }
-      }
+      handleError(error);
     } finally {
       formik.setSubmitting(false);
     }

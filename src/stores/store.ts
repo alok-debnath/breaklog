@@ -39,7 +39,7 @@ interface StoreState {
 }
 
 export const useStore = create<StoreState>((set) => ({
-  themeMode: 'night',
+  themeMode: 'light',
   logs: [],
   monthLogs: [
     {

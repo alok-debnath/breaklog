@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useStore } from '@/stores/store';
+import { handleError } from '@/components/common/CommonCodeBlocks';
 
 export default function SpecificDayLog({ params }: any) {
   const { logs, workData, loading } = useStore();
@@ -30,16 +31,7 @@ export default function SpecificDayLog({ params }: any) {
           });
         }
       } catch (error: any) {
-        useStore.setState(() => ({ loading: false }));
-        if (error.name !== 'AbortError') {
-          toast.error(error.message, {
-            style: {
-              padding: '15px',
-              color: 'white',
-              backgroundColor: 'rgb(214, 60, 60)',
-            },
-          });
-        }
+        handleError(error);
       }
     };
 

@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import { useStore } from '@/stores/store';
 import * as Yup from 'yup';
+import { handleError } from '@/components/common/CommonCodeBlocks';
 // import { sendEmail } from "@/helpers/mailer";
 
 const validationSchema = Yup.object().shape({
@@ -58,13 +59,7 @@ export default function SignupPage() {
           },
         });
       } else {
-        toast.error(error.message, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
-        });
+        handleError(error);
       }
     } finally {
       formik.setSubmitting(false);

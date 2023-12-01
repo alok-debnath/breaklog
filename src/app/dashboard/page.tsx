@@ -1,10 +1,11 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
-import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
+import { handleError } from '@/components/common/CommonCodeBlocks';
+import TimeEditModal from '@/components/Layouts/TimeEditModal';
 
 const Index = () => {
   const { breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
@@ -55,15 +56,7 @@ const Index = () => {
 
       useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
-      if (error.name !== 'AbortError') {
-        toast.error('Error while log entry: ' + error.message, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
-        });
-      }
+      handleError(error);
     }
   };
 
@@ -91,16 +84,7 @@ const Index = () => {
         useStore.setState(() => ({ breaklogMode: false }));
       }
     } catch (error: any) {
-      if (error.name !== 'AbortError') {
-        useStore.setState(() => ({ loading: false }));
-        toast.error(error.message, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
-        });
-      }
+      handleError(error);
     }
   };
 
@@ -108,6 +92,23 @@ const Index = () => {
     fetchLogFunction();
   }, []);
 
+  const [logDateTime, setLogDateTime] = useState<{
+    log_id: string;
+    log_dateTime: string;
+    log_dateTime_ahead: string;
+    log_dateTime_behind: string;
+  }>({
+    log_id: '',
+    log_dateTime: '',
+    log_dateTime_ahead: '',
+    log_dateTime_behind: '',
+  });
+  const openTimeEditModal = (value: any) => {
+    setLogDateTime(value);
+    console.log(logDateTime);
+
+    window.time_edit_modal.showModal();
+  };
   return (
     <>
       <div className='hero min-h-screen bg-base-200'>
@@ -118,6 +119,10 @@ const Index = () => {
                 workData.unformattedWorkDone >= 8 * 3600000 ? 'border-2 border-success' : ''
               }`}>
               <div className='card-body'>
+                {/* <input
+                  className='input input-bordered'
+                  type='time'
+                /> */}
                 <div className='text-left font-semibold mb-3'>
                   <p>
                     {new Date().toLocaleDateString('en-US', {
@@ -174,13 +179,34 @@ const Index = () => {
                 <table className='table text-center'>
                   <thead>
                     <tr>
-                      <th>Time</th>
+                      <th>
+                        <span className='flex items-center'>
+                          <span
+                            className='tooltip tooltip-right cursor-pointer'
+                            data-tip='Click on any of the time to edit'>
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              fill='none'
+                              viewBox='0 0 24 24'
+                              strokeWidth={1.5}
+                              stroke='currentColor'
+                              className='w-6 h-6 me-1 text-warning'>
+                              <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                              />
+                            </svg>
+                          </span>
+                          Time
+                        </span>
+                      </th>
                       <th>Log</th>
                     </tr>
                   </thead>
                   <tbody className='text-left'>
                     {logs &&
-                      [...logs].reverse().map((log) => {
+                      [...logs].reverse().map((log, index, array) => {
                         const createdAt = new Date(log.createdAt);
                         const utcFormattedDate = createdAt.toLocaleString('en-US', {
                           timeZone: 'Asia/Kolkata',
@@ -190,10 +216,27 @@ const Index = () => {
                           month: 'short',
                           day: 'numeric',
                         });
+
+                        const logAbove = index > 0 ? array[index - 1] : null;
+                        const logBelow = index < array.length - 1 ? array[index + 1] : null;
+
                         return (
                           <tr key={log.id}>
-                            <td>{utcFormattedDate}</td>
-                            <td>{log.log_status}</td>
+                            <td>
+                              <button
+                                className='btn btn-sm btn-ghost'
+                                onClick={() =>
+                                  openTimeEditModal({
+                                    log_id: log.id,
+                                    log_dateTime: log.createdAt,
+                                    log_dateTime_ahead: logAbove ? logAbove.createdAt : null,
+                                    log_dateTime_behind: logBelow ? logBelow.createdAt : null,
+                                  })
+                                }>
+                                {utcFormattedDate}
+                              </button>
+                            </td>
+                            <td className='text-center'>{log.log_status}</td>
                           </tr>
                         );
                       })}
@@ -288,6 +331,7 @@ const Index = () => {
         </div>
       </div>
       <NavbarBottom logEntry={logEntry} />
+      <TimeEditModal logDateTime={logDateTime} fetchLogFunction={fetchLogFunction}/>
     </>
   );
 };

@@ -3,6 +3,14 @@ import SelectboxText from '../UI/SelectboxText';
 import { ThemeName } from '../../Constants/ThemeConstant';
 import { useStore } from '@/stores/store';
 
+declare global {
+  interface Window {
+    setting_modal: {
+      showModal: () => void;
+      // Add any other properties and methods here if necessary
+    };
+  }
+}
 const SettingsModal = () => {
   const { breaklogMode, logs, themeMode } = useStore();
   const isClient = typeof window !== 'undefined';
@@ -19,7 +27,7 @@ const SettingsModal = () => {
     <>
       <dialog
         id='setting_modal'
-        className='modal modal-bottom sm:modal-middle backdrop-blur-sm'>
+        className='modal modal-bottom sm:modal-middle'>
         <form
           method='dialog'
           className='modal-box'>
