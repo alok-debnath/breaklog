@@ -58,7 +58,7 @@ export default function SpecificDayLog({ params }: any) {
               <div className='text-left font-semibold mb-3'>
                 {logs.length > 0 && (
                   <p>
-                    {new Date(logs[0].createdAt).toLocaleString('en-US', {
+                    {new Date(logs[0].updatedAt).toLocaleString('en-US', {
                       day: 'numeric',
                       month: 'long',
                     })}
@@ -67,7 +67,7 @@ export default function SpecificDayLog({ params }: any) {
                 )}
                 {logs.length > 0 && (
                   <p>
-                    {new Date(logs[0].createdAt).toLocaleDateString('en-US', {
+                    {new Date(logs[0].updatedAt).toLocaleDateString('en-US', {
                       weekday: 'long',
                     })}
                   </p>
@@ -107,8 +107,8 @@ export default function SpecificDayLog({ params }: any) {
                 <tbody className='text-left'>
                   {logs &&
                     [...logs].reverse().map((log) => {
-                      const createdAt = new Date(log.createdAt);
-                      const utcFormattedDate = createdAt.toLocaleString('en-US', {
+                      const updatedAt = new Date(log.updatedAt);
+                      const utcFormattedDate = updatedAt.toLocaleString('en-US', {
                         timeZone: 'Asia/Kolkata',
                         hour: 'numeric',
                         minute: 'numeric',

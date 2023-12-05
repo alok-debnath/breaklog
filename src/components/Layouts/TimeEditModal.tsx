@@ -47,7 +47,35 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunc
   }, [logDateTime.log_dateTime]);
 
   const logEdit = async () => {
-    const values = { log_id: logDateTime.log_id, log_dateTime: logDateTime.log_dateTime };
+    const originalDateTime = new Date(logDateTime.log_dateTime);
+
+    // Get the user's local timezone offset in minutes
+    const localTimeZoneOffset = originalDateTime.getTimezoneOffset();
+
+    // Set the local hours and minutes considering the local timezone offset
+    const updatedDateTime = new Date(originalDateTime);
+    updatedDateTime.setMinutes(originalDateTime.getMinutes() + localTimeZoneOffset);
+    updatedDateTime.setHours(localHour);
+
+    // Adjust AM/PM if necessary
+    if (amPm === 'PM' && localHour < 12) {
+      updatedDateTime.setHours(localHour + 12);
+    } else if (amPm === 'AM' && localHour === 12) {
+      updatedDateTime.setHours(0);
+    }
+
+    updatedDateTime.setMinutes(localMinute);
+
+    // Ensure the updated time is in the correct day by checking if it's before the original time
+    if (updatedDateTime < originalDateTime) {
+      updatedDateTime.setDate(originalDateTime.getDate());
+    }
+
+    // Convert the updatedDateTime to a string in ISO format (UTC)
+    const updatedDateTimeUTC = updatedDateTime.toISOString();
+
+    const values = { log_id: logDateTime.log_id, log_dateTime: updatedDateTimeUTC };
+
     try {
       useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/logedit', values);
@@ -77,25 +105,31 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunc
           <div className='form-control grid gap-y-5'>
             <div>
               <p className='label-text'>Hour</p>
-              <input
-                className='input input-bordered min-w-full'
-                type='text'
-                id='selectedHour'
-                name='selectedHour'
-                value={localHour}
-                onChange={(e) => setLocalHour(Number(e.target.value))}
-              />
+              <div className='w-full flex'>
+                <input
+                  className='input input-bordered flex-1'
+                  type='text'
+                  id='selectedHour'
+                  name='selectedHour'
+                  value={isNaN(localHour) ? 0 : localHour}
+                  onChange={(e) => setLocalHour(Number(e.target.value))}
+                />
+              </div>
             </div>
             <div>
               <p className='label-text'>Minute</p>
-              <input
-                className='input input-bordered min-w-full'
-                type='text'
-                id='selectedMinute'
-                name='selectedMinute'
-                value={localMinute}
-                onChange={(e) => setLocalMinute(Number(e.target.value))}
-              />
+              <div className='join w-full flex'>
+                <input
+                  className='input input-bordered flex-1 join-item'
+                  type='text'
+                  id='selectedMinute'
+                  name='selectedMinute'
+                  value={isNaN(localMinute) ? 0 : localMinute}
+                  onChange={(e) => setLocalMinute(Number(e.target.value))}
+                />
+                {/* <p className='btn input-bordered join-item no-animation flex-1'>Search</p>
+                <p className='btn input-bordered join-item no-animation flex-1'>Search</p> */}
+              </div>
             </div>
           </div>
           <div className='modal-action'>

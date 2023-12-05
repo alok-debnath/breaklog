@@ -16,18 +16,18 @@ export async function POST(request: NextRequest) {
     const logs = await prisma.log.findMany({
       where: {
         userId,
-        createdAt: {
+        updatedAt: {
           gte: monthStart,
           lte: monthEnd,
         },
       },
       select: {
         id: true,
-        createdAt: true,
+        updatedAt: true,
         log_status: true,
       },
       orderBy: {
-        createdAt: 'asc',
+        updatedAt: 'asc',
       },
     });
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     // Iterate through the 'logs' data and organize it by date
     logs.forEach((log) => {
       // Get the date without the time
-      const date = log.createdAt.toISOString().split('T')[0];
+      const date = log.updatedAt.toISOString().split('T')[0];
 
       // If the date doesn't exist in 'logsByDate', create an array for it
       if (!logsByDate[date]) {
@@ -82,20 +82,20 @@ export async function POST(request: NextRequest) {
           for (const log of logEntries) {
             if (log.log_status === 'day start') {
               isDayStarted = true;
-              dayStart = new Date(log.createdAt).getTime();
+              dayStart = new Date(log.updatedAt).getTime();
             } else if (log.log_status === 'day end') {
               isDayEnded = true;
-              dayEnd = new Date(log.createdAt).getTime();
+              dayEnd = new Date(log.updatedAt).getTime();
             }
 
             // Calculate break time
             if (log.log_status === 'exit') {
-              const logExit = new Date(log.createdAt).getTime();
+              const logExit = new Date(log.updatedAt).getTime();
               const nextLog = logEntries.find(
-                (entry) => entry.createdAt > log.createdAt && entry.log_status === 'enter'
+                (entry) => entry.updatedAt > log.updatedAt && entry.log_status === 'enter'
               );
               if (nextLog) {
-                const logEnter = new Date(nextLog.createdAt).getTime();
+                const logEnter = new Date(nextLog.updatedAt).getTime();
                 breakTime += logEnter - logExit;
               }
             }
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
 
               const lastLog = logEntries[logEntries.length - 1];
               if (lastLog.log_status === 'exit') {
-                const exitTime = currDay.getTime() - new Date(lastLog.createdAt).getTime();
+                const exitTime = currDay.getTime() - new Date(lastLog.updatedAt).getTime();
                 workDone = workDone - exitTime;
               }
             }

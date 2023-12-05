@@ -35,18 +35,18 @@ export async function POST(request: NextRequest) {
     const logs = await prisma.log.findMany({
       where: {
         userId,
-        createdAt: {
+        updatedAt: {
           gte: startOfToday,
           lte: endOfToday,
         },
       },
       select: {
         id: true,
-        createdAt: true,
+        updatedAt: true,
         log_status: true,
       },
       orderBy: {
-        createdAt: 'asc',
+        updatedAt: 'asc',
       },
     });
 
@@ -66,17 +66,17 @@ export async function POST(request: NextRequest) {
     for (const log of logs) {
       if (log.log_status === 'day start') {
         isDayStarted = true;
-        dayStart = log.createdAt.getTime();
+        dayStart = log.updatedAt.getTime();
       } else if (log.log_status === 'day end') {
         isDayEnded = true;
-        dayEnd = log.createdAt.getTime();
+        dayEnd = log.updatedAt.getTime();
       }
 
       // calculates break time
       if (log.log_status === 'exit') {
-        logExit = log.createdAt.getTime();
+        logExit = log.updatedAt.getTime();
       } else if (log.log_status === 'enter') {
-        logEnter = log.createdAt.getTime();
+        logEnter = log.updatedAt.getTime();
       }
       if (logExit !== 0 && logEnter !== 0) {
         breakTime += logEnter - logExit;
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
         workDone = currDay.getTime() - dayStart - breakTime;
 
         if (lastLog.log_status === 'exit') {
-          const exitTime = currDay.getTime() - lastLog.createdAt.getTime();
+          const exitTime = currDay.getTime() - lastLog.updatedAt.getTime();
           workDone = workDone - exitTime;
         }
       }
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
     // Determine current break time and recent log status
     if (logs.length > 0) {
       if (lastLog.log_status === 'exit') {
-        currentBreakTime = lastLog.createdAt;
+        currentBreakTime = lastLog.updatedAt;
       }
       recentLog = lastLog.log_status;
     }

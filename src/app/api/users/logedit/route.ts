@@ -11,20 +11,28 @@ export async function POST(request: NextRequest) {
     const userId = await getDataFromToken(request);
 
     const reqBody = await request.json();
-    const { log_id } = reqBody;
-    const time = '';
+    const { log_id, log_dateTime } = reqBody;
 
-    // Update log
-    // const logs = await prisma.log.update({
-    //   where: {
-    //     id: log_id,
-    //   },
-    //   data: { createdAt: time },
-    // });
+    // Update log using Prisma
+    const result = await prisma.log.update({
+      where: {
+        id: log_id,
+        userId: userId,
+      },
+      data: {
+        updatedAt: log_dateTime,
+      },
+    });
+
+    if (!result) {
+      return NextResponse.json({
+        message: 'No matching log found',
+        status: 404,
+      });
+    }
 
     return NextResponse.json({
-      // message: logs.length === 0 ? 'No logs found' : 'Logs fetched successfully',
-      // status: logs.length === 0 ? 404 : 200,
+      message: 'Log updated successfully',
       status: 200,
     });
   } catch (error: any) {

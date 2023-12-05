@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
           User: {
             connect: { id: userId },
           },
-          // createdAt: datetime,
+          // updatedAt: datetime,
           log_status: logToBeSaved,
         },
       });

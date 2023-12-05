@@ -207,8 +207,8 @@ const Index = () => {
                   <tbody className='text-left'>
                     {logs &&
                       [...logs].reverse().map((log, index, array) => {
-                        const createdAt = new Date(log.createdAt);
-                        const utcFormattedDate = createdAt.toLocaleString('en-US', {
+                        const updatedAt = new Date(log.updatedAt);
+                        const utcFormattedDate = updatedAt.toLocaleString('en-US', {
                           timeZone: 'Asia/Kolkata',
                           hour: 'numeric',
                           minute: 'numeric',
@@ -228,9 +228,9 @@ const Index = () => {
                                 onClick={() =>
                                   openTimeEditModal({
                                     log_id: log.id,
-                                    log_dateTime: log.createdAt,
-                                    log_dateTime_ahead: logAbove ? logAbove.createdAt : null,
-                                    log_dateTime_behind: logBelow ? logBelow.createdAt : null,
+                                    log_dateTime: log.updatedAt,
+                                    log_dateTime_ahead: logAbove ? logAbove.updatedAt : null,
+                                    log_dateTime_behind: logBelow ? logBelow.updatedAt : null,
                                   })
                                 }>
                                 {utcFormattedDate}
