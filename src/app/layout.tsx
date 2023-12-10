@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import type { Metadata } from 'next';
@@ -16,7 +15,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='en'>
       <body className={inter.className}>
         {children}
-        <Analytics />
         <SpeedInsights />
       </body>
     </html>
