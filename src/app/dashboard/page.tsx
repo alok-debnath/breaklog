@@ -105,7 +105,6 @@ const Index = () => {
   });
   const openTimeEditModal = (value: any) => {
     setLogDateTime(value);
-    console.log(logDateTime);
 
     window.time_edit_modal.showModal();
   };
@@ -229,8 +228,8 @@ const Index = () => {
                                   openTimeEditModal({
                                     log_id: log.id,
                                     log_dateTime: log.updatedAt,
-                                    log_dateTime_ahead: logAbove ? logAbove.updatedAt : null,
-                                    log_dateTime_behind: logBelow ? logBelow.updatedAt : null,
+                                    log_dateTime_ahead: logAbove ? logAbove.updatedAt : '',
+                                    log_dateTime_behind: logBelow ? logBelow.updatedAt : '',
                                   })
                                 }>
                                 {utcFormattedDate}
@@ -331,7 +330,11 @@ const Index = () => {
         </div>
       </div>
       <NavbarBottom logEntry={logEntry} />
-      <TimeEditModal logDateTime={logDateTime} fetchLogFunction={fetchLogFunction}/>
+      <TimeEditModal
+        logDateTime={logDateTime}
+        setLogDateTime={setLogDateTime}
+        fetchLogFunction={fetchLogFunction}
+      />
     </>
   );
 };

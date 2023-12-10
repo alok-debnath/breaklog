@@ -18,10 +18,22 @@ interface TimeEditModalProps {
     log_dateTime_ahead: string;
     log_dateTime_behind: string;
   };
+  setLogDateTime: React.Dispatch<
+    React.SetStateAction<{
+      log_id: string;
+      log_dateTime: string;
+      log_dateTime_ahead: string;
+      log_dateTime_behind: string;
+    }>
+  >;
   fetchLogFunction: Function;
 }
 
-const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunction }) => {
+const TimeEditModal: React.FC<TimeEditModalProps> = ({
+  logDateTime,
+  setLogDateTime,
+  fetchLogFunction,
+}) => {
   const { loading } = useStore();
   const [localHour, setLocalHour] = useState<number>(0);
   const [localMinute, setLocalMinute] = useState<number>(0);
@@ -29,6 +41,8 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunc
 
   useEffect(() => {
     const updateLocalTime = () => {
+      console.log("gg");
+      
       const updatedLocalTime = new Date(logDateTime.log_dateTime).toLocaleString('en-US', {
         timeZone: 'Asia/Kolkata',
         hour: 'numeric',
@@ -87,6 +101,15 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunc
     window.time_edit_modal.close();
   };
 
+  const closeModal = () => {
+    window.time_edit_modal.close();
+    setLogDateTime({
+      log_id: '',
+      log_dateTime: '',
+      log_dateTime_ahead: '',
+      log_dateTime_behind: '',
+    });
+  };
   return (
     <>
       <dialog
@@ -102,7 +125,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunc
           ) : (
             <div className='divider'></div>
           )}
-          <div className='form-control grid gap-y-5'>
+          <div className='form-control grid gap-y-5 card p-5'>
             <div>
               <p className='label-text'>Hour</p>
               <div className='w-full flex'>
@@ -131,6 +154,18 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunc
                 <p className='btn input-bordered join-item no-animation flex-1'>Search</p> */}
               </div>
             </div>
+            <div className='join join-horizontal flex'>
+              <span
+                className={`btn btn-sm join-item flex-1 ${amPm === 'AM' ? 'btn-primary' : ''}`}
+                onClick={() => setAmPm('AM')}>
+                AM
+              </span>
+              <span
+                className={`btn btn-sm join-item flex-1 ${amPm === 'PM' ? 'btn-primary' : ''}`}
+                onClick={() => setAmPm('PM')}>
+                PM
+              </span>
+            </div>
           </div>
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}
@@ -147,7 +182,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ logDateTime, fetchLogFunc
         <form
           method='dialog'
           className='modal-backdrop'>
-          <button>close</button>
+          <span onClick={() => closeModal()}>close</span>
         </form>
       </dialog>
     </>
