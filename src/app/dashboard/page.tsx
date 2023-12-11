@@ -9,7 +9,6 @@ import TimeEditModal from '@/components/Layouts/TimeEditModal';
 
 const Index = () => {
   const { breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
-
   const isClient = typeof window !== 'undefined';
 
   useEffect(() => {

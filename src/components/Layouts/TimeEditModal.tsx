@@ -41,8 +41,6 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({
 
   useEffect(() => {
     const updateLocalTime = () => {
-      console.log("gg");
-      
       const updatedLocalTime = new Date(logDateTime.log_dateTime).toLocaleString('en-US', {
         timeZone: 'Asia/Kolkata',
         hour: 'numeric',

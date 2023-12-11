@@ -12,7 +12,7 @@ const InitialFetch = () => {
     try {
       const res = await axios.get('/api/users/fetchprofile');
       useStore.setState(() => ({ userData: res.data.data }));
-    } catch (error:any) {
+    } catch (error: any) {
       if (error.name !== 'AbortError') {
         toast.error(error.message, {
           style: {
