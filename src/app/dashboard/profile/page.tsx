@@ -17,6 +17,8 @@ const validationSchema = Yup.object().shape({
 
 const ProfilePage = () => {
   const { userData } = useStore();
+  const router = useRouter();
+
   const initialValues = {
     work_required: userData.dailyWorkRequired,
     password: '',
@@ -29,8 +31,6 @@ const ProfilePage = () => {
   });
 
   async function handleSubmit(values: any) {
-    const router = useRouter();
-
     try {
       const res = await axios.post('/api/users/signup', values);
 
