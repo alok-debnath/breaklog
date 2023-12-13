@@ -9,12 +9,14 @@ export const getDataFromToken = (request: NextRequest) => {
 
     return decodedToken.id;
   } catch (error: any) {
-    if (error.message === 'invalid token') {
-      cookies().set('token', '', {
-        httpOnly: true,
-        expires: new Date(0),
-      });
-    }
-    throw new Error(error.message);
+    cookies().set('token', '', {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+
+    const tokenError = new Error(error.message);
+    tokenError.name = 'TokenError';
+
+    throw tokenError;
   }
 };

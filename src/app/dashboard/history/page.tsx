@@ -3,12 +3,14 @@ import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useStore } from '@/stores/store';
 import axios from 'axios';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 const HistoryPage = () => {
   const { loading, monthLogs, summary } = useStore();
   const [collapseBoxState, setCollapseBoxState] = useState(false);
+  const router = useRouter();
 
   // Initialize selectedMonth and selectedYear with the current month and year.
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Months are zero-based, so add 1.
@@ -68,7 +70,7 @@ const HistoryPage = () => {
         });
       }
     } catch (error: any) {
-      handleError(error);
+      handleError({ error: error, router: router });
     }
   };
 

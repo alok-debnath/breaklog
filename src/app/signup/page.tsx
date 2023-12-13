@@ -59,7 +59,7 @@ export default function SignupPage() {
           },
         });
       } else {
-        handleError(error);
+        handleError({ error: error, router: null });
       }
     } finally {
       formik.setSubmitting(false);

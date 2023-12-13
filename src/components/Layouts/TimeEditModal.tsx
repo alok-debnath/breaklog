@@ -94,7 +94,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({
       fetchLogFunction();
       // useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
-      handleError(error);
+      handleError({ error: error, router: null });
     }
     window.time_edit_modal.close();
   };

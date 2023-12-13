@@ -22,6 +22,10 @@ export async function GET(request: NextRequest) {
       data: user,
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    if (error.name === 'TokenError') {
+      return NextResponse.json({ TokenError: error.message }, { status: 400 });
+    } else {
+      return NextResponse.json({ error: error.message }, { status: 400 });
+    }
   }
 }

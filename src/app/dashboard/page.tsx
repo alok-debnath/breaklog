@@ -6,9 +6,11 @@ import axios from 'axios';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import TimeEditModal from '@/components/Layouts/TimeEditModal';
+import { useRouter } from 'next/navigation';
 
 const Index = () => {
   const { breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
+  const router = useRouter();
   const isClient = typeof window !== 'undefined';
 
   useEffect(() => {
@@ -55,7 +57,7 @@ const Index = () => {
 
       useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
-      handleError(error);
+      handleError({ error: error, router: router });
     }
   };
 
@@ -83,7 +85,7 @@ const Index = () => {
         useStore.setState(() => ({ breaklogMode: false }));
       }
     } catch (error: any) {
-      handleError(error);
+      handleError({ error: error, router: router });
     }
   };
 

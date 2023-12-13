@@ -52,7 +52,7 @@ export default function LoginPage() {
             },
           });
         } else {
-          handleError(error);
+          handleError({ error: error, router: null });
         }
       })
       .finally(() => {

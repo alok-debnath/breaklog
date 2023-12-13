@@ -5,6 +5,7 @@ import { useStore } from '@/stores/store';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
+import { useRouter } from 'next/navigation';
 
 const validationSchema = Yup.object().shape({
   work_required: Yup.number()
@@ -28,6 +29,8 @@ const ProfilePage = () => {
   });
 
   async function handleSubmit(values: any) {
+    const router = useRouter();
+
     try {
       const res = await axios.post('/api/users/signup', values);
 
@@ -41,7 +44,7 @@ const ProfilePage = () => {
         });
       }
     } catch (error: any) {
-      handleError(error);
+      handleError({ error: error, router: router });
     } finally {
       formik.setSubmitting(false);
     }

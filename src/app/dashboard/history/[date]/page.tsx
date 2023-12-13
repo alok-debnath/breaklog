@@ -4,9 +4,11 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
+import { useRouter } from 'next/navigation';
 
 export default function SpecificDayLog({ params }: any) {
   const { logs, workData, loading } = useStore();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchLogFunction = async () => {
@@ -31,7 +33,7 @@ export default function SpecificDayLog({ params }: any) {
           });
         }
       } catch (error: any) {
-        handleError(error);
+        handleError({ error: error, router: router });
       }
     };
 
