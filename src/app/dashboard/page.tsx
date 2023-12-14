@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
 import axios from 'axios';
@@ -93,20 +93,8 @@ const Index = () => {
     fetchLogFunction();
   }, []);
 
-  const [logDateTime, setLogDateTime] = useState<{
-    log_id: string;
-    log_dateTime: string;
-    log_dateTime_ahead: string;
-    log_dateTime_behind: string;
-  }>({
-    log_id: '',
-    log_dateTime: '',
-    log_dateTime_ahead: '',
-    log_dateTime_behind: '',
-  });
   const openTimeEditModal = (value: any) => {
-    setLogDateTime(value);
-
+    useStore.setState(() => ({ logEditStore: value }));
     window.time_edit_modal.showModal();
   };
   return (
@@ -332,8 +320,6 @@ const Index = () => {
       </div>
       <NavbarBottom logEntry={logEntry} />
       <TimeEditModal
-        logDateTime={logDateTime}
-        setLogDateTime={setLogDateTime}
         fetchLogFunction={fetchLogFunction}
       />
     </>

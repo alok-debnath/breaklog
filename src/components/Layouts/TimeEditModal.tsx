@@ -12,36 +12,18 @@ declare global {
   }
 }
 interface TimeEditModalProps {
-  logDateTime: {
-    log_id: string;
-    log_dateTime: string;
-    log_dateTime_ahead: string;
-    log_dateTime_behind: string;
-  };
-  setLogDateTime: React.Dispatch<
-    React.SetStateAction<{
-      log_id: string;
-      log_dateTime: string;
-      log_dateTime_ahead: string;
-      log_dateTime_behind: string;
-    }>
-  >;
   fetchLogFunction: Function;
 }
 
-const TimeEditModal: React.FC<TimeEditModalProps> = ({
-  logDateTime,
-  setLogDateTime,
-  fetchLogFunction,
-}) => {
-  const { loading } = useStore();
+const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
+  const { loading, logEditStore } = useStore();
   const [localHour, setLocalHour] = useState<number>(0);
   const [localMinute, setLocalMinute] = useState<number>(0);
   const [amPm, setAmPm] = useState<string>('AM');
 
   useEffect(() => {
     const updateLocalTime = () => {
-      const updatedLocalTime = new Date(logDateTime.log_dateTime).toLocaleString('en-US', {
+      const updatedLocalTime = new Date(logEditStore.log_dateTime).toLocaleString('en-US', {
         timeZone: 'Asia/Kolkata',
         hour: 'numeric',
         minute: 'numeric',
@@ -56,10 +38,10 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({
     };
 
     updateLocalTime();
-  }, [logDateTime.log_dateTime]);
+  }, [logEditStore.log_dateTime]);
 
   const logEdit = async () => {
-    const originalDateTime = new Date(logDateTime.log_dateTime);
+    const originalDateTime = new Date(logEditStore.log_dateTime);
 
     // Get the user's local timezone offset in minutes
     const localTimeZoneOffset = originalDateTime.getTimezoneOffset();
@@ -86,7 +68,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({
     // Convert the updatedDateTime to a string in ISO format (UTC)
     const updatedDateTimeUTC = updatedDateTime.toISOString();
 
-    const values = { log_id: logDateTime.log_id, log_dateTime: updatedDateTimeUTC };
+    const values = { log_id: logEditStore.log_id, log_dateTime: updatedDateTimeUTC };
 
     try {
       useStore.setState(() => ({ loading: true }));
@@ -101,12 +83,14 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({
 
   const closeModal = () => {
     window.time_edit_modal.close();
-    setLogDateTime({
-      log_id: '',
-      log_dateTime: '',
-      log_dateTime_ahead: '',
-      log_dateTime_behind: '',
-    });
+    useStore.setState(() => ({
+      logEditStore: {
+        log_id: '',
+        log_dateTime: '',
+        log_dateTime_ahead: '',
+        log_dateTime_behind: '',
+      },
+    }));
   };
   return (
     <>
@@ -168,7 +152,11 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}
             <div className='join w-full flex'>
-              <button className='btn join-item flex-1'>Close</button>
+              <span
+                className='btn join-item flex-1'
+                onClick={() => closeModal()}>
+                Close
+              </span>
               <span
                 className='btn btn-primary join-item flex-1'
                 onClick={() => logEdit()}>

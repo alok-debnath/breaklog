@@ -25,6 +25,13 @@ interface MonthLogData {
   formattedBreakTime: string;
   formattedWorkDone: string;
 }
+interface LogEditData {
+  log_id: string;
+  log_dateTime: string;
+  log_dateTime_ahead: string;
+  log_dateTime_behind: string;
+}
+
 interface StoreState {
   themeMode: string;
   logs: any[];
@@ -32,10 +39,11 @@ interface StoreState {
   userData: userData;
   summary: summary;
   breaklogMode: boolean;
-  workData: WorkData; // Replace 'any' with the actual type of workData
+  workData: WorkData;
   loading: boolean;
   currBreak: null | Date; // Change 'null' to 'null | Date' for date type
   liveBreaks: number;
+  logEditStore: LogEditData;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -72,4 +80,10 @@ export const useStore = create<StoreState>((set) => ({
   loading: false,
   currBreak: null,
   liveBreaks: 0,
+  logEditStore: {
+    log_id: '',
+    log_dateTime: '',
+    log_dateTime_ahead: '',
+    log_dateTime_behind: '',
+  },
 }));
