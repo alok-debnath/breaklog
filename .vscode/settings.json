@@ -1,2 +1,113 @@
 {
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "editor.accessibilitySupport": "off",
+    "files.autoSave": "afterDelay",
+    "[css]": {
+        "editor.defaultFormatter": "vscode.css-language-features"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "git.autofetch": true,
+    "prettier.printWidth": 100,
+    "prettier.bracketSameLine": true,
+    "prettier.htmlWhitespaceSensitivity": "strict",
+    "liveServer.settings.donotVerifyTags": true,
+    "liveServer.settings.donotShowInfoMsg": true,
+    "workbench.colorTheme": "Best Themes - Monokai Pirokai Beach Sunset",
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    },
+    "editor.minimap.autohide": true,
+    "editor.minimap.renderCharacters": false,
+    "editor.minimap.scale": 2,
+    "terminal.integrated.env.linux": {},
+    "workbench.iconTheme": "material-icon-theme",
+    "console-ninja.showWhatsNew": false,
+    "files.associations": {
+        "*.js": "javascriptreact"
+    },
+    "tabnine.experimentalAutoImports": true,
+    "codesandbox.currentWorkspace": "57881719-f9c9-4d88-b9a5-47dacdeb5fd1",
+    "remote.SSH.remotePlatform": {
+        "57881719-f9c9-4d88-b9a5-47dacdeb5fd1.alok-debnath.breaklog.main.csb": "linux"
+    },
+    "git.openRepositoryInParentFolders": "always",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "icon": "terminal-bash"
+        },
+        // "zsh": {
+        //     "path": "zsh"
+        // },
+        "fish": {
+            "path": "fish"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        },
+        // "bash": {
+        //     "path": "/usr/bin/flatpak-spawn",
+        //     "args": [
+        //         "--host",
+        //         "--env=TERM=xterm-256color",
+        //         "bash"
+        //     ],
+        //     "icon": "terminal-bash",
+        //     "overrideName": true
+        // },
+        "zsh": {
+            "path": "/usr/bin/flatpak-spawn",
+            "args": [
+                "--host",
+                "--env=TERM=xterm-256color",
+                "zsh"
+            ],
+            // "icon": "terminal-zsh",
+            "overrideName": true
+        },
+    },
+    "workbench.settings.applyToAllProfiles": [],
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "vscode-edge-devtools.webhintInstallNotification": true,
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.jsxSingleQuote": true,
+    "prettier.singleQuote": true,
+    "prettier.withNodeModules": true,
+    "prettier.singleAttributePerLine": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "bladeFormatter.format.indentSize": 2,
+    "editor.tabSize": 2,
+    "console-ninja.featureSet": "Community",
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "window.titleBarStyle": "custom",
+    "editor.fontFamily": "'JetBrainsMono Nerd Font Medium', 'Fira Code', 'Droid Sans Mono', 'monospace'",
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
+    "svelte.enable-ts-plugin": true,
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
 }
