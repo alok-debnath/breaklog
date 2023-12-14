@@ -74,7 +74,6 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
       useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/logedit', values);
       fetchLogFunction();
-      // useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
       handleError({ error: error, router: null });
     }

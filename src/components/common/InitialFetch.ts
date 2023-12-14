@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
-import { toast } from 'react-hot-toast';
 import { handleError } from './CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
 
