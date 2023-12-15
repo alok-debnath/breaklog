@@ -9,7 +9,7 @@ import TimeEditModal from '@/components/Layouts/TimeEditModal';
 import { useRouter } from 'next/navigation';
 
 const Index = () => {
-  const { breaklogMode, logs, workData, loading, currBreak, liveBreaks } = useStore();
+  const { breaklogMode, logs, workData, loading, currBreak } = useStore();
   const router = useRouter();
   const isClient = typeof window !== 'undefined';
 
@@ -20,15 +20,14 @@ const Index = () => {
         const currentTime = new Date();
         const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
         const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
-
-        useStore.setState(() => ({ liveBreaks: diffInMinutes }));
+        useStore.setState(() => ({ liveBreaks: diffInMinutes === -1 ? 0 : diffInMinutes }));
       }
     };
 
     calculateBreakTime(); // Call it immediately
 
     const intervalId = setInterval(() => {
-      calculateBreakTime();
+      useStore.setState((prev) => ({ liveBreaks: prev.liveBreaks + 1 }));
     }, 60000);
 
     return () => {
@@ -107,10 +106,6 @@ const Index = () => {
                 workData.unformattedWorkDone >= 8 * 3600000 ? 'border-2 border-success' : ''
               }`}>
               <div className='card-body'>
-                {/* <input
-                  className='input input-bordered'
-                  type='time'
-                /> */}
                 <div className='text-left font-semibold mb-3'>
                   <p>
                     {new Date().toLocaleDateString('en-US', {
@@ -251,13 +246,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-        {currBreak !== null && (
-          <div className='toast toast-start mb-14'>
-            <div className='flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-              <span className='text-black'>{liveBreaks} min</span>
-            </div>
-          </div>
-        )}
         <div className='fixed bottom-5 right-5 items-center justify-end mb-14'>
           <div className='dropdown dropdown-top dropdown-end'>
             <label
@@ -319,9 +307,7 @@ const Index = () => {
         </div>
       </div>
       <NavbarBottom logEntry={logEntry} />
-      <TimeEditModal
-        fetchLogFunction={fetchLogFunction}
-      />
+      <TimeEditModal fetchLogFunction={fetchLogFunction} />
     </>
   );
 };
