@@ -31,6 +31,11 @@ interface LogEditData {
   log_dateTime_ahead: string;
   log_dateTime_behind: string;
 }
+interface DialogModalData {
+  modal_body: '';
+  modal_head: '';
+  modal_confirm_btn: '';
+}
 
 interface StoreState {
   themeMode: string;
@@ -44,6 +49,7 @@ interface StoreState {
   currBreak: null | Date; // Change 'null' to 'null | Date' for date type
   liveBreaks: number;
   logEditStore: LogEditData;
+  dialogModal: DialogModalData;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -85,5 +91,10 @@ export const useStore = create<StoreState>((set) => ({
     log_dateTime: '',
     log_dateTime_ahead: '',
     log_dateTime_behind: '',
+  },
+  dialogModal: {
+    modal_body: '',
+    modal_head: '',
+    modal_confirm_btn: '',
   },
 }));

@@ -27,7 +27,8 @@ const Index = () => {
     calculateBreakTime(); // Call it immediately
 
     const intervalId = setInterval(() => {
-      useStore.setState((prev) => ({ liveBreaks: prev.liveBreaks + 1 }));
+      // useStore.setState((prev) => ({ liveBreaks: prev.liveBreaks + 1 }));
+      calculateBreakTime();
     }, 60000);
 
     return () => {
@@ -106,6 +107,7 @@ const Index = () => {
                 workData.unformattedWorkDone >= 8 * 3600000 ? 'border-2 border-success' : ''
               }`}>
               <div className='card-body'>
+                {/* <button className='btn' onClick={()=>window.confirmation_modal.showModal()}></button> */}
                 <div className='text-left font-semibold mb-3'>
                   <p>
                     {new Date().toLocaleDateString('en-US', {
