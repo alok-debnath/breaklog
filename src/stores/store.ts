@@ -32,9 +32,9 @@ interface LogEditData {
   log_dateTime_behind: string;
 }
 interface DialogModalData {
-  modal_body: '';
-  modal_head: '';
-  modal_confirm_btn: '';
+  modal_body: string;
+  modal_head: string;
+  modal_confirm_btn: string;
 }
 
 interface StoreState {

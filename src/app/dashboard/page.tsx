@@ -7,10 +7,12 @@ import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import TimeEditModal from '@/components/Layouts/TimeEditModal';
 import { useRouter } from 'next/navigation';
+import useConfirm from '@/hooks/useConfirm';
 
 const Index = () => {
   const { breaklogMode, logs, workData, loading, currBreak } = useStore();
   const router = useRouter();
+  const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
 
   useEffect(() => {
@@ -38,11 +40,16 @@ const Index = () => {
 
   const logEntry = async (value: string) => {
     try {
-      useStore.setState(() => ({ loading: true }));
-
       if (value === 'undo log') {
-        const userConfirmed = window.confirm('Are you sure you want to undo the recent log entry?');
-        if (!userConfirmed) {
+        useStore.setState(() => ({
+          dialogModal: {
+            modal_body: 'Your most recent log will be permanently deleted, proceed with caution.',
+            modal_head: 'Delete most recent log?',
+            modal_confirm_btn: 'Delete',
+          },
+        }));
+        const isConfirmed = await confirm();
+        if (!isConfirmed) {
           useStore.setState(() => ({ loading: false }));
           return;
         }
@@ -52,6 +59,7 @@ const Index = () => {
         logtype: value,
       };
 
+      useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/submitlog', values);
       await fetchLogFunction();
 
@@ -97,6 +105,7 @@ const Index = () => {
     useStore.setState(() => ({ logEditStore: value }));
     window.time_edit_modal.showModal();
   };
+
   return (
     <>
       <div className='hero min-h-screen bg-base-200'>
@@ -107,7 +116,6 @@ const Index = () => {
                 workData.unformattedWorkDone >= 8 * 3600000 ? 'border-2 border-success' : ''
               }`}>
               <div className='card-body'>
-                {/* <button className='btn' onClick={()=>window.confirmation_modal.showModal()}></button> */}
                 <div className='text-left font-semibold mb-3'>
                   <p>
                     {new Date().toLocaleDateString('en-US', {

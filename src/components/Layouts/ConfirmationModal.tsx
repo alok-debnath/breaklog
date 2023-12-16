@@ -1,5 +1,5 @@
 import { useStore } from '@/stores/store';
-
+import useConfirm from '@/hooks/useConfirm';
 declare global {
   interface Window {
     confirmation_modal: {
@@ -8,31 +8,12 @@ declare global {
     };
   }
 }
-interface ConfirmationModalProps {
-  // fetchLogFunction: Function;
-}
+interface ConfirmationModalProps {}
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = () => {
   const { dialogModal } = useStore();
-  const modalFunction = (value: string) => {
-    switch (value) {
-      case 'modal_close':
-        window.confirmation_modal.close();
-        useStore.setState(() => ({
-          dialogModal: {
-            modal_body: '',
-            modal_head: '',
-            modal_confirm_btn: '',
-          },
-        }));
-        break;
-      case 'modal_confirm':
-        window.confirmation_modal.close();
-        break;
-      default:
-        break;
-    }
-  };
+  const { onConfirm, onCancel } = useConfirm();
+
   return (
     <>
       <dialog
@@ -41,7 +22,9 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = () => {
         <form
           method='dialog'
           className='modal-box bg-base-200 pt-0 px-0 pb-0'>
-          <h3 className='font-bold text-lg text-center py-6'>Confirmation Dialog</h3>
+          <h3 className='font-bold text-lg text-center py-6'>
+            {dialogModal.modal_head ? dialogModal.modal_head : 'Confirmation Dialog'}
+          </h3>
           <div className='card px-5 pb-5 bg-base-100 rounded-t-'>
             <div className='card-body'>
               <p className='font-semibold'>{dialogModal.modal_body}</p>
@@ -51,12 +34,12 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = () => {
               <div className='join w-full flex'>
                 <span
                   className='btn join-item flex-1'
-                  onClick={() => modalFunction('modal_confirm')}>
-                  Confirm
+                  onClick={onConfirm}>
+                  {dialogModal.modal_confirm_btn ? dialogModal.modal_confirm_btn : 'Confirm'}
                 </span>
                 <span
                   className='btn btn-primary join-item flex-1'
-                  onClick={() => modalFunction('modal_close')}>
+                  onClick={onCancel}>
                   Close
                 </span>
               </div>
@@ -66,7 +49,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = () => {
         <form
           method='dialog'
           className='modal-backdrop'>
-          <span onClick={() => modalFunction('modal_close')}>close</span>
+          <span onClick={onCancel}>close</span>
         </form>
       </dialog>
     </>
