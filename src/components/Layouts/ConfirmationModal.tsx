@@ -40,7 +40,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = () => {
                 <span
                   className='btn btn-primary join-item flex-1'
                   onClick={onCancel}>
-                  Close
+                  {dialogModal.modal_cancel_btn ? dialogModal.modal_cancel_btn : 'Close'}
                 </span>
               </div>
             </div>

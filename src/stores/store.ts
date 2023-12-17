@@ -35,6 +35,7 @@ interface DialogModalData {
   modal_body: string;
   modal_head: string;
   modal_confirm_btn: string;
+  modal_cancel_btn: string;
 }
 
 interface StoreState {
@@ -96,5 +97,6 @@ export const useStore = create<StoreState>((set) => ({
     modal_body: '',
     modal_head: '',
     modal_confirm_btn: '',
+    modal_cancel_btn: '',
   },
 }));

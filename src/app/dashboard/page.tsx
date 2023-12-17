@@ -41,14 +41,12 @@ const Index = () => {
   const logEntry = async (value: string) => {
     try {
       if (value === 'undo log') {
-        useStore.setState(() => ({
-          dialogModal: {
-            modal_body: 'Your most recent log will be permanently deleted, proceed with caution.',
-            modal_head: 'Delete most recent log?',
-            modal_confirm_btn: 'Delete',
-          },
-        }));
-        const isConfirmed = await confirm();
+        const isConfirmed = await confirm({
+          modal_body: 'Your most recent log will be permanently deleted, proceed with caution.',
+          modal_head: 'Delete most recent log?',
+          modal_confirm_btn: 'Delete',
+          modal_cancel_btn: 'Cancel',
+        });
         if (!isConfirmed) {
           useStore.setState(() => ({ loading: false }));
           return;
