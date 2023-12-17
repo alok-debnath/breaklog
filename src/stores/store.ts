@@ -37,6 +37,10 @@ interface DialogModalData {
   modal_confirm_btn: string;
   modal_cancel_btn: string;
 }
+interface BreakData {
+  liveBreak: number;
+  totalBreak: number;
+}
 
 interface StoreState {
   themeMode: string;
@@ -48,7 +52,7 @@ interface StoreState {
   workData: WorkData;
   loading: boolean;
   currBreak: null | Date; // Change 'null' to 'null | Date' for date type
-  liveBreaks: number;
+  breaks: BreakData;
   logEditStore: LogEditData;
   dialogModal: DialogModalData;
 }
@@ -86,7 +90,10 @@ export const useStore = create<StoreState>((set) => ({
   },
   loading: false,
   currBreak: null,
-  liveBreaks: 0,
+  breaks: {
+    liveBreak: 0,
+    totalBreak: 0,
+  },
   logEditStore: {
     log_id: '',
     log_dateTime: '',

@@ -5,14 +5,19 @@ interface NavbarBottomProps {
   logEntry: (value: string) => void; // logEntry is a function that accepts a string
 }
 const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
-  const { breaklogMode, workData, loading, currBreak, liveBreaks } = useStore();
+  const { breaklogMode, workData, loading, currBreak, breaks } = useStore();
 
   return (
     <>
       {currBreak !== null && (
         <div className='toast toast-start mb-14'>
           <div className='flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-            <span className='text-black'>{liveBreaks} min</span>
+            <span className='text-black'>
+              {`${breaks.liveBreak} min `}
+              {breaks.liveBreak !== breaks.totalBreak && (
+                <span className='font-light italic'>{`(Total ${breaks.totalBreak})`}</span>
+              )}
+            </span>
           </div>
         </div>
       )}

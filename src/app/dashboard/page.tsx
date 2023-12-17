@@ -22,7 +22,17 @@ const Index = () => {
         const currentTime = new Date();
         const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
         const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
-        useStore.setState(() => ({ liveBreaks: diffInMinutes === -1 ? 0 : diffInMinutes }));
+
+        const workDurationArray = workData.breakTime.split(':');
+        const workHours = parseInt(workDurationArray[0]) * 60;
+        const workMinutes = parseInt(workDurationArray[1]);
+        const totalBreak = (diffInMinutes === -1 ? 0 : diffInMinutes) + workMinutes + workHours;
+        useStore.setState(() => ({
+          breaks: {
+            liveBreak: diffInMinutes === -1 ? 0 : diffInMinutes,
+            totalBreak: totalBreak,
+          },
+        }));
       }
     };
 

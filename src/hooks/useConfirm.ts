@@ -30,8 +30,8 @@ function useConfirm() {
     }));
 
     window.confirmation_modal.showModal();
-    return new Promise((res, rej) => {
-      resolveCallback = res;
+    return new Promise((resolve, reject) => {
+      resolveCallback = resolve;
     });
   };
 
