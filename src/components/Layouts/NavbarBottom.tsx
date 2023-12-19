@@ -15,7 +15,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
             <span className='text-black'>
               {`${breaks.liveBreak} min `}
               {breaks.liveBreak !== breaks.totalBreak && (
-                <span className='font-light italic'>{`(Total ${breaks.totalBreak})`}</span>
+                <span className='font-light italic'>{`(Total ${breaks.totalBreakFormated})`}</span>
               )}
             </span>
           </div>

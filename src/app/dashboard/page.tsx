@@ -15,6 +15,17 @@ const Index = () => {
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
 
+  const formatTime = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${remainingMinutes}m`;
+    } else {
+      return `${remainingMinutes}m`;
+    }
+  };
+
   useEffect(() => {
     const calculateBreakTime = () => {
       if (currBreak !== null) {
@@ -31,6 +42,7 @@ const Index = () => {
           breaks: {
             liveBreak: diffInMinutes === -1 ? 0 : diffInMinutes,
             totalBreak: totalBreak,
+            totalBreakFormated: formatTime(totalBreak),
           },
         }));
       }

@@ -40,6 +40,7 @@ interface DialogModalData {
 interface BreakData {
   liveBreak: number;
   totalBreak: number;
+  totalBreakFormated: string;
 }
 
 interface StoreState {
@@ -93,6 +94,7 @@ export const useStore = create<StoreState>((set) => ({
   breaks: {
     liveBreak: 0,
     totalBreak: 0,
+    totalBreakFormated: '',
   },
   logEditStore: {
     log_id: '',
