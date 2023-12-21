@@ -111,7 +111,7 @@ export default function SpecificDayLog({ params }: any) {
                     [...logs].reverse().map((log) => {
                       const updatedAt = new Date(log.updatedAt);
                       const utcFormattedDate = updatedAt.toLocaleString('en-US', {
-                        timeZone: 'Asia/Kolkata',
+                        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                         hour: 'numeric',
                         minute: 'numeric',
                         hour12: true,

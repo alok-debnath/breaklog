@@ -222,7 +222,7 @@ const Index = () => {
                       [...logs].reverse().map((log, index, array) => {
                         const updatedAt = new Date(log.updatedAt);
                         const utcFormattedDate = updatedAt.toLocaleString('en-US', {
-                          timeZone: 'Asia/Kolkata',
+                          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                           hour: 'numeric',
                           minute: 'numeric',
                           hour12: true,

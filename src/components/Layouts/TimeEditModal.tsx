@@ -20,11 +20,13 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
   const [localHour, setLocalHour] = useState<number>(0);
   const [localMinute, setLocalMinute] = useState<number>(0);
   const [amPm, setAmPm] = useState<string>('AM');
+  // Get the user's local timezone
+  const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   useEffect(() => {
     const updateLocalTime = () => {
       const updatedLocalTime = new Date(logEditStore.log_dateTime).toLocaleString('en-US', {
-        timeZone: 'Asia/Kolkata',
+        timeZone: localTimeZone,
         hour: 'numeric',
         minute: 'numeric',
         hour12: true,
@@ -43,30 +45,32 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
   const logEdit = async () => {
     const originalDateTime = new Date(logEditStore.log_dateTime);
 
-    // Get the user's local timezone offset in minutes
-    const localTimeZoneOffset = originalDateTime.getTimezoneOffset();
+    // Format the original date in the user's local timezone
+    const formattedOriginalDateTime = originalDateTime.toLocaleString('en-US', {
+      timeZone: localTimeZone,
+    });
 
-    // Set the local hours and minutes considering the local timezone offset
-    const updatedDateTime = new Date(originalDateTime);
-    updatedDateTime.setMinutes(originalDateTime.getMinutes() + localTimeZoneOffset);
-    updatedDateTime.setHours(localHour);
+    // Parse the formatted date to get a Date object in the local timezone
+    const localDateTime = new Date(formattedOriginalDateTime);
+
+    // Set the local hours and minutes
+    localDateTime.setHours(localHour);
+    localDateTime.setMinutes(localMinute);
 
     // Adjust AM/PM if necessary
     if (amPm === 'PM' && localHour < 12) {
-      updatedDateTime.setHours(localHour + 12);
+      localDateTime.setHours(localHour + 12);
     } else if (amPm === 'AM' && localHour === 12) {
-      updatedDateTime.setHours(0);
+      localDateTime.setHours(0);
     }
 
-    updatedDateTime.setMinutes(localMinute);
-
-    // Ensure the updated time is in the correct day by checking if it's before the original time
-    if (updatedDateTime < originalDateTime) {
-      updatedDateTime.setDate(originalDateTime.getDate());
+    // Ensure the updated time is in the correct day
+    if (localDateTime < originalDateTime) {
+      localDateTime.setDate(originalDateTime.getDate());
     }
 
-    // Convert the updatedDateTime to a string in ISO format (UTC)
-    const updatedDateTimeUTC = updatedDateTime.toISOString();
+    // Convert the localDateTime to a string in ISO format (UTC)
+    const updatedDateTimeUTC = localDateTime.toISOString();
 
     const values = { log_id: logEditStore.log_id, log_dateTime: updatedDateTimeUTC };
 
