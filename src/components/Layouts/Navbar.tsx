@@ -14,8 +14,7 @@ const Navbar = () => {
   useEffect(() => {
     if (pathname !== '/dashboard') {
       const parts = pathname.split('/');
-      parts.pop();
-      const modifiedPath = parts.join('/');
+      const modifiedPath = parts.slice(0, -1).join('/');
       setBackPath(modifiedPath);
     } else {
       setBackPath('');
@@ -23,7 +22,7 @@ const Navbar = () => {
   }, [pathname]);
 
   const router = useRouter();
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     try {
       await axios.get('/api/auth/logout');
       router.push('/login');
