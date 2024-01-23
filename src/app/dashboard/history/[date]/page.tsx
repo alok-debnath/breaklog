@@ -98,7 +98,6 @@ export default function SpecificDayLog({ params }: any) {
                   </span>
                 )}
               </div>
-              {loading && <progress className='progress progress-success'></progress>}
               <table className='table text-center'>
                 <thead>
                   <tr>

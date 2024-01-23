@@ -105,11 +105,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
           className='modal-box'>
           {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> */}
           <h3 className='font-bold text-lg text-center'>Edit Time</h3>
-          {loading ? (
-            <progress className='progress progress-success my-4'></progress>
-          ) : (
-            <div className='divider'></div>
-          )}
+          <div className='divider'></div>
           <div className='form-control grid gap-y-5 card p-5'>
             <div>
               <p className='label-text'>Hour</p>
