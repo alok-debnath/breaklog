@@ -76,7 +76,7 @@ const Navbar = () => {
                   History
                 </Link>
               </li>
-              {/* <li><a>About</a></li> */}
+              {/* <li><label>About</label></li> */}
             </ul>
           </div>
           <div className='flex-1'>
@@ -145,10 +145,10 @@ const Navbar = () => {
                 </Link>
               </li>
               <li onClick={() => window.setting_modal.showModal()}>
-                <a>Settings</a>
+                <label>Settings</label>
               </li>
               <li>
-                <a onClick={logout}>Logout</a>
+                <label onClick={logout}>Logout</label>
               </li>
             </ul>
           </div>

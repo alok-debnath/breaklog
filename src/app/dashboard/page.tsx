@@ -298,7 +298,7 @@ const Index = () => {
               tabIndex={0}
               className='dropdown-content menu shadow bg-base-100 rounded-box mb-2'>
               <li>
-                <a onClick={() => fetchLogFunction()}>
+                <span onClick={() => fetchLogFunction()}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -312,10 +312,10 @@ const Index = () => {
                       d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
                     />
                   </svg>
-                </a>
+                </span>
               </li>
               <li>
-                <a onClick={() => logEntry('undo log')}>
+                <span onClick={() => logEntry('undo log')}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -329,7 +329,7 @@ const Index = () => {
                       d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3'
                     />
                   </svg>
-                </a>
+                </span>
               </li>
             </ul>
           </div>

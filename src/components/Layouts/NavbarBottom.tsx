@@ -62,10 +62,10 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                   tabIndex={0}
                   className='dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>
                   <li>
-                    <a>Mark as Leave</a>
+                    <label>Mark as Leave</label>
                   </li>
                   <li>
-                    <a>Work From Home</a>
+                    <label>Work From Home</label>
                   </li>
                 </ul> */}
               </div>
