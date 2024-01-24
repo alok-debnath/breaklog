@@ -21,6 +21,7 @@ const SettingsModal = () => {
 
   const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     useStore.setState(() => ({ breaklogMode: event.target.checked }));
+    localStorage.setItem('breaklogMode', JSON.stringify(event.target.checked));
   };
 
   return (

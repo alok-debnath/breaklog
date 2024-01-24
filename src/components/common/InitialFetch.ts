@@ -5,7 +5,7 @@ import { handleError } from './CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
 
 const InitialFetch = () => {
-  const { breaklogMode, themeMode } = useStore();
+  const { breaklogMode, themeMode, userData } = useStore();
   const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
   const router = useRouter();
   const isClient = typeof window !== 'undefined';
@@ -15,10 +15,20 @@ const InitialFetch = () => {
       useStore.setState(() => ({ loading: true }));
       const res = await axios.get('/api/users/profile/fetchprofile');
       useStore.setState(() => ({ userData: res.data.data }));
+
+      if (isClient) {
+        const storedBreaklogMode = localStorage.getItem('breaklogMode');
+        if (!storedBreaklogMode) {
+          useStore.setState(() => ({
+            breaklogMode: JSON.parse(res.data.data.log_type === 'breakmode' ? 'true' : 'false'),
+          }));
+        }
+      }
     } catch (error: any) {
       handleError({ error: error, router: router });
     } finally {
       useStore.setState(() => ({ loading: false }));
+      setIsFirstEffectCompleted(true);
     }
   }, []);
 
@@ -38,7 +48,6 @@ const InitialFetch = () => {
 
     fetchData();
     loadLocalStorageData();
-    setIsFirstEffectCompleted(true);
   }, [isClient, fetchData]);
 
   useEffect(() => {

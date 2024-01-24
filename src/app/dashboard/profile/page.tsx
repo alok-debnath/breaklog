@@ -41,8 +41,6 @@ const ProfilePage = () => {
   });
 
   async function handleSubmit(values: any) {
-    console.log("handleSubmit");
-    
     useStore.setState(() => ({ loading: true }));
     try {
       const res = await axios.post('/api/users/profile/updateprofile', values);

@@ -39,8 +39,6 @@ export async function POST(request: NextRequest) {
         daily_work_required: true,
       },
     });
-    console.log(user?.daily_work_required);
-    
 
     // Initialize an object to store logs by date
     const logsByDate: { [date: string]: any[] } = {};
