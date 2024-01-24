@@ -12,10 +12,13 @@ const InitialFetch = () => {
 
   const fetchData = useCallback(async () => {
     try {
-      const res = await axios.get('/api/users/fetchprofile');
+      useStore.setState(() => ({ loading: true }));
+      const res = await axios.get('/api/users/profile/fetchprofile');
       useStore.setState(() => ({ userData: res.data.data }));
     } catch (error: any) {
       handleError({ error: error, router: router });
+    } finally {
+      useStore.setState(() => ({ loading: false }));
     }
   }, []);
 

@@ -15,6 +15,8 @@ export async function GET(request: NextRequest) {
         name: true,
         email: true,
         username: true,
+        daily_work_required: true,
+        log_type: true,
       },
     });
     return NextResponse.json({

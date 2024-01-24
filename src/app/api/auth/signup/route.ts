@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
         OR: [{ email: email }, { username: username }],
       },
     });
-    console.log(user);
+
     if (user) {
       return NextResponse.json({ error: 'User already exists' }, { status: 400 });
     }

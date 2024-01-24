@@ -39,7 +39,7 @@ export default function LoginPage() {
     axios
       .post('/api/auth/login', values)
       .then((res) => {
-        console.log('Login success: ', res);
+        // console.log('Login success: ', res);
         router.push('/dashboard');
       })
       .catch((error) => {

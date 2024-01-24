@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 const HistoryPage = () => {
-  const { loading, monthLogs, summary } = useStore();
+  const { loading, monthLogs, summary, userData } = useStore();
   const [collapseBoxState, setCollapseBoxState] = useState(false);
   const router = useRouter();
 
@@ -34,6 +34,15 @@ const HistoryPage = () => {
   ];
 
   const handleSearch = async () => {
+    if (
+      userData.daily_work_required === 0 ||
+      userData.daily_work_required === undefined ||
+      userData.daily_work_required === null
+    ) {
+      handleError({ error: { message: 'Please set required work hour from profile section' }, router: router });
+      return;
+    }
+
     const nextMonth = selectedMonth === 12 ? 1 : selectedMonth + 1;
     const nextYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear;
 

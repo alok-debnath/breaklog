@@ -31,6 +31,17 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    const user = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+      select: {
+        daily_work_required: true,
+      },
+    });
+    console.log(user?.daily_work_required);
+    
+
     // Initialize an object to store logs by date
     const logsByDate: { [date: string]: any[] } = {};
 
@@ -152,7 +163,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Calculate the expected work hours.
-      const expectedWorkHours = 8 * numberOfDays;
+      const expectedWorkHours = (user?.daily_work_required ?? 0) * numberOfDays;
 
       // Format the total break time and total work done.
       const formattedTotalBreakTime = formatTime(totalBreakTime);

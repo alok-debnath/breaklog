@@ -8,7 +8,7 @@ const updateLoadingState = () => {
 export const handleError = async ({ error, router }: { error: any; router: any }) => {
   if (error.name !== 'AbortError') {
     updateLoadingState();
-    if (error.response.data.TokenError) {
+    if (error.response?.data.TokenError) {
       await router.push('/login');
       toast.error('Error: ' + "Invalid Token", {
         style: {
