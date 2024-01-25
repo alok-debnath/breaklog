@@ -74,7 +74,7 @@ const ProfilePage = () => {
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>
-              <div className='card flex-shrink-0 w-full max-w-sm bg-base-100  my-20'>
+              <div className='card flex-shrink-0 w-full max-w-sm bg-base-100 my-20'>
                 <form
                   onSubmit={formik.handleSubmit}
                   className='card-body grid gap-y-3 w-full max-w-xl'>
@@ -83,7 +83,26 @@ const ProfilePage = () => {
                     <label
                       className='label'
                       htmlFor='daily_work_required'>
-                      <span className='label-text'>Daily work hour required</span>
+                      <span className='label-text flex items-center'>
+                        Daily work hour required
+                        <span
+                          className='ms-2 tooltip tooltip-top cursor-pointer'
+                          data-tip='Min work hours per day'>
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='w-6 h-6 me-1 text-warning'>
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                            />
+                          </svg>
+                        </span>
+                      </span>
                     </label>
                     <input
                       type='number'
@@ -110,7 +129,26 @@ const ProfilePage = () => {
                     <label
                       className='label'
                       htmlFor='log_type'>
-                      <span className='label-text'>Default Log Mode</span>
+                      <span className='label-text flex items-center'>
+                        Default Log Mode
+                        <span
+                          className='ms-2 tooltip tooltip-top cursor-pointer'
+                          data-tip='Default Mode to use on a fresh setup.'>
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='w-6 h-6 me-1 text-warning'>
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                            />
+                          </svg>
+                        </span>
+                      </span>
                     </label>
                     <select
                       id='log_type'

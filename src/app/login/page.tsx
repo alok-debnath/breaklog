@@ -87,7 +87,9 @@ export default function LoginPage() {
             </div>
             <div className='card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100'>
               <div className='card-body'>
-                <form onSubmit={formik.handleSubmit}>
+                <form
+                  onSubmit={formik.handleSubmit}
+                  className='grid gap-y-2'>
                   <div className='form-control'>
                     <label
                       className='label'
@@ -107,7 +109,7 @@ export default function LoginPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.email && formik.errors.email && (
-                      <div className='error text-red-500 my-1'>{formik.errors.email}</div>
+                      <div className='error text-red-500'>{formik.errors.email}</div>
                     )}
                   </div>
                   <div className='form-control'>
@@ -129,11 +131,15 @@ export default function LoginPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.password && formik.errors.password && (
-                      <div className='error text-red-500 my-1'>{formik.errors.password}</div>
+                      <div className='error text-red-500'>{formik.errors.password}</div>
                     )}
-                    {/* <label className="label">
-                                        <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
-                                    </label> */}
+                    {/* <label className='label'>
+                      <a
+                        href='#'
+                        className='label-text-alt link link-hover'>
+                        Forgot password?
+                      </a>
+                    </label> */}
                   </div>
                   <div className='form-control mt-6'>
                     <button

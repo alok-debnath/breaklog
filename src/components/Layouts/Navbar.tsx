@@ -87,7 +87,7 @@ const Navbar = () => {
                 <>BreakLog.v4</>
               ) : (
                 <>
-                  <div className='whitespace-nowrap'>DayL☀️g.v4</div>
+                  <div className='whitespace-nowrap'>DayLog.v4</div>
                 </>
               )}
             </Link>

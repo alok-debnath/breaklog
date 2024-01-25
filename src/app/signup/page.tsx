@@ -93,7 +93,7 @@ export default function SignupPage() {
             </div>
             <div className='card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100'>
               <div className='card-body'>
-                <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit} className='grid gap-y-2'>
                   <div className='form-control'>
                     <label
                       className='label'
@@ -113,7 +113,7 @@ export default function SignupPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.username && formik.errors.username && (
-                      <div className='error text-red-500 my-1'>{formik.errors.username}</div>
+                      <div className='error text-red-500'>{formik.errors.username}</div>
                     )}
                   </div>
                   <div className='form-control'>
@@ -135,7 +135,7 @@ export default function SignupPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.email && formik.errors.email && (
-                      <div className='error text-red-500 my-1'>{formik.errors.email}</div>
+                      <div className='error text-red-500'>{formik.errors.email}</div>
                     )}
                   </div>
                   <div className='form-control'>
@@ -156,8 +156,11 @@ export default function SignupPage() {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
+                    <div className='label'>
+                      <span className='label-text-alt'>Your password will be encrypted</span>
+                    </div>
                     {formik.touched.password && formik.errors.password && (
-                      <div className='error text-red-500 my-1'>{formik.errors.password}</div>
+                      <div className='error text-red-500'>{formik.errors.password}</div>
                     )}
                   </div>
                   <div className='form-control mt-6'>
