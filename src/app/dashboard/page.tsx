@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import useConfirm from '@/hooks/useConfirm';
 
 const Index = () => {
-  const { breaklogMode, logs, workData, loading, currBreak } = useStore();
+  const { breaklogMode, logs, workData, loading, currBreak, userData } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
@@ -133,7 +133,12 @@ const Index = () => {
           <div className='max-w-md'>
             <div
               className={`card bg-base-100 rounded-b-none mt-20 ${
-                workData.unformattedWorkDone >= 8 * 3600000 ? 'border-2 border-success' : ''
+                workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000 &&
+                (userData.daily_work_required !== 0 ||
+                  userData.daily_work_required !== undefined ||
+                  userData.daily_work_required !== null)
+                  ? 'border-2 border-success'
+                  : ''
               }`}>
               <div className='card-body'>
                 <div className='text-left font-semibold mb-3'>

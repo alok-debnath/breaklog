@@ -7,7 +7,7 @@ import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
 
 export default function SpecificDayLog({ params }: any) {
-  const { logs, workData, loading } = useStore();
+  const { logs, workData, userData } = useStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -40,19 +40,25 @@ export default function SpecificDayLog({ params }: any) {
     fetchLogFunction();
   }, [params.date]);
 
+  const isWorkDone = workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000;
+  const isWorkDoneSuccess =
+    isWorkDone &&
+    (userData.daily_work_required !== 0 ||
+      userData.daily_work_required !== undefined ||
+      userData.daily_work_required !== null);
   return (
     <>
       <div className='hero min-h-screen min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
           <div
             className={`card border-2 ${
-              workData.unformattedWorkDone >= 8 * 3600000 ? 'border-success' : 'border-error'
+              isWorkDoneSuccess ? 'border-success' : 'border-error'
             } bg-base-100 my-20 shadow-xl`}>
             <div className='card-body'>
               <div className='text-left font-semibold mb-2 block'>
                 <p
                   className={`btn btn-sm btn-outline no-animation ${
-                    workData.unformattedWorkDone >= 8 * 3600000 ? 'btn-success' : 'btn-error'
+                    isWorkDoneSuccess ? 'btn-success' : 'btn-error'
                   }`}>
                   Data from past
                 </p>

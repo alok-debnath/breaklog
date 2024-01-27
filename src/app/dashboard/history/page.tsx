@@ -226,7 +226,7 @@ const HistoryPage = () => {
                                     <Link
                                       href={`/dashboard/history/${log.date}`}
                                       className={`btn btn-sm ${
-                                        log.workDone >= 8 * 3600000 ? 'btn-success' : 'btn-error'
+                                        log.workDone >= userData.daily_work_required * 3600000 ? 'btn-success' : 'btn-error'
                                       }`}>
                                       {log.date}
                                     </Link>
