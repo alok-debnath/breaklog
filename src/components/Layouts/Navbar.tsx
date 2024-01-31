@@ -8,6 +8,7 @@ import SettingsModal from './SettingsModal';
 
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
+  const isClient = typeof window !== 'undefined';
 
   const [backPath, setBackPath] = useState('');
   const pathname = usePathname();
@@ -25,6 +26,9 @@ const Navbar = () => {
   const logout = async (): Promise<void> => {
     try {
       await axios.get('/api/auth/logout');
+      if (isClient) {
+        localStorage.clear();
+      }
       router.push('/login');
     } catch (error: any) {
       toast.error(error.message, {

@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     const logsByDate: { [date: string]: any[] } = {};
 
     // Iterate through the 'logs' data and organize it by date
-    logs.forEach((log) => {
+    logs.forEach((log: { updatedAt: Date }) => {
       // Get the date without the time
       const date = log.updatedAt.toISOString().split('T')[0];
 

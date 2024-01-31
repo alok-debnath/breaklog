@@ -19,7 +19,7 @@
     "prettier.htmlWhitespaceSensitivity": "strict",
     "liveServer.settings.donotVerifyTags": true,
     "liveServer.settings.donotShowInfoMsg": true,
-    "workbench.colorTheme": "Best Themes - Monokai Pirokai Beach Sunset",
+    "workbench.colorTheme": "Gitpod Dark",
     "[php]": {
         "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
     },

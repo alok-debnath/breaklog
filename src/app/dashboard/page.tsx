@@ -141,29 +141,57 @@ const Index = () => {
                   : ''
               }`}>
               <div className='card-body'>
-                <div className='text-left font-semibold mb-3'>
-                  <p>
-                    {new Date().toLocaleDateString('en-US', {
-                      day: 'numeric',
-                      month: 'long',
-                    })}
-                    ,
-                  </p>
-                  <p>
-                    {new Date().toLocaleDateString('en-US', {
-                      weekday: 'long',
-                    })}
-                  </p>
-                  <p className='font-medium my-2'>
+                <div className='mb-3'>
+                  <div className='text-left font-semibold card bg-base-100 pb-5'>
+                    <p>
+                      {new Date().toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                      })}
+                      ,{' '}
+                      {new Date().toLocaleDateString('en-US', {
+                        weekday: 'long',
+                      })}
+                    </p>
+                    <p></p>
+                  </div>
+                  <div
+                    className={`grid ${workData.workDone ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mt-3 text-center`}>
                     {!breaklogMode ? (
-                      workData.workDone ? (
-                        <>Work done: {workData.workDone} (hh:mm:ss)</>
+                      <div className='card bg-base-200 p-3'>
+                        {workData.workDone ? (
+                          <>
+                            <p className='font-medium'>Work done</p>
+                            <p className='font-semibold'>{workData.workDone}</p>
+                          </>
+                        ) : (
+                          <span className='animate-pulse'>
+                            <span className='flex space-x-4'>
+                              <span className='flex-1 space-y-9 py-1'>
+                                <span className='space-y-3'>
+                                  <span className='grid grid-rows-2 gap-3'>
+                                    <span className='h-2 bg-slate-700 rounded col-span-3'></span>
+                                    <span className='h-2 bg-slate-700 rounded col-span-2'></span>
+                                  </span>
+                                </span>
+                              </span>
+                            </span>
+                          </span>
+                        )}
+                      </div>
+                    ) : null}
+                    <div className='card bg-base-200 p-3'>
+                      {workData.breakTime ? (
+                        <>
+                          <p className='font-medium'>Break taken</p>
+                          <p className='font-semibold'>{workData.breakTime}</p>
+                        </>
                       ) : (
                         <span className='animate-pulse'>
                           <span className='flex space-x-4'>
                             <span className='flex-1 space-y-9 py-1'>
                               <span className='space-y-3'>
-                                <span className='grid grid-cols-5 gap-3'>
+                                <span className='grid grid-rows-2 gap-3'>
                                   <span className='h-2 bg-slate-700 rounded col-span-3'></span>
                                   <span className='h-2 bg-slate-700 rounded col-span-2'></span>
                                 </span>
@@ -171,27 +199,9 @@ const Index = () => {
                             </span>
                           </span>
                         </span>
-                      )
-                    ) : null}
-                  </p>
-                  <p className='font-medium my-2'>
-                    {workData.breakTime ? (
-                      <>Break taken: {workData.breakTime} (hh:mm:ss)</>
-                    ) : (
-                      <span className='animate-pulse'>
-                        <span className='flex space-x-4'>
-                          <span className='flex-1 space-y-9 py-1'>
-                            <span className='space-y-3'>
-                              <span className='grid grid-cols-5 gap-3'>
-                                <span className='h-2 bg-slate-700 rounded col-span-3'></span>
-                                <span className='h-2 bg-slate-700 rounded col-span-2'></span>
-                              </span>
-                            </span>
-                          </span>
-                        </span>
-                      </span>
-                    )}
-                  </p>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <table className='table text-center'>
                   <thead>
