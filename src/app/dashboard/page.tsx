@@ -158,7 +158,7 @@ const Index = () => {
                   <div
                     className={`grid ${workData.workDone ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mt-3 text-center`}>
                     {!breaklogMode ? (
-                      <div className='card bg-base-200 p-3'>
+                      <div className='card bg-base-200 p-3 drop-shadow-sm'>
                         {workData.workDone ? (
                           <>
                             <p className='font-medium'>Work done</p>
@@ -180,7 +180,7 @@ const Index = () => {
                         )}
                       </div>
                     ) : null}
-                    <div className='card bg-base-200 p-3'>
+                    <div className='card bg-base-200 p-3 drop-shadow-sm'>
                       {workData.breakTime ? (
                         <>
                           <p className='font-medium'>Break taken</p>
