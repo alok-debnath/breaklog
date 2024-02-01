@@ -5,7 +5,7 @@ const updateLoadingState = () => {
   useStore.setState(() => ({ loading: false }));
 };
 
-export const handleError = async ({ error, router }: { error: any; router: any }) => {
+export const handleError = async ({ error, router }: { error: any; router?: any }) => {
   if (error.name !== 'AbortError') {
     updateLoadingState();
     if (error.response?.data.TokenError) {

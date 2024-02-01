@@ -8,57 +8,16 @@ import { handleError } from '@/components/common/CommonCodeBlocks';
 import TimeEditModal from '@/components/Layouts/TimeEditModal';
 import { useRouter } from 'next/navigation';
 import useConfirm from '@/hooks/useConfirm';
+import LogsCard from '@/components/Layouts/LogsCard';
+import BreakCalculator from '@/utility/BreakCalculator';
 
 const Index = () => {
-  const { breaklogMode, logs, workData, loading, currBreak, userData } = useStore();
+  const { breaklogMode, workData, loading, userData } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
 
-  const formatTime = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-
-    if (hours > 0) {
-      return `${hours}h ${remainingMinutes}m`;
-    } else {
-      return `${remainingMinutes}m`;
-    }
-  };
-
-  useEffect(() => {
-    const calculateBreakTime = () => {
-      if (currBreak !== null) {
-        const breakTime = new Date(currBreak);
-        const currentTime = new Date();
-        const diffInMilliseconds = currentTime.getTime() - breakTime.getTime();
-        const diffInMinutes = Math.floor(diffInMilliseconds / 60000);
-
-        const workDurationArray = workData.breakTime.split(':');
-        const workHours = parseInt(workDurationArray[0]) * 60;
-        const workMinutes = parseInt(workDurationArray[1]);
-        const totalBreak = (diffInMinutes === -1 ? 0 : diffInMinutes) + workMinutes + workHours;
-        useStore.setState(() => ({
-          breaks: {
-            liveBreak: diffInMinutes === -1 ? 0 : diffInMinutes,
-            totalBreak: totalBreak,
-            totalBreakFormated: formatTime(totalBreak),
-          },
-        }));
-      }
-    };
-
-    calculateBreakTime(); // Call it immediately
-
-    const intervalId = setInterval(() => {
-      // useStore.setState((prev) => ({ liveBreaks: prev.liveBreaks + 1 }));
-      calculateBreakTime();
-    }, 60000);
-
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [currBreak]);
+  BreakCalculator();
 
   const logEntry = async (value: string) => {
     try {
@@ -121,156 +80,19 @@ const Index = () => {
     fetchLogFunction();
   }, []);
 
-  const openTimeEditModal = (value: any) => {
-    useStore.setState(() => ({ logEditStore: value }));
-    window.time_edit_modal.showModal();
-  };
+  const isWorkDone = workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000;
+  const isWorkDoneSuccess =
+    isWorkDone &&
+    (userData.daily_work_required !== 0 ||
+      userData.daily_work_required !== undefined ||
+      userData.daily_work_required !== null);
 
   return (
     <>
       <div className='hero min-h-screen bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            <div
-              className={`card bg-base-100 rounded-b-none mt-20 ${
-                workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000 &&
-                (userData.daily_work_required !== 0 ||
-                  userData.daily_work_required !== undefined ||
-                  userData.daily_work_required !== null)
-                  ? 'border-2 border-success'
-                  : ''
-              }`}>
-              <div className='card-body'>
-                <div className='mb-3'>
-                  <div className='text-left font-semibold card bg-base-100 pb-5'>
-                    <p>
-                      {new Date().toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                      })}
-                      ,{' '}
-                      {new Date().toLocaleDateString('en-US', {
-                        weekday: 'long',
-                      })}
-                    </p>
-                    <p></p>
-                  </div>
-                  <div
-                    className={`grid ${workData.workDone ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mt-3 text-center`}>
-                    {!breaklogMode ? (
-                      <div className='card bg-base-200 p-3 shadow-md'>
-                        {workData.workDone ? (
-                          <>
-                            <p className='font-medium'>Work done</p>
-                            <p className='font-semibold'>{workData.workDone}</p>
-                          </>
-                        ) : (
-                          <span className='animate-pulse'>
-                            <span className='flex space-x-4'>
-                              <span className='flex-1 space-y-9 py-1'>
-                                <span className='space-y-3'>
-                                  <span className='grid grid-rows-2 gap-3'>
-                                    <span className='h-2 bg-slate-700 rounded col-span-3'></span>
-                                    <span className='h-2 bg-slate-700 rounded col-span-2'></span>
-                                  </span>
-                                </span>
-                              </span>
-                            </span>
-                          </span>
-                        )}
-                      </div>
-                    ) : null}
-                    <div className='card bg-base-200 p-3 shadow-md'>
-                      {workData.breakTime ? (
-                        <>
-                          <p className='font-medium'>Break taken</p>
-                          <p className='font-semibold'>{workData.breakTime}</p>
-                        </>
-                      ) : (
-                        <span className='animate-pulse'>
-                          <span className='flex space-x-4'>
-                            <span className='flex-1 space-y-9 py-1'>
-                              <span className='space-y-3'>
-                                <span className='grid grid-rows-2 gap-3'>
-                                  <span className='h-2 bg-slate-700 rounded col-span-3'></span>
-                                  <span className='h-2 bg-slate-700 rounded col-span-2'></span>
-                                </span>
-                              </span>
-                            </span>
-                          </span>
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <table className='table text-center'>
-                  <thead>
-                    <tr>
-                      <th>
-                        <span className='flex items-center'>
-                          <span
-                            className='tooltip tooltip-right cursor-pointer'
-                            data-tip='Click on any of the time to edit'>
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              fill='none'
-                              viewBox='0 0 24 24'
-                              strokeWidth={1.5}
-                              stroke='currentColor'
-                              className='w-6 h-6 me-1 text-warning'>
-                              <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                              />
-                            </svg>
-                          </span>
-                          Time
-                        </span>
-                      </th>
-                      <th>Log</th>
-                    </tr>
-                  </thead>
-                  <tbody className='text-left'>
-                    {logs &&
-                      [...logs].reverse().map((log, index, array) => {
-                        const updatedAt = new Date(log.updatedAt);
-                        const utcFormattedDate = updatedAt.toLocaleString('en-US', {
-                          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                          hour: 'numeric',
-                          minute: 'numeric',
-                          hour12: true,
-                          month: 'short',
-                          day: 'numeric',
-                        });
-
-                        const logAbove = index > 0 ? array[index - 1] : null;
-                        const logBelow = index < array.length - 1 ? array[index + 1] : null;
-
-                        return (
-                          <tr key={log.id}>
-                            <td>
-                              <button
-                                className='btn btn-sm btn-ghost'
-                                onClick={() =>
-                                  openTimeEditModal({
-                                    log_id: log.id,
-                                    log_dateTime: log.updatedAt,
-                                    log_dateTime_ahead: logAbove ? logAbove.updatedAt : '',
-                                    log_dateTime_behind: logBelow ? logBelow.updatedAt : '',
-                                  })
-                                }>
-                                {utcFormattedDate}
-                              </button>
-                            </td>
-                            <td className='text-center'>{log.log_status}</td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <LogsCard isWorkDoneSuccess={isWorkDoneSuccess} />
             <div className='mb-20'>
               <Button
                 text='End Day'

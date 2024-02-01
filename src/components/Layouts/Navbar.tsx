@@ -5,6 +5,7 @@ import { useStore } from '@/stores/store';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SettingsModal from './SettingsModal';
+import { handleError } from '../common/CommonCodeBlocks';
 
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
@@ -24,6 +25,7 @@ const Navbar = () => {
 
   const router = useRouter();
   const logout = async (): Promise<void> => {
+    useStore.setState(() => ({ loading: true }));
     try {
       await axios.get('/api/auth/logout');
       if (isClient) {
@@ -31,13 +33,7 @@ const Navbar = () => {
       }
       router.push('/login');
     } catch (error: any) {
-      toast.error(error.message, {
-        style: {
-          padding: '15px',
-          color: 'white',
-          backgroundColor: 'rgb(214, 60, 60)',
-        },
-      });
+      handleError({ error: error});
     }
   };
 
