@@ -44,9 +44,15 @@ interface BreakData {
   totalBreakFormated: string;
 }
 
+interface LogsData {
+  id: string;
+  updatedAt: string;
+  log_status: string;
+}
+
 interface StoreState {
   themeMode: string;
-  logs: any[];
+  logs: LogsData[];
   monthLogs: MonthLogData[];
   userData: userData;
   summary: summary;

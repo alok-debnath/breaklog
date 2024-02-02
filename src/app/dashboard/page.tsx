@@ -9,15 +9,12 @@ import TimeEditModal from '@/components/Layouts/TimeEditModal';
 import { useRouter } from 'next/navigation';
 import useConfirm from '@/hooks/useConfirm';
 import LogsCard from '@/components/Layouts/LogsCard';
-import BreakCalculator from '@/utility/BreakCalculator';
 
 const Index = () => {
   const { breaklogMode, workData, loading, userData } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
-
-  BreakCalculator();
 
   const logEntry = async (value: string) => {
     try {

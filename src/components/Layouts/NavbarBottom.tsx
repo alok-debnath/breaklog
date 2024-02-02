@@ -1,32 +1,16 @@
 import Button from '../UI/Button';
 import { useStore } from '@/stores/store';
+import BreakCalculator from '@/utility/BreakCalculator';
 
 interface NavbarBottomProps {
   logEntry: (value: string) => void; // logEntry is a function that accepts a string
 }
 const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
-  const { breaklogMode, workData, loading, currBreak, breaks } = useStore();
+  const { breaklogMode, workData, loading } = useStore();
 
   return (
     <>
-      {currBreak !== null && (
-        <div
-          className={`toast toast-start mb-14 ${breaks.liveBreak !== breaks.totalBreak && 'grid grid-rows-2 gap-2'}`}>
-          <div className='rounded-full w-min flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-            <span className='text-black'>{`${breaks.liveBreak} min `}</span>
-          </div>
-          {breaks.liveBreak !== breaks.totalBreak && (
-            <div className='rounded-full flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-              <span className='text-black'>
-                <>
-                  <span className='font-light'>{`Total `}</span>
-                  <span>{breaks.totalBreakFormated}</span>
-                </>
-              </span>
-            </div>
-          )}
-        </div>
-      )}
+      <BreakCalculator />
       <div className='btm-nav btm-nav-md shadow-md'>
         <div className='cursor-default'>
           <div className='flex gap-3'>

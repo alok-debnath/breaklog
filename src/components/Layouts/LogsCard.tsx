@@ -12,6 +12,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
     useStore.setState(() => ({ logEditStore: value }));
     window.time_edit_modal.showModal();
   };
+
   return (
     <>
       <div
@@ -46,8 +47,8 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
               <p></p>
             </div>
             <div
-              className={`grid ${!breaklogMode ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mt-3 text-center`}>
-              {!breaklogMode ? (
+              className={`grid ${!breaklogMode || page === 'history' ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mt-3 text-center`}>
+              {!breaklogMode || page === 'history' ? (
                 <div className='card bg-base-200 p-3 shadow-md'>
                   {workData.workDone ? (
                     <>
@@ -93,76 +94,106 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
               </div>
             </div>
           </div>
-          <table className='table text-center'>
-            <thead>
-              <tr>
-                <th className='text-center'>
-                  <span className={`${page !== 'history' && 'flex items-center'}`}>
-                    {page !== 'history' && (
-                      <span
-                        className='tooltip tooltip-right cursor-pointer'
-                        data-tip='Click on any of the time to edit'>
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          strokeWidth={1.5}
-                          stroke='currentColor'
-                          className='w-6 h-6 me-1 text-warning'>
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                          />
-                        </svg>
+          <div className='collapse collapse-arrow border border-base-300'>
+            <input
+              type='checkbox'
+              className='peer'
+            />
+            <div className='collapse-title font-medium text-left px-5 peer-checked:hidden'>
+              show logs
+            </div>
+            <div className='collapse-title bg-base-300 font-medium text-left px-5 hidden peer-checked:block'>
+              hide logs
+            </div>
+            {page !== 'history' && (
+              <p className='bg-base-300 font-medium text-sm text-center py-0.5 peer-checked:hidden'>
+                {logs.length > 0 ? (
+                  <>
+                    Recent log:{' '}
+                    <span className='text-success font-bold'>
+                      {Object.entries(logs).reverse()[0][1].log_status}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className='text-error'>No logs available</span>
+                  </>
+                )}
+              </p>
+            )}
+            <div className='collapse-content px-2'>
+              <table className='table text-center'>
+                <thead>
+                  <tr>
+                    <th className='text-center'>
+                      <span className={`${page !== 'history' && 'flex items-center'}`}>
+                        {page !== 'history' && (
+                          <span
+                            className='tooltip tooltip-right cursor-pointer'
+                            data-tip='Click on any of the time to edit'>
+                            <svg
+                              xmlns='http://www.w3.org/2000/svg'
+                              fill='none'
+                              viewBox='0 0 24 24'
+                              strokeWidth={1.5}
+                              stroke='currentColor'
+                              className='w-6 h-6 me-1 text-warning'>
+                              <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                              />
+                            </svg>
+                          </span>
+                        )}
+                        Time
                       </span>
-                    )}
-                    Time
-                  </span>
-                </th>
-                <th>Log</th>
-              </tr>
-            </thead>
-            <tbody className='text-left'>
-              {logs &&
-                [...logs].reverse().map((log, index, array) => {
-                  const updatedAt = new Date(log.updatedAt);
-                  const utcFormattedDate = updatedAt.toLocaleString('en-US', {
-                    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    hour12: true,
-                    month: 'short',
-                    day: 'numeric',
-                  });
+                    </th>
+                    <th>Log</th>
+                  </tr>
+                </thead>
+                <tbody className='text-left'>
+                  {logs &&
+                    [...logs].reverse().map((log, index, array) => {
+                      const updatedAt = new Date(log.updatedAt);
+                      const utcFormattedDate = updatedAt.toLocaleString('en-US', {
+                        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                        month: 'short',
+                        day: 'numeric',
+                      });
 
-                  const logAbove = index > 0 ? array[index - 1] : null;
-                  const logBelow = index < array.length - 1 ? array[index + 1] : null;
+                      const logAbove = index > 0 ? array[index - 1] : null;
+                      const logBelow = index < array.length - 1 ? array[index + 1] : null;
 
-                  return (
-                    <tr key={log.id}>
-                      <td>
-                        <button
-                          className='btn btn-sm btn-ghost'
-                          onClick={() => {
-                            if (page !== 'history') {
-                              openTimeEditModal({
-                                log_id: log.id,
-                                log_dateTime: log.updatedAt,
-                                log_dateTime_ahead: logAbove ? logAbove.updatedAt : '',
-                                log_dateTime_behind: logBelow ? logBelow.updatedAt : '',
-                              });
-                            }
-                          }}>
-                          {utcFormattedDate}
-                        </button>
-                      </td>
-                      <td className='text-center'>{log.log_status}</td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </table>
+                      return (
+                        <tr key={log.id}>
+                          <td>
+                            <button
+                              className='btn btn-sm btn-ghost'
+                              onClick={() => {
+                                if (page !== 'history') {
+                                  openTimeEditModal({
+                                    log_id: log.id,
+                                    log_dateTime: log.updatedAt,
+                                    log_dateTime_ahead: logAbove ? logAbove.updatedAt : '',
+                                    log_dateTime_behind: logBelow ? logBelow.updatedAt : '',
+                                  });
+                                }
+                              }}>
+                              {utcFormattedDate}
+                            </button>
+                          </td>
+                          <td className='text-center'>{log.log_status}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </>

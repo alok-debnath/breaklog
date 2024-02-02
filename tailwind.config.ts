@@ -11,7 +11,7 @@ const config: Config = {
   },
   plugins: [require('daisyui'), 'prettier-plugin-tailwindcss'],
   daisyui: {
-    themes: ['light', 'dark', 'synthwave', 'cyberpunk', 'forest', 'retro'],
+    themes: ['light', 'dark', 'synthwave', 'cyberpunk', 'forest', 'retro', 'dim'],
   },
 };
 export default config;
