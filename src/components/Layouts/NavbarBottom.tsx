@@ -1,6 +1,6 @@
 import Button from '../UI/Button';
 import { useStore } from '@/stores/store';
-import BreakCalculator from '@/utility/BreakCalculator';
+import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
 
 interface NavbarBottomProps {
   logEntry: (value: string) => void; // logEntry is a function that accepts a string
@@ -10,7 +10,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
 
   return (
     <>
-      <BreakCalculator />
+      <LiveBreakCounter />
       <div className='btm-nav btm-nav-md shadow-md'>
         <div className='cursor-default'>
           <div className='flex gap-3'>

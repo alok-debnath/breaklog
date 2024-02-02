@@ -170,7 +170,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
 
                       return (
                         <tr key={log.id}>
-                          <td>
+                          <td className='ps-0'>
                             <button
                               className='btn btn-sm btn-ghost'
                               onClick={() => {

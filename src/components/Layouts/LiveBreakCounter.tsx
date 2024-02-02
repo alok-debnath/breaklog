@@ -1,7 +1,7 @@
 import { useStore } from '@/stores/store';
 import { useEffect } from 'react';
 
-const BreakCalculator = () => {
+const LiveBreakCounter = () => {
   const { workData, currBreak, breaks } = useStore();
 
   const formatTime = (minutes: number) => {
@@ -48,18 +48,18 @@ const BreakCalculator = () => {
       clearInterval(intervalId);
     };
   }, [currBreak]);
-  
+
   return (
     <>
-      {currBreak !== null && (
+      <div className={`${currBreak === null ? 'hidden' : 'block'}`}>
         <div
           className={`toast toast-start mb-14 ${breaks.liveBreak !== breaks.totalBreak && 'grid grid-rows-2 gap-2'}`}>
-          <div className='rounded-full w-min flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-            <span className='text-black'>{`${breaks.liveBreak} min `}</span>
+          <div className='rounded-full w-min flex justify-center alert shadow-xl backdrop-blur-md bg-primary/40'>
+            <span className=''>{`${breaks.liveBreak} min `}</span>
           </div>
           {breaks.liveBreak !== breaks.totalBreak && (
-            <div className='rounded-full flex justify-center alert alert-success shadow-xl backdrop-blur-md bg-secondary/40'>
-              <span className='text-black'>
+            <div className='rounded-full flex justify-center alert shadow-xl backdrop-blur-md bg-primary/40'>
+              <span className=''>
                 <>
                   <span className='font-light'>{`Total `}</span>
                   <span>{breaks.totalBreakFormated}</span>
@@ -68,9 +68,9 @@ const BreakCalculator = () => {
             </div>
           )}
         </div>
-      )}
+      </div>
     </>
   );
 };
 
-export default BreakCalculator;
+export default LiveBreakCounter;
