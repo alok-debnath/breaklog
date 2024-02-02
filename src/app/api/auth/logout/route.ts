@@ -3,16 +3,13 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   try {
     const response = NextResponse.json({
-      message: 'Logged successfully',
+      message: 'Logout successful',
       success: true,
     });
-    
-    // Set cache control header to 'no-store'
-    response.headers.set('Cache-Control', 'no-store');
 
     response.cookies.set('token', '', {
       httpOnly: true,
-      expires: new Date(0),
+      expires: new Date(Date.now()),
     });
 
     return response;

@@ -30,12 +30,11 @@ const Navbar = () => {
       await axios.get('/api/auth/logout');
       if (isClient) {
         localStorage.clear();
-        document.cookie = 'token=;expires=' + new Date(0).toUTCString() + ';path=/';
       }
       useStore.setState(() => ({ loading: false }));
       router.push('/login');
     } catch (error: any) {
-      handleError({ error: error});
+      handleError({ error: error });
     }
   };
 
