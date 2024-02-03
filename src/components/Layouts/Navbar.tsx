@@ -84,12 +84,25 @@ const Navbar = () => {
             <Link
               href='/dashboard'
               className='btn btn-ghost normal-case text-xl gap-1'>
-              {breaklogMode ? (
-                <>BreakLog.v4</>
+              {isClient && userData.username ? (
+                breaklogMode ? (
+                  <span className='whitespace-nowrap'>BreakLog.v4</span>
+                ) : (
+                  <span className='whitespace-nowrap'>DayLog.v4</span>
+                )
               ) : (
-                <>
-                  <div className='whitespace-nowrap'>DayLog.v4</div>
-                </>
+                <span className='animate-pulse'>
+                  <span className='flex space-x-4'>
+                    <span className='flex-1 space-y-9 py-1'>
+                      <span className='space-y-3'>
+                        <span className='grid grid-cols-6 gap-5'>
+                          <span className='h-2 bg-slate-700 rounded col-span-4'></span>
+                          <span className='h-2 bg-slate-700 rounded col-span-2'></span>
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </span>
               )}
             </Link>
           </div>

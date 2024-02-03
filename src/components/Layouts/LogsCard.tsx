@@ -6,7 +6,8 @@ interface LogsCardProps {
   isWorkDoneSuccess?: boolean;
 }
 const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
-  const { breaklogMode, logs, workData } = useStore();
+  const { breaklogMode, logs, workData, userData } = useStore();
+  const isClient = typeof window !== 'undefined';
 
   const openTimeEditModal = (value: any) => {
     useStore.setState(() => ({ logEditStore: value }));
@@ -34,17 +35,31 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
           )}
           <div className='mb-3'>
             <div className='text-left font-semibold card bg-base-100 pb-5'>
-              <p>
-                {new Date().toLocaleDateString('en-US', {
-                  day: 'numeric',
-                  month: 'long',
-                })}
-                ,{' '}
-                {new Date().toLocaleDateString('en-US', {
-                  weekday: 'long',
-                })}
-              </p>
-              <p></p>
+              {isClient && userData.username ? (
+                <span>
+                  {new Date().toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    month: 'long',
+                  })}
+                  ,{' '}
+                  {new Date().toLocaleDateString('en-US', {
+                    weekday: 'long',
+                  })}
+                </span>
+              ) : (
+                <span className='animate-pulse'>
+                  <span className='flex space-x-4'>
+                    <span className='flex-1 space-y-9 py-1'>
+                      <span className='space-y-3'>
+                        <span className='grid grid-cols-6 gap-3'>
+                          <span className='h-2 bg-slate-700 rounded col-span-2'></span>
+                          <span className='h-2 bg-slate-700 rounded col-span-1'></span>
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              )}
             </div>
             <div
               className={`grid ${!breaklogMode || page === 'history' ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mt-3 text-center`}>
