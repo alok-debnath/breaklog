@@ -125,9 +125,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
                 {logs.length > 0 ? (
                   <>
                     Recent log:{' '}
-                    <span className='text-success font-bold'>
-                      {Object.entries(logs).reverse()[0][1].log_status}
-                    </span>
+                    <span className='text-success font-bold'>{workData.lastLogStatus}</span>
                   </>
                 ) : (
                   <>

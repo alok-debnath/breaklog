@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import LogsCard from '@/components/Layouts/LogsCard';
 
 export default function SpecificDayLog({ params }: any) {
-  const { logs, workData, userData } = useStore();
+  const { workData, userData } = useStore();
   const router = useRouter();
 
   useEffect(() => {
