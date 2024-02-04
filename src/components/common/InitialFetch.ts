@@ -3,13 +3,11 @@ import axios from 'axios';
 import { useStore } from '@/stores/store';
 import { handleError } from './CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
-import { useUrlQuery } from '@/hooks/useUrlQuery';
 
 const InitialFetch = () => {
   const { breaklogMode, themeMode, userData } = useStore();
   const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
   const router = useRouter();
-  const { replaceQuery } = useUrlQuery();
   const isClient = typeof window !== 'undefined';
 
   const fetchData = useCallback(async () => {
@@ -56,8 +54,6 @@ const InitialFetch = () => {
     if (isClient && isFirstEffectCompleted) {
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
       localStorage.setItem('thememode', themeMode);
-
-      replaceQuery('theme', themeMode);
     }
   }, [breaklogMode, themeMode, isFirstEffectCompleted, isClient]);
 
