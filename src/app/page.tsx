@@ -1,3 +1,6 @@
+import Footer from '@/components/LandingPage/Footer';
+import MobileHalo from '@/components/LandingPage/MobileHalo';
+import MouseHalo from '@/components/LandingPage/MouseHalo';
 import Link from 'next/link';
 
 const Home = () => {
@@ -5,6 +8,8 @@ const Home = () => {
     <>
       <div className='mx-auto min-w-screen min-h-screen p-4 text-black bg-white'>
         <div className='mx-auto max-w-screen-xl px-1 md:px-10'>
+          <MouseHalo />
+          <MobileHalo />
           <nav className='bg-transparent w-full z-20 top-0 start-0 mb-4'>
             <div className='max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4'>
               <Link
@@ -37,7 +42,7 @@ const Home = () => {
               </div>
             </div>
           </nav>
-          <div className='grid grid-cols-12 mt-8 md:mt-14'>
+          <div className='grid grid-cols-12 my-8 md:my-14 min-h-screen'>
             <div className='col-span-12 xl:col-span-8'>
               <p className='text-4xl md:text-6xl xl:text-7xl font-bold xl:font-extrabold text-slate-300'>
                 A better way
@@ -45,18 +50,19 @@ const Home = () => {
               <p className='text-4xl md:text-6xl xl:text-7xl font-bold xl:font-extrabold'>
                 to manage your work hours
               </p>
-              <p className='text-2xl font-medium my-8 md:my-10 mr-10 md:mr-28'>
+              <p className='text-xl md:text-2xl font-medium my-8 md:my-10 mr-10 md:mr-28'>
                 A project to log your work activities for better time management.
               </p>
               <Link
                 href='/login'
-                className='text-white bg-sky-500 hover:bg-sky-600 font-medium rounded-3xl text-md px-7 py-3 text-center'>
+                className='block w-fit text-white bg-sky-500 hover:bg-sky-600 font-medium rounded-3xl text-md px-7 py-3 text-center'>
                 Try it now
               </Link>
             </div>
           </div>
         </div>
       </div>
+          <Footer />
     </>
   );
 };
