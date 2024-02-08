@@ -19,7 +19,7 @@
     "prettier.htmlWhitespaceSensitivity": "strict",
     "liveServer.settings.donotVerifyTags": true,
     "liveServer.settings.donotShowInfoMsg": true,
-    "workbench.colorTheme": "Gitpod Dark",
+    "workbench.colorTheme": "Best Themes - Gruvbox Dark",
     "[php]": {
         "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
     },
