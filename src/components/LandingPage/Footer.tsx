@@ -2,10 +2,10 @@ const Footer = () => {
   return (
     <>
       <div className='border bg-white'>
-        <div className='mx-auto max-w-screen-xl px-1 md:px-10 grid grid-cols-12 my-12'>
+        <div className='mx-auto max-w-screen-xl px-5 md:px-10 grid grid-cols-12 my-12'>
           <div className='col-span-6 flex items-center text-left text-sm'>
             <a
-              href=''
+              href='https://github.com/alok-debnath'
               className='group inline-block'>
               <p className='group-hover:text-emerald duration-300 ease-in-out'>
                 Built with &#9829; by <span className='text-sky-500'>Alok</span>
@@ -14,7 +14,7 @@ const Footer = () => {
           </div>
           <div className='col-span-6 text-right text-sm'>
             <a
-              href=''
+              href='https://github.com/alok-debnath/breaklog'
               className='group inline-block bg-slate-200 hover:bg-slate-300 font-medium rounded-xl text-md p-3 text-center'>
               <svg
                 width='20px'
