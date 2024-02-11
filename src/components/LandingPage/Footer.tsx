@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
     <>
-      <div className='border bg-white'>
-        <div className='mx-auto max-w-screen-xl px-5 md:px-10 grid grid-cols-12 my-12'>
+      <div className='border border-x-0 border-b-0 dark:border-slate-700'>
+        <div className='mx-auto max-w-screen-xl px-5 md:px-10 grid grid-cols-12 py-12'>
           <div className='col-span-6 flex items-center text-left text-sm'>
             <a
               href='https://github.com/alok-debnath'

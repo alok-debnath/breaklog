@@ -26,7 +26,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
           {page === 'history' && (
             <div className='text-left font-semibold mb-2 block'>
               <p
-                className={`btn btn-sm btn-outline no-animation ${
+                className={`btn btn-sm btn-outline no-animation cursor-default ${
                   isWorkDoneSuccess ? 'btn-success' : 'btn-error'
                 }`}>
                 Data from past

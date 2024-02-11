@@ -15,7 +15,7 @@
 }
 
 .mobile-halo-div {
-  position: fixed;
+  position: absolute;
   z-index: 0;
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -28,5 +28,4 @@
   height: 1200px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(128, 255, 202, 0.3) 0%, rgba(0, 0, 0, 0) 60%);
-
 }
