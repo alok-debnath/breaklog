@@ -40,8 +40,8 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='w-full fixed z-10 px-3 pt-3 bg-base-200'>
-        <div className='navbar bg-base-100 drop-shadow-md rounded-box w-full'>
+      <div className='w-full fixed z-10 px-3 pt-3 bg-gradient-to-b from-base-200 to-transparent'>
+        <div className='navbar bg-base-100 shadow-lg rounded-box w-full'>
           <div className='navbar-start'>
             <div className='dropdown'>
               <label
