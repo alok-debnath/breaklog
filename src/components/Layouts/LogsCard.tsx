@@ -22,7 +22,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
             ? 'border-2 border-success'
             : `${page !== 'history' ? '' : 'border-2 border-error'}`
         }`}>
-        <div className='card-body'>
+        <div className='card-body p-5 md:p-9'>
           {page === 'history' && (
             <div className='text-left font-semibold mb-2 block'>
               <p

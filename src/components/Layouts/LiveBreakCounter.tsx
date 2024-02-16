@@ -53,7 +53,7 @@ const LiveBreakCounter = () => {
     <>
       <div className={`${currBreak === null ? 'hidden' : 'block'}`}>
         <div
-          className={`toast toast-start mb-14 ${breaks.liveBreak !== breaks.totalBreak && 'grid grid-rows-2 gap-2'}`}>
+          className={`toast toast-start mb-16 ${breaks.liveBreak !== breaks.totalBreak && 'grid grid-rows-2 gap-2'}`}>
           <div className='rounded-full w-min flex justify-center alert shadow-xl backdrop-blur-md bg-primary/40'>
             <span className=''>{`${breaks.liveBreak} min `}</span>
           </div>
