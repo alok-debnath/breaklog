@@ -11,9 +11,9 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
   return (
     <>
       <LiveBreakCounter />
-      <div className='btm-nav btm-nav-md shadow-md w-fit mx-auto px-5 py-5 mb-3 rounded-box'>
+      <div className='btm-nav btm-nav-md shadow-md w-full md:w-fit mx-auto md:px-5 md:py-5 md:mb-3 rounded-t-box md:rounded-box'>
         <div className='cursor-default'>
-          <div className='flex gap-10'>
+          <div className='flex justify-center gap-10'>
             {/* <div>
               <div
                 className={`dropdown dropdown-top dropdown-hover ${
@@ -74,7 +74,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                 onclick={() => (breaklogMode ? logEntry('break log') : logEntry('day log'))}
               />
             </div>
-            <div className=''>
+            <div className='ml-auto'>
               <div className='dropdown dropdown-top dropdown-end'>
                 <label
                   tabIndex={0}
