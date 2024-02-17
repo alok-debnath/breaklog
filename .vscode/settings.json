@@ -2,8 +2,6 @@
     "[html]": {
         "editor.defaultFormatter": "vscode.html-language-features"
     },
-    "editor.accessibilitySupport": "off",
-    "files.autoSave": "afterDelay",
     "[css]": {
         "editor.defaultFormatter": "vscode.css-language-features"
     },
@@ -13,6 +11,30 @@
     "[python]": {
         "editor.formatOnType": true
     },
+    "[php]": {
+        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "window.title": "${dirty}${activeEditorShort} -> ${rootName}",
+    "editor.accessibilitySupport": "off",
+    "files.autoSave": "afterDelay",
     "git.autofetch": true,
     "prettier.printWidth": 100,
     "prettier.bracketSameLine": true,
@@ -20,9 +42,6 @@
     "liveServer.settings.donotVerifyTags": true,
     "liveServer.settings.donotShowInfoMsg": true,
     "workbench.colorTheme": "Shades of Purple (Super Dark)",
-    "[php]": {
-        "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
-    },
     "editor.minimap.autohide": true,
     "editor.minimap.renderCharacters": false,
     "editor.minimap.scale": 2,
@@ -43,9 +62,6 @@
             "path": "bash",
             "icon": "terminal-bash"
         },
-        // "zsh": {
-        //     "path": "zsh"
-        // },
         "fish": {
             "path": "fish"
         },
@@ -57,16 +73,6 @@
             "path": "pwsh",
             "icon": "terminal-powershell"
         },
-        // "bash": {
-        //     "path": "/usr/bin/flatpak-spawn",
-        //     "args": [
-        //         "--host",
-        //         "--env=TERM=xterm-256color",
-        //         "bash"
-        //     ],
-        //     "icon": "terminal-bash",
-        //     "overrideName": true
-        // },
         "zsh": {
             "path": "/usr/bin/flatpak-spawn",
             "args": [
@@ -74,40 +80,74 @@
                 "--env=TERM=xterm-256color",
                 "zsh"
             ],
-            // "icon": "terminal-zsh",
             "overrideName": true
-        },
+        }
     },
     "workbench.settings.applyToAllProfiles": [],
     "terminal.integrated.defaultProfile.linux": "zsh",
     "vscode-edge-devtools.webhintInstallNotification": true,
-    "[javascriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
-    "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "prettier.jsxSingleQuote": true,
     "prettier.singleQuote": true,
     "prettier.withNodeModules": true,
     "prettier.singleAttributePerLine": true,
-    "[typescript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "bladeFormatter.format.indentSize": 2,
     "editor.tabSize": 2,
     "console-ninja.featureSet": "Community",
-    "[scss]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-    },
     "window.titleBarStyle": "custom",
     "editor.fontFamily": "'JetBrainsMono Nerd Font Medium', 'Fira Code', 'Droid Sans Mono', 'monospace'",
-    "[svelte]": {
-        "editor.defaultFormatter": "svelte.svelte-vscode"
-    },
     "svelte.enable-ts-plugin": true,
     "terminal.integrated.fontFamily": "MesloLGS NF",
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    }
+    "workbench.editorAssociations": {
+        "*.pdf": "default"
+    },
+    "telemetry.telemetryLevel": "crash",
+    "editor.wordWrap": "on",
+    "chatgpt.lang": "en",
+    "chatgpt.temperature": 0.5,
+    "editor.cursorSmoothCaretAnimation": "on",
+    "editor.minimap.size": "fit",
+    "editor.mouseWheelZoom": true,
+    "breadcrumbs.enabled": true,
+    "remote.SSH.defaultExtensions": [
+        "gitpod.gitpod-remote-ssh"
+    ],
+    "launch": {
+        "configurations": []
+    },
+    "editor.fontSize": 15,
+    "editor.letterSpacing": 0.3,
+    "editor.lineHeight": 24,
+    "editor.fontWeight": "300",
+    "editor.fontLigatures": true,
+    "editor.cursorStyle": "line",
+    "editor.cursorWidth": 2,
+    "editor.cursorBlinking": "expand",
+    "editor.renderWhitespace": "all",
+    "editor.snippetSuggestions": "top",
+    "editor.definitionLinkOpensInPeek": false,
+    "editor.gotoLocation.multipleDefinitions": "goto",
+    "editor.gotoLocation.multipleReferences": "goto",
+    "editor.gotoLocation.multipleImplementations": "goto",
+    "editor.gotoLocation.multipleTypeDefinitions": "goto",
+    "editor.gotoLocation.multiplePeek": true,
+    "workbench.startupEditor": "newUntitledFile",
+    "editor.glyphMargin": true,
+    "workbench.editor.enablePreview": false,
+    "workbench.editor.highlightModifiedTabs": true,
+    "explorer.confirmDragAndDrop": false,
+    "files.trimTrailingWhitespace": true,
+    "files.trimFinalNewlines": true,
+    "prettier.eslintIntegration": true,
+    "eslint.run": "onType",
+    "editor.semanticHighlighting.enabled": false,
+    "highlight-matching-tag.styles": {
+        "opening": {
+            "full": {
+                "highlight": "rgba(165, 153, 233, 0.3)"
+            }
+        }
+    },
+    "importCost.largePackageColor": "#EC3A37F5",
+    "importCost.mediumPackageColor": "#B362FF",
+    "importCost.smallPackageColor": "#B362FF"
 }
