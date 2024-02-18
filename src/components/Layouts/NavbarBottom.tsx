@@ -11,7 +11,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
   return (
     <>
       <LiveBreakCounter />
-      <div className='btm-nav btm-nav-md shadow-md w-full md:w-fit mx-auto md:px-5 md:py-5 md:mb-3 rounded-t-box md:rounded-box'>
+      <div className='btm-nav btm-nav-md shadow-md w-full sm:w-fit mx-auto sm:px-5 sm:py-5 sm:mb-3 rounded-t-box sm:rounded-box'>
         <div className='cursor-default'>
           <div className='flex justify-center gap-10'>
             {/* <div>

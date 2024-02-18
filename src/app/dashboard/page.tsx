@@ -9,6 +9,7 @@ import TimeEditModal from '@/components/Layouts/TimeEditModal';
 import { useRouter } from 'next/navigation';
 import useConfirm from '@/hooks/useConfirm';
 import LogsCard from '@/components/Layouts/LogsCard';
+import BottomNavbar from '@/components/Layouts/BottomNavbar';
 
 const Index = () => {
   const { breaklogMode, workData, loading, userData } = useStore();
@@ -112,9 +113,10 @@ const Index = () => {
             </div>
           </div>
         </div>
-        
+
       </div>
-      <NavbarBottom logEntry={logEntry} />
+      {/* <NavbarBottom logEntry={logEntry} /> */}
+      <BottomNavbar/>
       <TimeEditModal fetchLogFunction={fetchLogFunction} />
     </>
   );
