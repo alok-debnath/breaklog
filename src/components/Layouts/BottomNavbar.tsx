@@ -7,7 +7,7 @@ interface BottomNavbarProps {
 }
 
 const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction }) => {
-  const { breaklogMode, workData, loading, breaks, currBreak } = useStore();
+  const { breaklogMode, workData, loading } = useStore();
   return (
     <>
       <LiveBreakCounter />

@@ -18,7 +18,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
     <>
       <div
         className={`card bg-base-100 mt-20 ${page === 'history' ? 'shadow-xl' : 'rounded-b-none'} ${
-          isWorkDoneSuccess
+          isWorkDoneSuccess && userData.username
             ? 'border-2 border-success'
             : `${page !== 'history' ? '' : 'border-2 border-error'}`
         }`}>

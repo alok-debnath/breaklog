@@ -78,14 +78,12 @@ const Index = () => {
   }, []);
 
   const isWorkDone = workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000;
-  // let isWorkDoneSuccess = false;
-  // if (isClient) {
+
   let isWorkDoneSuccess =
     isWorkDone &&
     (userData.daily_work_required !== 0 ||
       userData.daily_work_required !== undefined ||
       userData.daily_work_required !== null);
-  // }
 
   return (
     <>
