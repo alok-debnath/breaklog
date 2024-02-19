@@ -1,6 +1,5 @@
 'use client';
 import { useEffect } from 'react';
-import NavbarBottom from '@/components/Layouts/NavbarBottom';
 import Button from '@/components/UI/Button';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
@@ -81,11 +80,11 @@ const Index = () => {
   const isWorkDone = workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000;
   // let isWorkDoneSuccess = false;
   // if (isClient) {
-    let  isWorkDoneSuccess =
-      isWorkDone &&
-      (userData.daily_work_required !== 0 ||
-        userData.daily_work_required !== undefined ||
-        userData.daily_work_required !== null);
+  let isWorkDoneSuccess =
+    isWorkDone &&
+    (userData.daily_work_required !== 0 ||
+      userData.daily_work_required !== undefined ||
+      userData.daily_work_required !== null);
   // }
 
   return (
@@ -113,10 +112,11 @@ const Index = () => {
             </div>
           </div>
         </div>
-
       </div>
-      {/* <NavbarBottom logEntry={logEntry} /> */}
-      <BottomNavbar/>
+      <BottomNavbar
+        logEntry={logEntry}
+        fetchLogFunction={fetchLogFunction}
+      />
       <TimeEditModal fetchLogFunction={fetchLogFunction} />
     </>
   );
