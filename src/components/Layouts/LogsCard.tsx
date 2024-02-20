@@ -112,12 +112,11 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
           <div className='collapse collapse-arrow border border-base-300'>
             <input
               type='checkbox'
-              className='peer'
             />
-            <div className='mr-40 collapse-title font-medium text-left ps-5 peer-checked:hidden'>
+            <div className='collapse-title font-medium text-left ps-5 peer-checked:hidden'>
               show logs
             </div>
-            <div className='mr-40 collapse-title bg-base-300 font-medium text-left ps-5 hidden peer-checked:block'>
+            <div className='collapse-title bg-base-300 font-medium text-left ps-5 hidden peer-checked:block'>
               hide logs
             </div>
             {page !== 'history' && (
