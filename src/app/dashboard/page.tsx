@@ -100,10 +100,6 @@ const Index = () => {
                   breaklogMode
                     ? 'btn-disabled'
                     : ''
-                } ${
-                  workData.unformattedWorkDone >= 8 * 3600000
-                    ? 'btn-outline btn-success border-2 border-t-0'
-                    : ''
                 }`}
                 onclick={() => logEntry('day end')}
               />

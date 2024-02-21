@@ -18,9 +18,10 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
     <>
       <div
         className={`card bg-base-100 mt-20 ${page === 'history' ? 'shadow-xl' : 'rounded-b-none'} ${
-          isWorkDoneSuccess && userData.username
+          page == 'history' &&
+          (isWorkDoneSuccess && userData.username
             ? 'border-2 border-success'
-            : `${page !== 'history' ? '' : 'border-2 border-error'}`
+            : 'border-2 border-error')
         }`}>
         <div className='card-body p-5 md:p-9'>
           {page === 'history' && (
@@ -64,7 +65,14 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
             <div
               className={`grid ${!breaklogMode || page === 'history' ? 'grid-cols-2' : 'grid-cols-1'} gap-4 mt-3 text-center`}>
               {!breaklogMode || page === 'history' ? (
-                <div className='card bg-base-200 p-3 shadow-md'>
+                <div
+                  className={`card bg-base-200 p-3 shadow-md ${
+                    isWorkDoneSuccess && userData.username
+                      ? 'text-success bg-success/10'
+                      : page == 'history'
+                        ? 'text-error bg-error/10'
+                        : ''
+                  }`}>
                   {workData.workDone ? (
                     <>
                       <p className='font-medium'>Work done</p>
@@ -112,6 +120,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
           <div className='collapse collapse-arrow border border-base-300'>
             <input
               type='checkbox'
+              className='peer'
             />
             <div className='collapse-title font-medium text-left ps-5 peer-checked:hidden'>
               show logs

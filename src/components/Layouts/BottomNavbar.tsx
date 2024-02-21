@@ -8,10 +8,13 @@ interface BottomNavbarProps {
 
 const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction }) => {
   const { breaklogMode, workData, loading } = useStore();
+
+  const btnState = ['day end'].includes(workData.lastLogStatus) || loading;
   return (
     <>
       <LiveBreakCounter />
-      <div className='fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bottom-4 left-1/2'>
+      <div className='fixed z-30 w-full h-20 -translate-x-1/2 bottom-0 left-1/2 bg-gradient-to-b from-transparent to-base-200'></div>
+      <div className='fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bottom-3 left-1/2'>
         <div className='rounded-full bg-base-100 mx-3'>
           <div
             className={`grid h-full max-w-lg grid-cols-3 mx-auto justify-center items-center p-2 gap-x-2`}>
@@ -81,13 +84,11 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction 
             <div className='col-span-2 flex items-center justify-center'>
               <button
                 onClick={() => (breaklogMode ? logEntry('break log') : logEntry('day log'))}
-                className={`btn ${
-                  ['day end'].includes(workData.lastLogStatus) || loading ? 'btn-disabled' : ''
-                } inline-flex items-center justify-center w-full font-medium rounded-full group bg-success/20`}>
-                <p className='font-semibold text-success'>Add Log</p>
+                className={`btn ${btnState ? 'btn-disabled' : ''} inline-flex items-center justify-center w-full font-medium rounded-full group bg-success/20`}>
+                <p className={`font-semibold ${!btnState ? 'text-success' : ''}`}>Add Log</p>
                 {!loading && (
                   <svg
-                    className='w-3 h-3 text-success'
+                    className={`w-3 h-3 ${!btnState ? 'text-success' : ''}`}
                     aria-hidden='true'
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
