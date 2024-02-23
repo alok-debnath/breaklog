@@ -58,6 +58,11 @@ export default function SignupPage() {
             backgroundColor: 'rgb(214, 60, 60)',
           },
         });
+        if (error.response.data.focusOn.length > 0) {
+          error.response.data.focusOn.forEach((field: string) => {
+            formik.setFieldError(field, `Change ${field}`);
+          });
+        }
       } else {
         handleError({ error: error, router: null });
       }

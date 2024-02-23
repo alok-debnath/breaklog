@@ -11,14 +11,37 @@ export async function POST(request: NextRequest) {
     const { email, username, password } = reqBody;
 
     // check if user exists
-    const user = await prisma.user.findFirst({
+    let user: string[] = [];
+
+    const emailCheck = await prisma.user.findFirst({
       where: {
-        OR: [{ email: email }, { username: username }],
+        email: email,
       },
     });
 
-    if (user) {
-      return NextResponse.json({ error: 'User already exists' }, { status: 400 });
+    const usernameCheck = await prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
+
+    if (emailCheck) {
+      user.push('email');
+    }
+
+    if (usernameCheck) {
+      user.push('username');
+    }
+
+    if (user.length > 0) {
+      let errorMessage = '';
+      if (user.length === 2) {
+        errorMessage += 'email and username already exists';
+      } else {
+        errorMessage += `${user[0]} already exists`;
+      }
+
+      return NextResponse.json({ error: errorMessage, focusOn: user }, { status: 400 });
     }
     // hash password
     const salt = await bcryptjs.genSalt(10);
