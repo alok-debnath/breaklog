@@ -41,7 +41,9 @@ export default function SpecificDayLog({ params }: any) {
     fetchLogFunction();
   }, [params.date]);
 
-  const isWorkDone = workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000;
+  const isWorkDone =
+    workData.unformattedWorkDone >=
+    (userData.daily_work_required || 0) * 3600000;
   const isWorkDoneSuccess =
     isWorkDone &&
     (userData.daily_work_required !== 0 ||
@@ -52,10 +54,7 @@ export default function SpecificDayLog({ params }: any) {
     <>
       <div className='hero min-h-screen min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
-          <LogsCard
-            page='history'
-            isWorkDoneSuccess={isWorkDoneSuccess}
-          />
+          <LogsCard page='history' isWorkDoneSuccess={isWorkDoneSuccess} />
         </div>
       </div>
     </>

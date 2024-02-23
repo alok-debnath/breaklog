@@ -1,7 +1,13 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-export const handleInvalidToken = async ({ error, router }: { error: any; router: any }) => {
+export const handleInvalidToken = async ({
+  error,
+  router,
+}: {
+  error: any;
+  router: any;
+}) => {
   const responseData = JSON.parse(error.request.response);
   if (responseData.error === 'invalid token') {
     try {

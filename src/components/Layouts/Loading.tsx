@@ -6,9 +6,10 @@ const Loading = () => {
   return (
     <>
       <progress
-        className={`progress progress-success w-full h-1 rounded-none z-30 fixed top-0 ${
+        className={`progress progress-success fixed top-0 z-30 h-1 w-full rounded-none ${
           !loading && 'hidden'
-        }`}></progress>
+        }`}
+      ></progress>
     </>
   );
 };

@@ -5,12 +5,18 @@ const updateLoadingState = () => {
   useStore.setState(() => ({ loading: false }));
 };
 
-export const handleError = async ({ error, router }: { error: any; router?: any }) => {
+export const handleError = async ({
+  error,
+  router,
+}: {
+  error: any;
+  router?: any;
+}) => {
   if (error.name !== 'AbortError') {
     updateLoadingState();
     if (error.response?.data.TokenError) {
       await router.push('/login');
-      toast.error('Error: ' + "Invalid Token", {
+      toast.error('Error: ' + 'Invalid Token', {
         style: {
           padding: '15px',
           color: 'white',

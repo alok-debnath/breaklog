@@ -61,7 +61,10 @@ export async function POST(request: NextRequest) {
     const formatTime = (milliseconds: number) => {
       const totalSeconds = Math.floor(milliseconds / 1000);
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
+        2,
+        '0',
+      );
       const seconds = String(totalSeconds % 60).padStart(2, '0');
       return `${hours}:${minutes}:${seconds}`;
       // return `${hours}:${minutes}`;
@@ -76,7 +79,8 @@ export async function POST(request: NextRequest) {
         const startsWithDayStart =
           logEntries.length > 0 && logEntries[0].log_status === 'day start';
         const endsWithDayEnd =
-          logEntries.length > 0 && logEntries[logEntries.length - 1].log_status === 'day end';
+          logEntries.length > 0 &&
+          logEntries[logEntries.length - 1].log_status === 'day end';
 
         if (startsWithDayStart && endsWithDayEnd) {
           // Initialize variables for each date
@@ -101,7 +105,9 @@ export async function POST(request: NextRequest) {
             if (log.log_status === 'exit') {
               const logExit = new Date(log.updatedAt).getTime();
               const nextLog = logEntries.find(
-                (entry) => entry.updatedAt > log.updatedAt && entry.log_status === 'enter'
+                (entry) =>
+                  entry.updatedAt > log.updatedAt &&
+                  entry.log_status === 'enter',
               );
               if (nextLog) {
                 const logEnter = new Date(nextLog.updatedAt).getTime();
@@ -120,7 +126,8 @@ export async function POST(request: NextRequest) {
 
               const lastLog = logEntries[logEntries.length - 1];
               if (lastLog.log_status === 'exit') {
-                const exitTime = currDay.getTime() - new Date(lastLog.updatedAt).getTime();
+                const exitTime =
+                  currDay.getTime() - new Date(lastLog.updatedAt).getTime();
                 workDone = workDone - exitTime;
               }
             }

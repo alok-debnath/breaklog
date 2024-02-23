@@ -26,14 +26,10 @@ const SettingsModal = () => {
 
   return (
     <>
-      <dialog
-        id='setting_modal'
-        className='modal modal-bottom sm:modal-middle'>
-        <form
-          method='dialog'
-          className='modal-box'>
+      <dialog id='setting_modal' className='modal modal-bottom sm:modal-middle'>
+        <form method='dialog' className='modal-box'>
           {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> */}
-          <h3 className='font-bold text-lg text-center'>Settings</h3>
+          <h3 className='text-center text-lg font-bold'>Settings</h3>
           <div className='divider'></div>
 
           <ToggleButtonText
@@ -55,9 +51,7 @@ const SettingsModal = () => {
             <button className='btn'>Close</button>
           </div>
         </form>
-        <form
-          method='dialog'
-          className='modal-backdrop'>
+        <form method='dialog' className='modal-backdrop'>
           <button>close</button>
         </form>
       </dialog>

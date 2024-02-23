@@ -65,42 +65,35 @@ export default function LoginPage() {
     <>
       <div data-theme={themeMode}>
         <div className='hero min-h-screen bg-base-200'>
-          <Toaster
-            position='top-left'
-            reverseOrder={false}
-          />
+          <Toaster position='top-left' reverseOrder={false} />
           <div className='hero-content flex-col lg:flex-row-reverse'>
             <div className='text-center lg:text-left'>
               <h1 className='text-5xl font-bold underline'>Breaklog</h1>
               <p className='py-6'>
-                <span className='text-2xl font-bold'>Welcome back!</span> Let&apos;t log you in to
-                get started.
+                <span className='text-2xl font-bold'>Welcome back!</span>{' '}
+                Let&apos;t log you in to get started.
               </p>
               <p>
                 Don&apos;t have an account yet?{' '}
-                <Link
-                  href='/signup'
-                  className='font-semibold link link-hover'>
+                <Link href='/signup' className='link-hover link font-semibold'>
                   Sign up
                 </Link>
               </p>
             </div>
-            <div className='card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100'>
+            <div className='card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl'>
               <div className='card-body'>
-                <form
-                  onSubmit={formik.handleSubmit}
-                  className='grid gap-y-2'>
+                <form onSubmit={formik.handleSubmit} className='grid gap-y-2'>
                   <div className='form-control'>
-                    <label
-                      className='label'
-                      htmlFor='email'>
+                    <label className='label' htmlFor='email'>
                       <span className='label-text'>email</span>
                     </label>
                     <input
                       type='email'
                       placeholder='email'
                       className={`input input-bordered ${
-                        formik.touched.email && formik.errors.email ? 'input-error' : ''
+                        formik.touched.email && formik.errors.email
+                          ? 'input-error'
+                          : ''
                       }`}
                       id='email'
                       name='email'
@@ -109,20 +102,22 @@ export default function LoginPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.email && formik.errors.email && (
-                      <div className='error text-red-500'>{formik.errors.email}</div>
+                      <div className='error text-red-500'>
+                        {formik.errors.email}
+                      </div>
                     )}
                   </div>
                   <div className='form-control'>
-                    <label
-                      className='label'
-                      htmlFor='password'>
+                    <label className='label' htmlFor='password'>
                       <span className='label-text'>Password</span>
                     </label>
                     <input
                       type='password'
                       placeholder='password'
                       className={`input input-bordered ${
-                        formik.touched.password && formik.errors.password ? 'input-error' : ''
+                        formik.touched.password && formik.errors.password
+                          ? 'input-error'
+                          : ''
                       }`}
                       id='password'
                       name='password'
@@ -131,7 +126,9 @@ export default function LoginPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.password && formik.errors.password && (
-                      <div className='error text-red-500'>{formik.errors.password}</div>
+                      <div className='error text-red-500'>
+                        {formik.errors.password}
+                      </div>
                     )}
                     {/* <label className='label'>
                       <a
@@ -145,8 +142,11 @@ export default function LoginPage() {
                     <button
                       type='submit'
                       className={`btn btn-primary ${
-                        !formik.isValid || formik.isSubmitting ? 'btn-disabled' : ''
-                      }`}>
+                        !formik.isValid || formik.isSubmitting
+                          ? 'btn-disabled'
+                          : ''
+                      }`}
+                    >
                       Sign in
                       {formik.isSubmitting ? (
                         <span className='loading loading-spinner'></span>
@@ -157,7 +157,8 @@ export default function LoginPage() {
                           viewBox='0 0 24 24'
                           strokeWidth={1.5}
                           stroke='currentColor'
-                          className='w-6 h-6'>
+                          className='h-6 w-6'
+                        >
                           <path
                             strokeLinecap='round'
                             strokeLinejoin='round'

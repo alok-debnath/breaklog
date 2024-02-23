@@ -76,40 +76,35 @@ export default function SignupPage() {
     <>
       <div data-theme={themeMode}>
         <div className='hero min-h-screen bg-base-200'>
-          <Toaster
-            position='top-left'
-            reverseOrder={false}
-          />
+          <Toaster position='top-left' reverseOrder={false} />
           <div className='hero-content flex-col lg:flex-row-reverse'>
             <div className='text-center lg:text-left'>
               <h1 className='text-5xl font-bold underline'>Breaklog</h1>
               <p className='py-6'>
-                <span className='text-2xl font-bold'>Welcome!</span> Create a new account to get
-                started.
+                <span className='text-2xl font-bold'>Welcome!</span> Create a
+                new account to get started.
               </p>
               <p>
                 Already have an account?{' '}
-                <Link
-                  href='/login'
-                  className='font-semibold link link-hover'>
+                <Link href='/login' className='link-hover link font-semibold'>
                   Login
                 </Link>
               </p>
             </div>
-            <div className='card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100'>
+            <div className='card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl'>
               <div className='card-body'>
                 <form onSubmit={formik.handleSubmit} className='grid gap-y-2'>
                   <div className='form-control'>
-                    <label
-                      className='label'
-                      htmlFor='username'>
+                    <label className='label' htmlFor='username'>
                       <span className='label-text'>UserName</span>
                     </label>
                     <input
                       type='username'
                       placeholder='username'
                       className={`input input-bordered ${
-                        formik.touched.username && formik.errors.username ? 'input-error' : ''
+                        formik.touched.username && formik.errors.username
+                          ? 'input-error'
+                          : ''
                       }`}
                       id='username'
                       name='username'
@@ -118,20 +113,22 @@ export default function SignupPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.username && formik.errors.username && (
-                      <div className='error text-red-500'>{formik.errors.username}</div>
+                      <div className='error text-red-500'>
+                        {formik.errors.username}
+                      </div>
                     )}
                   </div>
                   <div className='form-control'>
-                    <label
-                      className='label'
-                      htmlFor='email'>
+                    <label className='label' htmlFor='email'>
                       <span className='label-text'>email</span>
                     </label>
                     <input
                       type='email'
                       placeholder='email'
                       className={`input input-bordered ${
-                        formik.touched.email && formik.errors.email ? 'input-error' : ''
+                        formik.touched.email && formik.errors.email
+                          ? 'input-error'
+                          : ''
                       }`}
                       id='email'
                       name='email'
@@ -140,20 +137,22 @@ export default function SignupPage() {
                       onBlur={formik.handleBlur}
                     />
                     {formik.touched.email && formik.errors.email && (
-                      <div className='error text-red-500'>{formik.errors.email}</div>
+                      <div className='error text-red-500'>
+                        {formik.errors.email}
+                      </div>
                     )}
                   </div>
                   <div className='form-control'>
-                    <label
-                      className='label'
-                      htmlFor='password'>
+                    <label className='label' htmlFor='password'>
                       <span className='label-text'>Password</span>
                     </label>
                     <input
                       type='password'
                       placeholder='password'
                       className={`input input-bordered ${
-                        formik.touched.password && formik.errors.password ? 'input-error' : ''
+                        formik.touched.password && formik.errors.password
+                          ? 'input-error'
+                          : ''
                       }`}
                       id='password'
                       name='password'
@@ -162,18 +161,25 @@ export default function SignupPage() {
                       onBlur={formik.handleBlur}
                     />
                     <div className='label'>
-                      <span className='label-text-alt'>Your password will be encrypted</span>
+                      <span className='label-text-alt'>
+                        Your password will be encrypted
+                      </span>
                     </div>
                     {formik.touched.password && formik.errors.password && (
-                      <div className='error text-red-500'>{formik.errors.password}</div>
+                      <div className='error text-red-500'>
+                        {formik.errors.password}
+                      </div>
                     )}
                   </div>
                   <div className='form-control mt-6'>
                     <button
                       type='submit'
                       className={`btn btn-primary ${
-                        !formik.isValid || formik.isSubmitting ? 'btn-disabled' : ''
-                      }`}>
+                        !formik.isValid || formik.isSubmitting
+                          ? 'btn-disabled'
+                          : ''
+                      }`}
+                    >
                       Next
                       {formik.isSubmitting ? (
                         <span className='loading loading-spinner'></span>
@@ -184,7 +190,8 @@ export default function SignupPage() {
                           viewBox='0 0 24 24'
                           strokeWidth={1.5}
                           stroke='currentColor'
-                          className='w-6 h-6'>
+                          className='h-6 w-6'
+                        >
                           <path
                             strokeLinecap='round'
                             strokeLinejoin='round'

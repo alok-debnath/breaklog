@@ -6,29 +6,35 @@ interface BottomNavbarProps {
   fetchLogFunction: Function;
 }
 
-const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction }) => {
+const BottomNavbar: React.FC<BottomNavbarProps> = ({
+  logEntry,
+  fetchLogFunction,
+}) => {
   const { breaklogMode, workData, loading } = useStore();
 
   const btnState = ['day end'].includes(workData.lastLogStatus) || loading;
   return (
     <>
       <LiveBreakCounter />
-      <div className='fixed z-30 w-full h-20 -translate-x-1/2 bottom-0 left-1/2 bg-gradient-to-b from-transparent to-base-200'></div>
-      <div className='fixed z-50 w-full h-16 max-w-lg -translate-x-1/2 bottom-3 left-1/2'>
-        <div className='rounded-full bg-base-100 mx-3'>
+      <div className='fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-gradient-to-b from-transparent to-base-200'></div>
+      <div className='fixed bottom-3 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2'>
+        <div className='mx-3 rounded-full bg-base-100'>
           <div
-            className={`grid h-full max-w-lg grid-cols-3 mx-auto justify-center items-center p-2 gap-x-2`}>
-            <div className='dropdown dropdown-top dropdown-start items-center justify-center p-0 m-0 w-full inline-flex'>
+            className={`mx-auto grid h-full max-w-lg grid-cols-3 items-center justify-center gap-x-2 p-2`}
+          >
+            <div className='dropdown-start dropdown dropdown-top m-0 inline-flex w-full items-center justify-center p-0'>
               <label
                 tabIndex={0}
-                className='btn inline-flex flex-col items-center justify-center px-5 rounded-full group flex-1'>
+                className='group btn inline-flex flex-1 flex-col items-center justify-center rounded-full px-5'
+              >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
                   viewBox='0 0 24 24'
                   strokeWidth={1.5}
                   stroke='currentColor'
-                  className='w-6 h-6'>
+                  className='h-6 w-6'
+                >
                   <path
                     strokeLinecap='round'
                     strokeLinejoin='round'
@@ -38,11 +44,13 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction 
               </label>
               <ul
                 tabIndex={0}
-                className='dropdown-content menu shadow bg-base-100 rounded-box mb-2'>
+                className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow'
+              >
                 <li>
                   <span
                     className='items-center justify-center'
-                    onClick={() => fetchLogFunction()}>
+                    onClick={() => fetchLogFunction()}
+                  >
                     <p>Refresh</p>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
@@ -50,7 +58,8 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction 
                       viewBox='0 0 24 24'
                       strokeWidth={1.5}
                       stroke='currentColor'
-                      className='w-6 h-6'>
+                      className='h-6 w-6'
+                    >
                       <path
                         strokeLinecap='round'
                         strokeLinejoin='round'
@@ -62,7 +71,8 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction 
                 <li>
                   <span
                     className='items-center justify-center'
-                    onClick={() => logEntry('undo log')}>
+                    onClick={() => logEntry('undo log')}
+                  >
                     <p>Undo</p>
                     <svg
                       xmlns='http://www.w3.org/2000/svg'
@@ -70,7 +80,8 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction 
                       viewBox='0 0 24 24'
                       strokeWidth={1.5}
                       stroke='currentColor'
-                      className='w-6 h-6'>
+                      className='h-6 w-6'
+                    >
                       <path
                         strokeLinecap='round'
                         strokeLinejoin='round'
@@ -83,16 +94,24 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction 
             </div>
             <div className='col-span-2 flex items-center justify-center'>
               <button
-                onClick={() => (breaklogMode ? logEntry('break log') : logEntry('day log'))}
-                className={`btn ${btnState ? 'btn-disabled' : ''} inline-flex items-center justify-center w-full font-medium rounded-full group bg-success/20`}>
-                <p className={`font-semibold ${!btnState ? 'text-success' : ''}`}>Add Log</p>
+                onClick={() =>
+                  breaklogMode ? logEntry('break log') : logEntry('day log')
+                }
+                className={`btn ${btnState ? 'btn-disabled' : ''} group inline-flex w-full items-center justify-center rounded-full bg-success/20 font-medium`}
+              >
+                <p
+                  className={`font-semibold ${!btnState ? 'text-success' : ''}`}
+                >
+                  Add Log
+                </p>
                 {!loading && (
                   <svg
-                    className={`w-3 h-3 ${!btnState ? 'text-success' : ''}`}
+                    className={`h-3 w-3 ${!btnState ? 'text-success' : ''}`}
                     aria-hidden='true'
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
-                    viewBox='0 0 18 18'>
+                    viewBox='0 0 18 18'
+                  >
                     <path
                       stroke='currentColor'
                       strokeLinecap='round'
@@ -102,7 +121,9 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, fetchLogFunction 
                     />
                   </svg>
                 )}
-                {loading && <span className='loading loading-ring loading-sm'></span>}
+                {loading && (
+                  <span className='loading loading-ring loading-sm'></span>
+                )}
               </button>
             </div>
           </div>

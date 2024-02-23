@@ -8,10 +8,15 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'BreakLog v4',
-  description: 'A place to log your work activities for better time management.',
+  description:
+    'A place to log your work activities for better time management.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang='en'>
       <body className={inter.className}>

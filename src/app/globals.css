@@ -8,10 +8,16 @@
   width: 900px;
   height: 900px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(18, 183, 114, 0.137) 0%, rgba(0, 0, 0, 0) 60%);
+  background: radial-gradient(
+    circle,
+    rgba(18, 183, 114, 0.137) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
   pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: transform 0.2s, background .0.2s;
+  transition:
+    transform 0.2s,
+    background 0.2s;
 }
 
 .mobile-halo-div {
@@ -19,7 +25,9 @@
   z-index: 0;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  transition: transform 0.2s, background .0.2s;
+  transition:
+    transform 0.2s,
+    background 0.2s;
   left: 50%;
   top: -50px;
 }
@@ -27,5 +35,9 @@
   width: 1200px;
   height: 1200px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(128, 255, 202, 0.3) 0%, rgba(0, 0, 0, 0) 60%);
+  background: radial-gradient(
+    circle,
+    rgba(128, 255, 202, 0.3) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
 }

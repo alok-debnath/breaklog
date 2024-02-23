@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
         {
           error: 'User does not exist',
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
         {
           error: 'Invalid password',
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -40,9 +40,13 @@ export async function POST(request: NextRequest) {
       email: user.email,
     };
     // create token
-    const token = await jwt.sign(tokenData, process.env.TOKEN_SECRET as string, {
-      expiresIn: '30d',
-    });
+    const token = await jwt.sign(
+      tokenData,
+      process.env.TOKEN_SECRET as string,
+      {
+        expiresIn: '30d',
+      },
+    );
     const reponse = NextResponse.json({
       message: 'Login successful',
       success: true,

@@ -116,7 +116,10 @@ export async function POST(request: NextRequest) {
     const formatTime = (milliseconds: number) => {
       const totalSeconds = Math.floor(milliseconds / 1000);
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
+        2,
+        '0',
+      );
       const seconds = String(totalSeconds % 60).padStart(2, '0');
       return `${hours}:${minutes}:${seconds}`;
     };
@@ -125,7 +128,8 @@ export async function POST(request: NextRequest) {
     const formattedWorkDone = formatTime(workDone);
 
     return NextResponse.json({
-      message: logs.length === 0 ? 'No logs found' : 'Logs fetched successfully',
+      message:
+        logs.length === 0 ? 'No logs found' : 'Logs fetched successfully',
       status: logs.length === 0 ? 404 : 200,
       data: logs,
       workdata: {

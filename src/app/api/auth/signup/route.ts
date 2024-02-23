@@ -41,7 +41,10 @@ export async function POST(request: NextRequest) {
         errorMessage += `${user[0]} already exists`;
       }
 
-      return NextResponse.json({ error: errorMessage, focusOn: user }, { status: 400 });
+      return NextResponse.json(
+        { error: errorMessage, focusOn: user },
+        { status: 400 },
+      );
     }
     // hash password
     const salt = await bcryptjs.genSalt(10);

@@ -16,10 +16,7 @@ const SelectboxText: React.FC<SelectboxTextProps> = ({
   const OptionData = OptionValue.map((data, index) => {
     const isSelected = checked === data.value;
     return (
-      <option
-        value={data.value}
-        key={index}
-        disabled={isSelected}>
+      <option value={data.value} key={index} disabled={isSelected}>
         {data.label}
       </option>
     );
@@ -41,7 +38,8 @@ const SelectboxText: React.FC<SelectboxTextProps> = ({
           <select
             className='select select-bordered w-min max-w-xs'
             onChange={onChange}
-            value={checked}>
+            value={checked}
+          >
             {OptionData}
           </select>
         </label>

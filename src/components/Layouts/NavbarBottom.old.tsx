@@ -11,7 +11,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
   return (
     <>
       <LiveBreakCounter />
-      <div className='btm-nav btm-nav-md shadow-md w-full sm:w-fit mx-auto sm:px-5 sm:py-5 sm:mb-3 rounded-t-box sm:rounded-box'>
+      <div className='btm-nav btm-nav-md mx-auto w-full rounded-t-box shadow-md sm:mb-3 sm:w-fit sm:rounded-box sm:px-5 sm:py-5'>
         <div className='cursor-default'>
           <div className='flex justify-center gap-10'>
             {/* <div>
@@ -63,7 +63,9 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
             <div>
               <Button
                 className={`btn ${
-                  ['day end'].includes(workData.lastLogStatus) || loading ? 'btn-disabled' : ''
+                  ['day end'].includes(workData.lastLogStatus) || loading
+                    ? 'btn-disabled'
+                    : ''
                 }`}
                 text={
                   <>
@@ -71,21 +73,25 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                     {/* {loading && <span className='loading loading-ring loading-md'></span>} */}
                   </>
                 }
-                onclick={() => (breaklogMode ? logEntry('break log') : logEntry('day log'))}
+                onclick={() =>
+                  breaklogMode ? logEntry('break log') : logEntry('day log')
+                }
               />
             </div>
             <div className='ml-auto'>
-              <div className='dropdown dropdown-top dropdown-end'>
+              <div className='dropdown-top dropdown dropdown-end'>
                 <label
                   tabIndex={0}
-                  className='btn bg-primary/40 shadow-xl backdrop-blur-md'>
+                  className='btn bg-primary/40 shadow-xl backdrop-blur-md'
+                >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
                     viewBox='0 0 24 24'
                     strokeWidth={1.5}
                     stroke='currentColor'
-                    className='w-6 h-6'>
+                    className='h-6 w-6'
+                  >
                     <path
                       strokeLinecap='round'
                       strokeLinejoin='round'
@@ -95,7 +101,8 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                 </label>
                 <ul
                   tabIndex={0}
-                  className='dropdown-content menu shadow bg-base-100 rounded-box mb-2'>
+                  className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow'
+                >
                   <li>
                     <span>
                       <svg
@@ -104,7 +111,8 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                         viewBox='0 0 24 24'
                         strokeWidth={1.5}
                         stroke='currentColor'
-                        className='w-6 h-6'>
+                        className='h-6 w-6'
+                      >
                         <path
                           strokeLinecap='round'
                           strokeLinejoin='round'
@@ -121,7 +129,8 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                         viewBox='0 0 24 24'
                         strokeWidth={1.5}
                         stroke='currentColor'
-                        className='w-6 h-6'>
+                        className='h-6 w-6'
+                      >
                         <path
                           strokeLinecap='round'
                           strokeLinejoin='round'

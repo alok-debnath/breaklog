@@ -7,36 +7,40 @@ const Home = () => {
   return (
     <>
       <div className=''>
-        <div className='text-black bg-white dark:bg-black dark:text-white'>
-          <div className='mx-auto min-w-screen min-h-screen p-4'>
+        <div className='bg-white text-black dark:bg-black dark:text-white'>
+          <div className='min-w-screen mx-auto min-h-screen p-4'>
             <div className='mx-auto max-w-screen-xl px-1 md:px-10'>
               <MouseHalo />
               <MobileHalo />
-              <nav className='bg-transparent w-full z-20 top-0 start-0 mb-4'>
-                <div className='max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4'>
+              <nav className='start-0 top-0 z-20 mb-4 w-full bg-transparent'>
+                <div className='mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4'>
                   <Link
                     href='/'
-                    className='flex items-center space-x-3 rtl:space-x-reverse md:order-1'>
+                    className='flex items-center space-x-3 rtl:space-x-reverse md:order-1'
+                  >
                     {/* <img src="" className="h-8" alt="BreakLog Logo"/> */}
-                    <span className='self-center text-xl font-semibold whitespace-nowrap'>
+                    <span className='self-center whitespace-nowrap text-xl font-semibold'>
                       BreakLog
                     </span>
                   </Link>
-                  <div className='flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse'>
+                  <div className='flex space-x-3 rtl:space-x-reverse md:order-2 md:space-x-0'>
                     <Link
                       href='/login'
-                      className='text-black bg-slate-100 hover:bg-slate-200 font-medium rounded-2xl text-sm px-5 py-2 text-center'>
+                      className='rounded-2xl bg-slate-100 px-5 py-2 text-center text-sm font-medium text-black hover:bg-slate-200'
+                    >
                       Login
                     </Link>
                   </div>
                   <div
-                    className='items-center justify-between hidden w-full md:flex md:w-auto md:order-0'
-                    id='navbar-sticky'>
-                    <ul className='flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white'>
+                    className='md:order-0 hidden w-full items-center justify-between md:flex md:w-auto'
+                    id='navbar-sticky'
+                  >
+                    <ul className='mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 font-medium rtl:space-x-reverse md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-white md:p-0'>
                       <li>
                         <Link
                           href='https://www.alok01.eu.org/'
-                          className='block text-black bg-transparent hover:bg-slate-100 font-medium rounded-2xl text-sm px-5 py-2 text-center'>
+                          className='block rounded-2xl bg-transparent px-5 py-2 text-center text-sm font-medium text-black hover:bg-slate-100'
+                        >
                           About
                         </Link>
                       </li>
@@ -44,20 +48,22 @@ const Home = () => {
                   </div>
                 </div>
               </nav>
-              <div className='grid grid-cols-12 my-8 md:my-14 min-h-screen'>
+              <div className='my-8 grid min-h-screen grid-cols-12 md:my-14'>
                 <div className='col-span-12 xl:col-span-8'>
-                  <p className='text-4xl md:text-6xl xl:text-7xl font-bold xl:font-extrabold text-slate-300'>
+                  <p className='text-4xl font-bold text-slate-300 md:text-6xl xl:text-7xl xl:font-extrabold'>
                     A better way
                   </p>
-                  <p className='text-4xl md:text-6xl xl:text-7xl font-bold xl:font-extrabold'>
+                  <p className='text-4xl font-bold md:text-6xl xl:text-7xl xl:font-extrabold'>
                     to manage your work hours
                   </p>
-                  <p className='text-xl md:text-2xl font-medium my-8 md:my-10 mr-10 md:mr-28'>
-                    A project to log your work activities for better time management.
+                  <p className='my-8 mr-10 text-xl font-medium md:my-10 md:mr-28 md:text-2xl'>
+                    A project to log your work activities for better time
+                    management.
                   </p>
                   <Link
                     href='/login'
-                    className='block w-fit text-white bg-sky-500 hover:bg-sky-600 font-medium rounded-3xl text-md px-7 py-3 text-center'>
+                    className='text-md block w-fit rounded-3xl bg-sky-500 px-7 py-3 text-center font-medium text-white hover:bg-sky-600'
+                  >
                     Try it now
                   </Link>
                 </div>

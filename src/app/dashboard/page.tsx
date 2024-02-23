@@ -20,7 +20,8 @@ const Index = () => {
     try {
       if (value === 'undo log') {
         const isConfirmed = await confirm({
-          modal_body: 'Your most recent log will be permanently deleted, proceed with caution.',
+          modal_body:
+            'Your most recent log will be permanently deleted, proceed with caution.',
           modal_head: 'Delete most recent log?',
           modal_confirm_btn: 'Delete',
           modal_cancel_btn: 'Cancel',
@@ -58,7 +59,9 @@ const Index = () => {
       }));
 
       if (res.data.workdata.currentBreak !== null) {
-        useStore.setState(() => ({ currBreak: res.data.workdata.currentBreak }));
+        useStore.setState(() => ({
+          currBreak: res.data.workdata.currentBreak,
+        }));
       } else {
         useStore.setState(() => ({
           currBreak: null,
@@ -77,7 +80,9 @@ const Index = () => {
     fetchLogFunction();
   }, []);
 
-  const isWorkDone = workData.unformattedWorkDone >= (userData.daily_work_required || 0) * 3600000;
+  const isWorkDone =
+    workData.unformattedWorkDone >=
+    (userData.daily_work_required || 0) * 3600000;
 
   let isWorkDoneSuccess =
     isWorkDone &&
@@ -107,10 +112,7 @@ const Index = () => {
           </div>
         </div>
       </div>
-      <BottomNavbar
-        logEntry={logEntry}
-        fetchLogFunction={fetchLogFunction}
-      />
+      <BottomNavbar logEntry={logEntry} fetchLogFunction={fetchLogFunction} />
       <TimeEditModal fetchLogFunction={fetchLogFunction} />
     </>
   );

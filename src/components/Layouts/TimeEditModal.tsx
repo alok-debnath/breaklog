@@ -25,7 +25,9 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
 
   useEffect(() => {
     const updateLocalTime = () => {
-      const updatedLocalTime = new Date(logEditStore.log_dateTime).toLocaleString('en-US', {
+      const updatedLocalTime = new Date(
+        logEditStore.log_dateTime,
+      ).toLocaleString('en-US', {
         timeZone: localTimeZone,
         hour: 'numeric',
         minute: 'numeric',
@@ -72,7 +74,10 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
     // Convert the localDateTime to a string in ISO format (UTC)
     const updatedDateTimeUTC = localDateTime.toISOString();
 
-    const values = { log_id: logEditStore.log_id, log_dateTime: updatedDateTimeUTC };
+    const values = {
+      log_id: logEditStore.log_id,
+      log_dateTime: updatedDateTimeUTC,
+    };
 
     try {
       useStore.setState(() => ({ loading: true }));
@@ -99,17 +104,16 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
     <>
       <dialog
         id='time_edit_modal'
-        className='modal modal-bottom sm:modal-middle'>
-        <form
-          method='dialog'
-          className='modal-box'>
+        className='modal modal-bottom sm:modal-middle'
+      >
+        <form method='dialog' className='modal-box'>
           {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> */}
-          <h3 className='font-bold text-lg text-center'>Edit Time</h3>
+          <h3 className='text-center text-lg font-bold'>Edit Time</h3>
           <div className='divider'></div>
-          <div className='form-control grid gap-y-5 card p-5'>
+          <div className='card form-control grid gap-y-5 p-5'>
             <div>
               <p className='label-text'>Hour</p>
-              <div className='w-full flex'>
+              <div className='flex w-full'>
                 <input
                   className='input input-bordered flex-1'
                   type='text'
@@ -122,9 +126,9 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
             </div>
             <div>
               <p className='label-text'>Minute</p>
-              <div className='join w-full flex'>
+              <div className='join flex w-full'>
                 <input
-                  className='input input-bordered flex-1 join-item'
+                  className='input join-item input-bordered flex-1'
                   type='text'
                   id='selectedMinute'
                   name='selectedMinute'
@@ -137,36 +141,38 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
             </div>
             <div className='join join-horizontal flex'>
               <span
-                className={`btn btn-sm join-item flex-1 ${amPm === 'AM' ? 'btn-primary' : ''}`}
-                onClick={() => setAmPm('AM')}>
+                className={`btn join-item btn-sm flex-1 ${amPm === 'AM' ? 'btn-primary' : ''}`}
+                onClick={() => setAmPm('AM')}
+              >
                 AM
               </span>
               <span
-                className={`btn btn-sm join-item flex-1 ${amPm === 'PM' ? 'btn-primary' : ''}`}
-                onClick={() => setAmPm('PM')}>
+                className={`btn join-item btn-sm flex-1 ${amPm === 'PM' ? 'btn-primary' : ''}`}
+                onClick={() => setAmPm('PM')}
+              >
                 PM
               </span>
             </div>
           </div>
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}
-            <div className='join w-full flex'>
+            <div className='join flex w-full'>
               <span
                 className='btn join-item flex-1'
-                onClick={() => closeModal()}>
+                onClick={() => closeModal()}
+              >
                 Close
               </span>
               <span
-                className='btn btn-primary join-item flex-1'
-                onClick={() => logEdit()}>
+                className='btn join-item btn-primary flex-1'
+                onClick={() => logEdit()}
+              >
                 Save
               </span>
             </div>
           </div>
         </form>
-        <form
-          method='dialog'
-          className='modal-backdrop'>
+        <form method='dialog' className='modal-backdrop'>
           <span onClick={() => closeModal()}>close</span>
         </form>
       </dialog>

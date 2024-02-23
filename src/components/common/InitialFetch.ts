@@ -20,7 +20,9 @@ const InitialFetch = () => {
         const storedBreaklogMode = localStorage.getItem('breaklogMode');
         if (!storedBreaklogMode) {
           useStore.setState(() => ({
-            breaklogMode: JSON.parse(res.data.data.log_type === 'breakmode' ? 'true' : 'false'),
+            breaklogMode: JSON.parse(
+              res.data.data.log_type === 'breakmode' ? 'true' : 'false',
+            ),
           }));
         }
       }
@@ -38,7 +40,9 @@ const InitialFetch = () => {
         const storedBreaklogMode = localStorage.getItem('breaklogMode');
         const savedTheme = localStorage.getItem('thememode');
         if (storedBreaklogMode) {
-          useStore.setState(() => ({ breaklogMode: JSON.parse(storedBreaklogMode) }));
+          useStore.setState(() => ({
+            breaklogMode: JSON.parse(storedBreaklogMode),
+          }));
         }
         if (savedTheme) {
           useStore.setState(() => ({ themeMode: savedTheme }));

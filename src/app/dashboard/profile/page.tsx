@@ -74,27 +74,30 @@ const ProfilePage = () => {
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>
-              <div className='card flex-shrink-0 w-full max-w-sm bg-base-100 my-20'>
+              <div className='card my-20 w-full max-w-sm flex-shrink-0 bg-base-100'>
                 <form
                   onSubmit={formik.handleSubmit}
-                  className='card-body grid gap-y-3 w-full max-w-xl'>
-                  <h3 className='text-2xl font-bold text-left'>Update your data</h3>
+                  className='card-body grid w-full max-w-xl gap-y-3'
+                >
+                  <h3 className='text-left text-2xl font-bold'>
+                    Update your data
+                  </h3>
                   <div className='form-control'>
-                    <label
-                      className='label'
-                      htmlFor='daily_work_required'>
+                    <label className='label' htmlFor='daily_work_required'>
                       <span className='label-text flex items-center'>
                         Daily work hour required
                         <span
-                          className='ms-2 tooltip tooltip-top cursor-pointer'
-                          data-tip='Min work hours per day'>
+                          className='tooltip tooltip-top ms-2 cursor-pointer'
+                          data-tip='Min work hours per day'
+                        >
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             fill='none'
                             viewBox='0 0 24 24'
                             strokeWidth={1.5}
                             stroke='currentColor'
-                            className='w-6 h-6 me-1 text-warning'>
+                            className='me-1 h-6 w-6 text-warning'
+                          >
                             <path
                               strokeLinecap='round'
                               strokeLinejoin='round'
@@ -111,7 +114,8 @@ const ProfilePage = () => {
                       name='daily_work_required'
                       placeholder='Type here'
                       className={`input input-bordered w-full max-w-md ${
-                        formik.touched.daily_work_required && formik.errors.daily_work_required
+                        formik.touched.daily_work_required &&
+                        formik.errors.daily_work_required
                           ? 'input-error'
                           : ''
                       }`}
@@ -119,28 +123,29 @@ const ProfilePage = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                     />
-                    {formik.touched.daily_work_required && formik.errors.daily_work_required && (
-                      <div className='error text-red-500 my-1 text-start'>
-                        {formik.errors.daily_work_required}
-                      </div>
-                    )}
+                    {formik.touched.daily_work_required &&
+                      formik.errors.daily_work_required && (
+                        <div className='error my-1 text-start text-red-500'>
+                          {formik.errors.daily_work_required}
+                        </div>
+                      )}
                   </div>
                   <div className='form-control'>
-                    <label
-                      className='label'
-                      htmlFor='log_type'>
+                    <label className='label' htmlFor='log_type'>
                       <span className='label-text flex items-center'>
                         Default Log Mode
                         <span
-                          className='ms-2 tooltip tooltip-top cursor-pointer'
-                          data-tip='Default Mode to use on a fresh setup.'>
+                          className='tooltip tooltip-top ms-2 cursor-pointer'
+                          data-tip='Default Mode to use on a fresh setup.'
+                        >
                           <svg
                             xmlns='http://www.w3.org/2000/svg'
                             fill='none'
                             viewBox='0 0 24 24'
                             strokeWidth={1.5}
                             stroke='currentColor'
-                            className='w-6 h-6 me-1 text-warning'>
+                            className='me-1 h-6 w-6 text-warning'
+                          >
                             <path
                               strokeLinecap='round'
                               strokeLinejoin='round'
@@ -154,22 +159,19 @@ const ProfilePage = () => {
                       id='log_type'
                       name='log_type'
                       className={`select select-bordered w-full max-w-xs ${
-                        formik.touched.log_type && formik.errors.log_type ? 'input-error' : ''
+                        formik.touched.log_type && formik.errors.log_type
+                          ? 'input-error'
+                          : ''
                       }`}
                       value={formik.values.log_type}
                       onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}>
-                      <option
-                        value='breakmode'
-                        label='Breaklog Mode'
-                      />
-                      <option
-                        value='daymode'
-                        label='Daylog Mode'
-                      />
+                      onBlur={formik.handleBlur}
+                    >
+                      <option value='breakmode' label='Breaklog Mode' />
+                      <option value='daymode' label='Daylog Mode' />
                     </select>
                     {formik.touched.log_type && formik.errors.log_type && (
-                      <div className='error text-red-500 my-1 text-start'>
+                      <div className='error my-1 text-start text-red-500'>
                         {formik.errors.log_type}
                       </div>
                     )}
@@ -177,7 +179,8 @@ const ProfilePage = () => {
                   <div className='form-control mt-6'>
                     <button
                       type='submit'
-                      className={`btn btn-primary normal-case ${loading && 'btn-disabled'}`}>
+                      className={`btn btn-primary normal-case ${loading && 'btn-disabled'}`}
+                    >
                       Update
                     </button>
                   </div>

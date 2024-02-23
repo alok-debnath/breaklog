@@ -16,7 +16,10 @@ const HistoryPage = () => {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Months are zero-based, so add 1.
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  const years = Array.from({ length: new Date().getFullYear() - 2022 }, (_, index) => 2023 + index);
+  const years = Array.from(
+    { length: new Date().getFullYear() - 2022 },
+    (_, index) => 2023 + index,
+  );
 
   const months = [
     'January',
@@ -39,7 +42,12 @@ const HistoryPage = () => {
       userData.daily_work_required === undefined ||
       userData.daily_work_required === null
     ) {
-      handleError({ error: { message: 'Please set required work hour from profile section' }, router: router });
+      handleError({
+        error: {
+          message: 'Please set required work hour from profile section',
+        },
+        router: router,
+      });
       return;
     }
 
@@ -47,8 +55,12 @@ const HistoryPage = () => {
     const nextYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear;
 
     const monthStart =
-      selectedYear + '-' + String(selectedMonth).padStart(2, '0') + '-01T00:00:00.000Z';
-    const monthEnd = nextYear + '-' + String(nextMonth).padStart(2, '0') + '-01T00:00:00.000Z';
+      selectedYear +
+      '-' +
+      String(selectedMonth).padStart(2, '0') +
+      '-01T00:00:00.000Z';
+    const monthEnd =
+      nextYear + '-' + String(nextMonth).padStart(2, '0') + '-01T00:00:00.000Z';
 
     try {
       setCollapseBoxState(false);
@@ -59,7 +71,10 @@ const HistoryPage = () => {
         monthEnd: monthEnd,
       };
 
-      const res = await axios.post('/api/users/fetchlog/fetchdynamiclog', values);
+      const res = await axios.post(
+        '/api/users/fetchlog/fetchdynamiclog',
+        values,
+      );
 
       if (res.data.status === 200) {
         setCollapseBoxState(true);
@@ -92,13 +107,15 @@ const HistoryPage = () => {
       <div className='hero min-h-screen min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            <div className='card bg-base-100 my-20 shadow-xl'>
+            <div className='card my-20 bg-base-100 shadow-xl'>
               <div className='card-body'>
-                <h3 className='text-md font-semibold text-left'>Fetch required data</h3>
-                <div className='mt-5 mb-2'>
+                <h3 className='text-md text-left font-semibold'>
+                  Fetch required data
+                </h3>
+                <div className='mb-2 mt-5'>
                   <div className='join'>
                     <select
-                      className='select select-bordered join-item'
+                      className='join-item select select-bordered'
                       value={selectedMonth.toString()} // Convert to string for consistency
                       onChange={(e) => setSelectedMonth(+e.target.value)} // Convert to number
                     >
@@ -106,13 +123,16 @@ const HistoryPage = () => {
                         <option
                           key={index}
                           value={(index + 1).toString()} // Convert to string
-                          disabled={index + 1 === selectedMonth ? true : undefined}>
+                          disabled={
+                            index + 1 === selectedMonth ? true : undefined
+                          }
+                        >
                           {month}
                         </option>
                       ))}
                     </select>
                     <select
-                      className='select select-bordered join-item'
+                      className='join-item select select-bordered'
                       value={selectedYear.toString()} // Convert to string for consistency
                       onChange={(e) => setSelectedYear(+e.target.value)} // Convert to number
                     >
@@ -120,7 +140,8 @@ const HistoryPage = () => {
                         <option
                           key={index}
                           value={year.toString()} // Convert to string
-                          disabled={year === selectedYear ? true : undefined}>
+                          disabled={year === selectedYear ? true : undefined}
+                        >
                           {year}
                         </option>
                       ))}
@@ -131,8 +152,12 @@ const HistoryPage = () => {
                       className={`btn ${loading ? 'btn-disabled' : ''}`}
                       onClick={() => {
                         handleSearch();
-                      }}>
-                      Search {loading && <span className='loading loading-ring loading-md'></span>}
+                      }}
+                    >
+                      Search{' '}
+                      {loading && (
+                        <span className='loading loading-ring loading-md'></span>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -146,19 +171,24 @@ const HistoryPage = () => {
                   <div className='collapse-content px-2'>
                     <div className='pt-2'>
                       <div className='card bg-base-100'>
-                        <div className='card-body text-sm py-5'>
+                        <div className='card-body py-5 text-sm'>
                           <p>
                             Work Required:{' '}
-                            <span className='font-semibold'>{summary.expectedWorkHours}</span> hr
+                            <span className='font-semibold'>
+                              {summary.expectedWorkHours}
+                            </span>{' '}
+                            hr
                           </p>
                           <p>
                             Work Done:{' '}
                             <span
                               className={`font-semibold ${
-                                summary.totalWorkDone >= summary.expectedWorkHours * 3600000
+                                summary.totalWorkDone >=
+                                summary.expectedWorkHours * 3600000
                                   ? 'text-success'
                                   : 'text-error'
-                              }`}>
+                              }`}
+                            >
                               {summary.formattedTotalWorkDone}
                             </span>{' '}
                             hr
@@ -180,21 +210,23 @@ const HistoryPage = () => {
                           </p>
                         </div>
                       </div>
-                      <table className='table md:table-md table-xs text-center mt-3'>
+                      <table className='table table-xs mt-3 text-center md:table-md'>
                         <thead>
                           <tr>
                             <th>
                               <span className='flex items-center'>
                                 <span
                                   className='tooltip tooltip-right cursor-pointer'
-                                  data-tip='Click on any of the dates'>
+                                  data-tip='Click on any of the dates'
+                                >
                                   <svg
                                     xmlns='http://www.w3.org/2000/svg'
                                     fill='none'
                                     viewBox='0 0 24 24'
                                     strokeWidth={1.5}
                                     stroke='currentColor'
-                                    className='w-6 h-6 me-1 text-warning'>
+                                    className='me-1 h-6 w-6 text-warning'
+                                  >
                                     <path
                                       strokeLinecap='round'
                                       strokeLinejoin='round'
@@ -226,8 +258,12 @@ const HistoryPage = () => {
                                     <Link
                                       href={`/dashboard/history/${log.date}`}
                                       className={`btn btn-sm ${
-                                        log.workDone >= userData.daily_work_required * 3600000 ? 'btn-success' : 'btn-error'
-                                      }`}>
+                                        log.workDone >=
+                                        userData.daily_work_required * 3600000
+                                          ? 'btn-success'
+                                          : 'btn-error'
+                                      }`}
+                                    >
                                       {log.date}
                                     </Link>
                                   </td>

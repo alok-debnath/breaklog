@@ -26,7 +26,8 @@ const LiveBreakCounter = () => {
         const workDurationArray = workData.breakTime.split(':');
         const workHours = parseInt(workDurationArray[0]) * 60;
         const workMinutes = parseInt(workDurationArray[1]);
-        const totalBreak = (diffInMinutes === -1 ? 0 : diffInMinutes) + workMinutes + workHours;
+        const totalBreak =
+          (diffInMinutes === -1 ? 0 : diffInMinutes) + workMinutes + workHours;
         useStore.setState(() => ({
           breaks: {
             liveBreak: diffInMinutes === -1 ? 0 : diffInMinutes,
@@ -53,16 +54,19 @@ const LiveBreakCounter = () => {
     <>
       <div className={`${currBreak === null ? 'hidden' : 'block'}`}>
         <div
-          className={`toast toast-start mb-20 ${breaks.liveBreak !== breaks.totalBreak && 'grid grid-rows-1 gap-2'}`}>
-          <div className='rounded-full w-min flex justify-center alert shadow-xl backdrop-blur-md bg-primary/20 py-2'>
+          className={`toast toast-start mb-20 ${breaks.liveBreak !== breaks.totalBreak && 'grid grid-rows-1 gap-2'}`}
+        >
+          <div className='alert flex w-min justify-center rounded-full bg-primary/20 py-2 shadow-xl backdrop-blur-md'>
             <span className='font-semibold'>{`${breaks.liveBreak} min `}</span>
           </div>
           {breaks.liveBreak !== breaks.totalBreak && (
-            <div className='rounded-full flex justify-center alert shadow-xl backdrop-blur-md bg-primary/20 py-2'>
+            <div className='alert flex justify-center rounded-full bg-primary/20 py-2 shadow-xl backdrop-blur-md'>
               <span className=''>
                 <>
                   <span className='font-normal'>{`Total break: `}</span>
-                  <span className='font-semibold'>{breaks.totalBreakFormated}</span>
+                  <span className='font-semibold'>
+                    {breaks.totalBreakFormated}
+                  </span>
                 </>
               </span>
             </div>

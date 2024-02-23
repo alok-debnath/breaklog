@@ -10,8 +10,7 @@ export async function connect() {
   } catch (error) {
     console.error('Error connecting to the database:', error);
     throw error;
-  }
-  finally {
-      await prisma.$disconnect();
+  } finally {
+    await prisma.$disconnect();
   }
 }
