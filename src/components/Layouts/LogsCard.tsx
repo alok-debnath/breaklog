@@ -120,6 +120,19 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
                 )}
               </div>
             </div>
+            {!breaklogMode &&
+            page !== 'history' &&
+            workData.formattedWorkEndTime ? (
+              <div className='card mt-3 grid grid-cols-2 items-center bg-base-200 p-2 shadow-md'>
+                <p className='font-medium'>Work until:</p>
+                <p className='font-semibold'>
+                  {new Date(workData.formattedWorkEndTime).toLocaleTimeString(
+                    'en-US',
+                    { hour12: true },
+                  )}
+                </p>
+              </div>
+            ) : null}
           </div>
           <div className='collapse collapse-arrow border border-base-300'>
             <input type='checkbox' className='peer' />

@@ -31,6 +31,13 @@ export async function POST(request: NextRequest) {
       endOfToday.setUTCHours(23, 59, 59, 999);
     }
 
+    const userData = await prisma.user.findFirst({
+      where: { id: userId },
+      select: {
+        daily_work_required: true,
+      },
+    });
+
     // Fetch logs for the current day
     const logs = await prisma.log.findMany({
       where: {
@@ -126,6 +133,25 @@ export async function POST(request: NextRequest) {
 
     const formattedTime = formatTime(breakTime);
     const formattedWorkDone = formatTime(workDone);
+    let formattedWorkEndTime =
+      (userData?.daily_work_required ?? 0) * 3600000 - workDone > 0 &&
+      workDone &&
+      recentLog !== 'day end'
+        ? formatTime((userData?.daily_work_required ?? 0) * 3600000 - workDone)
+        : '';
+
+    // for formattedWorkEndTime
+    if (formattedWorkEndTime !== '') {
+      const [hours, minutes, seconds] = formattedWorkEndTime
+        .split(':')
+        .map(Number);
+      const currentTime = new Date();
+      const updatedTime = new Date(
+        currentTime.getTime() + (hours * 3600 + minutes * 60 + seconds) * 1000,
+      );
+      formattedWorkEndTime = updatedTime.toISOString();
+    }
+    //
 
     return NextResponse.json({
       message:
@@ -138,7 +164,7 @@ export async function POST(request: NextRequest) {
         unformattedWorkDone: workDone,
         currentBreak: currentBreakTime,
         lastLogStatus: recentLog,
-        firstLogStatus: firstLog,
+        formattedWorkEndTime: formattedWorkEndTime,
       },
     });
   } catch (error: any) {
