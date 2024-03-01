@@ -139,6 +139,7 @@ export async function POST(request: NextRequest) {
       recentLog !== 'day end'
         ? formatTime((userData?.daily_work_required ?? 0) * 3600000 - workDone)
         : '';
+    const formattedWorkLeft = formattedWorkEndTime;
 
     // for formattedWorkEndTime
     if (formattedWorkEndTime !== '') {
@@ -165,6 +166,7 @@ export async function POST(request: NextRequest) {
         currentBreak: currentBreakTime,
         lastLogStatus: recentLog,
         formattedWorkEndTime: formattedWorkEndTime,
+        formattedWorkLeft: formattedWorkLeft,
       },
     });
   } catch (error: any) {

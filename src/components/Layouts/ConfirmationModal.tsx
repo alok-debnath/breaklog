@@ -26,7 +26,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = () => {
               ? dialogModal.modal_head
               : 'Confirmation Dialog'}
           </h3>
-          <div className='rounded-t- card bg-base-100 px-5 pb-5'>
+          <div className='rounded-t- card rounded-b-none bg-base-100 px-5 pb-5'>
             <div className='card-body'>
               <p className='font-semibold'>{dialogModal.modal_body}</p>
             </div>

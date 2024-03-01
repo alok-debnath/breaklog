@@ -6,6 +6,7 @@ interface WorkData {
   workDone: string;
   unformattedWorkDone: number;
   formattedWorkEndTime: string;
+  formattedWorkLeft: string;
 }
 interface summary {
   totalWorkDone: number;
@@ -98,6 +99,7 @@ export const useStore = create<StoreState>((set) => ({
     workDone: '',
     unformattedWorkDone: 0,
     formattedWorkEndTime: '',
+    formattedWorkLeft: '',
   },
   loading: false,
   currBreak: null,
