@@ -2,6 +2,8 @@ import { useStore } from '@/stores/store';
 import axios from 'axios';
 import { handleError } from '../common/CommonCodeBlocks';
 import { useEffect, useState } from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 declare global {
   interface Window {
@@ -17,11 +19,36 @@ interface TimeEditModalProps {
 
 const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
   const { loading, logEditStore } = useStore();
-  const [localHour, setLocalHour] = useState<number>(0);
-  const [localMinute, setLocalMinute] = useState<number>(0);
-  const [amPm, setAmPm] = useState<string>('AM');
+  const [localTime, setLocalTime] = useState({
+    hour: 0,
+    minute: 0,
+    period: 'AM',
+  });
+  const [limit, setLimit] = useState({
+    max: {
+      hour: 0,
+      minute: 0,
+      period: 'AM',
+    },
+    min: {
+      hour: 0,
+      minute: 0,
+      period: 'AM',
+    },
+  });
+
   // Get the user's local timezone
   const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const parseTimeString = (timeString: string) => {
+    const [hour, minute, period] = timeString.split(/:|\s/);
+
+    return {
+      hour: Number(hour),
+      minute: Number(minute),
+      period: period || 'AM',
+    };
+  };
 
   useEffect(() => {
     const updateLocalTime = () => {
@@ -36,15 +63,45 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
 
       const [hour, minute, period] = updatedLocalTime.split(/:|\s/);
 
-      setLocalHour(Number(hour));
-      setLocalMinute(Number(minute));
-      setAmPm(period || 'AM');
+      setLocalTime({
+        hour: Number(hour),
+        minute: Number(minute),
+        period: period || 'AM',
+      });
+
+      const minLimit = logEditStore.log_dateTime_behind
+        ? parseTimeString(
+            new Date(logEditStore.log_dateTime_behind).toLocaleString('en-US', {
+              timeZone: localTimeZone,
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            }),
+          )
+        : { hour: 5, minute: 31, period: 'AM' };
+
+      const maxLimit = logEditStore.log_dateTime_ahead
+        ? parseTimeString(
+            new Date(logEditStore.log_dateTime_ahead).toLocaleString('en-US', {
+              timeZone: localTimeZone,
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            }),
+          )
+        : { hour: 23, minute: 59, period: 'PM' };
+
+      setLimit({ min: minLimit, max: maxLimit });
     };
 
     updateLocalTime();
   }, [logEditStore.log_dateTime]);
 
-  const logEdit = async () => {
+  const logEdit = async (data: {
+    hour: number;
+    minute: number;
+    period: string;
+  }) => {
     const originalDateTime = new Date(logEditStore.log_dateTime);
 
     // Format the original date in the user's local timezone
@@ -54,16 +111,14 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
 
     // Parse the formatted date to get a Date object in the local timezone
     const localDateTime = new Date(formattedOriginalDateTime);
+    localDateTime.setMinutes(data.minute);
 
-    // Set the local hours and minutes
-    localDateTime.setHours(localHour);
-    localDateTime.setMinutes(localMinute);
-
-    // Adjust AM/PM if necessary
-    if (amPm === 'PM' && localHour < 12) {
-      localDateTime.setHours(localHour + 12);
-    } else if (amPm === 'AM' && localHour === 12) {
+    if (data.period === 'PM' && data.hour < 12) {
+      localDateTime.setHours(data.hour + 12);
+    } else if (data.period === 'AM' && data.hour === 12) {
       localDateTime.setHours(0);
+    } else {
+      localDateTime.setHours(data.hour);
     }
 
     // Ensure the updated time is in the correct day
@@ -89,6 +144,42 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
     window.time_edit_modal.close();
   };
 
+  const formik = useFormik({
+    initialValues: {
+      hour: localTime.hour,
+      minute: localTime.minute,
+      period: localTime.period,
+    },
+    validationSchema: Yup.object({
+      hour: Yup.number()
+        .min(limit.min.hour)
+        .max(limit.max.hour)
+        .required('Hour is required'),
+      minute: Yup.number()
+        .when(['hour', 'period'], ([hour, period], schema) => {
+          if (hour === limit.min.hour) {
+            if (limit.min.hour === limit.max.hour) {
+              return schema.min(limit.min.minute).max(limit.max.minute);
+            }
+            return schema.min(limit.min.minute).max(59);
+          } else if (hour === limit.max.hour) {
+            if (limit.min.hour === limit.max.hour) {
+              return schema.max(limit.max.minute).min(limit.min.minute);
+            }
+            return schema.max(limit.max.minute).min(0);
+          } else {
+            return schema.min(0).max(59);
+          }
+        })
+        .required('Minute is required'),
+      period: Yup.string()
+        .oneOf([limit.min.period, limit.max.period])
+        .required('Period is required'),
+    }),
+    onSubmit: logEdit,
+    enableReinitialize: true,
+  });
+
   const closeModal = () => {
     window.time_edit_modal.close();
     useStore.setState(() => ({
@@ -109,50 +200,86 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
         <form method='dialog' className='modal-box'>
           {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> */}
           <h3 className='text-center text-lg font-bold'>Edit Time</h3>
-          <div className='divider'></div>
+          <div className='flex items-center'>
+            <div className='divider flex-1'></div>
+            <p className='mx-4'>
+              {`${limit.min.hour < 10 ? '0' : ''}${limit.min.hour}:${limit.min.minute < 10 ? '0' : ''}${limit.min.minute} ${limit.min.period} - ${limit.max.hour < 10 ? '0' : ''}${limit.max.hour}:${limit.max.minute < 10 ? '0' : ''}${limit.max.minute} ${limit.max.period}`}
+            </p>
+            <div className='divider flex-1'></div>
+          </div>
           <div className='card form-control grid gap-y-5 p-5'>
             <div>
               <p className='label-text'>Hour</p>
               <div className='flex w-full'>
                 <input
                   className='input input-bordered flex-1'
-                  type='text'
-                  id='selectedHour'
-                  name='selectedHour'
-                  value={isNaN(localHour) ? 0 : localHour}
-                  onChange={(e) => setLocalHour(Number(e.target.value))}
+                  type='number'
+                  id='hour'
+                  name='hour'
+                  value={formik.values.hour}
+                  onChange={formik.handleChange}
                 />
               </div>
+              {formik.errors.hour && (
+                <div className='error text-red-500'>{formik.errors.hour}</div>
+              )}
             </div>
             <div>
               <p className='label-text'>Minute</p>
               <div className='join flex w-full'>
                 <input
                   className='input join-item input-bordered flex-1'
-                  type='text'
-                  id='selectedMinute'
-                  name='selectedMinute'
-                  value={isNaN(localMinute) ? 0 : localMinute}
-                  onChange={(e) => setLocalMinute(Number(e.target.value))}
+                  type='number'
+                  id='minute'
+                  name='minute'
+                  value={formik.values.minute}
+                  onChange={formik.handleChange}
                 />
-                {/* <p className='btn input-bordered join-item no-animation flex-1'>Search</p>
-                <p className='btn input-bordered join-item no-animation flex-1'>Search</p> */}
+                {/* <p className='btn input-bordered join-item no-animation flex-1'>Search</p> */}
               </div>
+              {formik.errors.minute && (
+                <div className='error text-red-500'>{formik.errors.minute}</div>
+              )}
             </div>
             <div className='join join-horizontal flex'>
-              <span
-                className={`btn join-item btn-sm flex-1 ${amPm === 'AM' ? 'btn-primary' : ''}`}
-                onClick={() => setAmPm('AM')}
-              >
-                AM
-              </span>
-              <span
-                className={`btn join-item btn-sm flex-1 ${amPm === 'PM' ? 'btn-primary' : ''}`}
-                onClick={() => setAmPm('PM')}
-              >
-                PM
-              </span>
+              {(limit.min.period === 'AM' && limit.max.period === 'PM') ||
+              (limit.min.period === 'PM' && limit.max.period === 'AM') ? (
+                <>
+                  <span
+                    className={`btn join-item btn-sm flex-1 ${
+                      formik.values.period === 'AM' ? 'btn-primary' : ''
+                    }`}
+                    onClick={() => formik.setFieldValue('period', 'AM')}
+                  >
+                    AM
+                  </span>
+                  <span
+                    className={`btn join-item btn-sm flex-1 ${
+                      formik.values.period === 'PM' ? 'btn-primary' : ''
+                    }`}
+                    onClick={() => formik.setFieldValue('period', 'PM')}
+                  >
+                    PM
+                  </span>
+                </>
+              ) : (
+                <span
+                  className={`btn join-item btn-sm flex-1 ${
+                    formik.values.period === limit.min.period
+                      ? 'btn-primary'
+                      : ''
+                  }`}
+                  onClick={() =>
+                    formik.setFieldValue('period', limit.min.period)
+                  }
+                >
+                  {limit.min.period}
+                </span>
+              )}
             </div>
+            {formik.errors.period && (
+              <div className='error text-red-500'>{formik.errors.period}</div>
+            )}
           </div>
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}
@@ -164,8 +291,11 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
                 Close
               </span>
               <span
-                className='btn join-item btn-primary flex-1'
-                onClick={() => logEdit()}
+                className={`btn btn-primary join-item flex-1 ${!formik.isValid ? 'disabled' : ''}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  formik.handleSubmit();
+                }}
               >
                 Save
               </span>
