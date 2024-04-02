@@ -89,7 +89,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
               hour12: true,
             }),
           )
-        : { hour: 23, minute: 59, period: 'PM' };
+        : { hour: 11, minute: 59, period: 'PM' };
 
       setLimit({ min: minLimit, max: maxLimit });
     };
@@ -152,17 +152,32 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
     },
     validationSchema: Yup.object({
       hour: Yup.number()
-        .min(limit.min.hour)
-        .max(limit.max.hour)
+        // .min(limit.min.hour)
+        // .max(limit.max.hour)
+        .when(['period'], ([period], schema) => {
+          if (period === limit.min.period) {
+            if (limit.min.period === limit.max.period) {
+              return schema.min(limit.min.hour).max(limit.max.hour);
+            }
+            return schema.min(limit.min.hour).max(11);
+          } else if (period === limit.max.period) {
+            if (limit.min.period === limit.max.period) {
+              return schema.max(limit.max.hour).min(limit.min.hour);
+            }
+            return schema.max(limit.max.hour).min(1);
+          } else {
+            return schema.min(limit.min.hour).max(limit.max.hour);
+          }
+        })
         .required('Hour is required'),
       minute: Yup.number()
         .when(['hour', 'period'], ([hour, period], schema) => {
-          if (hour === limit.min.hour) {
+          if (hour === limit.min.hour && period === limit.min.period) {
             if (limit.min.hour === limit.max.hour) {
               return schema.min(limit.min.minute).max(limit.max.minute);
             }
             return schema.min(limit.min.minute).max(59);
-          } else if (hour === limit.max.hour) {
+          } else if (hour === limit.max.hour && period === limit.max.period) {
             if (limit.min.hour === limit.max.hour) {
               return schema.max(limit.max.minute).min(limit.min.minute);
             }
