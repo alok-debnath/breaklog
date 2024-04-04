@@ -1,9 +1,19 @@
 import { useStore } from '@/stores/store';
 import axios from 'axios';
 import { handleError } from '../common/CommonCodeBlocks';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { TimePicker } from 'antd';
+import type { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
+
+const onChange = (time: Dayjs, timeString: string) => {
+  console.log(time, timeString);
+};
 
 declare global {
   interface Window {
@@ -206,11 +216,20 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
       },
     }));
   };
+
+  const popupContainerRef = useRef(null);
+  const [value, setValue] = useState<Dayjs | null>(null);
+
+  const onChange = (time: Dayjs) => {
+    setValue(time);
+  };
+
   return (
     <>
       <dialog
         id='time_edit_modal'
         className='modal modal-bottom sm:modal-middle'
+        ref={popupContainerRef}
       >
         <form method='dialog' className='modal-box'>
           {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> */}
@@ -295,6 +314,19 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
             {formik.errors.period && (
               <div className='error text-red-500'>{formik.errors.period}</div>
             )}
+            <TimePicker
+              use12Hours
+              format='h:mm A'
+              // defaultValue={dayjs('12:08', 'HH:mm')}
+              className='input input-bordered  stroke-white hover:bg-base-100 focus:bg-base-100'
+              getPopupContainer={() =>
+                popupContainerRef.current || document.body
+              }
+              // onChange={onChange}
+              value={value} onChange={onChange}
+              changeOnScroll
+              needConfirm={false}
+            />
           </div>
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}
