@@ -2,6 +2,7 @@ import { connect } from '@/dbConfig/dbConfig';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
+import { fetchLogs } from '@/helpers/fetchLogs';
 
 connect();
 
@@ -78,9 +79,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const fetchedLog = await fetchLogs(reqBody, userId);
+
     return NextResponse.json({
       message: 'Log submitted successfully',
-      // data: log,
+      fetchedLog,
     });
   } catch (error: any) {
     if (error.name === 'TokenError') {

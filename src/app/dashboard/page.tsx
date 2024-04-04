@@ -16,6 +16,43 @@ const Index = () => {
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
 
+  interface FetchedLogsData {
+    message: string;
+    status: number;
+    data: any[]; // Adjust this to match the structure of your actual data
+    workdata: {
+      breakTime: string;
+      workDone: string;
+      unformattedWorkDone: number;
+      currentBreak: null | Date;
+      lastLogStatus: string;
+      formattedWorkEndTime: string;
+      formattedWorkLeft: string;
+    };
+  }
+
+  const saveFetchedLogs = (data: FetchedLogsData) => {
+    useStore.setState(() => ({
+      loading: false,
+      logs: data.data,
+      workData: data.workdata,
+    }));
+
+    if (data.workdata.currentBreak !== null) {
+      useStore.setState(() => ({
+        currBreak: data.workdata.currentBreak,
+      }));
+    } else {
+      useStore.setState(() => ({
+        currBreak: null,
+        liveBreaks: 0,
+      }));
+    }
+    // if (data.workdata.firstLogStatus === 'day start') {
+    //   useStore.setState(() => ({ breaklogMode: false }));
+    // }
+  };
+
   const logEntry = async (value: string) => {
     try {
       if (value === 'undo log') {
@@ -38,9 +75,7 @@ const Index = () => {
 
       useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/submitlog', values);
-      await fetchLogFunction();
-
-      useStore.setState(() => ({ loading: false }));
+      saveFetchedLogs(res.data.fetchedLog);
     } catch (error: any) {
       handleError({ error: error, router: router });
     }
@@ -52,25 +87,7 @@ const Index = () => {
       const values = {};
 
       const res = await axios.post('/api/users/fetchlog', values);
-      useStore.setState(() => ({
-        loading: false,
-        logs: res.data.data,
-        workData: res.data.workdata,
-      }));
-
-      if (res.data.workdata.currentBreak !== null) {
-        useStore.setState(() => ({
-          currBreak: res.data.workdata.currentBreak,
-        }));
-      } else {
-        useStore.setState(() => ({
-          currBreak: null,
-          liveBreaks: 0,
-        }));
-      }
-      if (res.data.workdata.firstLogStatus === 'day start') {
-        useStore.setState(() => ({ breaklogMode: false }));
-      }
+      saveFetchedLogs(res.data);
     } catch (error: any) {
       handleError({ error: error, router: router });
     }
