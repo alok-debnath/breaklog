@@ -10,26 +10,32 @@ import useConfirm from '@/hooks/useConfirm';
 import LogsCard from '@/components/Layouts/LogsCard';
 import BottomNavbar from '@/components/Layouts/BottomNavbar';
 
+type LogEntry = {
+  id: string;
+  updatedAt: string;
+  log_status: string;
+};
+interface FetchedLogsData {
+  message: string;
+  status: number;
+  data: LogEntry[];
+  workdata: {
+    breakTime: string;
+    workDone: string;
+    unformattedWorkDone: number;
+    currentBreak: null | Date;
+    firstLogStatus: string | null;
+    lastLogStatus: string;
+    formattedWorkEndTime: string;
+    formattedWorkLeft: string;
+  };
+}
+
 const Index = () => {
   const { breaklogMode, workData, loading, userData } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
-
-  interface FetchedLogsData {
-    message: string;
-    status: number;
-    data: any[]; // Adjust this to match the structure of your actual data
-    workdata: {
-      breakTime: string;
-      workDone: string;
-      unformattedWorkDone: number;
-      currentBreak: null | Date;
-      lastLogStatus: string;
-      formattedWorkEndTime: string;
-      formattedWorkLeft: string;
-    };
-  }
 
   const saveFetchedLogs = (data: FetchedLogsData) => {
     useStore.setState(() => ({
@@ -48,9 +54,9 @@ const Index = () => {
         liveBreaks: 0,
       }));
     }
-    // if (data.workdata.firstLogStatus === 'day start') {
-    //   useStore.setState(() => ({ breaklogMode: false }));
-    // }
+    if (data.workdata.firstLogStatus === 'day start') {
+      useStore.setState(() => ({ breaklogMode: false }));
+    }
   };
 
   const logEntry = async (value: string) => {

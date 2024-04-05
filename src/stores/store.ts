@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 interface WorkData {
+  firstLogStatus: string | null;
   lastLogStatus: string;
   breakTime: string;
   workDone: string;
@@ -94,6 +95,7 @@ export const useStore = create<StoreState>((set) => ({
   },
   breaklogMode: true,
   workData: {
+    firstLogStatus: '',
     lastLogStatus: '',
     breakTime: '',
     workDone: '',

@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 
 // connect();
 
-export const fetchLogs = async (reqBody: any, userId: string,) => {
+export const fetchLogs = async (reqBody: any, userId: string) => {
   const { date } = reqBody;
 
   // Calculate the start of today in UTC time
@@ -157,6 +157,7 @@ export const fetchLogs = async (reqBody: any, userId: string,) => {
       workDone: formattedWorkDone,
       unformattedWorkDone: workDone,
       currentBreak: currentBreakTime,
+      firstLogStatus: firstLog,
       lastLogStatus: recentLog,
       formattedWorkEndTime: formattedWorkEndTime,
       formattedWorkLeft: formattedWorkLeft,
