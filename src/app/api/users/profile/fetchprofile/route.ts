@@ -1,9 +1,9 @@
-import { connect } from '@/dbConfig/dbConfig';
+// import { connect } from '@/dbConfig/dbConfig';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
 
-connect();
+// connect();
 
 export async function GET(request: NextRequest) {
   try {

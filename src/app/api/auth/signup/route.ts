@@ -1,9 +1,9 @@
-import { connect } from '@/dbConfig/dbConfig';
+// import { connect } from '@/dbConfig/dbConfig';
 import { NextRequest, NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
 import prisma from '@/dbConfig/dbConfig';
 
-connect();
+// connect();
 
 export async function POST(request: NextRequest) {
   try {
@@ -66,7 +66,8 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
   }
+  // finally {
+  //   await prisma.$disconnect();
+  // }
 }

@@ -1,8 +1,8 @@
-import { connect } from '@/dbConfig/dbConfig';
+// import { connect } from '@/dbConfig/dbConfig';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
 
-connect();
+// connect();
 
 export async function POST(request: NextRequest) {
   try {
