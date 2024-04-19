@@ -136,7 +136,7 @@ const Index = () => {
         </div>
       </div>
       <BottomNavbar logEntry={logEntry} fetchLogFunction={fetchLogFunction} />
-      <TimeEditModal fetchLogFunction={fetchLogFunction} />
+      <TimeEditModal saveFetchedLogs={saveFetchedLogs} />
     </>
   );
 };

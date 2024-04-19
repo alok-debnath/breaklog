@@ -24,10 +24,10 @@ declare global {
   }
 }
 interface TimeEditModalProps {
-  fetchLogFunction: Function;
+  saveFetchedLogs: Function;
 }
 
-const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
+const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
   const { loading, logEditStore } = useStore();
   const [localTime, setLocalTime] = useState({
     hour: 0,
@@ -147,7 +147,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
     try {
       useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/logedit', values);
-      fetchLogFunction();
+      saveFetchedLogs(res.data.fetchedLog);
     } catch (error: any) {
       handleError({ error: error, router: null });
     }
@@ -317,15 +317,18 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
             <TimePicker
               use12Hours
               format='h:mm A'
-              // defaultValue={dayjs('12:08', 'HH:mm')}
-              className='input input-bordered  stroke-white hover:bg-base-100 focus:bg-base-100'
+              defaultValue={dayjs('12:08', 'HH:mm')}
+              className='input input-bordered text-inherit placeholder-inherit hover:border-secondary hover:bg-inherit active:bg-inherit '
               getPopupContainer={() =>
                 popupContainerRef.current || document.body
               }
               // onChange={onChange}
-              value={value} onChange={onChange}
-              changeOnScroll
+              // disabledTime={disabledTime}
+              value={value}
+              onChange={onChange}
               needConfirm={false}
+              rootClassName=''
+              allowClear={false}
             />
           </div>
           <div className='modal-action'>

@@ -130,7 +130,7 @@
     "editor.gotoLocation.multipleImplementations": "goto",
     "editor.gotoLocation.multipleTypeDefinitions": "goto",
     "editor.gotoLocation.multiplePeek": true,
-    "workbench.startupEditor": "newUntitledFile",
+    "workbench.startupEditor": "none",
     "editor.glyphMargin": true,
     "workbench.editor.enablePreview": false,
     "workbench.editor.highlightModifiedTabs": true,
