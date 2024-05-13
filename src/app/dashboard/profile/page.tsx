@@ -6,7 +6,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
 
 const validationSchema = Yup.object().shape({
   daily_work_required: Yup.number()
@@ -14,6 +15,7 @@ const validationSchema = Yup.object().shape({
     .max(23, 'Value must be at most 23')
     .required('Value is required')
     .typeError('Value must be a number'),
+  default_time_zone: Yup.string().required('Default Timezone is required'),
   // default_log_mode: Yup.string().required('Default Log Mode is required'),
 });
 
@@ -24,6 +26,7 @@ const ProfilePage = () => {
   const initialValues = {
     daily_work_required: userData.daily_work_required,
     log_type: userData.log_type,
+    default_time_zone: userData.default_time_zone,
   };
   useEffect(() => {
     // Update form values when userData changes
@@ -31,6 +34,7 @@ const ProfilePage = () => {
       ...formik.values,
       daily_work_required: userData.daily_work_required,
       log_type: userData.log_type,
+      default_time_zone: userData.default_time_zone,
     });
   }, [userData]);
 
@@ -67,6 +71,15 @@ const ProfilePage = () => {
       useStore.setState(() => ({ loading: false }));
     }
   }
+
+  const labelStyle = 'abbrev';
+  const timezones = {
+    ...allTimezones,
+  };
+  const { options, parseTimezone } = useTimezoneSelect({
+    labelStyle,
+    timezones,
+  });
 
   return (
     <>
@@ -175,6 +188,38 @@ const ProfilePage = () => {
                         {formik.errors.log_type}
                       </div>
                     )}
+                  </div>
+                  <div className='form-control'>
+                    <label className='label' htmlFor='default_time_zone'>
+                      <span className='label-text flex items-center'>
+                        Default Time Zone
+                      </span>
+                    </label>
+                    <select
+                      id='default_time_zone'
+                      name='default_time_zone'
+                      className={`select select-bordered w-full max-w-xs ${
+                        formik.touched.default_time_zone && formik.errors.default_time_zone
+                          ? 'border-error'
+                          : ''
+                      }`}
+                      value={formik.values.default_time_zone}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    >
+                      <option value=''>Select a timezone</option>
+                      {options.map((option, index) => (
+                        <option key={index} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                    {formik.touched.default_time_zone &&
+                      formik.errors.default_time_zone && (
+                        <div className='error my-1 text-start text-red-500'>
+                          {formik.errors.default_time_zone}
+                        </div>
+                      )}
                   </div>
                   <div className='form-control mt-6'>
                     <button

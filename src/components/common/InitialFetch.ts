@@ -56,6 +56,9 @@ const InitialFetch = () => {
 
   useEffect(() => {
     if (isClient && isFirstEffectCompleted) {
+      if (!userData.default_time_zone) {
+        window.time_zone_modal.showModal();
+      }
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
       localStorage.setItem('thememode', themeMode);
     }

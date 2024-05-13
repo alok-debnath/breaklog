@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     const userId = await getDataFromToken(request);
 
     const reqBody = await request.json();
-    const { daily_work_required, log_type } = reqBody;
+    const { daily_work_required, log_type, default_time_zone } = reqBody;
 
     // Update profile using Prisma
     const result = await prisma.user.update({
@@ -20,6 +20,7 @@ export async function POST(request: NextRequest) {
       data: {
         daily_work_required: parseFloat(daily_work_required),
         log_type: log_type,
+        default_time_zone: default_time_zone,
       },
     });
 

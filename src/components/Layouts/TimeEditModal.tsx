@@ -4,16 +4,16 @@ import { handleError } from '../common/CommonCodeBlocks';
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { TimePicker } from 'antd';
-import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+// import { TimePicker } from 'antd';
+// import type { Dayjs } from 'dayjs';
+// import dayjs from 'dayjs';
+// import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-dayjs.extend(customParseFormat);
+// dayjs.extend(customParseFormat);
 
-const onChange = (time: Dayjs, timeString: string) => {
-  console.log(time, timeString);
-};
+// const onChange = (time: Dayjs, timeString: string) => {
+//   console.log(time, timeString);
+// };
 
 declare global {
   interface Window {
@@ -218,11 +218,11 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
   };
 
   const popupContainerRef = useRef(null);
-  const [value, setValue] = useState<Dayjs | null>(null);
+  // const [value, setValue] = useState<Dayjs | null>(null);
 
-  const onChange = (time: Dayjs) => {
-    setValue(time);
-  };
+  // const onChange = (time: Dayjs) => {
+  //   setValue(time);
+  // };
 
   return (
     <>
@@ -250,7 +250,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
                   type='number'
                   id='hour'
                   name='hour'
-                  value={formik.values.hour}
+                  value={formik.values.hour || 0}
                   onChange={formik.handleChange}
                 />
               </div>
@@ -266,7 +266,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
                   type='number'
                   id='minute'
                   name='minute'
-                  value={formik.values.minute}
+                  value={formik.values.minute || 0}
                   onChange={formik.handleChange}
                 />
                 {/* <p className='btn input-bordered join-item no-animation flex-1'>Search</p> */}
@@ -314,7 +314,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
             {formik.errors.period && (
               <div className='error text-red-500'>{formik.errors.period}</div>
             )}
-            <TimePicker
+            {/* <TimePicker
               use12Hours
               format='h:mm A'
               defaultValue={dayjs('12:08', 'HH:mm')}
@@ -329,7 +329,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
               needConfirm={false}
               rootClassName=''
               allowClear={false}
-            />
+            /> */}
           </div>
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}

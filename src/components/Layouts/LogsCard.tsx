@@ -194,7 +194,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
                         Time
                       </span>
                     </th>
-                    <th>Log</th>
+                    <th>Activity</th>
                   </tr>
                 </thead>
                 <tbody className='text-left'>

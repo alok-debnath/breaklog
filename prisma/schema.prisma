@@ -23,6 +23,7 @@ model User {
   default_log_start            DateTime?
   default_log_end              DateTime?
   default_break_time           Int?
+  default_time_zone            String?
   role                         Role      @default(USER)
   forgot_password_token        String?
   forgot_password_token_expiry DateTime?
@@ -34,11 +35,13 @@ model User {
 
 model Log {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String   @db.ObjectId
+  log_status String
+  // log_time   String
+  // timeZone   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  log_status String
   User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String   @db.ObjectId
 }
 
 enum Role {

@@ -4,6 +4,7 @@ import Navbar from '@/components/Layouts/Navbar';
 import InitialFetch from '@/components/common/InitialFetch';
 import Loading from '@/components/Layouts/Loading';
 import { useStore } from '@/stores/store';
+import TimeZoneModal from '@/components/Layouts/TimeZoneModal';
 
 export default function DashboardLayout({
   children, // will be a page or nested layout
@@ -17,6 +18,7 @@ export default function DashboardLayout({
       <div data-theme={themeMode}>
         <InitialFetch />
         <ConfirmationModal />
+        <TimeZoneModal />
         <Loading />
         <Navbar />
         {children}
