@@ -18,7 +18,7 @@ model User {
   username                     String    @unique
   password                     String
   name                         String?
-  log_type                     String    @default("breakmode")
+  log_type                     String    @default("daymode")
   daily_work_required          Float?
   default_log_start            DateTime?
   default_log_end              DateTime?
