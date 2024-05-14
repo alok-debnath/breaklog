@@ -64,9 +64,9 @@ export default function LoginPage() {
   return (
     <>
       <div data-theme={themeMode}>
-        <div className='hero min-h-screen bg-base-200'>
+        <div className='flex place-items-center justify-center min-h-svh bg-base-200'>
           <Toaster position='top-left' reverseOrder={false} />
-          <div className='hero-content flex-col lg:flex-row-reverse'>
+          <div className='hero-content w-full flex-col lg:flex-row-reverse'>
             <div className='text-center lg:text-left'>
               <h1 className='text-5xl font-bold underline'>Breaklog</h1>
               <p className='py-6'>
@@ -80,7 +80,7 @@ export default function LoginPage() {
                 </Link>
               </p>
             </div>
-            <div className='card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl'>
+            <div className='card max-w-sm flex-shrink-0 bg-base-100 shadow-2xl'>
               <div className='card-body'>
                 <form onSubmit={formik.handleSubmit} className='grid gap-y-2'>
                   <div className='form-control'>

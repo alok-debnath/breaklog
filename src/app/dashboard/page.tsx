@@ -115,7 +115,7 @@ const Index = () => {
 
   return (
     <>
-      <div className='hero min-h-screen bg-base-200'>
+      <div className='flex place-items-center justify-center min-h-svh bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <LogsCard isWorkDoneSuccess={isWorkDoneSuccess} />
