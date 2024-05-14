@@ -41,6 +41,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
       });
 
       if ((res.data.success = true)) {
+        window.time_zone_modal.close();
         useStore.setState({
           userData: {
             ...userData,
@@ -81,7 +82,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
         className='modal modal-bottom sm:modal-middle'
       >
         <form method='dialog' className='modal-box bg-base-200 px-0 pb-0 pt-0'>
-          <h3 className='py-6 text-center text-lg font-bold'>Time Zone</h3>
+          <h3 className='py-6 text-center text-lg font-bold'>Select Time Zone</h3>
           <div className='rounded-t- card rounded-b-none bg-base-100 px-5 pb-5'>
             <div className='card-body'>
               <p>
