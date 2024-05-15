@@ -4,7 +4,7 @@ import Button from '@/components/UI/Button';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
-import TimeEditModal from '@/components/Layouts/TimeEditModal';
+import TimeEditModal from '@/components/Layouts/Modals/TimeEditModal';
 import { useRouter } from 'next/navigation';
 import useConfirm from '@/hooks/useConfirm';
 import LogsCard from '@/components/Layouts/LogsCard';

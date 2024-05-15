@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
-import { handleError } from '../common/CommonCodeBlocks';
+import { handleError } from '../../common/CommonCodeBlocks';
 import toast from 'react-hot-toast';
 declare global {
   interface Window {

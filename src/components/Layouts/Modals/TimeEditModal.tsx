@@ -1,6 +1,6 @@
 import { useStore } from '@/stores/store';
 import axios from 'axios';
-import { handleError } from '../common/CommonCodeBlocks';
+import { handleError } from '../../common/CommonCodeBlocks';
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';

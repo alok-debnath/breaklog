@@ -83,7 +83,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className='flex place-items-center justify-center min-h-svh min-w-fit bg-base-200'>
+      <div className='flex min-h-svh min-w-fit place-items-center justify-center bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>
@@ -199,7 +199,8 @@ const ProfilePage = () => {
                       id='default_time_zone'
                       name='default_time_zone'
                       className={`select select-bordered w-full max-w-xs ${
-                        formik.touched.default_time_zone && formik.errors.default_time_zone
+                        formik.touched.default_time_zone &&
+                        formik.errors.default_time_zone
                           ? 'border-error'
                           : ''
                       }`}
