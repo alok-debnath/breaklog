@@ -2,6 +2,7 @@
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
+import { fetchLogs } from '@/helpers/fetchLogs';
 
 // connect();
 
@@ -31,9 +32,11 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    const fetchedLog = await fetchLogs(reqBody, userId);
+
     return NextResponse.json({
       message: 'Log updated successfully',
-      status: 200,
+      fetchedLog,
     });
   } catch (error: any) {
     if (error.name === 'TokenError') {

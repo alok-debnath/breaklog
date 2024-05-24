@@ -4,7 +4,7 @@ import Button from '@/components/UI/Button';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
-import TimeEditModal from '@/components/Layouts/TimeEditModal';
+import TimeEditModal from '@/components/Layouts/Modals/TimeEditModal';
 import { useRouter } from 'next/navigation';
 import useConfirm from '@/hooks/useConfirm';
 import LogsCard from '@/components/Layouts/LogsCard';
@@ -115,7 +115,7 @@ const Index = () => {
 
   return (
     <>
-      <div className='hero min-h-screen bg-base-200'>
+      <div className='flex place-items-center justify-center min-h-svh bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <LogsCard isWorkDoneSuccess={isWorkDoneSuccess} />
@@ -136,7 +136,7 @@ const Index = () => {
         </div>
       </div>
       <BottomNavbar logEntry={logEntry} fetchLogFunction={fetchLogFunction} />
-      <TimeEditModal fetchLogFunction={fetchLogFunction} />
+      <TimeEditModal saveFetchedLogs={saveFetchedLogs} />
     </>
   );
 };

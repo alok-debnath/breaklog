@@ -4,7 +4,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import SettingsModal from './SettingsModal';
+import SettingsModal from './Modals/SettingsModal';
 import { handleError } from '../common/CommonCodeBlocks';
 
 const Navbar = () => {

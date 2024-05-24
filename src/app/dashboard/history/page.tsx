@@ -104,7 +104,7 @@ const HistoryPage = () => {
 
   return (
     <>
-      <div className='hero min-h-screen min-w-fit bg-base-200'>
+      <div className='flex place-items-center justify-center min-h-svh min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='card my-20 bg-base-100 shadow-xl'>

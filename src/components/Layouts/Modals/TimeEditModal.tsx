@@ -1,19 +1,19 @@
 import { useStore } from '@/stores/store';
 import axios from 'axios';
-import { handleError } from '../common/CommonCodeBlocks';
+import { handleError } from '../../common/CommonCodeBlocks';
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { TimePicker } from 'antd';
-import type { Dayjs } from 'dayjs';
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+// import { TimePicker } from 'antd';
+// import type { Dayjs } from 'dayjs';
+// import dayjs from 'dayjs';
+// import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-dayjs.extend(customParseFormat);
+// dayjs.extend(customParseFormat);
 
-const onChange = (time: Dayjs, timeString: string) => {
-  console.log(time, timeString);
-};
+// const onChange = (time: Dayjs, timeString: string) => {
+//   console.log(time, timeString);
+// };
 
 declare global {
   interface Window {
@@ -24,10 +24,10 @@ declare global {
   }
 }
 interface TimeEditModalProps {
-  fetchLogFunction: Function;
+  saveFetchedLogs: Function;
 }
 
-const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
+const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
   const { loading, logEditStore } = useStore();
   const [localTime, setLocalTime] = useState({
     hour: 0,
@@ -147,7 +147,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
     try {
       useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/logedit', values);
-      fetchLogFunction();
+      saveFetchedLogs(res.data.fetchedLog);
     } catch (error: any) {
       handleError({ error: error, router: null });
     }
@@ -218,11 +218,11 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
   };
 
   const popupContainerRef = useRef(null);
-  const [value, setValue] = useState<Dayjs | null>(null);
+  // const [value, setValue] = useState<Dayjs | null>(null);
 
-  const onChange = (time: Dayjs) => {
-    setValue(time);
-  };
+  // const onChange = (time: Dayjs) => {
+  //   setValue(time);
+  // };
 
   return (
     <>
@@ -250,7 +250,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
                   type='number'
                   id='hour'
                   name='hour'
-                  value={formik.values.hour}
+                  value={formik.values.hour || 0}
                   onChange={formik.handleChange}
                 />
               </div>
@@ -266,7 +266,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
                   type='number'
                   id='minute'
                   name='minute'
-                  value={formik.values.minute}
+                  value={formik.values.minute || 0}
                   onChange={formik.handleChange}
                 />
                 {/* <p className='btn input-bordered join-item no-animation flex-1'>Search</p> */}
@@ -314,19 +314,22 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ fetchLogFunction }) => {
             {formik.errors.period && (
               <div className='error text-red-500'>{formik.errors.period}</div>
             )}
-            <TimePicker
+            {/* <TimePicker
               use12Hours
               format='h:mm A'
-              // defaultValue={dayjs('12:08', 'HH:mm')}
-              className='input input-bordered  stroke-white hover:bg-base-100 focus:bg-base-100'
+              defaultValue={dayjs('12:08', 'HH:mm')}
+              className='input input-bordered text-inherit placeholder-inherit hover:border-secondary hover:bg-inherit active:bg-inherit '
               getPopupContainer={() =>
                 popupContainerRef.current || document.body
               }
               // onChange={onChange}
-              value={value} onChange={onChange}
-              changeOnScroll
+              // disabledTime={disabledTime}
+              value={value}
+              onChange={onChange}
               needConfirm={false}
-            />
+              rootClassName=''
+              allowClear={false}
+            /> */}
           </div>
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}

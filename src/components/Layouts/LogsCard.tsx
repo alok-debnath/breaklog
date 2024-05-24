@@ -40,14 +40,31 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
             <div className='card bg-base-100 pb-5 text-left font-semibold'>
               {isClient && userData.username ? (
                 <span>
-                  {new Date().toLocaleDateString('en-US', {
-                    day: 'numeric',
-                    month: 'long',
-                  })}
-                  ,{' '}
-                  {new Date().toLocaleDateString('en-US', {
-                    weekday: 'long',
-                  })}
+                  {page === 'history' &&
+                  logs.length > 0 &&
+                  logs[0].updatedAt ? (
+                    <>
+                      {new Date(logs[0].updatedAt).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                      })}
+                      ,{' '}
+                      {new Date(logs[0].updatedAt).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                      })}
+                    </>
+                  ) : (
+                    <>
+                      {new Date().toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'long',
+                      })}
+                      ,{' '}
+                      {new Date().toLocaleDateString('en-US', {
+                        weekday: 'long',
+                      })}
+                    </>
+                  )}
                 </span>
               ) : (
                 <span className='animate-pulse'>
@@ -194,7 +211,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
                         Time
                       </span>
                     </th>
-                    <th>Log</th>
+                    <th>Activity</th>
                   </tr>
                 </thead>
                 <tbody className='text-left'>

@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
         username: true,
         daily_work_required: true,
         log_type: true,
+        default_time_zone: true,
       },
     });
     return NextResponse.json({

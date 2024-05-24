@@ -1,6 +1,6 @@
-import ToggleButtonText from '../UI/ToggleButtonText';
-import SelectboxText from '../UI/SelectboxText';
-import { ThemeName } from '../../Constants/ThemeConstant';
+import ToggleButtonText from '../../UI/ToggleButtonText';
+import SelectboxText from '../../UI/SelectboxText';
+import { ThemeName } from '../../../Constants/ThemeConstant';
 import { useStore } from '@/stores/store';
 
 declare global {
