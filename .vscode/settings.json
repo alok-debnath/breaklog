@@ -94,7 +94,7 @@
     "editor.tabSize": 2,
     "console-ninja.featureSet": "Community",
     "window.titleBarStyle": "custom",
-    "editor.fontFamily": "'JetBrainsMono Nerd Font Medium', 'Fira Code', 'Droid Sans Mono', 'monospace'",
+    // "editor.fontFamily": "'JetBrainsMono Nerd Font Medium', 'Fira Code', 'Droid Sans Mono', 'monospace'",
     "svelte.enable-ts-plugin": true,
     "terminal.integrated.fontFamily": "MesloLGS NF",
     "workbench.editorAssociations": {

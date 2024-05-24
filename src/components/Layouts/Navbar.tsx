@@ -41,7 +41,7 @@ const Navbar = () => {
   return (
     <>
       <div className='fixed z-10 w-full bg-gradient-to-b from-base-200 to-transparent px-3 pt-3'>
-        <div className='navbar w-full rounded-box bg-base-100 shadow-lg'>
+        <div className='navbar mx-auto max-w-screen-lg rounded-box bg-base-100 shadow-lg'>
           <div className='navbar-start'>
             <div className='dropdown'>
               <label tabIndex={0} className='btn btn-ghost'>
