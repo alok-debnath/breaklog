@@ -42,10 +42,15 @@ interface DialogModalData {
   modal_confirm_btn: string;
   modal_cancel_btn: string;
 }
+interface TimeData {
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
 interface BreakData {
-  liveBreak: number;
-  totalBreak: number;
-  totalBreakFormated: string;
+  liveBreak: TimeData;
+  totalBreak: TimeData;
 }
 
 interface LogsData {
@@ -108,9 +113,8 @@ export const useStore = create<StoreState>((set) => ({
   loading: false,
   currBreak: null,
   breaks: {
-    liveBreak: 0,
-    totalBreak: 0,
-    totalBreakFormated: '',
+    liveBreak: { hours: 0, minutes: 0, seconds: 0 },
+    totalBreak: { hours: 0, minutes: 0, seconds: 0 },
   },
   logEditStore: {
     log_id: '',
