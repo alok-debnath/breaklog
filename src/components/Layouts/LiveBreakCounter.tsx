@@ -1,35 +1,15 @@
 import { useStore } from '@/stores/store';
 import { useEffect } from 'react';
+import useTimeDifference from '@/hooks/useTimeDifference';
+import { calculateTimeData, TimeData } from '@/hooks/timeUtils';
 
 const LiveBreakCounter = () => {
   const { workData, currBreak, breaks } = useStore();
 
-  // const formatTime = (timeData: {
-  //   hours: number;
-  //   minutes: number;
-  //   seconds: number;
-  // }) => {
-  //   const { hours, minutes, seconds } = timeData;
-  //   return `${hours > 0 ? `${hours}h ` : ''}${minutes}m ${seconds}s`;
-  // };
-
-  const calculateTimeData = (totalSeconds: number) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    return { hours, minutes, seconds };
-  };
-
+  const diffInSeconds = useTimeDifference(currBreak);
   useEffect(() => {
     const calculateBreakTime = () => {
       if (currBreak !== null) {
-        const breakTime = new Date(currBreak);
-        const currentTime = new Date();
-        const diffInSeconds = Math.floor(
-          (currentTime.getTime() - breakTime.getTime()) / 1000,
-        );
-
         const [workHours, workMinutes] = workData.breakTime
           .split(':')
           .map(Number);
@@ -54,7 +34,7 @@ const LiveBreakCounter = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [currBreak]);
+  }, [currBreak, diffInSeconds]);
 
   return (
     <>
@@ -63,7 +43,7 @@ const LiveBreakCounter = () => {
           className={`toast toast-start mb-20 ${breaks.liveBreak !== breaks.totalBreak && 'grid grid-rows-1 gap-2'}`}
         >
           <div className='alert flex w-min justify-center rounded-full bg-primary/20 py-2 shadow-xl backdrop-blur-md'>
-            <span className='countdown font-mono'>
+            <span className='countdown font-mono font-semibold'>
               {breaks.liveBreak.hours > 0 && (
                 <>
                   <span style={{ '--value': breaks.liveBreak.hours }}></span>h
@@ -83,7 +63,7 @@ const LiveBreakCounter = () => {
               <span className=''>
                 <>
                   <span className='font-normal'>{`Total break: `}</span>
-                  <span className='countdown font-mono'>
+                  <span className='countdown font-mono font-semibold'>
                     {breaks.totalBreak.hours > 0 && (
                       <>
                         <span style={{ '--value': breaks.totalBreak.hours }} />h
@@ -97,7 +77,7 @@ const LiveBreakCounter = () => {
                         m
                       </>
                     )}
-                    <span style={{ '--value': breaks.totalBreak.seconds }} />s
+                    {/* <span style={{ '--value': breaks.totalBreak.seconds }} />s */}
                   </span>
                 </>
               </span>
