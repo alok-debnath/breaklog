@@ -1,14 +1,17 @@
 import { useStore } from '@/stores/store';
 import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
+import Button from '../UI/Button';
 
 interface BottomNavbarProps {
   logEntry: (value: string) => void; // logEntry is a function that accepts a string
   fetchLogFunction: Function;
+  isIntersecting: boolean;
 }
 
 const BottomNavbar: React.FC<BottomNavbarProps> = ({
   logEntry,
   fetchLogFunction,
+  isIntersecting,
 }) => {
   const { breaklogMode, workData, loading } = useStore();
 
@@ -20,9 +23,9 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
       <div className='fixed bottom-3 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2'>
         <div className='mx-3 rounded-full bg-base-100'>
           <div
-            className={`mx-auto grid h-full max-w-lg grid-cols-3 items-center justify-center gap-x-2 p-2`}
+            className={`mx-auto grid h-full max-w-lg items-center justify-center space-x-2 p-2 ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? 'grid-cols-3' : 'grid-cols-5'}`}
           >
-            <div className='dropdown-start dropdown dropdown-top m-0 inline-flex w-full items-center justify-center p-0'>
+            <div className='dropdown dropdown-top m-0 inline-flex w-full items-center p-0'>
               <label
                 tabIndex={0}
                 className='group btn inline-flex flex-1 flex-col items-center justify-center rounded-full px-5'
@@ -92,6 +95,25 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                 </li>
               </ul>
             </div>
+            {!['exit', null, 'day end'].includes(workData.lastLogStatus) && (
+              <div
+                className={`${!isIntersecting ? '' : 'hidden'} col-span-2 flex items-center justify-center`}
+              >
+                <Button
+                  text='End Day'
+                  className={`btn w-full rounded-full bg-error/20 font-semibold text-error ${
+                    ['exit', null, 'day end'].includes(
+                      workData.lastLogStatus,
+                    ) ||
+                    loading ||
+                    breaklogMode
+                      ? 'btn-disabled'
+                      : ''
+                  }`}
+                  onclick={() => logEntry('day end')}
+                />
+              </div>
+            )}
             <div className='col-span-2 flex items-center justify-center'>
               <button
                 onClick={() =>

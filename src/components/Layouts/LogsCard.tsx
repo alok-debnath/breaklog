@@ -4,8 +4,13 @@ import React from 'react';
 interface LogsCardProps {
   page?: string;
   isWorkDoneSuccess?: boolean;
+  isIntersecting?: boolean;
 }
-const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
+const LogsCard: React.FC<LogsCardProps> = ({
+  page,
+  isWorkDoneSuccess,
+  isIntersecting,
+}) => {
   const { breaklogMode, logs, workData, userData } = useStore();
   const isClient = typeof window !== 'undefined';
 
@@ -17,7 +22,7 @@ const LogsCard: React.FC<LogsCardProps> = ({ page, isWorkDoneSuccess }) => {
   return (
     <>
       <div
-        className={`card mt-20 bg-base-100 ${page === 'history' ? 'shadow-xl' : 'rounded-b-none'} ${
+        className={`card mt-20 bg-base-100 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus)) && 'rounded-b-none'} ${
           page == 'history' &&
           (isWorkDoneSuccess && userData.username
             ? 'border-2 border-success'

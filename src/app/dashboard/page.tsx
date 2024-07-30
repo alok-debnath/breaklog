@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import useConfirm from '@/hooks/useConfirm';
 import LogsCard from '@/components/Layouts/LogsCard';
 import BottomNavbar from '@/components/Layouts/BottomNavbar';
+import useOnScreen from '@/hooks/useOnScreen';
 
 type LogEntry = {
   id: string;
@@ -113,29 +114,42 @@ const Index = () => {
       userData.daily_work_required !== undefined ||
       userData.daily_work_required !== null);
 
+  const [ref, isIntersecting] = useOnScreen(-80);
+
   return (
     <>
-      <div className='flex place-items-center justify-center min-h-svh bg-base-200'>
+      <div className='flex min-h-svh place-items-center justify-center bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            <LogsCard isWorkDoneSuccess={isWorkDoneSuccess} />
+            <LogsCard
+              isWorkDoneSuccess={isWorkDoneSuccess}
+              isIntersecting={isIntersecting}
+            />
             <div className='mb-20'>
-              <Button
-                text='End Day'
-                className={`btn btn-primary w-full rounded-t-none normal-case ${
-                  ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
-                  loading ||
-                  breaklogMode
-                    ? 'btn-disabled'
-                    : ''
-                }`}
-                onclick={() => logEntry('day end')}
-              />
+              <div ref={ref}>
+                <Button
+                  text='End Day'
+                  className={`btn btn-primary w-full rounded-t-none normal-case ${
+                    ['exit', null, 'day end'].includes(
+                      workData.lastLogStatus,
+                    ) ||
+                    loading ||
+                    breaklogMode
+                      ? 'btn-disabled'
+                      : ''
+                  } ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? '' : 'invisible'}`}
+                  onclick={() => logEntry('day end')}
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <BottomNavbar logEntry={logEntry} fetchLogFunction={fetchLogFunction} />
+      <BottomNavbar
+        logEntry={logEntry}
+        fetchLogFunction={fetchLogFunction}
+        isIntersecting={isIntersecting}
+      />
       <TimeEditModal saveFetchedLogs={saveFetchedLogs} />
     </>
   );
