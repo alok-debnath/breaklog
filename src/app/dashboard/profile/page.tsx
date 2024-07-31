@@ -83,7 +83,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className='flex min-h-svh min-w-fit place-items-center justify-center bg-base-200'>
+      <div className='flex min-h-dvh min-w-fit place-items-center justify-center bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>

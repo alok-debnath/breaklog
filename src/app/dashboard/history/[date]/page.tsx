@@ -52,7 +52,7 @@ export default function SpecificDayLog({ params }: any) {
 
   return (
     <>
-      <div className='flex place-items-center justify-center min-h-svh min-w-fit bg-base-200'>
+      <div className='flex place-items-center justify-center min-h-dvh min-w-fit bg-base-200'>
         <div className='hero-content text-center'>
           <LogsCard page='history' isWorkDoneSuccess={isWorkDoneSuccess} />
         </div>

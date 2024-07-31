@@ -64,7 +64,7 @@ export default function LoginPage() {
   return (
     <>
       <div data-theme={themeMode}>
-        <div className='flex place-items-center justify-center min-h-svh bg-base-200'>
+        <div className='flex place-items-center justify-center min-h-dvh bg-base-200'>
           <Toaster position='top-left' reverseOrder={false} />
           <div className='hero-content w-full flex-col lg:flex-row-reverse'>
             <div className='text-center lg:text-left'>
