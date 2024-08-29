@@ -1,7 +1,3 @@
-[build]
-# Specify the build command
-command = "pnpm i --force && pnpm build"
-
 [dependencies]
 # Define dependencies or specify the `pnpm` version
 pnpm_version = "9.5.0"
