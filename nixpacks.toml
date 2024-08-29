@@ -1,2 +1,2 @@
 [phases.install]
-  cmds = ['pnpm install --legacy-peer-deps --include-optional']
+  cmds = ['pnpm install --force']
