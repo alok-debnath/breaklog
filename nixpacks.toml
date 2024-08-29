@@ -1,7 +1,2 @@
-[build]
-# Custom build command
-command = "pnpm i --force && pnpm dlx prisma generate && pnpm build"
-
-[dependencies]
-# Define dependencies or specify the `pnpm` version
-pnpm_version = "9.5.0"
+[phases.install]
+  cmds = ['pnpm install --legacy-peer-deps --include-optional']
