@@ -11,7 +11,7 @@
 
 ## Introduction
 
-BreakLog is a Next.js project hosted on Vercel that allows you to efficiently log your daily work activities, including day start, exit, enter, day end, and break times. It provides insights into your workday by calculating the total break time and work done for that particular day. Additionally, it offers the functionality to retrieve monthly logged data with useful information. If you only need to track break times, BreakLog can handle that too, without requiring day start and day end entries.
+BreakLog is a self-hosted time and attendance system built with Next.js. It allows you to log your workday by recording the start and end times of your work, as well as any breaks you take. It calculates the total break time and work done for that particular day, providing insights into your daily productivity. Additionally, it allows you to retrieve monthly logged data with useful insights. If you only need to track break times, BreakLog can handle that too, without requiring you to log your day start and day end logs.
 
 ## Features
 
@@ -33,7 +33,7 @@ To start using BreakLog, follow these steps:
 1. Clone the repository:
 
    ```bash
-   https://github.com/alok-debnath/breaklog.git
+   git clone https://github.com/alok-debnath/breaklog.git
    ```
 
 2. Navigate to the project directory:
@@ -45,13 +45,13 @@ To start using BreakLog, follow these steps:
 3. Install dependencies:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 4. Run the development server:
 
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 5. Open http://localhost:3000 with your web browser to use BreakLog.
