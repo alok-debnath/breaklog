@@ -5,7 +5,7 @@
 [![GitHub Stars](https://img.shields.io/github/stars/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/stargazers)
 [![GitHub Forks](https://img.shields.io/github/forks/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/network)
 
-<!-- ![Project Logo](your-logo.png) If you have a project logo, include it here -->
+![BreakLog Dashboard](https://i.ibb.co/jZYR6S2/breaklog.png)
 
 <!-- [![Vercel Production Status](https://vercel-status-badge.vercel.app/alok-debnath/breaklog)](https://vercel.com/alokdebnath/breaklog) -->
 
