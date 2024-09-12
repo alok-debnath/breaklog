@@ -3,7 +3,7 @@
 <div align="center">
     <img src="https://i.ibb.co/jZYR6S2/breaklog.png" alt="BreakLog Dashboard">
     <br/>
-    <i>Dashboard of Breaklog</i>
+    <i>Dashboard of BreakLog</i>
     <br/><br/>
     <a href="https://github.com/alok-debnath/breaklog/blob/main/LICENSE" target="_blank">
         <img alt="GitHub License" src="https://img.shields.io/github/license/alok-debnath/breaklog?style=flat-square" />
