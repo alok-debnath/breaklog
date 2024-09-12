@@ -1,11 +1,23 @@
 # BreakLog
 
-[![GitHub License](https://img.shields.io/github/license/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/blob/main/LICENSE)
-[![GitHub Issues](https://img.shields.io/github/issues/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/issues)
-[![GitHub Stars](https://img.shields.io/github/stars/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/stargazers)
-[![GitHub Forks](https://img.shields.io/github/forks/alok-debnath/breaklog)](https://github.com/alok-debnath/breaklog/network)
-
-![BreakLog Dashboard](https://i.ibb.co/jZYR6S2/breaklog.png)
+<div align="center">
+    <img src="https://i.ibb.co/jZYR6S2/breaklog.png" alt="BreakLog Dashboard">
+    <br/>
+    <i>Dashboard of Breaklog</i>
+    <br/><br/>
+    <a href="https://github.com/alok-debnath/breaklog/blob/main/LICENSE" target="_blank">
+        <img alt="GitHub License" src="https://img.shields.io/github/license/alok-debnath/breaklog?style=flat-square" />
+    </a>
+    <a href="https://github.com/alok-debnath/breaklog/issues" target="_blank">
+        <img alt="GitHub Issues" src="https://img.shields.io/github/issues/alok-debnath/breaklog?style=flat-square" />
+    </a>
+    <a href="https://github.com/alok-debnath/breaklog/stargazers" target="_blank">
+        <img alt="GitHub Stars" src="https://img.shields.io/github/stars/alok-debnath/breaklog?style=flat-square" />
+    </a>
+    <a href="https://github.com/alok-debnath/breaklog/network" target="_blank">
+        <img alt="GitHub Forks" src="https://img.shields.io/github/forks/alok-debnath/breaklog?style=flat-square" />
+    </a>
+</div>
 
 <!-- [![Vercel Production Status](https://vercel-status-badge.vercel.app/alok-debnath/breaklog)](https://vercel.com/alokdebnath/breaklog) -->
 
