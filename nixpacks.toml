@@ -1,0 +1,5 @@
+[phases]
+build = "pnpm dlx prisma generate && next build"
+
+[dependencies]
+nodejs = "20"
