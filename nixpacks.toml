@@ -1,5 +1,5 @@
 [phases.build]
 cmds = ["pnpm dlx prisma generate", "next build"]
 
-[dependencies]
-nodejs = "20"
+[variables]
+NIXPACKS_NODE_VERSION = "22"
