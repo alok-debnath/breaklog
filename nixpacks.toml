@@ -1,5 +1,5 @@
-[phases]
-build = "pnpm dlx prisma generate && next build"
+[phases.build]
+cmds = ["pnpm dlx prisma generate", "next build"]
 
 [dependencies]
 nodejs = "20"
