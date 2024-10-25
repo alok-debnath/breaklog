@@ -28,6 +28,13 @@ const ProfilePage = () => {
     log_type: userData.log_type,
     default_time_zone: userData.default_time_zone,
   };
+
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: handleSubmit,
+  });
+
   useEffect(() => {
     // Update form values when userData changes
     formik.setValues({
@@ -36,13 +43,7 @@ const ProfilePage = () => {
       log_type: userData.log_type,
       default_time_zone: userData.default_time_zone,
     });
-  }, [userData]);
-
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: handleSubmit,
-  });
+  }, [userData, formik]);
 
   async function handleSubmit(values: any) {
     useStore.setState(() => ({ loading: true }));

@@ -34,7 +34,7 @@ const LiveBreakCounter = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [currBreak, diffInSeconds]);
+  }, [currBreak, diffInSeconds, workData.breakTime]);
 
   return (
     <>

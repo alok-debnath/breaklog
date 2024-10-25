@@ -44,7 +44,7 @@ export default function SpecificDayLog({
     };
 
     fetchLogFunction();
-  }, [date]);
+  }, [router, date]);
 
   const isWorkDone =
     workData.unformattedWorkDone >=

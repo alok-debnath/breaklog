@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Button from '@/components/UI/Button';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
@@ -38,7 +38,7 @@ const Index = () => {
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
 
-  const saveFetchedLogs = (data: FetchedLogsData) => {
+  const saveFetchedLogs = useCallback((data: FetchedLogsData) => {
     useStore.setState(() => ({
       loading: false,
       logs: data.data,
@@ -58,7 +58,7 @@ const Index = () => {
     if (data.workdata.firstLogStatus === 'day start') {
       useStore.setState(() => ({ breaklogMode: false }));
     }
-  };
+  }, []);
 
   const logEntry = async (value: string) => {
     try {
@@ -88,7 +88,7 @@ const Index = () => {
     }
   };
 
-  const fetchLogFunction = async () => {
+  const fetchLogFunction = useCallback(async () => {
     try {
       useStore.setState(() => ({ loading: true }));
       const values = {};
@@ -98,7 +98,7 @@ const Index = () => {
     } catch (error: any) {
       handleError({ error: error, router: router });
     }
-  };
+  }, [saveFetchedLogs, router]);
 
   useEffect(() => {
     fetchLogFunction();

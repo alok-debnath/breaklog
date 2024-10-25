@@ -73,7 +73,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
       setDeviceTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
       setSelectedTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
     }
-  }, []);
+  }, [options]);
 
   return (
     <>
@@ -82,7 +82,9 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
         className='modal modal-bottom sm:modal-middle'
       >
         <form method='dialog' className='modal-box bg-base-200 px-0 pb-0 pt-0'>
-          <h3 className='py-6 text-center text-lg font-bold'>Select Time Zone</h3>
+          <h3 className='py-6 text-center text-lg font-bold'>
+            Select Time Zone
+          </h3>
           <div className='rounded-t- card rounded-b-none bg-base-100 px-5 pb-5'>
             <div className='card-body'>
               <p>
@@ -132,7 +134,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
                 </div>
                 <div className='collapse-content text-sm'>
                   <p>
-                    If your work ends within the same day then you don't have to
+                    If your work ends within the same day then you don&apos;t have to
                     bother and can select your own timezone
                   </p>
                   <div className='divider'>OR</div>
@@ -140,7 +142,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
                     In the event that you have an irregular work schedule,
                     consider using a TimeZone where your shift will start and
                     end within the same working day (this is solely for
-                    calculation purposes only and won't affect how you see the
+                    calculation purposes only and won&apos;t affect how you see the
                     time).
                   </p>
                   <h3 className='mt-3 font-bold'>Example:</h3>

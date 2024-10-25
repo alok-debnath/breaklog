@@ -32,7 +32,7 @@ const InitialFetch = () => {
       useStore.setState(() => ({ loading: false }));
       setIsFirstEffectCompleted(true);
     }
-  }, []);
+  }, [isClient, router]);
 
   useEffect(() => {
     const loadLocalStorageData = () => {
@@ -62,7 +62,13 @@ const InitialFetch = () => {
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
       localStorage.setItem('thememode', themeMode);
     }
-  }, [breaklogMode, themeMode, isFirstEffectCompleted, isClient]);
+  }, [
+    breaklogMode,
+    themeMode,
+    isFirstEffectCompleted,
+    isClient,
+    userData.default_time_zone,
+  ]);
 
   return null;
 };

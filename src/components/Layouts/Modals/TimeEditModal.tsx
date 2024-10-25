@@ -105,7 +105,10 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
     };
 
     updateLocalTime();
-  }, [logEditStore.log_dateTime]);
+  }, [
+    logEditStore,
+    localTimeZone
+  ]);
 
   const logEdit = async (data: {
     hour: number;

@@ -15,13 +15,14 @@ const useOnScreen = (offset: number = 0): UseOnScreenResult => {
       },
     );
 
-    if (ref.current) {
-      observer.observe(ref.current);
+    const element = ref.current; // Create a local variable to store ref.current
+    if (element) {
+      observer.observe(element);
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+      if (element) {
+        observer.unobserve(element);
       }
     };
   }, [offset]);
