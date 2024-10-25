@@ -1,21 +1,26 @@
 'use client';
 import axios from 'axios';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
 import LogsCard from '@/components/Layouts/LogsCard';
 
-export default function SpecificDayLog({ params }: any) {
+export default function SpecificDayLog({
+  params,
+}: {
+  params: Promise<{ date: string }>;
+}) {
   const { workData, userData } = useStore();
   const router = useRouter();
+  const { date } = React.use(params);
 
   useEffect(() => {
     const fetchLogFunction = async () => {
       try {
         useStore.setState(() => ({ loading: true }));
-        const values = { date: params.date };
+        const values = { date: date };
         const res = await axios.post('/api/users/fetchlog', values);
 
         useStore.setState(() => ({
@@ -39,7 +44,7 @@ export default function SpecificDayLog({ params }: any) {
     };
 
     fetchLogFunction();
-  }, [params.date]);
+  }, [date]);
 
   const isWorkDone =
     workData.unformattedWorkDone >=
@@ -52,7 +57,7 @@ export default function SpecificDayLog({ params }: any) {
 
   return (
     <>
-      <div className='flex place-items-center justify-center min-h-dvh min-w-fit bg-base-200'>
+      <div className='flex min-h-dvh min-w-fit place-items-center justify-center bg-base-200'>
         <div className='hero-content text-center'>
           <LogsCard page='history' isWorkDoneSuccess={isWorkDoneSuccess} />
         </div>
