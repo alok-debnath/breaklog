@@ -43,7 +43,7 @@ const ProfilePage = () => {
       log_type: userData.log_type,
       default_time_zone: userData.default_time_zone,
     });
-  }, [userData, formik]);
+  }, [userData]);
 
   async function handleSubmit(values: any) {
     useStore.setState(() => ({ loading: true }));
