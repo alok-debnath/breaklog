@@ -1,3 +1,4 @@
+'use client';
 import axios from 'axios';
 import { useRouter, usePathname } from 'next/navigation';
 import { Toaster, toast } from 'react-hot-toast';

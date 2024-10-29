@@ -1,3 +1,4 @@
+'use client';
 import { useStore } from '@/stores/store';
 import useConfirm from '@/hooks/useConfirm';
 declare global {
