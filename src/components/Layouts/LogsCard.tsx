@@ -1,17 +1,25 @@
+'use client';
 import { useStore } from '@/stores/store';
 import React from 'react';
+
+import { LogsData } from '@/stores/store';
+import { WorkData } from '@/stores/store';
 
 interface LogsCardProps {
   page?: string;
   isWorkDoneSuccess?: boolean;
   isIntersecting?: boolean;
+  logsServer?: LogsData[];
+  workDataServer?: WorkData;
 }
 const LogsCard: React.FC<LogsCardProps> = ({
   page,
   isWorkDoneSuccess,
   isIntersecting,
+  logsServer,
+  workDataServer,
 }) => {
-  const { breaklogMode, logs, workData, userData } = useStore();
+  let { breaklogMode, logs, workData, userData } = useStore();
   const isClient = typeof window !== 'undefined';
 
   const openTimeEditModal = (value: any) => {
@@ -19,12 +27,15 @@ const LogsCard: React.FC<LogsCardProps> = ({
     window.time_edit_modal.showModal();
   };
 
+  const currentLogs = logsServer ?? logs;
+  const currentWorkData = workDataServer ?? workData;
+
   return (
     <>
       <div
-        className={`card mt-20 bg-base-100 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus)) && 'rounded-b-none'} ${
+        className={`card mt-20 bg-base-100 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(currentWorkData.lastLogStatus)) && 'rounded-b-none'} ${
           page == 'history' &&
-          (isWorkDoneSuccess && userData.username
+          (isWorkDoneSuccess
             ? 'border-2 border-success'
             : 'border-2 border-error')
         }`}
@@ -43,20 +54,26 @@ const LogsCard: React.FC<LogsCardProps> = ({
           )}
           <div className='mb-3'>
             <div className='card bg-base-100 pb-5 text-left font-semibold'>
-              {isClient && userData.username ? (
+              {page === 'history' || (isClient && userData.username) ? (
                 <span>
                   {page === 'history' &&
-                  logs.length > 0 &&
-                  logs[0].updatedAt ? (
+                  currentLogs.length > 0 &&
+                  currentLogs[0].updatedAt ? (
                     <>
-                      {new Date(logs[0].updatedAt).toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                      })}
+                      {new Date(currentLogs[0].updatedAt).toLocaleDateString(
+                        'en-US',
+                        {
+                          day: 'numeric',
+                          month: 'long',
+                        },
+                      )}
                       ,{' '}
-                      {new Date(logs[0].updatedAt).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                      })}
+                      {new Date(currentLogs[0].updatedAt).toLocaleDateString(
+                        'en-US',
+                        {
+                          weekday: 'long',
+                        },
+                      )}
                     </>
                   ) : (
                     <>
@@ -92,17 +109,21 @@ const LogsCard: React.FC<LogsCardProps> = ({
               {!breaklogMode || page === 'history' ? (
                 <div
                   className={`card bg-base-200 p-3 shadow-md ${
-                    isWorkDoneSuccess && userData.username
+                    page === 'history' && isWorkDoneSuccess
                       ? 'bg-success/10 text-success'
-                      : page == 'history'
+                      : page === 'history' && !isWorkDoneSuccess
                         ? 'bg-error/10 text-error'
-                        : ''
+                        : isWorkDoneSuccess && userData.username
+                          ? 'bg-success/10 text-success'
+                          : ''
                   }`}
                 >
-                  {workData.workDone ? (
+                  {currentWorkData.workDone ? (
                     <>
                       <p className='font-medium'>Work done</p>
-                      <p className='font-semibold'>{workData.workDone}</p>
+                      <p className='font-semibold'>
+                        {currentWorkData.workDone}
+                      </p>
                     </>
                   ) : (
                     <span className='animate-pulse'>
@@ -121,10 +142,10 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 </div>
               ) : null}
               <div className='card bg-base-200 p-3 shadow-md'>
-                {workData.breakTime ? (
+                {currentWorkData.breakTime ? (
                   <>
                     <p className='font-medium'>Break taken</p>
-                    <p className='font-semibold'>{workData.breakTime}</p>
+                    <p className='font-semibold'>{currentWorkData.breakTime}</p>
                   </>
                 ) : (
                   <span className='animate-pulse'>
@@ -144,18 +165,17 @@ const LogsCard: React.FC<LogsCardProps> = ({
             </div>
             {!breaklogMode &&
             page !== 'history' &&
-            workData.formattedWorkEndTime ? (
+            currentWorkData.formattedWorkEndTime ? (
               <div className='card mt-3 grid grid-cols-2 items-center bg-base-200 py-2 shadow-md'>
                 <p className='text-sm font-medium'>Work until:</p>
                 <p className='text-sm font-semibold'>
-                  {new Date(workData.formattedWorkEndTime).toLocaleTimeString(
-                    'en-US',
-                    { hour12: true },
-                  )}
+                  {new Date(
+                    currentWorkData.formattedWorkEndTime,
+                  ).toLocaleTimeString('en-US', { hour12: true })}
                 </p>
                 <p className='text-sm font-medium'>Work left:</p>
                 <p className='text-sm font-semibold'>
-                  {workData.formattedWorkLeft}
+                  {currentWorkData.formattedWorkLeft}
                 </p>
               </div>
             ) : null}
@@ -170,11 +190,11 @@ const LogsCard: React.FC<LogsCardProps> = ({
             </div>
             {page !== 'history' && (
               <p className='bg-base-300 py-0.5 text-center text-sm font-medium peer-checked:hidden'>
-                {logs.length > 0 ? (
+                {currentLogs.length > 0 ? (
                   <>
                     Recent log:{' '}
                     <span className='font-bold text-success'>
-                      {workData.lastLogStatus}
+                      {currentWorkData.lastLogStatus}
                     </span>
                   </>
                 ) : (
@@ -220,14 +240,13 @@ const LogsCard: React.FC<LogsCardProps> = ({
                   </tr>
                 </thead>
                 <tbody className='text-left'>
-                  {logs &&
-                    [...logs].reverse().map((log, index, array) => {
+                  {currentLogs &&
+                    [...currentLogs].reverse().map((log, index, array) => {
                       const updatedAt = new Date(log.updatedAt);
                       const utcFormattedDate = updatedAt.toLocaleString(
                         'en-US',
                         {
-                          timeZone:
-                            Intl.DateTimeFormat().resolvedOptions().timeZone,
+                          timeZone: 'Asia/Kolkata', //setting this to static for now (temporarily)
                           hour: 'numeric',
                           minute: 'numeric',
                           hour12: true,

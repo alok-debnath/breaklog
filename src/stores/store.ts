@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface WorkData {
+export interface WorkData {
   firstLogStatus: string | null;
   lastLogStatus: string;
   breakTime: string;
@@ -17,7 +17,7 @@ interface summary {
   expectedWorkHours: number;
   // actualWorkHours: string;
 }
-interface userData {
+export interface UserData {
   username: string;
   daily_work_required: number;
   log_type: string;
@@ -53,7 +53,7 @@ interface BreakData {
   totalBreak: TimeData;
 }
 
-interface LogsData {
+export interface LogsData {
   id: string;
   updatedAt: string;
   log_status: string;
@@ -63,7 +63,7 @@ interface StoreState {
   themeMode: string;
   logs: LogsData[];
   monthLogs: MonthLogData[];
-  userData: userData;
+  userData: UserData;
   summary: summary;
   breaklogMode: boolean;
   workData: WorkData;
