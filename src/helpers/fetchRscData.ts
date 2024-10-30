@@ -1,9 +1,10 @@
+'use server';
 import { headers } from 'next/headers';
 
 const fetchRscData = () => {
   const getHeaders = async () => {
     const headerObject = Object.fromEntries(await headers());
-    const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
+    const protocol = process.env.NEXT_ENV === 'prod' ? 'https' : 'http';
     const host = headerObject.host;
     const url = `${protocol}://${host}/api`;
     return { headerObject, url };
