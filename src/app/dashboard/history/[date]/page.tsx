@@ -1,6 +1,6 @@
 import React from 'react';
 import LogsCard from '@/components/Layouts/LogsCard';
-import useFetchRscData from '@/hooks/useFetchRscData';
+import fetchRscData from '@/helpers/fetchRscData';
 
 export default async function SpecificDayLog({
   params,
@@ -8,7 +8,7 @@ export default async function SpecificDayLog({
   params: Promise<{ date: string }>;
 }) {
   const { date } = await params; // Resolve the params promise
-  const { fetchDynamicLogData, fetchProfileData } = useFetchRscData();
+  const { fetchDynamicLogData, fetchProfileData } = fetchRscData();
 
   // Fetch logs data with the specific date
   const { logs, workData, errorMessage: logsError } = await fetchDynamicLogData(date);

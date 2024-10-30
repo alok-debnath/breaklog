@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 
-const useFetchRscData = () => {
+const fetchRscData = () => {
   const getHeaders = async () => {
     const headerObject = Object.fromEntries(await headers());
     const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
@@ -61,4 +61,4 @@ const useFetchRscData = () => {
   return { fetchDynamicLogData, fetchProfileData };
 };
 
-export default useFetchRscData;
+export default fetchRscData;
