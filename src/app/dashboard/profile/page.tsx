@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
 
 const validationSchema = Yup.object().shape({
@@ -23,11 +23,14 @@ const ProfilePage = () => {
   const { userData, loading } = useStore();
   const router = useRouter();
 
-  const initialValues = {
-    daily_work_required: userData.daily_work_required,
-    log_type: userData.log_type,
-    default_time_zone: userData.default_time_zone,
-  };
+  const initialValues = useMemo(
+    () => ({
+      daily_work_required: userData.daily_work_required,
+      log_type: userData.log_type,
+      default_time_zone: userData.default_time_zone,
+    }),
+    [userData],
+  );
 
   const formik = useFormik({
     initialValues,
@@ -43,7 +46,7 @@ const ProfilePage = () => {
       log_type: userData.log_type,
       default_time_zone: userData.default_time_zone,
     });
-  }, [userData, formik]);
+  }, [userData]);
 
   async function handleSubmit(values: any) {
     useStore.setState(() => ({ loading: true }));

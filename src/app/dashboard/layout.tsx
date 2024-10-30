@@ -1,6 +1,6 @@
 import ConfirmationModal from '@/components/Layouts/Modals/ConfirmationModal';
 import Navbar from '@/components/Layouts/Navbar';
-import InitialFetch from '@/components/common/InitialFetch';
+import InitialRscFetch from '@/components/common/InitialRscFetch';
 import Loading from '@/components/Layouts/Loading';
 import TimeZoneModal from '@/components/Layouts/Modals/TimeZoneModal';
 import ThemeWrapper from '@/components/ThemeWrapper';
@@ -13,7 +13,7 @@ export default function DashboardLayout({
   return (
     <section>
       <ThemeWrapper>
-        <InitialFetch />
+        <InitialRscFetch />
         <ConfirmationModal />
         <TimeZoneModal />
         <Loading />
