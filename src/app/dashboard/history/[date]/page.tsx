@@ -1,7 +1,6 @@
 import React from 'react';
 import LogsCard from '@/components/Layouts/LogsCard';
-import { headers } from 'next/headers';
-import { UserData } from '@/stores/store';
+import useFetchRscData from '@/hooks/useFetchRscData';
 
 export default async function SpecificDayLog({
   params,
@@ -9,63 +8,12 @@ export default async function SpecificDayLog({
   params: Promise<{ date: string }>;
 }) {
   const { date } = await params; // Resolve the params promise
+  const { fetchDynamicLogData, fetchProfileData } = useFetchRscData();
 
-  // Fetch logs and user data
-  const fetchLogFunction = async () => {
-    const headerObject = Object.fromEntries(await headers());
-    try {
-      const logRes = await fetch(`http://127.0.0.1:3000/api/users/fetchlog`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...headerObject,
-        },
-        body: JSON.stringify({ date }),
-      });
-
-      const profileRes = await fetch(
-        `http://127.0.0.1:3000/api/users/profile/fetchprofile`,
-        {
-          headers: {
-            ...headerObject,
-          },
-        },
-      );
-
-      const logsData = await logRes.json();
-      const profileData = await profileRes.json();
-
-      const logs = logsData.data || [];
-      const workData = logsData.workdata || {};
-      const userData: UserData = profileData.data;
-
-      if (logsData.status === 404) {
-        return {
-          logs: [],
-          workData: {},
-          userData,
-          errorMessage: logsData.message,
-        };
-      }
-
-      return {
-        logs,
-        workData,
-        userData,
-        errorMessage: null,
-      };
-    } catch (error) {
-      console.error('Error fetching data:', error); // Log the error for debugging
-      return {
-        logs: [],
-        workData: {},
-        userData: {} as UserData, // Default value
-        errorMessage: 'Error fetching data',
-      };
-    }
-  };
-
-  const { logs, workData, userData, errorMessage } = await fetchLogFunction();
+  // Fetch logs data with the specific date
+  const { logs, workData, errorMessage: logsError } = await fetchDynamicLogData(date);
+  // Fetch profile data independently
+  const { userData, errorMessage: profileError } = await fetchProfileData();  
 
   const isWorkDone =
     workData.unformattedWorkDone >=
