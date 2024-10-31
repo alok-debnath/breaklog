@@ -24,6 +24,7 @@ model User {
   default_log_end              DateTime?
   default_break_time           Int?
   default_time_zone            String?
+  default_theme                String?
   role                         Role      @default(USER)
   forgot_password_token        String?
   forgot_password_token_expiry DateTime?
