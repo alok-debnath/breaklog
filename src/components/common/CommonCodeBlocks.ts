@@ -1,3 +1,4 @@
+'use client';
 import toast from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 

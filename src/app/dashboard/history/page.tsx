@@ -5,7 +5,6 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 
 const HistoryPage = () => {
   const { loading, monthLogs, summary, userData } = useStore();
@@ -79,18 +78,17 @@ const HistoryPage = () => {
       if (res.data.status === 200) {
         setCollapseBoxState(true);
 
-        useStore.setState(() => ({ monthLogs: res.data.data }));
-        useStore.setState(() => ({ loading: false }));
-        useStore.setState(() => ({ summary: res.data.summary }));
+        useStore.setState(() => ({
+          monthLogs: res.data.data,
+          loading: false,
+          summary: res.data.summary,
+        }));
       } else {
         setCollapseBoxState(false);
         useStore.setState(() => ({ loading: false }));
-        toast.error('Error: ' + res.data.status, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
+        handleError({
+          error: { message: res.data.status },
+          router: router,
         });
       }
     } catch (error: any) {
@@ -104,7 +102,7 @@ const HistoryPage = () => {
 
   return (
     <>
-      <div className='flex place-items-center justify-center min-h-dvh min-w-fit bg-base-200'>
+      <div className='flex min-h-dvh min-w-fit place-items-center justify-center bg-base-200'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='card my-20 bg-base-100 shadow-xl'>
@@ -123,9 +121,9 @@ const HistoryPage = () => {
                         <option
                           key={index}
                           value={(index + 1).toString()} // Convert to string
-                          disabled={
-                            index + 1 === selectedMonth ? true : undefined
-                          }
+                          // disabled={
+                          //   index + 1 === selectedMonth ? true : undefined
+                          // }
                         >
                           {month}
                         </option>
@@ -140,7 +138,7 @@ const HistoryPage = () => {
                         <option
                           key={index}
                           value={year.toString()} // Convert to string
-                          disabled={year === selectedYear ? true : undefined}
+                          // disabled={year === selectedYear ? true : undefined}
                         >
                           {year}
                         </option>
@@ -210,7 +208,7 @@ const HistoryPage = () => {
                           </p>
                         </div>
                       </div>
-                      <table className='table table-xs mt-3 text-center md:table-md'>
+                      <table className='table table-xs mt-3 w-full table-fixed text-center md:table-md'>
                         <thead>
                           <tr>
                             <th>
@@ -257,7 +255,7 @@ const HistoryPage = () => {
                                   <td>
                                     <Link
                                       href={`/dashboard/history/${log.date}`}
-                                      className={`btn btn-sm ${
+                                      className={`btn btn-sm min-w-full text-xs font-bold ${
                                         log.workDone >=
                                         userData.daily_work_required * 3600000
                                           ? 'btn-success'
