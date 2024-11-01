@@ -1,13 +1,16 @@
 'use client';
 import { UserData, useStore } from '@/stores/store';
 import React, { useEffect, useState } from 'react';
+import { FetchedLogsDataType, saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 
 interface SaveDataToGlobalStoreProps {
   userDataServer: UserData;
+  logDataServer: FetchedLogsDataType;
 }
 
-const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
+export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
   userDataServer,
+  logDataServer,
 }) => {
   const [isFirstEffectCompleted, setIsFirstEffectCompleted] = useState(false);
   const { breaklogMode, themeMode, userData } = useStore();
@@ -15,6 +18,7 @@ const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
   // Helper function to initialize local storage data
   const loadLocalStorageData = () => {
     useStore.setState({ userData: userDataServer });
+    saveFetchedLogsToStore(logDataServer)
 
     const storedBreaklogMode = localStorage.getItem('breaklogMode');
     const savedTheme = localStorage.getItem('thememode');
@@ -50,5 +54,3 @@ const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
 
   return null;
 };
-
-export default SaveDataToGlobalStore;

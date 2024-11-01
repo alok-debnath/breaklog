@@ -4,6 +4,7 @@ import { handleError } from '../../common/CommonCodeBlocks';
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 // import { TimePicker } from 'antd';
 // import type { Dayjs } from 'dayjs';
 // import dayjs from 'dayjs';
@@ -24,10 +25,9 @@ declare global {
   }
 }
 interface TimeEditModalProps {
-  saveFetchedLogs: Function;
 }
 
-const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
+const TimeEditModal: React.FC<TimeEditModalProps> = () => {
   const { loading, logEditStore } = useStore();
   const [localTime, setLocalTime] = useState({
     hour: 0,
@@ -150,7 +150,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = ({ saveFetchedLogs }) => {
     try {
       useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/logedit', values);
-      saveFetchedLogs(res.data.fetchedLog);
+      saveFetchedLogsToStore(res.data.fetchedLog);
     } catch (error: any) {
       handleError({ error: error, router: null });
     }

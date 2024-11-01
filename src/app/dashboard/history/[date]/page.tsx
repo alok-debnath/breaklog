@@ -8,12 +8,12 @@ export default async function SpecificDayLog({
   params: Promise<{ date: string }>;
 }) {
   const { date } = await params; // Resolve the params promise
-  const { fetchDynamicLogData, fetchProfileData } = fetchRscData();
+  const { fetchDynamicLogDataRsc, fetchProfileDataRsc } = fetchRscData();
 
   // Fetch logs data with the specific date
-  const { logs, workData, errorMessage: logsError } = await fetchDynamicLogData(date);
+  const { logs, workData, errorMessage: logsError } = await fetchDynamicLogDataRsc(date);
   // Fetch profile data independently
-  const { userData, errorMessage: profileError } = await fetchProfileData();  
+  const { userData, errorMessage: profileError } = await fetchProfileDataRsc();  
 
   const isWorkDone =
     workData.unformattedWorkDone >=

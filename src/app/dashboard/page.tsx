@@ -1,5 +1,4 @@
 'use client';
-import { useCallback, useEffect } from 'react';
 import Button from '@/components/UI/Button';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
@@ -10,55 +9,13 @@ import useConfirm from '@/hooks/useConfirm';
 import LogsCard from '@/components/Layouts/LogsCard';
 import BottomNavbar from '@/components/Layouts/BottomNavbar';
 import useOnScreen from '@/hooks/useOnScreen';
-
-type LogEntry = {
-  id: string;
-  updatedAt: string;
-  log_status: string;
-};
-interface FetchedLogsData {
-  message: string;
-  status: number;
-  data: LogEntry[];
-  workdata: {
-    breakTime: string;
-    workDone: string;
-    unformattedWorkDone: number;
-    currentBreak: null | Date;
-    firstLogStatus: string | null;
-    lastLogStatus: string;
-    formattedWorkEndTime: string;
-    formattedWorkLeft: string;
-  };
-}
+import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 
 const Index = () => {
   const { breaklogMode, workData, loading, userData } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
-
-  const saveFetchedLogs = useCallback((data: FetchedLogsData) => {
-    useStore.setState(() => ({
-      loading: false,
-      logs: data.data,
-      workData: data.workdata,
-    }));
-
-    if (data.workdata.currentBreak !== null) {
-      useStore.setState(() => ({
-        currBreak: data.workdata.currentBreak,
-      }));
-    } else {
-      useStore.setState(() => ({
-        currBreak: null,
-        liveBreaks: 0,
-      }));
-    }
-    if (data.workdata.firstLogStatus === 'day start') {
-      useStore.setState(() => ({ breaklogMode: false }));
-    }
-  }, []);
 
   const logEntry = async (value: string) => {
     try {
@@ -82,27 +39,11 @@ const Index = () => {
 
       useStore.setState(() => ({ loading: true }));
       const res = await axios.post('/api/users/submitlog', values);
-      saveFetchedLogs(res.data.fetchedLog);
+      saveFetchedLogsToStore(res.data.fetchedLog);
     } catch (error: any) {
       handleError({ error: error, router: router });
     }
   };
-
-  const fetchLogFunction = useCallback(async () => {
-    try {
-      useStore.setState(() => ({ loading: true }));
-      const values = {};
-
-      const res = await axios.post('/api/users/fetchlog', values);
-      saveFetchedLogs(res.data);
-    } catch (error: any) {
-      handleError({ error: error, router: router });
-    }
-  }, [saveFetchedLogs, router]);
-
-  useEffect(() => {
-    fetchLogFunction();
-  }, []);
 
   const isWorkDone =
     workData.unformattedWorkDone >=
@@ -147,10 +88,9 @@ const Index = () => {
       </div>
       <BottomNavbar
         logEntry={logEntry}
-        fetchLogFunction={fetchLogFunction}
         isIntersecting={isIntersecting}
       />
-      <TimeEditModal saveFetchedLogs={saveFetchedLogs} />
+      <TimeEditModal />
     </>
   );
 };

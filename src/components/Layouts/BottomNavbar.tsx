@@ -4,13 +4,11 @@ import Button from '../UI/Button';
 
 interface BottomNavbarProps {
   logEntry: (value: string) => void; // logEntry is a function that accepts a string
-  fetchLogFunction: Function;
   isIntersecting: boolean;
 }
 
 const BottomNavbar: React.FC<BottomNavbarProps> = ({
   logEntry,
-  fetchLogFunction,
   isIntersecting,
 }) => {
   const { breaklogMode, workData, loading } = useStore();
@@ -49,7 +47,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                 tabIndex={0}
                 className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow'
               >
-                <li>
+                {/* <li>
                   <span
                     className='items-center justify-center'
                     onClick={() => fetchLogFunction()}
@@ -70,7 +68,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                       />
                     </svg>
                   </span>
-                </li>
+                </li> */}
                 <li>
                   <span
                     className='items-center justify-center'

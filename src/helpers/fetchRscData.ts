@@ -10,7 +10,7 @@ const fetchRscData = () => {
     return { headerObject, url };
   };
 
-  const fetchDynamicLogData = async (date: string) => {
+  const fetchDynamicLogDataRsc = async (date: string) => {
     try {
       const { headerObject, url } = await getHeaders();
       const response = await fetch(url + '/users/fetchlog', {
@@ -38,7 +38,7 @@ const fetchRscData = () => {
     }
   };
 
-  const fetchProfileData = async () => {
+  const fetchProfileDataRsc = async () => {
     try {
       const { headerObject, url } = await getHeaders();
       const response = await fetch(url + '/users/profile/fetchprofile', {
@@ -59,7 +59,34 @@ const fetchRscData = () => {
     }
   };
 
-  return { fetchDynamicLogData, fetchProfileData };
+  const fetchLogDataRsc = async () => {
+    try {
+      const { headerObject, url } = await getHeaders();
+      const values = {};
+      const response = await fetch(url + '/users/fetchlog', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...headerObject,
+        },
+        body: JSON.stringify({ values }),
+      });
+
+      const logData = await response.json();
+      return {
+        logData: logData,
+        errorMessage: null,
+      };
+    } catch (error) {
+      console.error('Error fetching log data:', error);
+      return {
+        logData: null,
+        errorMessage: 'Error fetching log data',
+      };
+    }
+  };
+
+  return { fetchDynamicLogDataRsc, fetchProfileDataRsc, fetchLogDataRsc };
 };
 
 export default fetchRscData;
