@@ -30,7 +30,7 @@ export const saveFetchedLogsToStore = (data: FetchedLogsDataType) => {
     workData: data.workdata,
   }));
 
-  if (data.workdata?.currentBreak !== null) {
+  if (data.workdata.currentBreak !== null) {
     useStore.setState(() => ({
       currBreak: data.workdata.currentBreak,
     }));

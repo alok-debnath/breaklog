@@ -76,7 +76,7 @@ const HistoryPage = () => {
       );
 
       if (res.data.status === 200) {
-        setCollapseBoxState(true);
+        // setCollapseBoxState(true);
 
         useStore.setState(() => ({
           monthLogs: res.data.data,
@@ -99,6 +99,12 @@ const HistoryPage = () => {
   useEffect(() => {
     setCollapseBoxState(false);
   }, [selectedMonth, selectedYear]);
+
+  useEffect(() => {
+    if (Number(summary.numberOfDays) > 0) {
+      setCollapseBoxState(true);
+    }
+  }, [summary.numberOfDays]);
 
   return (
     <>
@@ -247,7 +253,7 @@ const HistoryPage = () => {
                             </th>
                           </tr>
                         </thead>
-                        <tbody className='text-left'>
+                        <tbody className='text-center'>
                           {monthLogs &&
                             [...monthLogs].reverse().map((log, index) => {
                               return (
