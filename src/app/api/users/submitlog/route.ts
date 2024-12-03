@@ -75,6 +75,7 @@ export async function POST(request: NextRequest) {
           },
           // updatedAt: datetime,
           log_status: logToBeSaved,
+          // isHalfDay: false,
         },
       });
     }
