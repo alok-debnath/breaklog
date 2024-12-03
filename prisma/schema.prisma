@@ -35,15 +35,22 @@ model User {
 }
 
 model Log {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId     String   @db.ObjectId
-  log_status String
-  // log_time   String
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String       @db.ObjectId
+  log_status String? //temporary
   // timeZone   String
-  isHalfDay  Boolean  @default(false)
+  logEntries logEntries[]
+  isHalfDay  Boolean      @default(false)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  User       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+type logEntries {
+  uniqueId   String // Manually generated unique ID
+  log_status String
+  log_time   DateTime
   createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  User       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum Role {

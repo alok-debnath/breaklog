@@ -1,10 +1,8 @@
-// import { connect } from '@/dbConfig/dbConfig';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
 import { fetchLogs } from '@/helpers/fetchLogs';
-
-// connect();
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,71 +11,84 @@ export async function POST(request: NextRequest) {
     const { logtype } = reqBody;
 
     const startOfToday = new Date();
-    startOfToday.setUTCHours(0, 0, 0, 0); // Set start time to 00:00:00.000Z
+    startOfToday.setUTCHours(0, 0, 0, 0);
 
-    const recentLog = await prisma.log.findFirst({
+    // Find the log document for today
+    let logDoc = await prisma.log.findFirst({
       where: {
         userId: userId,
         createdAt: {
           gte: startOfToday,
         },
       },
-      select: {
-        log_status: true,
-        id: true,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
     });
 
+    let logToBeSaved = '';
     if (logtype === 'undo log') {
-      if (recentLog !== null) {
-        await prisma.log.delete({
-          where: {
-            id: recentLog.id,
-          },
+      if (logDoc && logDoc.logEntries.length > 0) {
+        const lastEntry = logDoc.logEntries.pop(); // Remove the last log entry
+        await prisma.log.update({
+          where: { id: logDoc.id },
+          data: { logEntries: logDoc.logEntries },
+        });
+        return NextResponse.json({
+          message: 'Last log entry undone successfully',
+          lastEntry,
         });
       }
     }
 
-    let logToBeSaved = '';
-
     if (logtype === 'day log') {
-      if (recentLog === null) {
+      if (!logDoc || logDoc.logEntries.length === 0) {
         logToBeSaved = 'day start';
-      } else if (recentLog.log_status === 'day start') {
-        logToBeSaved = 'exit';
-      } else if (recentLog.log_status === 'enter') {
-        logToBeSaved = 'exit';
-      } else if (recentLog.log_status === 'exit') {
-        logToBeSaved = 'enter';
+      } else {
+        const lastLogStatus =
+          logDoc.logEntries[logDoc.logEntries.length - 1].log_status;
+        logToBeSaved =
+          lastLogStatus === 'enter' || lastLogStatus === 'day start'
+            ? 'exit'
+            : 'enter';
       }
     } else if (logtype === 'day end') {
       logToBeSaved = 'day end';
-    }
-
-    if (logtype === 'break log') {
-      if (recentLog === null) {
+    } else if (logtype === 'break log') {
+      if (
+        !logDoc ||
+        logDoc.logEntries.length === 0 ||
+        logDoc.logEntries[logDoc.logEntries.length - 1].log_status === 'enter'
+      ) {
         logToBeSaved = 'exit';
-      } else if (recentLog.log_status === 'enter') {
-        logToBeSaved = 'exit';
-      } else if (recentLog.log_status === 'exit') {
+      } else {
         logToBeSaved = 'enter';
       }
     }
 
-    if (logToBeSaved !== '') {
-      const log = await prisma.log.create({
-        data: {
-          User: {
-            connect: { id: userId },
+    if (logToBeSaved) {
+      const newLogEntry = {
+        uniqueId: uuidv4(), // Generate a unique ID for the log entry
+        log_status: logToBeSaved,
+        log_time: new Date(),
+        createdAt: new Date(),
+      };
+
+      if (logDoc) {
+        await prisma.log.update({
+          where: { id: logDoc.id },
+          data: {
+            logEntries: {
+              push: newLogEntry, // Append the new log entry
+            },
           },
-          // updatedAt: datetime,
-          log_status: logToBeSaved,
-          // isHalfDay: false,
-        },
-      });
+        });
+      } else {
+        await prisma.log.create({
+          data: {
+            userId: userId,
+            logEntries: [newLogEntry],
+            isHalfDay: false,
+          },
+        });
+      }
     }
 
     const fetchedLog = await fetchLogs(reqBody, userId);
