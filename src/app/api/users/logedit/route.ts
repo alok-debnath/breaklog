@@ -1,10 +1,7 @@
-// import { connect } from '@/dbConfig/dbConfig';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
 import { fetchLogs } from '@/helpers/fetchLogs';
-
-// connect();
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,24 +11,39 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { log_id, log_dateTime } = reqBody;
 
-    // Update log using Prisma
-    const result = await prisma.log.update({
+    // Find the existing log for the user (single document with multiple entries)
+    const existingLog = await prisma.log.findFirst({
       where: {
-        id: log_id,
         userId: userId,
-      },
-      data: {
-        updatedAt: log_dateTime,
+        logEntries: {
+          some: {
+            uniqueId: log_id,
+          },
+        },
       },
     });
 
-    if (!result) {
+    if (!existingLog) {
       return NextResponse.json({
-        message: 'No matching log found',
+        message: 'No matching log entry found',
         status: 404,
       });
     }
 
+    // Update the specific log entry within the composite type array
+    const updatedLog = await prisma.log.update({
+      where: { id: existingLog.id },
+      data: {
+        logEntries: {
+          updateMany: {
+            where: { uniqueId: log_id },
+            data: { log_time: log_dateTime },
+          },
+        },
+      },
+    });
+
+    // Fetch updated logs
     const fetchedLog = await fetchLogs(reqBody, userId);
 
     return NextResponse.json({

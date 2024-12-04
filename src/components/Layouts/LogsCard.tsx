@@ -58,9 +58,9 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 <span>
                   {page === 'history' &&
                   currentLogs.length > 0 &&
-                  currentLogs[0].updatedAt ? (
+                  currentLogs[0].log_time ? (
                     <>
-                      {new Date(currentLogs[0].updatedAt).toLocaleDateString(
+                      {new Date(currentLogs[0].log_time).toLocaleDateString(
                         'en-US',
                         {
                           day: 'numeric',
@@ -68,7 +68,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                         },
                       )}
                       ,{' '}
-                      {new Date(currentLogs[0].updatedAt).toLocaleDateString(
+                      {new Date(currentLogs[0].log_time).toLocaleDateString(
                         'en-US',
                         {
                           weekday: 'long',
@@ -242,8 +242,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 <tbody className='text-left'>
                   {currentLogs &&
                     [...currentLogs].reverse().map((log, index, array) => {
-                      const updatedAt = new Date(log.updatedAt);
-                      const utcFormattedDate = updatedAt.toLocaleString(
+                      const log_time = new Date(log.log_time);
+                      const utcFormattedDate = log_time.toLocaleString(
                         'en-US',
                         {
                           timeZone: 'Asia/Kolkata', //setting this to static for now (temporarily)
@@ -268,12 +268,12 @@ const LogsCard: React.FC<LogsCardProps> = ({
                                 if (page !== 'history') {
                                   openTimeEditModal({
                                     log_id: log.id,
-                                    log_dateTime: log.updatedAt,
+                                    log_dateTime: log.log_time,
                                     log_dateTime_ahead: logAbove
-                                      ? logAbove.updatedAt
+                                      ? logAbove.log_time
                                       : '',
                                     log_dateTime_behind: logBelow
-                                      ? logBelow.updatedAt
+                                      ? logBelow.log_time
                                       : '',
                                   });
                                 }

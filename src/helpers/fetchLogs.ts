@@ -1,121 +1,116 @@
-// import { connect } from '@/dbConfig/dbConfig';
 import prisma from '@/dbConfig/dbConfig';
-import { NextRequest } from 'next/server';
-
-// connect();
 
 export const fetchLogs = async (reqBody: any, userId: string) => {
   const { date } = reqBody;
 
-  // Calculate the start of today in UTC time
-  let startOfToday = new Date();
-  startOfToday.setUTCHours(0, 0, 0, 0);
-  // Calculate the end of today in UTC time
-  let endOfToday = new Date();
-  endOfToday.setUTCHours(23, 59, 59, 999);
+  // Calculate start and end of the target day (default to today)
+  let startOfDay = new Date();
+  let endOfDay = new Date();
 
-  if (date !== undefined) {
+  startOfDay.setUTCHours(0, 0, 0, 0);
+  endOfDay.setUTCHours(23, 59, 59, 999);
+
+  if (date) {
     const parts = date.split('-');
     const correctedDate = `20${parts[2]}-${parts[1]}-${parts[0]}`;
-    startOfToday = new Date(correctedDate);
-    startOfToday.setUTCHours(0, 0, 0, 0);
-
-    // Calculate the end of the specific date in UTC time
-    endOfToday = new Date(correctedDate);
-    endOfToday.setUTCHours(23, 59, 59, 999);
+    startOfDay = new Date(correctedDate);
+    startOfDay.setUTCHours(0, 0, 0, 0);
+    endOfDay = new Date(correctedDate);
+    endOfDay.setUTCHours(23, 59, 59, 999);
   }
 
-  const userData = await prisma.user.findFirst({
-    where: { id: userId },
-    select: {
-      daily_work_required: true,
-    },
-  });
-
-  // Fetch logs for the current day
-  const logs = await prisma.log.findMany({
-    where: {
-      userId,
-      updatedAt: {
-        gte: startOfToday,
-        lte: endOfToday,
+  // Fetch user data and log entries
+  const [userData, logDoc] = await Promise.all([
+    prisma.user.findFirst({
+      where: { id: userId },
+      select: { daily_work_required: true },
+    }),
+    prisma.log.findFirst({
+      where: {
+        userId,
+        createdAt: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
       },
-    },
-    select: {
-      id: true,
-      updatedAt: true,
-      log_status: true,
-    },
-    orderBy: {
-      updatedAt: 'asc',
-    },
-  });
+      select: {
+        logEntries: true,
+      },
+    }),
+  ]);
+
+  // Extract logs or set empty array if none found
+  const logs =
+    logDoc?.logEntries.map((entry) => ({
+      id: entry.uniqueId,
+      log_time: entry.log_time,
+      log_status: entry.log_status,
+    })) || [];
 
   // Initialize variables
   let breakTime = 0;
   let workDone = 0;
-  let logExit = 0;
-  let logEnter = 0;
   let dayStart = 0;
   let dayEnd = 0;
+  let currentBreakTime = null;
+  let firstLog = null;
+  let lastLog = null;
+  let recentLog = null;
   let isDayStarted = false;
   let isDayEnded = false;
-  let currentBreakTime = null;
-  let recentLog = null;
 
   // Process logs
+  let logExit = 0,
+    logEnter = 0;
   for (const log of logs) {
     if (log.log_status === 'day start') {
       isDayStarted = true;
-      dayStart = log.updatedAt.getTime();
+      dayStart = log.log_time.getTime();
     } else if (log.log_status === 'day end') {
       isDayEnded = true;
-      dayEnd = log.updatedAt.getTime();
+      dayEnd = log.log_time.getTime();
     }
 
-    // calculates break time
     if (log.log_status === 'exit') {
-      logExit = log.updatedAt.getTime();
+      logExit = log.log_time.getTime();
     } else if (log.log_status === 'enter') {
-      logEnter = log.updatedAt.getTime();
+      logEnter = log.log_time.getTime();
     }
+
     if (logExit !== 0 && logEnter !== 0) {
       breakTime += logEnter - logExit;
-      logExit = 0;
-      logEnter = 0;
+      logExit = logEnter = 0;
     }
   }
 
-  // the most recent log
-  const lastLog = logs[logs.length - 1];
-  const firstLog = logs.length > 0 ? logs[0].log_status : null;
+  // First and last log statuses
+  firstLog = logs.length > 0 ? logs[0].log_status : null;
+  lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
+  recentLog = lastLog?.log_status || null;
 
   // Calculate work done
   if (isDayStarted) {
     if (isDayEnded) {
       workDone = dayEnd - dayStart - breakTime;
     } else {
-      const currDay = new Date();
-      workDone = currDay.getTime() - dayStart - breakTime;
+      const currentTime = Date.now();
+      workDone = currentTime - dayStart - breakTime;
 
-      if (lastLog.log_status === 'exit') {
-        const exitTime = currDay.getTime() - lastLog.updatedAt.getTime();
-        workDone = workDone - exitTime;
+      if (lastLog && recentLog === 'exit') {
+        const exitDuration = currentTime - lastLog.log_time.getTime();
+        workDone -= exitDuration;
       }
     }
   }
 
-  // Determine current break time and recent log status
-  if (logs.length > 0) {
-    if (lastLog.log_status === 'exit') {
-      currentBreakTime = lastLog.updatedAt;
-    }
-    recentLog = lastLog.log_status;
+  // Set current break time
+  if (lastLog && recentLog === 'exit') {
+    currentBreakTime = lastLog.log_time;
   }
 
-  // Format time
-  const formatTime = (milliseconds: number) => {
-    const totalSeconds = Math.floor(milliseconds / 1000);
+  // Format time utility
+  const formatTime = (ms: number) => {
+    const totalSeconds = Math.floor(ms / 1000);
     const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
     const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
       2,
@@ -125,42 +120,41 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  const formattedTime = formatTime(breakTime);
+  const formattedBreakTime = formatTime(breakTime);
   const formattedWorkDone = formatTime(workDone);
-  let formattedWorkEndTime =
-    (userData?.daily_work_required ?? 0) * 3600000 - workDone > 0 &&
-    workDone &&
-    recentLog !== 'day end'
-      ? formatTime((userData?.daily_work_required ?? 0) * 3600000 - workDone)
-      : '';
-  const formattedWorkLeft = formattedWorkEndTime;
 
-  // for formattedWorkEndTime
-  if (formattedWorkEndTime !== '') {
-    const [hours, minutes, seconds] = formattedWorkEndTime
-      .split(':')
-      .map(Number);
-    const currentTime = new Date();
-    const updatedTime = new Date(
-      currentTime.getTime() + (hours * 3600 + minutes * 60 + seconds) * 1000,
-    );
-    formattedWorkEndTime = updatedTime.toISOString();
+  // Calculate work left and end time
+  let formattedWorkLeft = '';
+  let formattedWorkEndTime = '';
+
+  if (userData?.daily_work_required) {
+    const workRequiredMs = userData.daily_work_required * 3600000;
+    if (workDone < workRequiredMs) {
+      formattedWorkLeft = formatTime(workRequiredMs - workDone);
+
+      const [hours, minutes, seconds] = formattedWorkLeft
+        .split(':')
+        .map(Number);
+      const endTime = new Date(
+        Date.now() + (hours * 3600 + minutes * 60 + seconds) * 1000,
+      );
+      formattedWorkEndTime = endTime.toISOString();
+    }
   }
-  //
 
   return {
-    message: logs.length === 0 ? 'No logs found' : 'Logs fetched successfully',
-    status: logs.length === 0 ? 404 : 200,
+    message: logs.length ? 'Logs fetched successfully' : 'No logs found',
+    status: logs.length ? 200 : 404,
     data: logs,
     workdata: {
-      breakTime: formattedTime,
+      breakTime: formattedBreakTime,
       workDone: formattedWorkDone,
       unformattedWorkDone: workDone,
       currentBreak: currentBreakTime,
       firstLogStatus: firstLog,
       lastLogStatus: recentLog,
-      formattedWorkEndTime: formattedWorkEndTime,
-      formattedWorkLeft: formattedWorkLeft,
+      formattedWorkEndTime,
+      formattedWorkLeft,
     },
   };
 };

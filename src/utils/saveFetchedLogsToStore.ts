@@ -3,7 +3,7 @@ import { useStore } from '@/stores/store';
 
 type LogEntryType = {
   id: string;
-  updatedAt: string;
+  log_time: string;
   log_status: string;
 };
 

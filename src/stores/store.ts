@@ -55,7 +55,7 @@ interface BreakData {
 
 export interface LogsData {
   id: string;
-  updatedAt: string;
+  log_time: string;
   log_status: string;
 }
 

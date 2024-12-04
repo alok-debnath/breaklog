@@ -1,4 +1,3 @@
-// import { connect } from '@/dbConfig/dbConfig';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
@@ -12,22 +11,24 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { monthStart, monthEnd } = reqBody;
 
-    // Fetch logs for the current day
+    // Fetch logs based on the createdAt field of the main Log document
     const logs = await prisma.log.findMany({
       where: {
         userId,
-        updatedAt: {
+        createdAt: {
           gte: monthStart,
           lte: monthEnd,
         },
       },
       select: {
         id: true,
-        updatedAt: true,
-        log_status: true,
-      },
-      orderBy: {
-        updatedAt: 'asc',
+        createdAt: true,
+        logEntries: {
+          select: {
+            log_status: true,
+            log_time: true,
+          },
+        },
       },
     });
 
@@ -43,21 +44,30 @@ export async function POST(request: NextRequest) {
     // Initialize an object to store logs by date
     const logsByDate: { [date: string]: any[] } = {};
 
-    // Iterate through the 'logs' data and organize it by date
-    logs.forEach((log: { updatedAt: Date }) => {
-      // Get the date without the time
-      const date = log.updatedAt.toISOString().split('T')[0];
+    // Organize logs by date from logEntries
+    logs.forEach((log) => {
+      log.logEntries.forEach((entry) => {
+        const date = entry.log_time.toISOString().split('T')[0];
 
-      // If the date doesn't exist in 'logsByDate', create an array for it
-      if (!logsByDate[date]) {
-        logsByDate[date] = [];
-      }
+        if (!logsByDate[date]) {
+          logsByDate[date] = [];
+        }
 
-      // Push the log entry into the corresponding date's array
-      logsByDate[date].push(log);
+        logsByDate[date].push(entry);
+      });
     });
 
-    // Format time
+    // Sort logEntries by log_time for each date
+    for (const date in logsByDate) {
+      if (logsByDate.hasOwnProperty(date)) {
+        logsByDate[date].sort(
+          (a, b) =>
+            new Date(a.log_time).getTime() - new Date(b.log_time).getTime(),
+        );
+      }
+    }
+
+    // Format time helper function
     const formatTime = (milliseconds: number) => {
       const totalSeconds = Math.floor(milliseconds / 1000);
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
@@ -67,11 +77,11 @@ export async function POST(request: NextRequest) {
       );
       const seconds = String(totalSeconds % 60).padStart(2, '0');
       return `${hours}:${minutes}:${seconds}`;
-      // return `${hours}:${minutes}`;
     };
 
     const dateMetrics = [];
-    // Process logs
+
+    // Process logs to calculate work and break time
     for (const date in logsByDate) {
       if (logsByDate.hasOwnProperty(date)) {
         const logEntries = logsByDate[date];
@@ -95,22 +105,21 @@ export async function POST(request: NextRequest) {
           for (const log of logEntries) {
             if (log.log_status === 'day start') {
               isDayStarted = true;
-              dayStart = new Date(log.updatedAt).getTime();
+              dayStart = new Date(log.log_time).getTime();
             } else if (log.log_status === 'day end') {
               isDayEnded = true;
-              dayEnd = new Date(log.updatedAt).getTime();
+              dayEnd = new Date(log.log_time).getTime();
             }
 
             // Calculate break time
             if (log.log_status === 'exit') {
-              const logExit = new Date(log.updatedAt).getTime();
+              const logExit = new Date(log.log_time).getTime();
               const nextLog = logEntries.find(
                 (entry) =>
-                  entry.updatedAt > log.updatedAt &&
-                  entry.log_status === 'enter',
+                  entry.log_time > log.log_time && entry.log_status === 'enter',
               );
               if (nextLog) {
-                const logEnter = new Date(nextLog.updatedAt).getTime();
+                const logEnter = new Date(nextLog.log_time).getTime();
                 breakTime += logEnter - logExit;
               }
             }
@@ -127,7 +136,7 @@ export async function POST(request: NextRequest) {
               const lastLog = logEntries[logEntries.length - 1];
               if (lastLog.log_status === 'exit') {
                 const exitTime =
-                  currDay.getTime() - new Date(lastLog.updatedAt).getTime();
+                  currDay.getTime() - new Date(lastLog.log_time).getTime();
                 workDone = workDone - exitTime;
               }
             }
@@ -181,7 +190,6 @@ export async function POST(request: NextRequest) {
         formattedTotalWorkDone,
         numberOfDays,
         expectedWorkHours,
-        // actualWorkHours: (totalWorkDone / 3600000).toFixed(2),
       };
     }
 
@@ -190,13 +198,6 @@ export async function POST(request: NextRequest) {
       status: dateMetrics.length === 0 ? 'No fullday logs found' : 200,
       data: dateMetrics.length === 0 ? '' : dateMetrics,
       summary: summary,
-      // workdata: {
-      //   breakTime: formattedTime,
-      //   workDone: formattedWorkDone,
-      //   currentBreak: currentBreakTime,
-      //   lastLogStatus: recentLog,
-      //   firstLogStatus: firstLog,
-      // },
     });
   } catch (error: any) {
     if (error.name === 'TokenError') {

@@ -31,10 +31,6 @@ export async function POST(request: NextRequest) {
           where: { id: logDoc.id },
           data: { logEntries: logDoc.logEntries },
         });
-        return NextResponse.json({
-          message: 'Last log entry undone successfully',
-          lastEntry,
-        });
       }
     }
 
