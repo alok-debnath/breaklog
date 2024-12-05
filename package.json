@@ -23,6 +23,8 @@
     "eslint-config-next": "^15.0.3",
     "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.467.0",
+    "luxon": "^3.5.0",
     "next": "^15.0.3",
     "nodemailer": "^6.9.16",
     "postcss": "^8.4.49",
@@ -39,6 +41,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.7",
+    "@types/luxon": "^3.4.2",
     "@types/nodemailer": "^6.4.17",
     "daisyui": "^4.12.14",
     "prettier": "^3.4.1",

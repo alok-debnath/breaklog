@@ -38,7 +38,7 @@ model Log {
   id         String       @id @default(auto()) @map("_id") @db.ObjectId
   userId     String       @db.ObjectId
   log_status String? //temporary
-  // timeZone   String
+  timeZone   String       @default("Etc/GMT")
   logEntries logEntries[]
   isHalfDay  Boolean      @default(false)
   createdAt  DateTime     @default(now())

@@ -1,6 +1,7 @@
 import { useStore } from '@/stores/store';
 import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
 import Button from '../UI/Button';
+import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus } from 'lucide-react';
 
 interface BottomNavbarProps {
   logEntry: (value: string) => void; // logEntry is a function that accepts a string
@@ -117,30 +118,35 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                 onClick={() =>
                   breaklogMode ? logEntry('break log') : logEntry('day log')
                 }
-                className={`btn ${btnState ? 'btn-disabled' : ''} group inline-flex w-full items-center justify-center rounded-full bg-success/20 font-medium`}
+                className={`btn ${btnState ? 'btn-disabled' : ''} group inline-flex w-full items-center justify-center rounded-full bg-success/20 font-medium text-success`}
               >
-                <p
-                  className={`font-semibold ${!btnState ? 'text-success' : ''}`}
-                >
-                  Add Log
+                <p className='font-semibold'>
+                  {workData.lastLogStatus === null && !breaklogMode
+                    ? 'Start Day'
+                    : workData.lastLogStatus === null && breaklogMode
+                      ? 'Take Break'
+                      : workData.lastLogStatus === 'day start'
+                        ? 'Take Break'
+                        : workData.lastLogStatus === 'exit'
+                          ? 'End Break'
+                          : workData.lastLogStatus === 'enter'
+                            ? 'Take Break'
+                            : 'Add Log'}
                 </p>
-                {!loading && (
-                  <svg
-                    className={`h-3 w-3 ${!btnState ? 'text-success' : ''}`}
-                    aria-hidden='true'
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 18 18'
-                  >
-                    <path
-                      stroke='currentColor'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth='2'
-                      d='M9 1v16M1 9h16'
-                    />
-                  </svg>
-                )}
+                {!loading &&
+                  (workData.lastLogStatus === null && !breaklogMode ? (
+                    <BriefcaseBusiness className='h-4 w-4' />
+                  ) : workData.lastLogStatus === null && breaklogMode ? (
+                    <Coffee className='h-4 w-4' />
+                  ) : workData.lastLogStatus === 'day start' ? (
+                    <Coffee className='h-4 w-4' />
+                  ) : workData.lastLogStatus === 'exit' ? (
+                    <LogIn className='h-4 w-4' />
+                  ) : workData.lastLogStatus === 'enter' ? (
+                    <Coffee className='h-4 w-4' />
+                  ) : (
+                    <Plus className='h-4 w-4' />
+                  ))}
                 {loading && (
                   <span className='loading loading-ring loading-sm'></span>
                 )}

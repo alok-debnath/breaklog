@@ -1,43 +1,40 @@
 import prisma from '@/dbConfig/dbConfig';
+import { DateTime } from 'luxon';
+import getStartAndEndOfDay from './getStartAndEndOfDay';
 
 export const fetchLogs = async (reqBody: any, userId: string) => {
   const { date } = reqBody;
 
-  // Calculate start and end of the target day (default to today)
-  let startOfDay = new Date();
-  let endOfDay = new Date();
+  const userData = await prisma.user.findFirst({
+    where: { id: userId },
+    select: {
+      daily_work_required: true,
+      default_time_zone: true,
+    },
+  });
 
-  startOfDay.setUTCHours(0, 0, 0, 0);
-  endOfDay.setUTCHours(23, 59, 59, 999);
+  let [startOfDay, endOfDay, timeZone] = getStartAndEndOfDay(userData);
 
   if (date) {
     const parts = date.split('-');
     const correctedDate = `20${parts[2]}-${parts[1]}-${parts[0]}`;
-    startOfDay = new Date(correctedDate);
-    startOfDay.setUTCHours(0, 0, 0, 0);
-    endOfDay = new Date(correctedDate);
-    endOfDay.setUTCHours(23, 59, 59, 999);
+    const dateObj = DateTime.fromISO(correctedDate, { zone: timeZone });
+    startOfDay = dateObj.startOf('day').toJSDate();
+    endOfDay = dateObj.endOf('day').toJSDate();
   }
 
-  // Fetch user data and log entries
-  const [userData, logDoc] = await Promise.all([
-    prisma.user.findFirst({
-      where: { id: userId },
-      select: { daily_work_required: true },
-    }),
-    prisma.log.findFirst({
-      where: {
-        userId,
-        createdAt: {
-          gte: startOfDay,
-          lte: endOfDay,
-        },
+  const logDoc = await prisma.log.findFirst({
+    where: {
+      userId,
+      createdAt: {
+        gte: startOfDay,
+        lte: endOfDay,
       },
-      select: {
-        logEntries: true,
-      },
-    }),
-  ]);
+    },
+    select: {
+      logEntries: true,
+    },
+  });
 
   // Extract logs or set empty array if none found
   const logs =
@@ -127,7 +124,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
   let formattedWorkLeft = '';
   let formattedWorkEndTime = '';
 
-  if (userData?.daily_work_required) {
+  if (userData?.daily_work_required && workDone > 0) {
     const workRequiredMs = userData.daily_work_required * 3600000;
     if (workDone < workRequiredMs) {
       formattedWorkLeft = formatTime(workRequiredMs - workDone);

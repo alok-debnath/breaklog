@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/dbConfig/dbConfig';
 import { fetchLogs } from '@/helpers/fetchLogs';
 import { v4 as uuidv4 } from 'uuid';
+import getStartAndEndOfDay from '@/helpers/getStartAndEndOfDay';
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,15 +11,22 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const { logtype } = reqBody;
 
-    const startOfToday = new Date();
-    startOfToday.setUTCHours(0, 0, 0, 0);
+    const user = await prisma.user.findFirst({
+      where: { id: userId },
+      select: {
+        default_time_zone: true,
+      },
+    });
+
+    const [startOfDay, endOfDay, timeZone] = getStartAndEndOfDay(user);
 
     // Find the log document for today
     let logDoc = await prisma.log.findFirst({
       where: {
         userId: userId,
         createdAt: {
-          gte: startOfToday,
+          gte: startOfDay,
+          lte: endOfDay,
         },
       },
     });
@@ -80,8 +88,8 @@ export async function POST(request: NextRequest) {
         await prisma.log.create({
           data: {
             userId: userId,
+            timeZone: timeZone,
             logEntries: [newLogEntry],
-            isHalfDay: false,
           },
         });
       }
