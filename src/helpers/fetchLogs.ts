@@ -152,6 +152,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
       lastLogStatus: recentLog,
       formattedWorkEndTime,
       formattedWorkLeft,
+      calculatedOn: Date.now(), // epoch timestamp
     },
   };
 };
