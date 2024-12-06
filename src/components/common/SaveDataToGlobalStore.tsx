@@ -29,6 +29,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
         : userDataServer.log_type === 'breakmode',
       themeMode: savedTheme || themeMode,
     });
+    document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
 
     setIsFirstEffectCompleted(true);
   };
@@ -44,6 +45,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
       if (!userData.default_time_zone) window.time_zone_modal.showModal();
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
       localStorage.setItem('thememode', themeMode);
+      document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
     }
   }, [
     breaklogMode,

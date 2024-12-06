@@ -6,9 +6,12 @@ export default function ThemeWrapper({
   themeCookie,
 }: {
   children: React.ReactNode;
-  themeCookie: string | null;
+  themeCookie: string;
 }) {
   const { themeMode } = useStore();
 
-  return <div data-theme={themeCookie ?? themeMode}>{children}</div>;
+  const isClient = typeof window !== 'undefined';
+  const theme = isClient && themeMode !== '' ? themeMode : themeCookie;
+
+  return <div data-theme={theme}>{children}</div>;
 }
