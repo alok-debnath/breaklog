@@ -5,15 +5,18 @@ import Loading from '@/components/Layouts/Loading';
 import TimeZoneModal from '@/components/Layouts/Modals/TimeZoneModal';
 import ThemeWrapper from '@/components/ThemeWrapper';
 import InitialRscFetch from '@/components/common/InitialRscFetch';
+import { cookies } from 'next/headers';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
 }) {
+  const themeCookie = (await cookies()).get('theme')?.value || null;
+
   return (
     <section>
-      <ThemeWrapper>
+      <ThemeWrapper themeCookie={themeCookie}>
         <Suspense fallback={null}>
           <InitialRscFetch />
         </Suspense>
