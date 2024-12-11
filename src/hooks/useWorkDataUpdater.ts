@@ -30,7 +30,10 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
   let updatedFormattedWorkLeft = workData.formattedWorkLeft;
   let updatedFormattedWorkEndTime = workData.formattedWorkEndTime;
 
-  if (workData.lastLogStatus === 'enter') {
+  if (
+    workData.lastLogStatus === 'day start' ||
+    workData.lastLogStatus === 'enter'
+  ) {
     const totalWorkDoneSeconds =
       Math.floor(updatedUnformattedWorkDone / 1000) + timeDifferenceInSeconds;
     updatedUnformattedWorkDone += timeDifferenceInSeconds * 1000;
@@ -86,8 +89,7 @@ const useWorkDataUpdater = (workData: WorkData): UpdatedWorkData => {
 
     const intervalId = setInterval(() => {
       updateWorkData();
-    // }, 60000); // Update every minute
-  }, 1000); // Update every minute
+    }, 1000); // Update every minute
 
     return () => clearInterval(intervalId);
   }, [updateWorkData]);
