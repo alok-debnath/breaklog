@@ -1,26 +1,13 @@
 'use client';
 import { useStore } from '@/stores/store';
-
-type LogEntryType = {
-  id: string;
-  log_time: string;
-  log_status: string;
-};
+import { WorkData } from '@/stores/store';
+import { LogsData } from '@/stores/store';
 
 export interface FetchedLogsDataType {
   message: string;
   status: number;
-  data: LogEntryType[];
-  workdata: {
-    breakTime: string;
-    workDone: string;
-    unformattedWorkDone: number;
-    currentBreak: null | Date;
-    firstLogStatus: string | null;
-    lastLogStatus: string;
-    formattedWorkEndTime: string;
-    formattedWorkLeft: string;
-  };
+  data: LogsData[];
+  workdata: WorkData & { currentBreak: null | Date };
 }
 
 export const saveFetchedLogsToStore = (data: FetchedLogsDataType) => {
