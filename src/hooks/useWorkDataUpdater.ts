@@ -37,7 +37,7 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
     const totalWorkDoneSeconds =
       Math.floor(updatedUnformattedWorkDone / 1000) + timeDifferenceInSeconds;
     updatedUnformattedWorkDone += timeDifferenceInSeconds * 1000;
-    updatedWorkDone = calculateTimeData(totalWorkDoneSeconds);
+    updatedWorkDone = calculateTimeData(totalWorkDoneSeconds + 1);
 
     const [leftHours, leftMinutes, leftSeconds] = workData.formattedWorkLeft
       .split(':')
