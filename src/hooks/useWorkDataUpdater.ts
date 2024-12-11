@@ -21,9 +21,8 @@ const calculateTimeData = (seconds: number): string => {
 
 const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
   const now = Date.now(); // Current time in milliseconds
-  const timeDifferenceInSeconds = Math.floor(
-    (now - workData.calculatedOn) / 1000,
-  );
+  const timeDifferenceInSeconds =
+    Math.floor((now - workData.calculatedOn) / 1000) + 1; // +1 sec for potential margin of error
 
   let updatedUnformattedWorkDone = workData.unformattedWorkDone;
   let updatedWorkDone = workData.workDone;
@@ -37,7 +36,7 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
     const totalWorkDoneSeconds =
       Math.floor(updatedUnformattedWorkDone / 1000) + timeDifferenceInSeconds;
     updatedUnformattedWorkDone += timeDifferenceInSeconds * 1000;
-    updatedWorkDone = calculateTimeData(totalWorkDoneSeconds + 1); // +1 sec for margin of error
+    updatedWorkDone = calculateTimeData(totalWorkDoneSeconds);
 
     const [leftHours, leftMinutes, leftSeconds] = workData.formattedWorkLeft
       .split(':')
@@ -50,7 +49,7 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
     updatedFormattedWorkLeft = calculateTimeData(Math.max(totalLeftSeconds, 0));
   } else if (workData.lastLogStatus === 'exit') {
     const endTimeDate = new Date(workData.formattedWorkEndTime);
-    endTimeDate.setSeconds(endTimeDate.getSeconds() + timeDifferenceInSeconds + 1); // +1 sec for margin of error
+    endTimeDate.setSeconds(endTimeDate.getSeconds() + timeDifferenceInSeconds);
     updatedFormattedWorkEndTime = endTimeDate.toISOString();
   }
 
