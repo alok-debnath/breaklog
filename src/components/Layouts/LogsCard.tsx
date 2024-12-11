@@ -4,6 +4,7 @@ import React from 'react';
 
 import { LogsData } from '@/stores/store';
 import { WorkData } from '@/stores/store';
+import useWorkDataUpdater from '@/hooks/useWorkDataUpdater';
 
 interface LogsCardProps {
   page?: string;
@@ -29,6 +30,13 @@ const LogsCard: React.FC<LogsCardProps> = ({
 
   const currentLogs = logsServer ?? logs;
   const currentWorkData = workDataServer ?? workData;
+
+  const {
+    workDone,
+    unformattedWorkDone,
+    formattedWorkLeft,
+    formattedWorkEndTime,
+  } = useWorkDataUpdater(currentWorkData);
 
   return (
     <>
@@ -118,12 +126,10 @@ const LogsCard: React.FC<LogsCardProps> = ({
                           : ''
                   }`}
                 >
-                  {currentWorkData.workDone ? (
+                  {workDone ? (
                     <>
                       <p className='font-medium'>Work done</p>
-                      <p className='font-semibold'>
-                        {currentWorkData.workDone}
-                      </p>
+                      <p className='font-mono font-semibold'>{workDone}</p>
                     </>
                   ) : (
                     <span className='animate-pulse'>
@@ -145,7 +151,9 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 {currentWorkData.breakTime ? (
                   <>
                     <p className='font-medium'>Break taken</p>
-                    <p className='font-semibold'>{currentWorkData.breakTime}</p>
+                    <p className='font-mono font-semibold'>
+                      {currentWorkData.breakTime}
+                    </p>
                   </>
                 ) : (
                   <span className='animate-pulse'>
@@ -163,19 +171,17 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 )}
               </div>
             </div>
-            {!breaklogMode &&
-            page !== 'history' &&
-            currentWorkData.formattedWorkEndTime ? (
+            {!breaklogMode && page !== 'history' && formattedWorkEndTime ? (
               <div className='card mt-3 grid grid-cols-2 items-center bg-base-200 py-2 shadow-md'>
                 <p className='text-sm font-medium'>Work until:</p>
-                <p className='text-sm font-semibold'>
-                  {new Date(
-                    currentWorkData.formattedWorkEndTime,
-                  ).toLocaleTimeString('en-US', { hour12: true })}
+                <p className='font-mono text-sm font-semibold'>
+                  {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', {
+                    hour12: true,
+                  })}
                 </p>
                 <p className='text-sm font-medium'>Work left:</p>
-                <p className='text-sm font-semibold'>
-                  {currentWorkData.formattedWorkLeft}
+                <p className='font-mono text-sm font-semibold'>
+                  {formattedWorkLeft}
                 </p>
               </div>
             ) : null}
