@@ -37,7 +37,7 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
     const totalWorkDoneSeconds =
       Math.floor(updatedUnformattedWorkDone / 1000) + timeDifferenceInSeconds;
     updatedUnformattedWorkDone += timeDifferenceInSeconds * 1000;
-    updatedWorkDone = calculateTimeData(totalWorkDoneSeconds + 1);
+    updatedWorkDone = calculateTimeData(totalWorkDoneSeconds + 1); // +1 sec for margin of error
 
     const [leftHours, leftMinutes, leftSeconds] = workData.formattedWorkLeft
       .split(':')
@@ -50,7 +50,7 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
     updatedFormattedWorkLeft = calculateTimeData(Math.max(totalLeftSeconds, 0));
   } else if (workData.lastLogStatus === 'exit') {
     const endTimeDate = new Date(workData.formattedWorkEndTime);
-    endTimeDate.setSeconds(endTimeDate.getSeconds() + timeDifferenceInSeconds);
+    endTimeDate.setSeconds(endTimeDate.getSeconds() + timeDifferenceInSeconds + 1); // +1 sec for margin of error
     updatedFormattedWorkEndTime = endTimeDate.toISOString();
   }
 
@@ -89,7 +89,7 @@ const useWorkDataUpdater = (workData: WorkData): UpdatedWorkData => {
 
     const intervalId = setInterval(() => {
       updateWorkData();
-    }, 1000); // Update every minute
+    }, 1000); // Update every second
 
     return () => clearInterval(intervalId);
   }, [updateWorkData]);
