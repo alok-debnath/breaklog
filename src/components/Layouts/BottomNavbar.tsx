@@ -15,6 +15,9 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
   const { breaklogMode, workData, loading } = useStore();
 
   const btnState = ['day end'].includes(workData.lastLogStatus) || loading;
+  const showButtonLogo =
+    isIntersecting ||
+    ['exit', null, 'day end'].includes(workData.lastLogStatus);
   return (
     <>
       <LiveBreakCounter />
@@ -134,6 +137,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                             : 'Add Log'}
                 </p>
                 {!loading &&
+                  showButtonLogo &&
                   (workData.lastLogStatus === null && !breaklogMode ? (
                     <BriefcaseBusiness className='h-4 w-4' />
                   ) : workData.lastLogStatus === null && breaklogMode ? (
@@ -147,7 +151,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                   ) : (
                     <Plus className='h-4 w-4' />
                   ))}
-                {loading && (
+                {loading && showButtonLogo && (
                   <span className='loading loading-ring loading-sm'></span>
                 )}
               </button>
