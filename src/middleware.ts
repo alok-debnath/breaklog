@@ -9,6 +9,11 @@ export function middleware(request: NextRequest) {
 
   const token = request.cookies.get('token')?.value || '';
 
+  // Rewrite /home to / if token is present
+  if (path === '/home' && token) {
+    return NextResponse.rewrite(new URL('/', request.nextUrl));
+  }
+
   if (path === '/' && !token) {
     return;
   }
@@ -29,5 +34,6 @@ export const config = {
     '/dashboard/history/:path*',
     '/login',
     '/signup',
+    '/home',
   ],
 };
