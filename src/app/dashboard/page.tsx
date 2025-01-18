@@ -49,11 +49,7 @@ const Index = () => {
     workData.unformattedWorkDone >=
     (userData.daily_work_required || 0) * 3600000;
 
-  let isWorkDoneSuccess =
-    isWorkDone &&
-    (userData.daily_work_required !== 0 ||
-      userData.daily_work_required !== undefined ||
-      userData.daily_work_required !== null);
+  let isWorkDoneSuccess = isWorkDone && Boolean(userData.daily_work_required);
 
   const [ref, isIntersecting] = useOnScreen(-80);
 
@@ -86,10 +82,7 @@ const Index = () => {
           </div>
         </div>
       </div>
-      <BottomNavbar
-        logEntry={logEntry}
-        isIntersecting={isIntersecting}
-      />
+      <BottomNavbar logEntry={logEntry} isIntersecting={isIntersecting} />
       <TimeEditModal />
     </>
   );

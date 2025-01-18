@@ -47,7 +47,10 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
       leftSeconds -
       timeDifferenceInSeconds;
     updatedFormattedWorkLeft = calculateTimeData(Math.max(totalLeftSeconds, 0));
-  } else if (workData.lastLogStatus === 'exit') {
+  } else if (
+    workData.lastLogStatus === 'exit' &&
+    workData.formattedWorkEndTime
+  ) {
     const endTimeDate = new Date(workData.formattedWorkEndTime);
     endTimeDate.setSeconds(endTimeDate.getSeconds() + timeDifferenceInSeconds);
     updatedFormattedWorkEndTime = endTimeDate.toISOString();
