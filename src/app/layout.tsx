@@ -18,8 +18,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const umamiSrc = process.env.UMAMI_SRC;
-  const umamiWebsiteId = process.env.UMAMI_WEBSITE_ID;
+  // const umamiSrc = process.env.UMAMI_SRC;
+  // const umamiWebsiteId = process.env.UMAMI_WEBSITE_ID;
 
   return (
     <html lang='en'>
