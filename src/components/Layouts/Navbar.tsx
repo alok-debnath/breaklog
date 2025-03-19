@@ -68,7 +68,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href='/dashboard'
-                    className={`${pathname === '/dashboard' ? 'focus' : ''}`}
+                    className={`${pathname === '/dashboard' ? 'menu-focus' : ''}`}
                   >
                     Homepage
                   </Link>
@@ -76,7 +76,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href='/dashboard/history'
-                    className={`${pathname === '/dashboard/history' ? 'focus' : ''}`}
+                    className={`${pathname === '/dashboard/history' ? 'menu-focus' : ''}`}
                   >
                     History
                   </Link>

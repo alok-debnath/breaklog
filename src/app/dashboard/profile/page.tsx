@@ -130,7 +130,7 @@ const ProfilePage = () => {
                       id='daily_work_required'
                       name='daily_work_required'
                       placeholder='Type here'
-                      className={`input input-bordered w-full max-w-md ${
+                      className={`input w-full max-w-md ${
                         formik.touched.daily_work_required &&
                         formik.errors.daily_work_required
                           ? 'input-error'
@@ -175,7 +175,7 @@ const ProfilePage = () => {
                     <select
                       id='log_type'
                       name='log_type'
-                      className={`select select-bordered w-full max-w-xs ${
+                      className={`select w-full max-w-xs ${
                         formik.touched.log_type && formik.errors.log_type
                           ? 'input-error'
                           : ''
@@ -202,7 +202,7 @@ const ProfilePage = () => {
                     <select
                       id='default_time_zone'
                       name='default_time_zone'
-                      className={`select select-bordered w-full max-w-xs ${
+                      className={`select w-full max-w-xs ${
                         formik.touched.default_time_zone &&
                         formik.errors.default_time_zone
                           ? 'border-error'

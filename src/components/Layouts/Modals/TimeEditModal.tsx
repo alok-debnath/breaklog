@@ -249,7 +249,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
               <p className='label-text'>Hour</p>
               <div className='flex w-full'>
                 <input
-                  className='input input-bordered flex-1'
+                  className='input flex-1'
                   type='number'
                   id='hour'
                   name='hour'
@@ -265,14 +265,14 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
               <p className='label-text'>Minute</p>
               <div className='join flex w-full'>
                 <input
-                  className='input join-item input-bordered flex-1'
+                  className='input join-item flex-1'
                   type='number'
                   id='minute'
                   name='minute'
                   value={formik.values.minute || 0}
                   onChange={formik.handleChange}
                 />
-                {/* <p className='btn input-bordered join-item no-animation flex-1'>Search</p> */}
+                {/* <p className='btn join-item no-animation flex-1'>Search</p> */}
               </div>
               {formik.errors.minute && (
                 <div className='error text-red-500'>{formik.errors.minute}</div>
@@ -321,7 +321,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
               use12Hours
               format='h:mm A'
               defaultValue={dayjs('12:08', 'HH:mm')}
-              className='input input-bordered text-inherit placeholder-inherit hover:border-secondary hover:bg-inherit active:bg-inherit '
+              className='input text-inherit placeholder-inherit hover:border-secondary hover:bg-inherit active:bg-inherit '
               getPopupContainer={() =>
                 popupContainerRef.current || document.body
               }

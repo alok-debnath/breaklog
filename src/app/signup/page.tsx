@@ -101,7 +101,7 @@ export default function SignupPage() {
                     <input
                       type='username'
                       placeholder='username'
-                      className={`input input-bordered ${
+                      className={`input ${
                         formik.touched.username && formik.errors.username
                           ? 'input-error'
                           : ''
@@ -125,7 +125,7 @@ export default function SignupPage() {
                     <input
                       type='email'
                       placeholder='email'
-                      className={`input input-bordered ${
+                      className={`input ${
                         formik.touched.email && formik.errors.email
                           ? 'input-error'
                           : ''
@@ -149,7 +149,7 @@ export default function SignupPage() {
                     <input
                       type='password'
                       placeholder='password'
-                      className={`input input-bordered ${
+                      className={`input ${
                         formik.touched.password && formik.errors.password
                           ? 'input-error'
                           : ''

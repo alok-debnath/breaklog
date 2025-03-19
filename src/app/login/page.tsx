@@ -90,7 +90,7 @@ export default function LoginPage() {
                     <input
                       type='email'
                       placeholder='email'
-                      className={`input input-bordered ${
+                      className={`input ${
                         formik.touched.email && formik.errors.email
                           ? 'input-error'
                           : ''
@@ -114,7 +114,7 @@ export default function LoginPage() {
                     <input
                       type='password'
                       placeholder='password'
-                      className={`input input-bordered ${
+                      className={`input ${
                         formik.touched.password && formik.errors.password
                           ? 'input-error'
                           : ''
