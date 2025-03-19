@@ -102,8 +102,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
                     <span className='flex-1 space-y-9 py-1'>
                       <span className='space-y-3'>
                         <span className='grid grid-cols-6 gap-3'>
-                          <span className='col-span-2 h-2 rounded bg-slate-700'></span>
-                          <span className='col-span-1 h-2 rounded bg-slate-700'></span>
+                          <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
+                          <span className='col-span-1 h-2 rounded-sm bg-slate-700'></span>
                         </span>
                       </span>
                     </span>
@@ -137,8 +137,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
                         <span className='flex-1 space-y-9 py-1'>
                           <span className='space-y-3'>
                             <span className='grid grid-rows-2 gap-3'>
-                              <span className='col-span-3 h-2 rounded bg-slate-700'></span>
-                              <span className='col-span-2 h-2 rounded bg-slate-700'></span>
+                              <span className='col-span-3 h-2 rounded-sm bg-slate-700'></span>
+                              <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
                             </span>
                           </span>
                         </span>
@@ -161,8 +161,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
                       <span className='flex-1 space-y-9 py-1'>
                         <span className='space-y-3'>
                           <span className='grid grid-rows-2 gap-3'>
-                            <span className='col-span-3 h-2 rounded bg-slate-700'></span>
-                            <span className='col-span-2 h-2 rounded bg-slate-700'></span>
+                            <span className='col-span-3 h-2 rounded-sm bg-slate-700'></span>
+                            <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
                           </span>
                         </span>
                       </span>

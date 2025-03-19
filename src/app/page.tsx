@@ -9,11 +9,11 @@ const Home = () => {
       <div className=''>
         <div className='bg-white text-black dark:bg-black dark:text-white'>
           <div className='min-w-screen mx-auto min-h-screen p-4'>
-            <div className='mx-auto max-w-screen-xl px-1 md:px-10'>
+            <div className='mx-auto max-w-(--breakpoint-xl) px-1 md:px-10'>
               <MouseHalo />
               <MobileHalo />
               <nav className='start-0 top-0 z-20 mb-4 w-full bg-transparent'>
-                <div className='mx-auto flex max-w-screen-xl flex-wrap items-center justify-between p-4'>
+                <div className='mx-auto flex max-w-(--breakpoint-xl) flex-wrap items-center justify-between p-4'>
                   <Link
                     href='/'
                     className='flex items-center space-x-3 rtl:space-x-reverse md:order-1'

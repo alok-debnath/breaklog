@@ -50,7 +50,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                 </label>
                 <ul
                   tabIndex={0}
-                  className='dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52'>
+                  className='dropdown-content z-1 menu p-2 shadow-sm bg-base-100 rounded-box w-52'>
                   <li>
                     <label>Mark as Leave</label>
                   </li>
@@ -101,7 +101,7 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
                 </label>
                 <ul
                   tabIndex={0}
-                  className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow'
+                  className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow-sm'
                 >
                   <li>
                     <span>

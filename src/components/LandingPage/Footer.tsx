@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <>
       <div className='border border-x-0 border-b-0 dark:border-slate-700'>
-        <div className='mx-auto grid max-w-screen-xl grid-cols-12 px-5 py-12 md:px-10'>
+        <div className='mx-auto grid max-w-(--breakpoint-xl) grid-cols-12 px-5 py-12 md:px-10'>
           <div className='col-span-6 flex items-center text-left text-sm'>
             <a
               href='https://github.com/alok-debnath'

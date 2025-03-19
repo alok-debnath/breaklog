@@ -91,7 +91,7 @@ const ProfilePage = () => {
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>
-              <div className='card my-20 w-full max-w-sm flex-shrink-0 bg-base-100'>
+              <div className='card my-20 w-full max-w-sm shrink-0 bg-base-100'>
                 <form
                   onSubmit={formik.handleSubmit}
                   className='card-body grid w-full max-w-xl gap-y-3'

@@ -1,6 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, synthwave, cyberpunk, forest, retro, dim;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
 
 .halo {
   position: fixed;
@@ -8,11 +31,9 @@
   width: 900px;
   height: 900px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(18, 183, 114, 0.137) 0%,
-    rgba(0, 0, 0, 0) 60%
-  );
+  background: radial-gradient(circle,
+      rgba(18, 183, 114, 0.137) 0%,
+      rgba(0, 0, 0, 0) 60%);
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition:
@@ -31,13 +52,12 @@
   left: 50%;
   top: -50px;
 }
+
 .mobile-halo {
   width: 1200px;
   height: 1200px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(128, 255, 202, 0.3) 0%,
-    rgba(0, 0, 0, 0) 60%
-  );
+  background: radial-gradient(circle,
+      rgba(128, 255, 202, 0.3) 0%,
+      rgba(0, 0, 0, 0) 60%);
 }

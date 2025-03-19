@@ -91,7 +91,7 @@ export default function SignupPage() {
                 </Link>
               </p>
             </div>
-            <div className='card w-full max-w-sm flex-shrink-0 bg-base-100 shadow-2xl'>
+            <div className='card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl'>
               <div className='card-body'>
                 <form onSubmit={formik.handleSubmit} className='grid gap-y-2'>
                   <div className='form-control'>

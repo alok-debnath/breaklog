@@ -21,7 +21,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
   return (
     <>
       <LiveBreakCounter />
-      <div className='fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-gradient-to-b from-transparent to-base-200'></div>
+      <div className='fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-linear-to-b from-transparent to-base-200'></div>
       <div className='fixed bottom-3 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2'>
         <div className='mx-3 rounded-full bg-base-100'>
           <div
@@ -49,7 +49,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
               </label>
               <ul
                 tabIndex={0}
-                className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow'
+                className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow-sm'
               >
                 {/* <li>
                   <span
