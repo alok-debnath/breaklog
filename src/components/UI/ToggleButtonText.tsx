@@ -15,11 +15,11 @@ const ToggleButtonText: React.FC<ToggleButtonTextProps> = ({
   return (
     <>
       <div className='form-control'>
-        <label className='label cursor-pointer gap-2'>
+        <label className='label cursor-pointer gap-3'>
           <div>
             <span className='label-text font-bold'>{text}</span>
             {secondaryText && (
-              <span className='label-text font-light'>
+              <span className='label-text font-light text-wrap'>
                 <br />
                 {secondaryText}
               </span>

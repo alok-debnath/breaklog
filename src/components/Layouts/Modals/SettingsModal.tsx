@@ -31,21 +31,21 @@ const SettingsModal = () => {
           {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> */}
           <h3 className='text-center text-lg font-bold'>Settings</h3>
           <div className='divider'></div>
-
-          <ToggleButtonText
-            text='BreakLog mode'
-            disabled={logs.length === 0 ? false : true}
-            checked={breaklogMode}
-            secondaryText='(LOP will be miscalculated once log is saved using this mode)'
-            onChange={handleToggleChange}
-          />
-          <SelectboxText
-            text='Theme'
-            OptionValue={ThemeName}
-            checked={themeMode}
-            onChange={handleThemeChange}
-          />
-
+          <div className='grid grid-cols-1 gap-y-6'>
+            <ToggleButtonText
+              text='BreakLog mode'
+              disabled={logs.length === 0 ? false : true}
+              checked={breaklogMode}
+              secondaryText='(LOP will be miscalculated once log is saved using this mode)'
+              onChange={handleToggleChange}
+            />
+            <SelectboxText
+              text='Theme'
+              OptionValue={ThemeName}
+              checked={themeMode}
+              onChange={handleThemeChange}
+            />
+          </div>
           <div className='modal-action'>
             {/* if there is a button in form, it will close the modal */}
             <button className='btn'>Close</button>

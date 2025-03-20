@@ -75,7 +75,7 @@ export default function SignupPage() {
   return (
     <>
       <div data-theme={themeMode}>
-        <div className='flex place-items-center justify-center min-h-dvh bg-base-200'>
+        <div className='hero bg-base-200 min-h-screen'>
           <Toaster position='top-left' reverseOrder={false} />
           <div className='hero-content flex-col lg:flex-row-reverse'>
             <div className='text-center lg:text-left'>
@@ -91,116 +91,106 @@ export default function SignupPage() {
                 </Link>
               </p>
             </div>
-            <div className='card w-full max-w-sm shrink-0 bg-base-100 shadow-2xl'>
+            <div className='card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl'>
               <div className='card-body'>
-                <form onSubmit={formik.handleSubmit} className='grid gap-y-2'>
-                  <div className='form-control'>
-                    <label className='label' htmlFor='username'>
-                      <span className='label-text'>UserName</span>
-                    </label>
-                    <input
-                      type='username'
-                      placeholder='username'
-                      className={`input ${
-                        formik.touched.username && formik.errors.username
-                          ? 'input-error'
-                          : ''
-                      }`}
-                      id='username'
-                      name='username'
-                      value={formik.values.username.toLowerCase()}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.username && formik.errors.username && (
-                      <div className='error text-red-500'>
-                        {formik.errors.username}
-                      </div>
-                    )}
-                  </div>
-                  <div className='form-control'>
-                    <label className='label' htmlFor='email'>
-                      <span className='label-text'>email</span>
-                    </label>
-                    <input
-                      type='email'
-                      placeholder='email'
-                      className={`input ${
-                        formik.touched.email && formik.errors.email
-                          ? 'input-error'
-                          : ''
-                      }`}
-                      id='email'
-                      name='email'
-                      value={formik.values.email.toLowerCase()}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.email && formik.errors.email && (
-                      <div className='error text-red-500'>
-                        {formik.errors.email}
-                      </div>
-                    )}
-                  </div>
-                  <div className='form-control'>
-                    <label className='label' htmlFor='password'>
-                      <span className='label-text'>Password</span>
-                    </label>
-                    <input
-                      type='password'
-                      placeholder='password'
-                      className={`input ${
-                        formik.touched.password && formik.errors.password
-                          ? 'input-error'
-                          : ''
-                      }`}
-                      id='password'
-                      name='password'
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    <div className='label'>
-                      <span className='label-text-alt'>
-                        Your password will be encrypted
-                      </span>
-                    </div>
-                    {formik.touched.password && formik.errors.password && (
-                      <div className='error text-red-500'>
-                        {formik.errors.password}
-                      </div>
-                    )}
-                  </div>
-                  <div className='form-control mt-6'>
-                    <button
-                      type='submit'
-                      className={`btn btn-primary ${
-                        !formik.isValid || formik.isSubmitting
-                          ? 'btn-disabled'
-                          : ''
-                      }`}
-                    >
-                      Next
-                      {formik.isSubmitting ? (
-                        <span className='loading loading-spinner'></span>
-                      ) : (
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          strokeWidth={1.5}
-                          stroke='currentColor'
-                          className='h-6 w-6'
-                        >
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75'
-                          />
-                        </svg>
+                <form onSubmit={formik.handleSubmit}>
+                  <fieldset className='fieldset grid gap-y-3'>
+                    <div>
+                      <legend className='fieldset-label'>UserName</legend>
+                      <input
+                        type='username'
+                        placeholder='username'
+                        className={`input ${
+                          formik.touched.username && formik.errors.username
+                            ? 'input-error'
+                            : ''
+                        }`}
+                        id='username'
+                        name='username'
+                        value={formik.values.username.toLowerCase()}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.username && formik.errors.username && (
+                        <div className='error text-red-500'>
+                          {formik.errors.username}
+                        </div>
                       )}
-                    </button>
-                  </div>
+                    </div>
+                    <div>
+                      <legend className='fieldset-label'>email</legend>
+                      <input
+                        type='email'
+                        placeholder='email'
+                        className={`input ${
+                          formik.touched.email && formik.errors.email
+                            ? 'input-error'
+                            : ''
+                        }`}
+                        id='email'
+                        name='email'
+                        value={formik.values.email.toLowerCase()}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.email && formik.errors.email && (
+                        <div className='error text-red-500'>
+                          {formik.errors.email}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <legend className='fieldset-label'>Password</legend>
+                      <input
+                        type='password'
+                        placeholder='password'
+                        className={`input ${
+                          formik.touched.password && formik.errors.password
+                            ? 'input-error'
+                            : ''
+                        }`}
+                        id='password'
+                        name='password'
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      <p>Your password will be encrypted</p>
+                      {formik.touched.password && formik.errors.password && (
+                        <div className='error text-red-500'>
+                          {formik.errors.password}
+                        </div>
+                      )}
+                    </div>
+                      <button
+                        type='submit'
+                        className={`btn btn-primary mt-4 ${
+                          !formik.isValid || formik.isSubmitting
+                            ? 'btn-disabled'
+                            : ''
+                        }`}
+                      >
+                        Next
+                        {formik.isSubmitting ? (
+                          <span className='loading loading-spinner'></span>
+                        ) : (
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='h-6 w-6'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75'
+                            />
+                          </svg>
+                        )}
+                      </button>
+                  </fieldset>
                 </form>
               </div>
             </div>
