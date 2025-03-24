@@ -5,5 +5,5 @@ export const ThemeName = [
   { label: 'forest', value: 'forest' },
   { label: 'synthwave', value: 'synthwave' },
   { label: 'cyberpunk', value: 'cyberpunk' },
-  { label: 'dim', value: 'dim' },
+  { label: 'sunset', value: 'sunset' },
 ];

@@ -87,11 +87,11 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className='flex min-h-dvh min-w-fit place-items-center justify-center bg-base-200'>
+      <div className='bg-base-200 flex min-h-dvh min-w-fit place-items-center justify-center'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>
-              <div className='card my-20 w-full max-w-sm flex-shrink-0 bg-base-100'>
+              <div className='card bg-base-100 my-20 w-full max-w-sm shrink-0'>
                 <form
                   onSubmit={formik.handleSubmit}
                   className='card-body grid w-full max-w-xl gap-y-3'
@@ -99,38 +99,37 @@ const ProfilePage = () => {
                   <h3 className='text-left text-2xl font-bold'>
                     Update your data
                   </h3>
-                  <div className='form-control'>
-                    <label className='label' htmlFor='daily_work_required'>
-                      <span className='label-text flex items-center'>
-                        Daily work hour required
-                        <span
-                          className='tooltip tooltip-top ms-2 cursor-pointer'
-                          data-tip='Min work hours per day'
+
+                  <fieldset className='fieldset'>
+                    <legend className='fieldset-legend text-left'>
+                      Daily work hour required
+                      <span
+                        className='tooltip tooltip-top ms-2 cursor-pointer'
+                        data-tip='Min work hours per day'
+                      >
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={1.5}
+                          stroke='currentColor'
+                          className='text-warning me-1 h-6 w-6'
                         >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
-                            stroke='currentColor'
-                            className='me-1 h-6 w-6 text-warning'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                            />
-                          </svg>
-                        </span>
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                          />
+                        </svg>
                       </span>
-                    </label>
+                    </legend>
                     <input
                       type='number'
                       step='0.01'
                       id='daily_work_required'
                       name='daily_work_required'
                       placeholder='Type here'
-                      className={`input input-bordered w-full max-w-md ${
+                      className={`input w-full max-w-md ${
                         formik.touched.daily_work_required &&
                         formik.errors.daily_work_required
                           ? 'input-error'
@@ -146,36 +145,35 @@ const ProfilePage = () => {
                           {formik.errors.daily_work_required}
                         </div>
                       )}
-                  </div>
-                  <div className='form-control'>
-                    <label className='label' htmlFor='log_type'>
-                      <span className='label-text flex items-center'>
-                        Default Log Mode
-                        <span
-                          className='tooltip tooltip-top ms-2 cursor-pointer'
-                          data-tip='Default Mode to use on a fresh setup.'
+                  </fieldset>
+
+                  <fieldset className='fieldset'>
+                    <legend className='fieldset-legend text-start'>
+                      Default Log Mode
+                      <span
+                        className='tooltip tooltip-top ms-2 cursor-pointer'
+                        data-tip='Default Mode to use on a fresh setup.'
+                      >
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={1.5}
+                          stroke='currentColor'
+                          className='text-warning me-1 h-6 w-6'
                         >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
-                            stroke='currentColor'
-                            className='me-1 h-6 w-6 text-warning'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                            />
-                          </svg>
-                        </span>
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                          />
+                        </svg>
                       </span>
-                    </label>
+                    </legend>
                     <select
                       id='log_type'
                       name='log_type'
-                      className={`select select-bordered w-full max-w-xs ${
+                      className={`select w-full max-w-xs ${
                         formik.touched.log_type && formik.errors.log_type
                           ? 'input-error'
                           : ''
@@ -192,17 +190,16 @@ const ProfilePage = () => {
                         {formik.errors.log_type}
                       </div>
                     )}
-                  </div>
-                  <div className='form-control'>
-                    <label className='label' htmlFor='default_time_zone'>
-                      <span className='label-text flex items-center'>
-                        Default Time Zone
-                      </span>
-                    </label>
+                  </fieldset>
+
+                  <fieldset className='fieldset'>
+                    <legend className='fieldset-legend text-start'>
+                      Default Time Zone
+                    </legend>
                     <select
                       id='default_time_zone'
                       name='default_time_zone'
-                      className={`select select-bordered w-full max-w-xs ${
+                      className={`select w-full max-w-xs ${
                         formik.touched.default_time_zone &&
                         formik.errors.default_time_zone
                           ? 'border-error'
@@ -225,15 +222,13 @@ const ProfilePage = () => {
                           {formik.errors.default_time_zone}
                         </div>
                       )}
-                  </div>
-                  <div className='form-control mt-6'>
                     <button
                       type='submit'
-                      className={`btn btn-primary normal-case ${loading && 'btn-disabled'}`}
+                      className={`btn btn-primary normal-case mt-3 ${loading && 'btn-disabled'}`}
                     >
                       Update
                     </button>
-                  </div>
+                  </fieldset>
                 </form>
               </div>
             </div>

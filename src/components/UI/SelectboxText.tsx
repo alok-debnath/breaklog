@@ -36,7 +36,7 @@ const SelectboxText: React.FC<SelectboxTextProps> = ({
             )}
           </div>
           <select
-            className='select select-bordered w-min max-w-xs'
+            className='select w-min max-w-xs'
             onChange={onChange}
             value={checked}
           >

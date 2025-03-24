@@ -41,8 +41,8 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='fixed z-10 w-full bg-gradient-to-b from-base-200 to-transparent px-3 pt-3'>
-        <div className='navbar mx-auto max-w-screen-lg rounded-box bg-base-100 shadow-lg'>
+      <div className='fixed z-10 w-full bg-linear-to-b from-base-200 to-transparent px-3 pt-3'>
+        <div className='navbar mx-auto max-w-(--breakpoint-lg) rounded-box bg-base-100 shadow-lg'>
           <div className='navbar-start'>
             <div className='dropdown'>
               <label tabIndex={0} className='btn btn-ghost'>
@@ -63,12 +63,12 @@ const Navbar = () => {
               </label>
               <ul
                 tabIndex={0}
-                className='menu dropdown-content menu-lg z-[1] mt-3 w-52 space-y-2 rounded-box bg-base-100 p-2 shadow-lg'
+                className='menu dropdown-content menu-lg z-1 mt-3 w-52 space-y-2 rounded-box bg-base-100 p-2 shadow-lg'
               >
                 <li>
                   <Link
                     href='/dashboard'
-                    className={`${pathname === '/dashboard' ? 'focus' : ''}`}
+                    className={`${pathname === '/dashboard' ? 'menu-focus' : ''}`}
                   >
                     Homepage
                   </Link>
@@ -76,7 +76,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href='/dashboard/history'
-                    className={`${pathname === '/dashboard/history' ? 'focus' : ''}`}
+                    className={`${pathname === '/dashboard/history' ? 'menu-focus' : ''}`}
                   >
                     History
                   </Link>
@@ -101,8 +101,8 @@ const Navbar = () => {
                       <span className='flex-1 space-y-9 py-1'>
                         <span className='space-y-3'>
                           <span className='grid grid-cols-6 gap-5'>
-                            <span className='col-span-4 h-2 rounded bg-slate-700'></span>
-                            <span className='col-span-2 h-2 rounded bg-slate-700'></span>
+                            <span className='col-span-4 h-2 rounded-sm bg-slate-700'></span>
+                            <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
                           </span>
                         </span>
                       </span>
@@ -144,7 +144,7 @@ const Navbar = () => {
                       <div className='flex-1 space-y-9 py-1'>
                         <div className='space-y-3'>
                           <div className='grid grid-cols-3 gap-3'>
-                            <div className='col-span-3 h-2 rounded bg-slate-700'></div>
+                            <div className='col-span-3 h-2 rounded-sm bg-slate-700'></div>
                           </div>
                         </div>
                       </div>
@@ -154,7 +154,7 @@ const Navbar = () => {
               </label>
               <ul
                 tabIndex={0}
-                className='menu dropdown-content menu-lg z-[1] mt-3 w-52 rounded-box bg-base-100 p-2 shadow-lg'
+                className='menu dropdown-content menu-lg z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow-lg'
               >
                 <li>
                   <Link href='/dashboard/profile' className='justify-between'>

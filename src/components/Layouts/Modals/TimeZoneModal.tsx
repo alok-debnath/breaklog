@@ -185,7 +185,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
                 </label>
                 <select
                   value={selectedTimeZone}
-                  className='select select-bordered w-full'
+                  className='select w-full'
                   onChange={(e) => setSelectedTimeZone(e.currentTarget.value)}
                 >
                   <option value=''>Select a timezone</option>

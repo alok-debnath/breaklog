@@ -119,7 +119,7 @@ const HistoryPage = () => {
                 <div className='mb-2 mt-5'>
                   <div className='join'>
                     <select
-                      className='join-item select select-bordered'
+                      className='join-item select'
                       value={selectedMonth.toString()} // Convert to string for consistency
                       onChange={(e) => setSelectedMonth(+e.target.value)} // Convert to number
                     >
@@ -136,7 +136,7 @@ const HistoryPage = () => {
                       ))}
                     </select>
                     <select
-                      className='join-item select select-bordered'
+                      className='join-item select'
                       value={selectedYear.toString()} // Convert to string for consistency
                       onChange={(e) => setSelectedYear(+e.target.value)} // Convert to number
                     >
