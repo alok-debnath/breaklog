@@ -18,6 +18,7 @@ const Index = () => {
   const isClient = typeof window !== 'undefined';
 
   const logEntry = async (value: string) => {
+    if (!isClient) return;
     try {
       if (value === 'undo log') {
         const isConfirmed = await confirm({
