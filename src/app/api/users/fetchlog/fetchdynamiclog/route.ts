@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
       select: {
         id: true,
         createdAt: true,
+        isHalfDay: true,
         logEntries: {
           select: {
             log_status: true,
@@ -80,6 +81,7 @@ export async function POST(request: NextRequest) {
     };
 
     const dateMetrics = [];
+    let halfDayCount = 0;
 
     // Process logs to calculate work and break time
     for (const date in logsByDate) {
@@ -150,12 +152,25 @@ export async function POST(request: NextRequest) {
             const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
             const year = parsedDate.getFullYear().toString().slice(-2);
             const formattedDate = `${day}-${month}-${year}`;
+
+            // Check if the log is marked as half-day
+            const isHalfDay = logs.some(
+              (log) =>
+                log.isHalfDay &&
+                log.createdAt.toISOString().split('T')[0] === date,
+            );
+
+            if (isHalfDay) {
+              halfDayCount++;
+            }
+
             dateMetrics.push({
               date: formattedDate,
               breakTime: breakTime,
               workDone: workDone,
               formattedBreakTime: formattedBreakTime,
               formattedWorkDone: formattedWorkDone,
+              isHalfDay: isHalfDay,
             });
           }
         }
@@ -177,7 +192,9 @@ export async function POST(request: NextRequest) {
       }
 
       // Calculate the expected work hours.
-      const expectedWorkHours = (user?.daily_work_required ?? 0) * numberOfDays;
+      const expectedWorkHours =
+        (user?.daily_work_required ?? 0) * numberOfDays -
+        ((user?.daily_work_required ?? 0) / 2) * halfDayCount;
 
       // Format the total break time and total work done.
       const formattedTotalBreakTime = formatTime(totalBreakTime);
@@ -190,6 +207,7 @@ export async function POST(request: NextRequest) {
         formattedTotalWorkDone,
         numberOfDays,
         expectedWorkHours,
+        halfDayCount,
       };
     }
 

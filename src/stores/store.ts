@@ -16,6 +16,7 @@ interface summary {
   formattedTotalWorkDone: string;
   numberOfDays: string;
   expectedWorkHours: number;
+  halfDayCount: number;
   // actualWorkHours: string;
 }
 export interface UserData {
@@ -99,6 +100,7 @@ export const useStore = create<StoreState>((set) => ({
     formattedTotalWorkDone: '',
     numberOfDays: '',
     expectedWorkHours: 0,
+    halfDayCount: 0,
     // actualWorkHours: "",
   },
   breaklogMode: true,

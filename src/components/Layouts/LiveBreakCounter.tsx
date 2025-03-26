@@ -29,6 +29,7 @@ const LiveBreakCounter = () => {
     const interval = setInterval(updateBreakTime, 1000);
 
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currBreak, diffInSeconds, workData.breakTime]);
 
   return (
