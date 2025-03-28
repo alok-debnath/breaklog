@@ -62,7 +62,7 @@ const HistoryPage = () => {
       nextYear + '-' + String(nextMonth).padStart(2, '0') + '-01T00:00:00.000Z';
 
     try {
-      setCollapseBoxState(false);
+      // setCollapseBoxState(false);
       useStore.setState(() => ({ loading: true }));
 
       const values = {
@@ -76,7 +76,7 @@ const HistoryPage = () => {
       );
 
       if (res.data.status === 200) {
-        // setCollapseBoxState(true);
+        setCollapseBoxState(true);
 
         useStore.setState(() => ({
           monthLogs: res.data.data,
@@ -205,13 +205,6 @@ const HistoryPage = () => {
                             </span>{' '}
                             day
                           </p>
-                          <p>
-                            Break Taken:{' '}
-                            <span className='text-success font-semibold'>
-                              {summary.formattedTotalBreakTime}
-                            </span>{' '}
-                            hr
-                          </p>
                           {summary.halfDayCount > 0 && (
                             <p>
                               Half-Days:{' '}
@@ -221,6 +214,13 @@ const HistoryPage = () => {
                               Day
                             </p>
                           )}
+                          <p>
+                            Break Taken:{' '}
+                            <span className='text-success font-semibold'>
+                              {summary.formattedTotalBreakTime}
+                            </span>{' '}
+                            hr
+                          </p>
                         </div>
                       </div>
                       <table className='table-xs md:table-md mt-3 table w-full table-fixed text-center'>
