@@ -31,6 +31,7 @@ interface MonthLogData {
   workDone: number;
   formattedBreakTime: string;
   formattedWorkDone: string;
+  isHalfDay: boolean;
 }
 interface LogEditData {
   log_id: string;
@@ -87,6 +88,7 @@ export const useStore = create<StoreState>((set) => ({
       workDone: 0,
       formattedBreakTime: '',
       formattedWorkDone: '',
+      isHalfDay: false,
     },
   ],
   userData: {

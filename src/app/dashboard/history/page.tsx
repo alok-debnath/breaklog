@@ -206,13 +206,15 @@ const HistoryPage = () => {
                             day
                           </p>
                           {summary.halfDayCount > 0 && (
-                            <p>
+                            <div>
+                              <p className='inline-block border border-dashed border-gray-400 rounded-lg px-2 py-1'>
                               Half-Days:{' '}
                               <span className='font-semibold'>
                                 {summary.halfDayCount}
                               </span>{' '}
                               Day
-                            </p>
+                              </p>
+                            </div>
                           )}
                           <p>
                             Break Taken:{' '}
@@ -271,10 +273,13 @@ const HistoryPage = () => {
                                     <Link
                                       href={`/dashboard/history/${log.date}`}
                                       className={`btn btn-sm min-w-full text-xs font-bold ${
-                                        log.workDone >=
-                                        userData.daily_work_required * 3600000
-                                          ? 'btn-success'
-                                          : 'btn-error'
+                                        log.isHalfDay
+                                          ? 'btn-dash'
+                                          : log.workDone >=
+                                              userData.daily_work_required *
+                                                3600000
+                                            ? 'btn-success'
+                                            : 'btn-error'
                                       }`}
                                     >
                                       {log.date}
