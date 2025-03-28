@@ -62,7 +62,7 @@ const HistoryPage = () => {
       nextYear + '-' + String(nextMonth).padStart(2, '0') + '-01T00:00:00.000Z';
 
     try {
-      setCollapseBoxState(false);
+      // setCollapseBoxState(false);
       useStore.setState(() => ({ loading: true }));
 
       const values = {
@@ -76,7 +76,7 @@ const HistoryPage = () => {
       );
 
       if (res.data.status === 200) {
-        // setCollapseBoxState(true);
+        setCollapseBoxState(true);
 
         useStore.setState(() => ({
           monthLogs: res.data.data,
@@ -108,15 +108,15 @@ const HistoryPage = () => {
 
   return (
     <>
-      <div className='flex min-h-dvh min-w-fit place-items-center justify-center bg-base-200'>
+      <div className='bg-base-200 flex min-h-dvh min-w-fit place-items-center justify-center'>
         <div className='hero-content text-center'>
           <div className='max-w-md'>
-            <div className='card my-20 bg-base-100 shadow-xl'>
+            <div className='card bg-base-100 my-20 shadow-xl'>
               <div className='card-body'>
                 <h3 className='text-md text-left font-semibold'>
                   Fetch required data
                 </h3>
-                <div className='mb-2 mt-5'>
+                <div className='mt-5 mb-2'>
                   <div className='join'>
                     <select
                       className='join-item select'
@@ -165,7 +165,7 @@ const HistoryPage = () => {
                     </button>
                   </div>
                 </div>
-                <div className='collapse bg-base-200'>
+                <div className='bg-base-200 collapse'>
                   <input
                     type='checkbox'
                     checked={collapseBoxState}
@@ -200,21 +200,30 @@ const HistoryPage = () => {
                           <div className='divider my-1'></div>
                           <p>
                             Days Logged:{' '}
-                            <span className='font-semibold text-success'>
+                            <span className='text-success font-semibold'>
                               {summary.numberOfDays}
                             </span>{' '}
                             day
                           </p>
+                          {summary.halfDayCount > 0 && (
+                            <p>
+                              Half-Days:{' '}
+                              <span className='font-semibold'>
+                                {summary.halfDayCount}
+                              </span>{' '}
+                              Day
+                            </p>
+                          )}
                           <p>
                             Break Taken:{' '}
-                            <span className='font-semibold text-success'>
+                            <span className='text-success font-semibold'>
                               {summary.formattedTotalBreakTime}
                             </span>{' '}
                             hr
                           </p>
                         </div>
                       </div>
-                      <table className='table table-xs mt-3 w-full table-fixed text-center md:table-md'>
+                      <table className='table-xs md:table-md mt-3 table w-full table-fixed text-center'>
                         <thead>
                           <tr>
                             <th>
@@ -229,7 +238,7 @@ const HistoryPage = () => {
                                     viewBox='0 0 24 24'
                                     strokeWidth={1.5}
                                     stroke='currentColor'
-                                    className='me-1 h-6 w-6 text-warning'
+                                    className='text-warning me-1 h-6 w-6'
                                   >
                                     <path
                                       strokeLinecap='round'
