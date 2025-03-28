@@ -73,6 +73,7 @@ interface StoreState {
   breaks: BreakData;
   logEditStore: LogEditData;
   dialogModal: DialogModalData;
+  initialPageLoadDone: boolean;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -130,4 +131,5 @@ export const useStore = create<StoreState>((set) => ({
     modal_confirm_btn: '',
     modal_cancel_btn: '',
   },
+  initialPageLoadDone: false,
 }));

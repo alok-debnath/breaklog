@@ -46,6 +46,9 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
       localStorage.setItem('thememode', themeMode);
       document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
+      useStore.setState({
+        initialPageLoadDone: true,
+      });
     }
   }, [
     breaklogMode,

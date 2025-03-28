@@ -12,13 +12,13 @@ import useOnScreen from '@/hooks/useOnScreen';
 import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 
 const Index = () => {
-  const { breaklogMode, workData, loading, userData } = useStore();
+  const { breaklogMode, workData, loading, userData,initialPageLoadDone } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
 
   const logEntry = async (value: string) => {
-    if (!isClient) return;
+    if (!isClient || !initialPageLoadDone) return;
     try {
       if (value === 'undo log') {
         const isConfirmed = await confirm({
