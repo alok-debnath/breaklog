@@ -38,16 +38,42 @@ const LogsCard: React.FC<LogsCardProps> = ({
     formattedWorkEndTime,
   } = useWorkDataUpdater(currentWorkData);
 
+  // is the current log half day
+  const isHalfDay =
+    userData.daily_work_required &&
+    currentWorkData.lastLogStatus === 'day end' &&
+    unformattedWorkDone >= (userData.daily_work_required * 3600000) / 2 &&
+    unformattedWorkDone <= (userData.daily_work_required * 3600000 * 3) / 4;
+
   return (
     <>
       <div
-        className={`card mt-20 bg-base-100 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(currentWorkData.lastLogStatus)) && 'rounded-b-none'} ${
+        className={`card bg-base-100 mt-20 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(currentWorkData.lastLogStatus)) && 'rounded-b-none'} ${
           page == 'history' &&
           (isWorkDoneSuccess
-            ? 'border-2 border-success'
-            : 'border-2 border-error')
+            ? 'border-success border-2'
+            : 'border-error border-2')
         }`}
       >
+        {isHalfDay === true && currentWorkData.isHalfDay !== true && (
+          <div className='card-body bg-success/30 rounded-t-lg px-5 py-3 text-amber-50'>
+            Should this log be marked as a half day?
+            <div className='mt-2 flex w-full space-x-3'>
+              <button className='btn btn-sm btn-success flex-1'>Yes</button>
+              <button className='btn btn-sm btn-error flex-1'>No</button>
+            </div>
+          </div>
+        )}
+        {currentWorkData.isHalfDay === true && (
+          <div className='card-body bg-warning/30 rounded-t-lg px-5 py-3'>
+            <div className='flex items-center justify-between gap-3'>
+              <div className='label-text text-start text-wrap text-amber-50'>
+                This log has been marked as half day
+              </div>
+              <button className='btn btn-sm btn-success px-6'>Undo</button>
+            </div>
+          </div>
+        )}
         <div className='card-body p-5 md:p-9'>
           {page === 'history' && (
             <div className='mb-2 block text-left font-semibold'>
@@ -172,7 +198,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
               </div>
             </div>
             {!breaklogMode && page !== 'history' && formattedWorkEndTime ? (
-              <div className='card mt-3 grid grid-cols-2 items-center bg-base-200 py-2 shadow-md'>
+              <div className='card bg-base-200 mt-3 grid grid-cols-2 items-center py-2 shadow-md'>
                 <p className='text-sm font-medium'>Work until:</p>
                 <p className='font-mono text-sm font-semibold'>
                   {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', {
@@ -186,12 +212,12 @@ const LogsCard: React.FC<LogsCardProps> = ({
               </div>
             ) : null}
           </div>
-          <div className='collapse collapse-arrow border border-base-300'>
+          <div className='collapse-arrow border-base-300 collapse border'>
             <input type='checkbox' className='peer' />
             <div className='collapse-title ps-5 text-left font-medium peer-checked:hidden'>
               show logs
             </div>
-            <div className='collapse-title hidden bg-base-300 ps-5 text-left font-medium peer-checked:block'>
+            <div className='collapse-title bg-base-300 hidden ps-5 text-left font-medium peer-checked:block'>
               hide logs
             </div>
             {page !== 'history' && (
@@ -199,7 +225,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 {currentLogs.length > 0 ? (
                   <>
                     Recent log:{' '}
-                    <span className='font-bold text-success'>
+                    <span className='text-success font-bold'>
                       {currentWorkData.lastLogStatus}
                     </span>
                   </>
@@ -229,7 +255,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                               viewBox='0 0 24 24'
                               strokeWidth={1.5}
                               stroke='currentColor'
-                              className='me-1 h-6 w-6 text-warning'
+                              className='text-warning me-1 h-6 w-6'
                             >
                               <path
                                 strokeLinecap='round'

@@ -9,6 +9,7 @@ export interface WorkData {
   formattedWorkEndTime: string;
   formattedWorkLeft: string;
   calculatedOn: number;
+  isHalfDay: boolean;
 }
 interface summary {
   totalWorkDone: number;
@@ -116,6 +117,7 @@ export const useStore = create<StoreState>((set) => ({
     formattedWorkEndTime: '',
     formattedWorkLeft: '',
     calculatedOn: 0,
+    isHalfDay: false,
   },
   loading: false,
   currBreak: null,

@@ -2,6 +2,7 @@ import prisma from '@/dbConfig/dbConfig';
 import { DateTime } from 'luxon';
 import getStartAndEndOfDay from './getStartAndEndOfDay';
 
+// Function to fetch logs for a user for a specific date
 export const fetchLogs = async (reqBody: any, userId: string) => {
   const { date } = reqBody;
 
@@ -33,6 +34,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
     },
     select: {
       logEntries: true,
+      isHalfDay: true,
     },
   });
 
@@ -153,6 +155,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
       formattedWorkEndTime,
       formattedWorkLeft,
       calculatedOn: Date.now(), // epoch timestamp
+      isHalfDay: logDoc?.isHalfDay || false,
     },
   };
 };
