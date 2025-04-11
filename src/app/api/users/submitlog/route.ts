@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
         const lastEntry = logDoc.logEntries.pop(); // Remove the last log entry
         await prisma.log.update({
           where: { id: logDoc.id },
-          data: { logEntries: logDoc.logEntries },
+          data: { logEntries: logDoc.logEntries, isHalfDay: false },
         });
       }
     } else if (logtype === 'mark-as-half-day') {
