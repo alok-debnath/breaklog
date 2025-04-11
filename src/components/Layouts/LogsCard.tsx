@@ -5,6 +5,7 @@ import React from 'react';
 import { LogsData } from '@/stores/store';
 import { WorkData } from '@/stores/store';
 import useWorkDataUpdater from '@/hooks/useWorkDataUpdater';
+import HalfDaySection from './HelperUI/HalfDaySection';
 
 interface LogsCardProps {
   page?: string;
@@ -55,25 +56,10 @@ const LogsCard: React.FC<LogsCardProps> = ({
             : 'border-error border-2')
         }`}
       >
-        {isHalfDay === true && currentWorkData.isHalfDay !== true && (
-          <div className='card-body bg-success/30 rounded-t-lg px-5 py-3 text-amber-50'>
-            Should this log be marked as a half day?
-            <div className='mt-2 flex w-full space-x-3'>
-              <button className='btn btn-sm btn-success flex-1'>Yes</button>
-              <button className='btn btn-sm btn-error flex-1'>No</button>
-            </div>
-          </div>
+        {isHalfDay === true && (
+          <HalfDaySection isHalfDay={currentWorkData.isHalfDay} />
         )}
-        {currentWorkData.isHalfDay === true && (
-          <div className='card-body bg-warning/30 rounded-t-lg px-5 py-3'>
-            <div className='flex items-center justify-between gap-3'>
-              <div className='label-text text-start text-wrap text-amber-50'>
-                This log has been marked as half day
-              </div>
-              <button className='btn btn-sm btn-success px-6'>Undo</button>
-            </div>
-          </div>
-        )}
+
         <div className='card-body p-5 md:p-9'>
           {page === 'history' && (
             <div className='mb-2 block text-left font-semibold'>

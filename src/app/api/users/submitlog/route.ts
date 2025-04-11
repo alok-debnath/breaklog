@@ -40,6 +40,26 @@ export async function POST(request: NextRequest) {
           data: { logEntries: logDoc.logEntries },
         });
       }
+    } else if (logtype === 'mark-as-half-day') {
+      if (logDoc && logDoc.logEntries.length > 1) {
+        const lastEntry = logDoc.logEntries[logDoc.logEntries.length - 1];
+        if (lastEntry.log_status === 'day end') {
+          await prisma.log.update({
+            where: { id: logDoc.id },
+            data: { isHalfDay: true },
+          });
+        }
+      }
+    } else if (logtype === 'undo-half-day') {
+      if (logDoc && logDoc.logEntries.length > 1) {
+        const lastEntry = logDoc.logEntries[logDoc.logEntries.length - 1];
+        if (lastEntry.log_status === 'day end') {
+          await prisma.log.update({
+            where: { id: logDoc.id },
+            data: { isHalfDay: false },
+          });
+        }
+      }
     }
 
     if (logtype === 'day log') {
