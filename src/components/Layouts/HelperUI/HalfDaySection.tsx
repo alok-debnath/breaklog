@@ -3,7 +3,7 @@ import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useStore } from '@/stores/store';
 import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface HalfDaySectionProps {
   isHalfDay: boolean;
@@ -13,18 +13,22 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
   const isClient = typeof window !== 'undefined';
   const router = useRouter();
   const { initialPageLoadDone, loading } = useStore();
+  const pathname = usePathname();
 
   const [isHalfDayState, setIsHalfDayState] = useState(null);
 
   const simpleLogEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
     try {
+
+      const date = pathname?.split('/').pop();
       const values = {
         logtype: value,
+        date: date,
       };
 
       useStore.setState(() => ({ loading: true }));
-      const res = await axios.post('/api/users/submitlog', values);
+      const res = await axios.post('/api/users/submitlog/submitHalfday', values);
       setIsHalfDayState(res.data.fetchedLog.workdata.isHalfDay);
       useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
