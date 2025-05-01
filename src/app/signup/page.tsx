@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import { useStore } from '@/stores/store';
 import * as Yup from 'yup';
@@ -52,12 +52,9 @@ export default function SignupPage() {
       }
     } catch (error: any) {
       if (error.response.data.error !== undefined) {
-        toast.error(error.response.data.error, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
-          },
+        handleError({
+          error: { message: error.response.data.error },
+          router: router,
         });
         if (error.response.data.focusOn.length > 0) {
           error.response.data.focusOn.forEach((field: string) => {
@@ -75,7 +72,7 @@ export default function SignupPage() {
   const { themeMode } = useStore();
   return (
     <>
-      <div data-theme={themeMode}>
+      <div data-theme={themeMode || 'caramellatte'}>
         <div className='hero bg-base-200 min-h-screen'>
           <Toaster position='top-left' reverseOrder={false} />
           <div className='hero-content flex-col lg:flex-row-reverse'>

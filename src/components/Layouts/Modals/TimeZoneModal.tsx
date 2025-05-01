@@ -4,8 +4,8 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
-import { handleError } from '../../common/CommonCodeBlocks';
-import toast from 'react-hot-toast';
+import { handleError, handleSuccessToast } from '../../common/CommonCodeBlocks';
+
 declare global {
   interface Window {
     time_zone_modal: {
@@ -47,12 +47,8 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
             ...userData,
           },
         });
-        toast.success('Data saved succesfully', {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(0, 120, 0)',
-          },
+        handleSuccessToast({
+          message: 'Data saved successfully',
         });
       }
     } catch (error: any) {
@@ -81,11 +77,11 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
         id='time_zone_modal'
         className='modal modal-bottom sm:modal-middle'
       >
-        <form method='dialog' className='modal-box bg-base-200 px-0 pb-0 pt-0'>
+        <form method='dialog' className='modal-box bg-base-200 px-0 pt-0 pb-0'>
           <h3 className='py-6 text-center text-lg font-bold'>
             Select Time Zone
           </h3>
-          <div className='rounded-t- card rounded-b-none bg-base-100 px-5 pb-5'>
+          <div className='rounded-t- card bg-base-100 rounded-b-none px-5 pb-5'>
             <div className='card-body'>
               <p>
                 Device Timezone:{' '}
@@ -127,23 +123,23 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
                     'undefined'}
                 </span>
               </p>
-              <div className='collapse collapse-arrow bg-base-200'>
+              <div className='collapse-arrow bg-base-200 collapse'>
                 <input type='checkbox' />
                 <div className='collapse-title font-medium'>
                   Click for more info
                 </div>
                 <div className='collapse-content text-sm'>
                   <p>
-                    If your work ends within the same day then you don&apos;t have to
-                    bother and can select your own timezone
+                    If your work ends within the same day then you don&apos;t
+                    have to bother and can select your own timezone
                   </p>
                   <div className='divider'>OR</div>
                   <p>
                     In the event that you have an irregular work schedule,
                     consider using a TimeZone where your shift will start and
                     end within the same working day (this is solely for
-                    calculation purposes only and won&apos;t affect how you see the
-                    time).
+                    calculation purposes only and won&apos;t affect how you see
+                    the time).
                   </p>
                   <h3 className='mt-3 font-bold'>Example:</h3>
                   <p className='mb-3'>
@@ -157,7 +153,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
                     someting like
                     <span className='font-bold'> GMT+2:00 or GMT+3:00</span>
                   </p>
-                  <table className='table table-zebra text-center'>
+                  <table className='table-zebra table text-center'>
                     <thead>
                       <tr>
                         <th>Time</th>

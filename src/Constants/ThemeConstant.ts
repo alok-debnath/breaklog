@@ -1,9 +1,7 @@
 export const ThemeName = [
-  { label: 'light', value: 'light' },
-  { label: 'retro', value: 'retro' },
-  { label: 'dark', value: 'dark' },
-  { label: 'forest', value: 'forest' },
-  { label: 'synthwave', value: 'synthwave' },
-  { label: 'cyberpunk', value: 'cyberpunk' },
+  { label: 'caramellate', value: 'caramellatte' },
   { label: 'sunset', value: 'sunset' },
+  { label: 'synthwave', value: 'synthwave' },
+  { label: 'forest', value: 'forest' },
+  { label: 'coffee', value: 'coffee' },
 ];

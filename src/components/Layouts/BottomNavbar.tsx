@@ -21,9 +21,9 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
   return (
     <>
       <LiveBreakCounter />
-      <div className='fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-linear-to-b from-transparent to-base-200'></div>
+      <div className='to-base-200 fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-linear-to-b from-transparent'></div>
       <div className='fixed bottom-3 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2'>
-        <div className='mx-3 rounded-full bg-base-100'>
+        <div className='bg-base-100 mx-3 rounded-full shadow-lg'>
           <div
             className={`mx-auto grid h-full max-w-lg items-center justify-center space-x-2 p-2 ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? 'grid-cols-3' : 'grid-cols-5'}`}
           >
@@ -49,7 +49,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
               </label>
               <ul
                 tabIndex={0}
-                className='menu dropdown-content mb-2 rounded-box bg-base-100 shadow-sm'
+                className='menu dropdown-content rounded-box bg-base-100 mb-2 shadow-sm'
               >
                 {/* <li>
                   <span
@@ -103,7 +103,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
               >
                 <Button
                   text='End Day'
-                  className={`btn w-full rounded-full bg-error/20 font-semibold text-error ${
+                  className={`btn bg-error/20 text-error w-full rounded-full font-semibold ${
                     ['exit', null, 'day end'].includes(
                       workData.lastLogStatus,
                     ) ||
@@ -121,7 +121,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                 onClick={() =>
                   breaklogMode ? logEntry('break log') : logEntry('day log')
                 }
-                className={`btn ${btnState ? 'btn-disabled' : ''} group inline-flex w-full items-center justify-center rounded-full bg-success/20 font-medium text-success`}
+                className={`btn ${btnState ? 'btn-disabled' : ''} group bg-success/20 text-success inline-flex w-full items-center justify-center rounded-full font-medium`}
               >
                 <p className='font-semibold'>
                   {workData.lastLogStatus === null && !breaklogMode

@@ -14,13 +14,15 @@ export const handleInvalidToken = async ({
       await axios.get('/api/auth/logout');
       router.push('/login');
     } catch (error: any) {
-      toast.error(error.message, {
-        style: {
-          padding: '15px',
-          color: 'white',
-          backgroundColor: 'rgb(214, 60, 60)',
-        },
-      });
+      toast.custom((t) => (
+        <div
+          className={`bg-error/20 rounded-2xl px-6 py-4 font-semibold shadow-lg ${
+            t.visible ? 'animate-enter' : 'animate-leave'
+          }`}
+        >
+          {error.message}
+        </div>
+      ));
     }
   }
 };

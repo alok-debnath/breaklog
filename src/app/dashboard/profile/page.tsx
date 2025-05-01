@@ -1,10 +1,12 @@
 'use client';
 import axios from 'axios';
-import toast from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { handleError } from '@/components/common/CommonCodeBlocks';
+import {
+  handleError,
+  handleSuccessToast,
+} from '@/components/common/CommonCodeBlocks';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
@@ -60,12 +62,8 @@ const ProfilePage = () => {
             ...formik.values,
           },
         });
-        toast.success('Data saved succesfully', {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(0, 120, 0)',
-          },
+        handleSuccessToast({
+          message: 'Data saved successfully',
         });
       }
     } catch (error: any) {
@@ -224,7 +222,7 @@ const ProfilePage = () => {
                       )}
                     <button
                       type='submit'
-                      className={`btn btn-primary normal-case mt-3 ${loading && 'btn-disabled'}`}
+                      className={`btn btn-primary mt-3 normal-case ${loading && 'btn-disabled'}`}
                     >
                       Update
                     </button>

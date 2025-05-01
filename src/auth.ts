@@ -17,7 +17,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email and password are required');
+          // throw new Error('Email and password are required');
+          return null;
         }
 
         const account = await prisma.account.findFirst({
@@ -29,11 +30,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         });
 
         if (!account || !account.user) {
-          throw new Error('Invalid credentials');
+          // throw new Error('Invalid credentials');
+          return null;
         }
 
         if (!account.access_token) {
-          throw new Error('No password set for this account');
+          // throw new Error('No password set for this account');
+          return null;
         }
 
         if (
@@ -41,12 +44,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           !credentials?.password ||
           typeof credentials.password !== 'string'
         ) {
-          throw new Error('Email and password are required');
+          // throw new Error('Email and password are required');
+          return null;
         }
 
         const valid = await compare(credentials.password, account.access_token);
         if (!valid) {
-          throw new Error('Invalid credentials');
+          // throw new Error('Invalid credentials');
+          return null;
         }
 
         return {

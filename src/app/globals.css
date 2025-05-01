@@ -1,7 +1,12 @@
 @import 'tailwindcss';
 
 @plugin "daisyui" {
-  themes: light --default, dark --prefersdark, synthwave, cyberpunk, forest, retro, sunset;
+  themes:
+    caramellatte --default,
+    sunset --prefersdark,
+    synthwave,
+    forest,
+    coffee;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -15,7 +20,6 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-
   *,
   ::after,
   ::before,
@@ -31,9 +35,11 @@
   width: 900px;
   height: 900px;
   border-radius: 50%;
-  background: radial-gradient(circle,
-      rgba(18, 183, 114, 0.137) 0%,
-      rgba(0, 0, 0, 0) 60%);
+  background: radial-gradient(
+    circle,
+    rgba(18, 183, 114, 0.137) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
   pointer-events: none;
   transform: translate(-50%, -50%);
   transition:
@@ -57,7 +63,41 @@
   width: 1200px;
   height: 1200px;
   border-radius: 50%;
-  background: radial-gradient(circle,
-      rgba(128, 255, 202, 0.3) 0%,
-      rgba(0, 0, 0, 0) 60%);
+  background: radial-gradient(
+    circle,
+    rgba(128, 255, 202, 0.3) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+}
+
+@layer utilities {
+  @keyframes fadeInRight {
+    0% {
+      opacity: 0;
+      transform: translateX(2rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fadeOutLeft {
+    0% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-2rem);
+    }
+  }
+
+  .animate-enter {
+    animation: fadeInRight 300ms ease-out;
+  }
+
+  .animate-leave {
+    animation: fadeOutLeft 300ms ease-in forwards;
+  }
 }

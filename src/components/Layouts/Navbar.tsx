@@ -161,7 +161,7 @@ const Navbar = () => {
           </div>
         </div>
         <Toaster
-          containerClassName='mt-16'
+          containerClassName='mt-18'
           position='top-left'
           reverseOrder={false}
         />

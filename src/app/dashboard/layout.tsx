@@ -12,7 +12,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const themeCookie = (await cookies()).get('theme')?.value || 'light';
+  const themeCookie = (await cookies()).get('theme')?.value || 'caramellatte';
 
   return (
     <section>

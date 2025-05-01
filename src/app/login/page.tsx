@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import { useStore } from '@/stores/store';
 import * as Yup from 'yup';
@@ -44,19 +44,31 @@ export default function LoginPage() {
         password: values.password,
       });
 
-      if (res?.ok) {
+      if (!res) {
+        // signIn() failed unexpectedly (network or internal error)
+        handleError({
+          error: { message: 'Unexpected error. Please try again' },
+          router: router,
+        });
+      } else if (res.ok && !res.error) {
         router.push('/dashboard');
-      } else if (res?.error) {
-        toast.error(res.error, {
-          style: {
-            padding: '15px',
-            color: 'white',
-            backgroundColor: 'rgb(214, 60, 60)',
+      } else {
+        // Invalid credentials or handled failure
+        handleError({
+          error: {
+            message:
+              //  res.error ||
+              'Invalid credentials',
           },
+          router: router,
         });
       }
     } catch (error: any) {
-      handleError({ error, router: null });
+      console.error('SignIn exception:', error);
+      handleError({
+        error: { message: 'An unexpected error occurred' },
+        router: router,
+      });
     } finally {
       formik.setSubmitting(false);
     }
@@ -65,7 +77,7 @@ export default function LoginPage() {
   const { themeMode } = useStore();
   return (
     <>
-      <div data-theme={themeMode}>
+      <div data-theme={themeMode || 'caramellatte'}>
         <div className='hero bg-base-200 min-h-screen'>
           <Toaster position='top-left' reverseOrder={false} />
           <div className='hero-content flex-col lg:flex-row-reverse'>

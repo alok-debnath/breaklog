@@ -14,9 +14,13 @@ const SelectboxText: React.FC<SelectboxTextProps> = ({
   onChange,
 }) => {
   const OptionData = OptionValue.map((data, index) => {
-    const isSelected = checked === data.value;
+    // const isSelected = checked === data.value;
     return (
-      <option value={data.value} key={index} disabled={isSelected}>
+      <option
+        value={data.value}
+        key={index}
+        // disabled={isSelected}
+      >
         {data.label}
       </option>
     );
