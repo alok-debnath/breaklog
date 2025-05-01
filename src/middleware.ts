@@ -8,8 +8,8 @@ export function middleware(request: NextRequest) {
 
   // NextAuth session token cookie (works both dev & prod)
   const token =
-    request.cookies.get('next-auth.session-token')?.value ||
-    request.cookies.get('__Secure-next-auth.session-token')?.value ||
+    request.cookies.get('authjs.session-token')?.value ||
+    request.cookies.get('__Secure-authjs.session-token')?.value ||
     '';
 
   if (path === '/home' && token) {

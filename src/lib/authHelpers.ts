@@ -1,10 +1,9 @@
 // lib/authHelpers.ts
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth";
+import { auth } from "@/auth";
 import { cookies } from "next/headers";
 
 export const getUserIdFromSession = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
   if (!session || !session.user?.id) {
     // Clear NextAuth session cookie
