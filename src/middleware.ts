@@ -1,15 +1,17 @@
+// src/middleware.ts
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-// This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-
   const isPublicPath = path === '/login' || path === '/signup' || path === '/';
 
-  const token = request.cookies.get('token')?.value || '';
+  // NextAuth session token cookie (works both dev & prod)
+  const token =
+    request.cookies.get('next-auth.session-token')?.value ||
+    request.cookies.get('__Secure-next-auth.session-token')?.value ||
+    '';
 
-  // Rewrite /home to / if token is present
   if (path === '/home' && token) {
     return NextResponse.rewrite(new URL('/', request.nextUrl));
   }
@@ -17,9 +19,11 @@ export function middleware(request: NextRequest) {
   if (path === '/' && !token) {
     return;
   }
+
   if (isPublicPath && token) {
     return NextResponse.redirect(new URL('/dashboard', request.nextUrl));
   }
+
   if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }

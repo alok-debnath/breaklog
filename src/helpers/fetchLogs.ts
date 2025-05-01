@@ -1,4 +1,4 @@
-import prisma from '@/dbConfig/dbConfig';
+import { prisma } from "@/lib/prisma"
 import { DateTime } from 'luxon';
 import getStartAndEndOfDay from './getStartAndEndOfDay';
 

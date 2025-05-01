@@ -1,73 +1,72 @@
-// import { connect } from '@/dbConfig/dbConfig';
+// signup route (fixed)
 import { NextRequest, NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
-import prisma from '@/dbConfig/dbConfig';
-
-// connect();
+import { prisma } from "@/lib/prisma"
 
 export async function POST(request: NextRequest) {
   try {
     const reqBody = await request.json();
     const { email, username, password } = reqBody;
 
-    // check if user exists
-    let user: string[] = [];
-
-    const emailCheck = await prisma.user.findFirst({
+    // Check if email or username already exists
+    const existingUser = await prisma.user.findFirst({
       where: {
-        email: email,
+        OR: [{ email }, { username }],
+      },
+      select: {
+        email: true,
+        username: true,
       },
     });
 
-    const usernameCheck = await prisma.user.findFirst({
-      where: {
-        username: username,
-      },
-    });
+    if (existingUser) {
+      const conflicts = [];
+      if (existingUser.email === email) conflicts.push('email');
+      if (existingUser.username === username) conflicts.push('username');
 
-    if (emailCheck) {
-      user.push('email');
-    }
-
-    if (usernameCheck) {
-      user.push('username');
-    }
-
-    if (user.length > 0) {
-      let errorMessage = '';
-      if (user.length === 2) {
-        errorMessage += 'email and username already exists';
-      } else {
-        errorMessage += `${user[0]} already exists`;
-      }
+      const errorMessage = conflicts.length === 2
+        ? 'email and username already exist'
+        : `${conflicts[0]} already exists`;
 
       return NextResponse.json(
-        { error: errorMessage, focusOn: user },
-        { status: 400 },
+        { error: errorMessage, focusOn: conflicts },
+        { status: 400 }
       );
     }
-    // hash password
+
+    // Hash password
     const salt = await bcryptjs.genSalt(10);
     const hashedPassword = await bcryptjs.hash(password, salt);
 
-    // save user to DB
-    const newUser = await prisma.user.create({
-      data: {
-        username,
-        email,
-        password: hashedPassword,
-      },
+    // Create user and account (transaction for safety)
+    const newUserWithAccount = await prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          email,
+          username,
+          password: hashedPassword,  // Now including the hashed password here
+        },
+      });
+
+      await tx.account.create({
+        data: {
+          userId: user.id,
+          provider: "credentials", // Set provider to 'credentials' for this case
+          providerAccountId: email, // Using email as provider account ID
+          access_token: hashedPassword, // Store hashed password as access token
+          type: 'credentials', // The 'type' field is required
+        },
+      });
+
+      return user;
     });
 
     return NextResponse.json({
       message: 'User created successfully',
       success: true,
-      newUser,
+      data: newUserWithAccount,
     });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-  // finally {
-  //   await prisma.$disconnect();
-  // }
 }

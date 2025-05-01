@@ -11,27 +11,33 @@ datasource db {
 }
 
 model User {
-  id                           String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt                    DateTime  @default(now())
-  updatedAt                    DateTime  @updatedAt
-  email                        String    @unique
-  username                     String    @unique
-  password                     String
-  name                         String?
-  log_type                     String    @default("daymode")
-  daily_work_required          Float?
-  default_log_start            DateTime?
-  default_log_end              DateTime?
-  default_break_time           Int?
-  default_time_zone            String?
-  default_theme                String?
-  role                         Role      @default(USER)
-  forgot_password_token        String?
-  forgot_password_token_expiry DateTime?
-  verify_token                 String?
-  verify_token_expiry          DateTime?
-  isVerified                   Boolean   @default(false)
-  logs                         Log[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Core user info
+  email    String? @unique // optional because users might signup with Google, no email initially
+  username String? @unique // optional but strongly recommended (enforce later in app logic)
+  name     String?
+  password String?
+
+  log_type            String    @default("daymode")
+  daily_work_required Float?
+  default_log_start   DateTime?
+  default_log_end     DateTime?
+  default_break_time  Int?
+  default_time_zone   String?
+  default_theme       String?
+  role                Role      @default(USER)
+  isVerified          Boolean   @default(false)
+
+  // Relations
+  logs     Log[]
+  accounts Account[] // One user → many accounts (credentials, google, github etc.)
+  sessions Session[] // One user → many sessions
+
+  // next-auth fields
+  emailVerified DateTime?
 }
 
 model Log {
@@ -55,4 +61,43 @@ type logEntries {
 enum Role {
   USER
   ADMIN
+}
+
+// next-auth models
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String // 'oauth', 'credentials' etc.
+  provider          String // 'google', 'github', 'credentials'
+  providerAccountId String // unique ID per provider (email or Google ID etc.)
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId]) // Ensures no duplicate provider accounts
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
 }

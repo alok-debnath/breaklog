@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 const fetchRscData = () => {
   const getHeaders = async () => {
     const headerObject = Object.fromEntries(await headers());
-    const protocol = process.env.NEXT_ENV === 'local' ? 'http' : 'https';
+    const protocol = process.env.NEXT_ENV === 'development' ? 'http' : 'https';
     const host = headerObject.host;
     const url = `${protocol}://${host}/api`;
     return { headerObject, url };

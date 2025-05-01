@@ -1,12 +1,11 @@
 'use client';
-import axios from 'axios';
-import { useRouter, usePathname } from 'next/navigation';
-import { Toaster, toast } from 'react-hot-toast';
+import { usePathname } from 'next/navigation';
+import { Toaster } from 'react-hot-toast';
 import { useStore } from '@/stores/store';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SettingsModal from './Modals/SettingsModal';
-import { handleError } from '../common/CommonCodeBlocks';
+import { signOut } from 'next-auth/react';
 
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
@@ -24,19 +23,8 @@ const Navbar = () => {
     }
   }, [pathname]);
 
-  const router = useRouter();
   const logout = async (): Promise<void> => {
-    useStore.setState(() => ({ loading: true }));
-    try {
-      await axios.get('/api/auth/logout');
-      if (isClient) {
-        localStorage.clear();
-      }
-      useStore.setState(() => ({ loading: false }));
-      router.push('/login');
-    } catch (error: any) {
-      handleError({ error: error });
-    }
+    signOut({ callbackUrl: '/login' })
   };
 
   return (

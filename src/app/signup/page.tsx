@@ -7,6 +7,7 @@ import { useFormik } from 'formik';
 import { useStore } from '@/stores/store';
 import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
+import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
 // import { sendEmail } from "@/helpers/mailer";
 
 const validationSchema = Yup.object().shape({
@@ -79,12 +80,11 @@ export default function SignupPage() {
           <Toaster position='top-left' reverseOrder={false} />
           <div className='hero-content flex-col lg:flex-row-reverse'>
             <div className='text-center lg:text-left'>
-              <h1 className='text-5xl font-bold underline'>Breaklog</h1>
-              <p className='py-6'>
-                <span className='text-2xl font-bold'>Welcome!</span> Create a
-                new account to get started.
-              </p>
-              <p>
+              <div className='mb-3 flex flex-row items-center gap-4'>
+                <h1 className='text-5xl font-bold underline'>Breaklog</h1>
+                <p className='text-2xl font-bold'>Sign up</p>
+              </div>
+              <p className='py-2'>
                 Already have an account?{' '}
                 <Link href='/login' className='link-hover link font-semibold'>
                   Login
@@ -161,35 +161,36 @@ export default function SignupPage() {
                           {formik.errors.password}
                         </div>
                       )}
+                      {/* <GoogleSignInButton text='Sign up with Google' /> */}
                     </div>
-                      <button
-                        type='submit'
-                        className={`btn btn-primary mt-4 ${
-                          !formik.isValid || formik.isSubmitting
-                            ? 'btn-disabled'
-                            : ''
-                        }`}
-                      >
-                        Next
-                        {formik.isSubmitting ? (
-                          <span className='loading loading-spinner'></span>
-                        ) : (
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
-                            stroke='currentColor'
-                            className='h-6 w-6'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              d='M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75'
-                            />
-                          </svg>
-                        )}
-                      </button>
+                    <button
+                      type='submit'
+                      className={`btn btn-primary mt-4 ${
+                        !formik.isValid || formik.isSubmitting
+                          ? 'btn-disabled'
+                          : ''
+                      }`}
+                    >
+                      Next
+                      {formik.isSubmitting ? (
+                        <span className='loading loading-spinner'></span>
+                      ) : (
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={1.5}
+                          stroke='currentColor'
+                          className='h-6 w-6'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75'
+                          />
+                        </svg>
+                      )}
+                    </button>
                   </fieldset>
                 </form>
               </div>

@@ -6,6 +6,7 @@ const InitialRscFetch = async () => {
   const { fetchProfileDataRsc, fetchLogDataRsc } = fetchRscData();
   const { userData, errorMessage: profileError } = await fetchProfileDataRsc();
   const { logData, errorMessage: logError } = await fetchLogDataRsc();
+  console.log('InitialRscFetch', userData, logData);
 
   return <SaveDataToGlobalStore userDataServer={userData} logDataServer={logData} />;
 };

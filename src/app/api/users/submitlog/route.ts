@@ -1,13 +1,13 @@
-import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/dbConfig/dbConfig';
+import { prisma } from "@/lib/prisma"
 import { fetchLogs } from '@/helpers/fetchLogs';
 import { v4 as uuidv4 } from 'uuid';
 import getStartAndEndOfDay from '@/helpers/getStartAndEndOfDay';
+import { getUserIdFromSession } from '@/lib/authHelpers';
 
 export async function POST(request: NextRequest) {
   try {
-    const userId = await getDataFromToken(request);
+    const userId = await getUserIdFromSession();
     const reqBody = await request.json();
     const { logtype } = reqBody;
 
@@ -122,8 +122,8 @@ export async function POST(request: NextRequest) {
       fetchedLog,
     });
   } catch (error: any) {
-    if (error.name === 'TokenError') {
-      return NextResponse.json({ TokenError: error.message }, { status: 400 });
+    if (error.name === 'SessionError') {
+      return NextResponse.json({ SessionError: error.message }, { status: 400 });
     } else {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

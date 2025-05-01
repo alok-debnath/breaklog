@@ -1,13 +1,10 @@
-// import { connect } from '@/dbConfig/dbConfig';
-import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/dbConfig/dbConfig';
-
-// connect();
+import { prisma } from "@/lib/prisma"
+import { getUserIdFromSession } from '@/lib/authHelpers';
 
 export async function GET(request: NextRequest) {
   try {
-    const userId = await getDataFromToken(request);
+    const userId = await getUserIdFromSession();
     const user = await prisma.user.findFirst({
       where: { id: userId },
       select: {
@@ -25,8 +22,8 @@ export async function GET(request: NextRequest) {
       data: user,
     });
   } catch (error: any) {
-    if (error.name === 'TokenError') {
-      return NextResponse.json({ TokenError: error.message }, { status: 400 });
+    if (error.name === 'SessionError') {
+      return NextResponse.json({ SessionError: error.message }, { status: 400 });
     } else {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
