@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
-import { PrismaAdapter } from "@auth/prisma-adapter"
+import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
 import { compare } from 'bcryptjs';
 
@@ -34,6 +34,14 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         if (!account.access_token) {
           throw new Error('No password set for this account');
+        }
+
+        if (
+          !credentials?.email ||
+          !credentials?.password ||
+          typeof credentials.password !== 'string'
+        ) {
+          throw new Error('Email and password are required');
         }
 
         const valid = await compare(credentials.password, account.access_token);
