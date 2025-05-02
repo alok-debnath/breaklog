@@ -1,6 +1,7 @@
 // components/auth/GoogleSignInButton.tsx
 'use client';
 import { signIn } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function GoogleSignInButton({
   text = 'Sign in with Google',
@@ -14,9 +15,9 @@ export default function GoogleSignInButton({
         className='btn btn-outline flex w-full items-center gap-2 rounded-full px-4 py-2'
         onClick={() => signIn('google')}
       >
-        <img
+        <Image
           src='https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg'
-          alt='Google G'
+          alt='Google'
           className='h-5 w-5'
         />
         {text}
