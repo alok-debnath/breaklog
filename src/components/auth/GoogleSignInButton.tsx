@@ -12,7 +12,7 @@ export default function GoogleSignInButton({
     <div className='mt-5'>
       <button
         type='button'
-        className='btn btn-outline flex w-full items-center gap-2 rounded-full px-4 py-2'
+        className='btn btn-primary flex w-full items-center gap-2 rounded-full'
         onClick={() => signIn('google')}
       >
         <Image

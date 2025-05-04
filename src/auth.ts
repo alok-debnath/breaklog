@@ -86,6 +86,17 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         });
 
         if (existingUser) {
+          // If user exists and is not verified, update verification status
+          if (!existingUser.isVerified) {
+            await prisma.user.update({
+              where: { id: existingUser.id },
+              data: {
+                isVerified: true,
+                emailVerified: new Date(),
+              },
+            });
+          }
+
           await prisma.account.upsert({
             where: {
               provider_providerAccountId: {

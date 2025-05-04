@@ -42,8 +42,6 @@ export default function SignupPage() {
   async function handleSubmit(values: any) {
     try {
       const res = await axios.post('/api/auth/signup', values);
-      // alert(res.data.data.id);
-      // console.log("Signup success: ", res);
 
       // send email
       // await sendEmail({ email: values.email, emailType: "VERIFY", userID: res.data.data.id })

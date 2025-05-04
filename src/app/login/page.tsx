@@ -103,7 +103,7 @@ export default function LoginPage() {
                     aria-label='Traditional login'
                     defaultChecked
                   />
-                  <div className='tab-content bg-base-100 border-base-300 p-6'>
+                  <div className='tab-content bg-base-100 border-base-300 rounded-lg p-6'>
                     <form onSubmit={formik.handleSubmit}>
                       <fieldset className='fieldset grid gap-y-3'>
                         <div>
@@ -190,7 +190,7 @@ export default function LoginPage() {
                     className='tab'
                     aria-label='OAuth login'
                   />
-                  <div className='tab-content bg-base-100 border-base-300 p-6'>
+                  <div className='tab-content bg-base-100 border-base-300 rounded-lg p-6'>
                     <GoogleSignInButton text='Sign in with Google' />
                   </div>
                 </div>
