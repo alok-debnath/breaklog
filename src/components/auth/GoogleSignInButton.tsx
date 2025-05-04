@@ -18,7 +18,8 @@ export default function GoogleSignInButton({
         <Image
           src='https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg'
           alt='Google'
-          className='h-5 w-5'
+          width={20}
+          height={20}
         />
         {text}
       </button>

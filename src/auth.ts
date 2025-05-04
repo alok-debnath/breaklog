@@ -109,5 +109,5 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return true;
     },
   },
-  secret: process.env.TOKEN_SECRET,
+  // secret: process.env.TOKEN_SECRET,
 });
