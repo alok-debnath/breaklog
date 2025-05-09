@@ -57,7 +57,8 @@
       "@vercel/speed-insights",
       "esbuild",
       "prisma",
-      "sharp"
+      "sharp",
+      "unrs-resolver"
     ]
   }
 }
