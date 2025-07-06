@@ -3,52 +3,67 @@ import { useStore } from '@/stores/store';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Toaster } from 'react-hot-toast';
+import { Card, CardContent } from '@/components/ui/card';
+import { Clock } from 'lucide-react';
 
-export default function DashboardLayout({
-  children, // will be a page or nested layout
+export default function AuthLayout({
+  children,
 }: {
   children: React.ReactNode;
 }) {
-  const { themeMode } = useStore();
   const pathname = usePathname();
 
   return (
-    <div data-theme={themeMode || 'caramellatte'}>
-      <div className='hero bg-base-200 min-h-screen'>
-        <Toaster position='top-left' reverseOrder={false} />
-        <div className='hero-content flex-col lg:flex-row-reverse'>
-          <div className='text-center lg:text-left'>
-            <div className='mb-3 flex flex-row items-center gap-4'>
-              <h1 className='text-5xl font-bold underline'>Breaklog</h1>
-              <p className='text-2xl font-bold'>
-                {pathname === '/login' ? 'Login' : 'Sign up'}
-              </p>
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/50 flex items-center justify-center p-4">
+      <Toaster position='top-center' />
+      <div className="w-full max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        
+        {/* Left side - Branding */}
+        <div className="text-center lg:text-left space-y-6">
+          <div className="flex items-center justify-center lg:justify-start space-x-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
+              <Clock className="h-6 w-6 text-primary-foreground" />
             </div>
-            <p className='py-2'>
-              {pathname === '/login' ? (
-                <>
-                  Don&apos;t have an account yet?{' '}
-                  <Link
-                    href='/signup'
-                    className='link-hover link font-semibold'
-                  >
-                    Sign up
-                  </Link>
-                </>
-              ) : (
-                <>
-                  Already have an account?{' '}
-                  <Link href='/login' className='link-hover link font-semibold'>
-                    Login
-                  </Link>
-                </>
-              )}
+            <h1 className="text-4xl font-bold">BreakLog</h1>
+          </div>
+          
+          <div className="space-y-4">
+            <h2 className="text-2xl font-semibold">
+              {pathname === '/login' ? 'Welcome back!' : 'Get started today'}
+            </h2>
+            <p className="text-muted-foreground max-w-md">
+              {pathname === '/login' 
+                ? 'Track your work activities and boost your productivity'
+                : 'Join thousands of professionals optimizing their work time'
+              }
             </p>
           </div>
-          <div className='card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl'>
-            <div className='card-body p-0'>{children}</div>
-          </div>
+          
+          <p className="text-sm text-muted-foreground">
+            {pathname === '/login' ? (
+              <>
+                Don&apos;t have an account?{' '}
+                <Link href='/signup' className='text-primary hover:underline font-medium'>
+                  Sign up here
+                </Link>
+              </>
+            ) : (
+              <>
+                Already have an account?{' '}
+                <Link href='/login' className='text-primary hover:underline font-medium'>
+                  Sign in here
+                </Link>
+              </>
+            )}
+          </p>
         </div>
+
+        {/* Right side - Form */}
+        <Card className="w-full max-w-md mx-auto shadow-lg">
+          <CardContent className="p-6">
+            {children}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
