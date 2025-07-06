@@ -40,7 +40,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
 
   // Extract logs or set empty array if none found
   const logs =
-    logDoc?.logEntries.map((entry) => ({
+    logDoc?.logEntries.map((entry: any) => ({
       id: entry.uniqueId,
       log_time: entry.log_time,
       log_status: entry.log_status,

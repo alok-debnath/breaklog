@@ -1,5 +1,5 @@
 'use client';
-import Button from '@/components/UI/Button';
+import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
@@ -66,18 +66,20 @@ const Index = () => {
             <div className='mb-20'>
               <div ref={ref}>
                 <Button
-                  text='End Day'
-                  className={`btn btn-primary w-full rounded-t-none normal-case ${
+                  className={`w-full rounded-t-none ${
                     ['exit', null, 'day end'].includes(
                       workData.lastLogStatus,
                     ) ||
                     loading ||
                     breaklogMode
-                      ? 'btn-disabled'
+                      ? 'opacity-50 cursor-not-allowed'
                       : ''
                   } ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? '' : 'invisible'}`}
-                  onclick={() => logEntry('day end')}
-                />
+                  onClick={() => logEntry('day end')}
+                  disabled={['exit', null, 'day end'].includes(workData.lastLogStatus) || loading || breaklogMode}
+                >
+                  End Day
+                </Button>
               </div>
             </div>
           </div>

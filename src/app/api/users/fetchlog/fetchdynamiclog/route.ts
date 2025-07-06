@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
     const logsByDate: { [date: string]: any[] } = {};
 
     // Organize logs by date from logEntries
-    logs.forEach((log) => {
-      log.logEntries.forEach((entry) => {
+    logs.forEach((log: any) => {
+      log.logEntries.forEach((entry: any) => {
         const date = entry.log_time.toISOString().split('T')[0];
 
         if (!logsByDate[date]) {
@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
 
             // Check if the log is marked as half-day
             const isHalfDay = logs.some(
-              (log) =>
+              (log: any) =>
                 log.isHalfDay &&
                 log.createdAt.toISOString().split('T')[0] === date,
             );

@@ -1,4 +1,4 @@
-import Button from '../UI/Button';
+import { Button } from '@/components/ui/button';
 import { useStore } from '@/stores/store';
 import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
 
@@ -62,21 +62,19 @@ const NavbarBottom: React.FC<NavbarBottomProps> = ({ logEntry }) => {
             </div> */}
             <div>
               <Button
-                className={`btn ${
+                className={`${
                   ['day end'].includes(workData.lastLogStatus) || loading
-                    ? 'btn-disabled'
+                    ? 'opacity-50 cursor-not-allowed'
                     : ''
                 }`}
-                text={
-                  <>
-                    <p>Enter Log</p>
-                    {/* {loading && <span className='loading loading-ring loading-md'></span>} */}
-                  </>
-                }
-                onclick={() =>
+                onClick={() =>
                   breaklogMode ? logEntry('break log') : logEntry('day log')
                 }
-              />
+                disabled={['day end'].includes(workData.lastLogStatus) || loading}
+              >
+                <p>Enter Log</p>
+                {/* {loading && <span className='loading loading-ring loading-md'></span>} */}
+              </Button>
             </div>
             <div className='ml-auto'>
               <div className='dropdown-top dropdown dropdown-end'>

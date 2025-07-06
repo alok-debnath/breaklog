@@ -1,6 +1,6 @@
 import { useStore } from '@/stores/store';
 import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
-import Button from '../UI/Button';
+import { Button } from '@/components/ui/button';
 import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus } from 'lucide-react';
 
 interface BottomNavbarProps {
@@ -102,18 +102,20 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                 className={`${!isIntersecting ? '' : 'hidden'} col-span-2 flex items-center justify-center`}
               >
                 <Button
-                  text='End Day'
-                  className={`btn bg-error/20 text-error w-full rounded-full font-semibold ${
+                  className={`w-full rounded-full font-semibold bg-destructive/20 text-destructive hover:bg-destructive/30 ${
                     ['exit', null, 'day end'].includes(
                       workData.lastLogStatus,
                     ) ||
                     loading ||
                     breaklogMode
-                      ? 'btn-disabled'
+                      ? 'opacity-50 cursor-not-allowed'
                       : ''
                   }`}
-                  onclick={() => logEntry('day end')}
-                />
+                  onClick={() => logEntry('day end')}
+                  disabled={['exit', null, 'day end'].includes(workData.lastLogStatus) || loading || breaklogMode}
+                >
+                  End Day
+                </Button>
               </div>
             )}
             <div className='col-span-2 flex items-center justify-center'>

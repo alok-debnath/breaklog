@@ -1,5 +1,5 @@
-import ToggleButtonText from '../../UI/ToggleButtonText';
-import SelectboxText from '../../UI/SelectboxText';
+import ToggleButtonText from '../../ui/toggle-button-text';
+import SelectboxText from '../../ui/selectbox-text';
 import { ThemeName } from '../../../Constants/ThemeConstant';
 import { useStore } from '@/stores/store';
 
