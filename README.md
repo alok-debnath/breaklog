@@ -17,6 +17,7 @@
     <a href="https://github.com/alok-debnath/breaklog/network" target="_blank">
         <img alt="GitHub Forks" src="https://img.shields.io/github/forks/alok-debnath/breaklog?style=flat-square" />
     </a>
+    <a href="https://www.codefactor.io/repository/github/alok-debnath/breaklog"><img src="https://www.codefactor.io/repository/github/alok-debnath/breaklog/badge" alt="CodeFactor" /></a>
 </div>
 
 <!-- [![Vercel Production Status](https://vercel-status-badge.vercel.app/alok-debnath/breaklog)](https://vercel.com/alokdebnath/breaklog) -->
