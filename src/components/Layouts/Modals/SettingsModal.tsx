@@ -18,7 +18,6 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useStore } from '@/stores/store';
 import { Button } from "@/components/ui/button";
-import { ThemeName } from '../../../Constants/ThemeConstant';
 
 const SettingsModal = () => {
   const { breaklogMode, logs, themeMode, isSettingsModalOpen, userData } = useStore();
@@ -58,26 +57,6 @@ const SettingsModal = () => {
               onCheckedChange={handleToggleChange}
               disabled={logs.length > 0}
             />
-          </div>
-          <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
-             <div className="flex flex-col space-y-1">
-                <Label htmlFor="theme-selector">Theme</Label>
-                <DialogDescription>
-                  Select a theme for the application.
-                </DialogDescription>
-              </div>
-            <Select onValueChange={handleThemeChange} defaultValue={themeMode}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select Theme" />
-              </SelectTrigger>
-              <SelectContent>
-                {ThemeName.map((theme) => (
-                  <SelectItem key={theme} value={theme}>
-                    {theme.charAt(0).toUpperCase() + theme.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
           </div>
         </div>
         <DialogFooter>
