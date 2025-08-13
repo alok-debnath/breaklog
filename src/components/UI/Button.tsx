@@ -1,15 +1,24 @@
-import { Button as ShadcnButton } from "@/components/ui/button";
+import { Button as ShadcnButton, ButtonProps as ShadcnButtonProps } from "@/components/ui/button";
+import React from "react";
 
-interface ButtonProps {
-  className?: string;
-  onClick: () => void;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
-  size?: "default" | "sm" | "lg" | "icon";
-  disabled?: boolean;
+  variant?: ShadcnButtonProps['variant'];
+  size?: ShadcnButtonProps['size'];
+  asChild?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ className, onClick, children, variant, size, disabled }) => {
+const Button: React.FC<ButtonProps> = ({
+  children,
+  className,
+  onClick,
+  variant,
+  size,
+  disabled,
+  type = 'button',
+  asChild = false,
+  ...props
+}) => {
   return (
     <ShadcnButton
       className={className}
@@ -17,6 +26,9 @@ const Button: React.FC<ButtonProps> = ({ className, onClick, children, variant, 
       variant={variant}
       size={size}
       disabled={disabled}
+      type={type}
+      asChild={asChild}
+      {...props}
     >
       {children}
     </ShadcnButton>

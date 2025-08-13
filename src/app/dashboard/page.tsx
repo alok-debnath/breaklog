@@ -56,7 +56,7 @@ const Index = () => {
 
   return (
     <div className="bg-background text-foreground">
-      <div className="container mx-auto max-w-lg p-4">
+      <div className="container mx-auto max-w-screen-lg p-4">
         <LogsCard
           isWorkDoneSuccess={isWorkDoneSuccess}
           isIntersecting={isIntersecting}
