@@ -6,6 +6,14 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SettingsModal from './Modals/SettingsModal';
 import { signOut } from 'next-auth/react';
+import { ModeToggle } from '../mode-toggle';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import Button from '../UI/Button';
 
 const Navbar = () => {
   const { breaklogMode, userData } = useStore();
@@ -29,49 +37,47 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='fixed z-10 w-full bg-linear-to-b from-base-200 to-transparent px-3 pt-3'>
-        <div className='navbar mx-auto max-w-(--breakpoint-lg) rounded-box bg-base-100 shadow-lg'>
-          <div className='navbar-start'>
-            <div className='dropdown'>
-              <label tabIndex={0} className='btn btn-ghost'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-5 w-5'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    d='M4 6h16M4 12h16M4 18h7'
-                  />
-                </svg>
-              </label>
-              <ul
-                tabIndex={0}
-                className='menu dropdown-content menu-lg z-1 mt-3 w-52 space-y-2 rounded-box bg-base-100 p-2 shadow-lg'
-              >
-                <li>
+      <div className='fixed z-10 w-full bg-linear-to-b from-muted to-transparent px-3 pt-3'>
+        <div className='flex items-center mx-auto max-w-(--breakpoint-lg) rounded-box bg-card text-card-foreground shadow-lg p-2'>
+          <div className='flex-1'>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='h-5 w-5'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M4 6h16M4 12h16M4 18h7'
+                    />
+                  </svg>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
                   <Link
                     href='/dashboard'
-                    className={`${pathname === '/dashboard' ? 'menu-focus' : ''}`}
+                    className={`${pathname === '/dashboard' ? 'bg-accent' : ''}`}
                   >
                     Homepage
                   </Link>
-                </li>
-                <li>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
                   <Link
                     href='/dashboard/history'
-                    className={`${pathname === '/dashboard/history' ? 'menu-focus' : ''}`}
+                    className={`${pathname === '/dashboard/history' ? 'bg-accent' : ''}`}
                   >
                     History
                   </Link>
-                </li>
-                {/* <li><label>About</label></li> */}
-              </ul>
-            </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <div className='flex-1'>
               <Link
                 href='/dashboard'
@@ -100,7 +106,7 @@ const Navbar = () => {
               </Link>
             </div>
           </div>
-          <div className='join navbar-end gap-1'>
+          <div className='flex-1 justify-end gap-1'>
             {backPath !== '' && (
               <Link
                 href={backPath}
@@ -122,42 +128,41 @@ const Navbar = () => {
                 </svg>
               </Link>
             )}
-            <div className='dropdown dropdown-end'>
-              <label tabIndex={0} className='btn join-item normal-case'>
-                {userData.username ? (
-                  <span className=''>{userData.username}</span>
-                ) : (
-                  <>
-                    <div className='flex animate-pulse space-x-4'>
-                      <div className='flex-1 space-y-9 py-1'>
-                        <div className='space-y-3'>
-                          <div className='grid grid-cols-3 gap-3'>
-                            <div className='col-span-3 h-2 rounded-sm bg-slate-700'></div>
+            <ModeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">
+                  {userData.username ? (
+                    <span className=''>{userData.username}</span>
+                  ) : (
+                    <>
+                      <div className='flex animate-pulse space-x-4'>
+                        <div className='flex-1 space-y-9 py-1'>
+                          <div className='space-y-3'>
+                            <div className='grid grid-cols-3 gap-3'>
+                              <div className='col-span-3 h-2 rounded-sm bg-slate-700'></div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </>
-                )}
-              </label>
-              <ul
-                tabIndex={0}
-                className='menu dropdown-content menu-lg z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow-lg'
-              >
-                <li>
+                    </>
+                  )}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>
                   <Link href='/dashboard/profile' className='justify-between'>
                     Profile
-                    <span className='badge'>New</span>
                   </Link>
-                </li>
-                <li onClick={() => window.setting_modal.showModal()}>
-                  <label>Settings</label>
-                </li>
-                <li>
-                  <label onClick={logout}>Logout</label>
-                </li>
-              </ul>
-            </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => useStore.setState({ isSettingsModalOpen: true })}>
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={logout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
         <Toaster
@@ -165,7 +170,6 @@ const Navbar = () => {
           position='top-left'
           reverseOrder={false}
         />
-        <SettingsModal />
       </div>
     </>
   );

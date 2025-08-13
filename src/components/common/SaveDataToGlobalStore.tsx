@@ -42,7 +42,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
   // Update local storage and trigger timezone modal if needed
   useEffect(() => {
     if (isFirstEffectCompleted) {
-      if (!userData.default_time_zone) window.time_zone_modal.showModal();
+      if (!userData.default_time_zone) useStore.setState({ isTimeZoneModalOpen: true });
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
       localStorage.setItem('thememode', themeMode);
       document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;

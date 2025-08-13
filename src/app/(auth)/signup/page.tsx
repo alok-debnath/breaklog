@@ -5,6 +5,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
+import Button from '@/components/UI/Button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 // import { sendEmail } from "@/helpers/mailer";
 
 const validationSchema = Yup.object().shape({
@@ -66,19 +69,14 @@ export default function SignupPage() {
 
   return (
     <>
-      <div className='bg-base-100 border-base-300 rounded-lg p-6'>
+      <div className='bg-card text-card-foreground rounded-lg p-6'>
         <form onSubmit={formik.handleSubmit}>
           <fieldset className='fieldset grid gap-y-3'>
-            <div>
-              <legend className='fieldset-legend'>UserName</legend>
-              <input
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="username">Username</Label>
+              <Input
                 type='username'
                 placeholder='username'
-                className={`input ${
-                  formik.touched.username && formik.errors.username
-                    ? 'input-error'
-                    : ''
-                }`}
                 id='username'
                 name='username'
                 value={formik.values.username.toLowerCase()}
@@ -91,16 +89,11 @@ export default function SignupPage() {
                 </div>
               )}
             </div>
-            <div>
-              <legend className='fieldset-legend'>email</legend>
-              <input
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
                 type='email'
                 placeholder='email'
-                className={`input ${
-                  formik.touched.email && formik.errors.email
-                    ? 'input-error'
-                    : ''
-                }`}
                 id='email'
                 name='email'
                 value={formik.values.email.toLowerCase()}
@@ -111,16 +104,11 @@ export default function SignupPage() {
                 <div className='error text-red-500'>{formik.errors.email}</div>
               )}
             </div>
-            <div>
-              <legend className='fieldset-legend'>Password</legend>
-              <input
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input
                 type='password'
                 placeholder='password'
-                className={`input ${
-                  formik.touched.password && formik.errors.password
-                    ? 'input-error'
-                    : ''
-                }`}
                 id='password'
                 name='password'
                 value={formik.values.password}
@@ -135,11 +123,9 @@ export default function SignupPage() {
               )}
               {/* <GoogleSignInButton text='Sign up with Google' /> */}
             </div>
-            <button
-              type='submit'
-              className={`btn btn-primary mt-4 ${
-                !formik.isValid || formik.isSubmitting ? 'btn-disabled' : ''
-              }`}
+            <Button
+              type="submit"
+              disabled={!formik.isValid || formik.isSubmitting}
             >
               Next
               {formik.isSubmitting ? (
@@ -160,7 +146,7 @@ export default function SignupPage() {
                   />
                 </svg>
               )}
-            </button>
+            </Button>
           </fieldset>
         </form>
       </div>

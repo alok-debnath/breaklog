@@ -10,6 +10,20 @@ import {
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
+import Button from '@/components/UI/Button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const validationSchema = Yup.object().shape({
   daily_work_required: Yup.number()
@@ -85,18 +99,19 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className='bg-base-200 flex min-h-dvh min-w-fit place-items-center justify-center'>
-        <div className='hero-content text-center'>
+      <div className='bg-muted flex min-h-dvh min-w-fit place-items-center justify-center'>
+        <div className='text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>
-              <div className='card bg-base-100 my-20 w-full max-w-sm shrink-0'>
-                <form
-                  onSubmit={formik.handleSubmit}
-                  className='card-body grid w-full max-w-xl gap-y-3'
-                >
-                  <h3 className='text-left text-2xl font-bold'>
-                    Update your data
-                  </h3>
+              <Card className="my-20 w-full max-w-sm shrink-0">
+                <CardHeader>
+                  <CardTitle>Update your data</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form
+                    onSubmit={formik.handleSubmit}
+                    className='grid w-full max-w-xl gap-y-3'
+                  >
 
                   <fieldset className='fieldset'>
                     <legend className='fieldset-legend text-left'>
@@ -121,18 +136,12 @@ const ProfilePage = () => {
                         </svg>
                       </span>
                     </legend>
-                    <input
+                    <Input
                       type='number'
                       step='0.01'
                       id='daily_work_required'
                       name='daily_work_required'
                       placeholder='Type here'
-                      className={`input w-full max-w-md ${
-                        formik.touched.daily_work_required &&
-                        formik.errors.daily_work_required
-                          ? 'input-error'
-                          : ''
-                      }`}
                       value={formik.values.daily_work_required}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -168,21 +177,15 @@ const ProfilePage = () => {
                         </svg>
                       </span>
                     </legend>
-                    <select
-                      id='log_type'
-                      name='log_type'
-                      className={`select w-full max-w-xs ${
-                        formik.touched.log_type && formik.errors.log_type
-                          ? 'input-error'
-                          : ''
-                      }`}
-                      value={formik.values.log_type}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    >
-                      <option value='breakmode' label='Breaklog Mode' />
-                      <option value='daymode' label='Daylog Mode' />
-                    </select>
+                    <Select onValueChange={(value) => formik.setFieldValue('log_type', value)} defaultValue={formik.values.log_type}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Log Mode" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="breakmode">Breaklog Mode</SelectItem>
+                        <SelectItem value="daymode">Daylog Mode</SelectItem>
+                      </SelectContent>
+                    </Select>
                     {formik.touched.log_type && formik.errors.log_type && (
                       <div className='error my-1 text-start text-red-500'>
                         {formik.errors.log_type}
@@ -194,41 +197,35 @@ const ProfilePage = () => {
                     <legend className='fieldset-legend text-start'>
                       Default Time Zone
                     </legend>
-                    <select
-                      id='default_time_zone'
-                      name='default_time_zone'
-                      className={`select w-full max-w-xs ${
-                        formik.touched.default_time_zone &&
-                        formik.errors.default_time_zone
-                          ? 'border-error'
-                          : ''
-                      }`}
-                      value={formik.values.default_time_zone}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    >
-                      <option value=''>Select a timezone</option>
-                      {options.map((option, index) => (
-                        <option key={index} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
+                    <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Timezone" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {options.map((option, index) => (
+                          <SelectItem key={index} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     {formik.touched.default_time_zone &&
                       formik.errors.default_time_zone && (
                         <div className='error my-1 text-start text-red-500'>
                           {formik.errors.default_time_zone}
                         </div>
                       )}
-                    <button
+                    <Button
                       type='submit'
-                      className={`btn btn-primary mt-3 normal-case ${loading && 'btn-disabled'}`}
+                      disabled={loading}
+                      className="mt-3 normal-case"
                     >
                       Update
-                    </button>
+                    </Button>
                   </fieldset>
-                </form>
-              </div>
+                  </form>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>

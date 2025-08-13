@@ -27,16 +27,15 @@ function useConfirm() {
         modal_confirm_btn: values.modal_confirm_btn,
         modal_cancel_btn: values.modal_cancel_btn,
       },
+      isConfirmationDialogOpen: true,
     }));
 
-    window.confirmation_modal.showModal();
     return new Promise((resolve, reject) => {
       resolveCallback = resolve;
     });
   };
 
   const closeConfirm = () => {
-    window.confirmation_modal.close();
     useStore.setState(() => ({
       dialogModal: {
         modal_body: '',
@@ -44,6 +43,7 @@ function useConfirm() {
         modal_confirm_btn: '',
         modal_cancel_btn: '',
       },
+      isConfirmationDialogOpen: false,
     }));
   };
 

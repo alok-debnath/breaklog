@@ -56,8 +56,8 @@ const Index = () => {
 
   return (
     <>
-      <div className='flex min-h-dvh place-items-center justify-center bg-base-200'>
-        <div className='hero-content text-center'>
+      <div className='flex min-h-dvh place-items-center justify-center bg-muted'>
+        <div className='text-center'>
           <div className='max-w-md'>
             <LogsCard
               isWorkDoneSuccess={isWorkDoneSuccess}
@@ -66,18 +66,19 @@ const Index = () => {
             <div className='mb-20'>
               <div ref={ref}>
                 <Button
-                  text='End Day'
-                  className={`btn btn-primary w-full rounded-t-none normal-case ${
-                    ['exit', null, 'day end'].includes(
-                      workData.lastLogStatus,
-                    ) ||
+                  onClick={() => logEntry('day end')}
+                  variant="default"
+                  className={`w-full rounded-t-none normal-case ${
+                    isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? '' : 'invisible'
+                  }`}
+                  disabled={
+                    ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
                     loading ||
                     breaklogMode
-                      ? 'btn-disabled'
-                      : ''
-                  } ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? '' : 'invisible'}`}
-                  onclick={() => logEntry('day end')}
-                />
+                  }
+                >
+                  End Day
+                </Button>
               </div>
             </div>
           </div>

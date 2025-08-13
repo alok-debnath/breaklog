@@ -73,7 +73,7 @@ To start using BreakLog, follow these steps:
 
 I would like to thank the Next.js and Vercel communities for their amazing tools and resources that made this project possible. Additionally, I'm grateful to the following libraries that played a key role in this project:
 
-- [DaisyUI](https://daisyui.com/)
+- [Shadcn](https://ui.shadcn.com/)
 - [Zustand](https://github.com/pmndrs/zustand)
 
 These libraries have been instrumental in creating a seamless and efficient user experience.

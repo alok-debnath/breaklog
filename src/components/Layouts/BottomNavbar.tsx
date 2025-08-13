@@ -2,6 +2,12 @@ import { useStore } from '@/stores/store';
 import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
 import Button from '../UI/Button';
 import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface BottomNavbarProps {
   logEntry: (value: string) => void; // logEntry is a function that accepts a string
@@ -23,80 +29,49 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
       <LiveBreakCounter />
       <div className='to-base-200 fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-linear-to-b from-transparent'></div>
       <div className='fixed bottom-3 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2'>
-        <div className='bg-base-100 mx-3 rounded-full shadow-lg'>
+        <div className='bg-card text-card-foreground mx-3 rounded-full shadow-lg'>
           <div
             className={`mx-auto grid h-full max-w-lg items-center justify-center space-x-2 p-2 ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? 'grid-cols-3' : 'grid-cols-5'}`}
           >
-            <div className='dropdown dropdown-top m-0 inline-flex w-full items-center p-0'>
-              <label
-                tabIndex={0}
-                className='group btn inline-flex flex-1 flex-col items-center justify-center rounded-full px-5'
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth={1.5}
-                  stroke='currentColor'
-                  className='h-6 w-6'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
-                  />
-                </svg>
-              </label>
-              <ul
-                tabIndex={0}
-                className='menu dropdown-content rounded-box bg-base-100 mb-2 shadow-sm'
-              >
-                {/* <li>
-                  <span
-                    className='items-center justify-center'
-                    onClick={() => fetchLogFunction()}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='h-6 w-6'
                   >
-                    <p>Refresh</p>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth={1.5}
-                      stroke='currentColor'
-                      className='h-6 w-6'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
-                      />
-                    </svg>
-                  </span>
-                </li> */}
-                <li>
-                  <span
-                    className='items-center justify-center'
-                    onClick={() => logEntry('undo log')}
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
+                    />
+                  </svg>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => logEntry('undo log')}>
+                  <p>Undo</p>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='h-6 w-6'
                   >
-                    <p>Undo</p>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth={1.5}
-                      stroke='currentColor'
-                      className='h-6 w-6'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3'
-                      />
-                    </svg>
-                  </span>
-                </li>
-              </ul>
-            </div>
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3'
+                    />
+                  </svg>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             {!['exit', null, 'day end'].includes(workData.lastLogStatus) && (
               <div
                 className={`${!isIntersecting ? '' : 'hidden'} col-span-2 flex items-center justify-center`}

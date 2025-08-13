@@ -22,8 +22,8 @@ export default async function SpecificDayLog({
   const isWorkDoneSuccess = isWorkDone && userData.daily_work_required > 0;
 
   return (
-    <div className='flex min-h-dvh min-w-fit place-items-center justify-center bg-base-200'>
-      <div className='hero-content text-center'>
+    <div className='flex min-h-dvh min-w-fit place-items-center justify-center bg-muted'>
+      <div className='text-center'>
         <LogsCard
           page='history'
           isWorkDoneSuccess={isWorkDoneSuccess}

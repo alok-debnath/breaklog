@@ -6,6 +6,8 @@ import TimeZoneModal from '@/components/Layouts/Modals/TimeZoneModal';
 import ThemeWrapper from '@/components/ThemeWrapper';
 import InitialRscFetch from '@/components/common/InitialRscFetch';
 import { cookies } from 'next/headers';
+import SettingsModal from '@/components/Layouts/Modals/SettingsModal';
+import { Toaster } from '@/components/ui/sonner';
 
 export default async function DashboardLayout({
   children, // will be a page or nested layout
@@ -21,10 +23,12 @@ export default async function DashboardLayout({
           <InitialRscFetch />
         </Suspense>
         <ConfirmationModal />
+        <SettingsModal />
         <TimeZoneModal />
         <Loading />
         <Navbar />
         {children}
+        <Toaster />
       </ThemeWrapper>
     </section>
   );

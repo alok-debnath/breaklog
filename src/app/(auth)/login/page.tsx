@@ -5,6 +5,10 @@ import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { signIn } from 'next-auth/react';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
+import Button from '@/components/UI/Button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -73,27 +77,19 @@ export default function LoginPage() {
 
   return (
     <>
-      <div className='tabs tabs-box'>
-        <input
-          type='radio'
-          name='my_tabs_3'
-          className='tab'
-          aria-label='Traditional login'
-          defaultChecked
-        />
-        <div className='tab-content bg-base-100 border-base-300 rounded-lg p-6'>
+      <Tabs defaultValue="traditional" className="w-[400px]">
+        <TabsList>
+          <TabsTrigger value="traditional">Traditional</TabsTrigger>
+          <TabsTrigger value="oauth">OAuth</TabsTrigger>
+        </TabsList>
+        <TabsContent value="traditional">
           <form onSubmit={formik.handleSubmit}>
             <fieldset className='fieldset grid gap-y-3'>
-              <div>
-                <legend className='fieldset-legend'>email</legend>
-                <input
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="email">Email</Label>
+                <Input
                   type='email'
                   placeholder='email'
-                  className={`input ${
-                    formik.touched.email && formik.errors.email
-                      ? 'input-error'
-                      : ''
-                  }`}
                   id='email'
                   name='email'
                   value={formik.values.email.toLowerCase()}
@@ -106,16 +102,11 @@ export default function LoginPage() {
                   </div>
                 )}
               </div>
-              <div>
-                <legend className='fieldset-legend'>Password</legend>
-                <input
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="password">Password</Label>
+                <Input
                   type='password'
                   placeholder='password'
-                  className={`input ${
-                    formik.touched.password && formik.errors.password
-                      ? 'input-error'
-                      : ''
-                  }`}
                   id='password'
                   name='password'
                   value={formik.values.password}
@@ -129,11 +120,9 @@ export default function LoginPage() {
                 )}
                 {/* <div><a className="link link-hover">Forgot password?</a></div> */}
               </div>
-              <button
-                type='submit'
-                className={`btn btn-primary mt-4 ${
-                  !formik.isValid || formik.isSubmitting ? 'btn-disabled' : ''
-                }`}
+              <Button
+                type="submit"
+                disabled={!formik.isValid || formik.isSubmitting}
               >
                 Sign in
                 {formik.isSubmitting ? (
@@ -154,21 +143,14 @@ export default function LoginPage() {
                     />
                   </svg>
                 )}
-              </button>
+              </Button>
             </fieldset>
           </form>
-        </div>
-
-        <input
-          type='radio'
-          name='my_tabs_3'
-          className='tab'
-          aria-label='OAuth login'
-        />
-        <div className='tab-content bg-base-100 border-base-300 rounded-lg p-6'>
+        </TabsContent>
+        <TabsContent value="oauth">
           <GoogleSignInButton text='Sign in with Google' />
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
     </>
   );
 }

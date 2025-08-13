@@ -1,6 +1,12 @@
 'use client';
 import { useStore } from '@/stores/store';
 import React from 'react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 import { LogsData } from '@/stores/store';
 import { WorkData } from '@/stores/store';
@@ -25,8 +31,10 @@ const LogsCard: React.FC<LogsCardProps> = ({
   const isClient = typeof window !== 'undefined';
 
   const openTimeEditModal = (value: any) => {
-    useStore.setState(() => ({ logEditStore: value }));
-    window.time_edit_modal.showModal();
+    useStore.setState(() => ({
+      logEditStore: value,
+      isTimeEditModalOpen: true
+    }));
   };
 
   const currentLogs = logsServer ?? logs;
@@ -49,7 +57,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
   return (
     <>
       <div
-        className={`card bg-base-100 mt-20 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(currentWorkData.lastLogStatus)) && 'rounded-b-none'} ${
+        className={`card bg-card text-card-foreground mt-20 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(currentWorkData.lastLogStatus)) && 'rounded-b-none'} ${
           page == 'history' &&
           (isWorkDoneSuccess
             ? 'border-success border-2'
@@ -73,7 +81,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
             </div>
           )}
           <div className='mb-3'>
-            <div className='card bg-base-100 pb-5 text-left font-semibold'>
+            <div className='card bg-card text-card-foreground pb-5 text-left font-semibold'>
               {page === 'history' || (isClient && userData.username) ? (
                 <span>
                   {page === 'history' &&
@@ -128,7 +136,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
             >
               {!breaklogMode || page === 'history' ? (
                 <div
-                  className={`card bg-base-200 p-3 shadow-md ${
+                  className={`card bg-muted p-3 shadow-md ${
                     page === 'history' && isWorkDoneSuccess
                       ? 'bg-success/10 text-success'
                       : page === 'history' && !isWorkDoneSuccess
@@ -159,7 +167,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                   )}
                 </div>
               ) : null}
-              <div className='card bg-base-200 p-3 shadow-md'>
+              <div className='card bg-muted p-3 shadow-md'>
                 {currentWorkData.breakTime ? (
                   <>
                     <p className='font-medium'>Break taken</p>
@@ -184,7 +192,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
               </div>
             </div>
             {!breaklogMode && page !== 'history' && formattedWorkEndTime ? (
-              <div className='card bg-base-200 mt-3 grid grid-cols-2 items-center py-2 shadow-md'>
+              <div className='card bg-muted mt-3 grid grid-cols-2 items-center py-2 shadow-md'>
                 <p className='text-sm font-medium'>Work until:</p>
                 <p className='font-mono text-sm font-semibold'>
                   {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', {
@@ -198,31 +206,27 @@ const LogsCard: React.FC<LogsCardProps> = ({
               </div>
             ) : null}
           </div>
-          <div className='collapse-arrow border-base-300 collapse border'>
-            <input type='checkbox' className='peer' />
-            <div className='collapse-title ps-5 text-left font-medium peer-checked:hidden'>
-              show logs
-            </div>
-            <div className='collapse-title bg-base-300 hidden ps-5 text-left font-medium peer-checked:block'>
-              hide logs
-            </div>
-            {page !== 'history' && (
-              <p className='bg-base-300 py-0.5 text-center text-sm font-medium peer-checked:hidden'>
-                {currentLogs.length > 0 ? (
-                  <>
-                    Recent log:{' '}
-                    <span className='text-success font-bold'>
-                      {currentWorkData.lastLogStatus}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className='text-error'>No logs available</span>
-                  </>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                {page !== 'history' && (
+                  <p className='text-center text-sm font-medium'>
+                    {currentLogs.length > 0 ? (
+                      <>
+                        Recent log:{' '}
+                        <span className='text-green-500 font-bold'>
+                          {currentWorkData.lastLogStatus}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className='text-red-500'>No logs available</span>
+                      </>
+                    )}
+                  </p>
                 )}
-              </p>
-            )}
-            <div className='collapse-content px-2'>
+              </AccordionTrigger>
+              <AccordionContent>
               <table className='table text-center'>
                 <thead>
                   <tr>
@@ -306,8 +310,9 @@ const LogsCard: React.FC<LogsCardProps> = ({
                     })}
                 </tbody>
               </table>
-            </div>
-          </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
     </>

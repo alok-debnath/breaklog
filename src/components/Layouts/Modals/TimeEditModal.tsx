@@ -1,34 +1,25 @@
+'use client';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { useStore } from '@/stores/store';
+import Button from "@/components/UI/Button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import axios from 'axios';
 import { handleError } from '../../common/CommonCodeBlocks';
 import { useEffect, useRef, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
-// import { TimePicker } from 'antd';
-// import type { Dayjs } from 'dayjs';
-// import dayjs from 'dayjs';
-// import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-// dayjs.extend(customParseFormat);
-
-// const onChange = (time: Dayjs, timeString: string) => {
-//   console.log(time, timeString);
-// };
-
-declare global {
-  interface Window {
-    time_edit_modal: {
-      showModal: () => void;
-      close: () => void;
-    };
-  }
-}
-interface TimeEditModalProps {
-}
-
-const TimeEditModal: React.FC<TimeEditModalProps> = () => {
-  const { loading, logEditStore } = useStore();
+const TimeEditModal: React.FC = () => {
+  const { loading, logEditStore, isTimeEditModalOpen } = useStore();
   const [localTime, setLocalTime] = useState({
     hour: 0,
     minute: 0,
@@ -62,6 +53,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
 
   useEffect(() => {
     const updateLocalTime = () => {
+      if (!logEditStore.log_dateTime) return;
       const updatedLocalTime = new Date(
         logEditStore.log_dateTime,
       ).toLocaleString('en-US', {
@@ -81,24 +73,24 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
 
       const minLimit = logEditStore.log_dateTime_behind
         ? parseTimeString(
-            new Date(logEditStore.log_dateTime_behind).toLocaleString('en-US', {
-              timeZone: localTimeZone,
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true,
-            }),
-          )
+          new Date(logEditStore.log_dateTime_behind).toLocaleString('en-US', {
+            timeZone: localTimeZone,
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+          }),
+        )
         : { hour: 5, minute: 31, period: 'AM' };
 
       const maxLimit = logEditStore.log_dateTime_ahead
         ? parseTimeString(
-            new Date(logEditStore.log_dateTime_ahead).toLocaleString('en-US', {
-              timeZone: localTimeZone,
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true,
-            }),
-          )
+          new Date(logEditStore.log_dateTime_ahead).toLocaleString('en-US', {
+            timeZone: localTimeZone,
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+          }),
+        )
         : { hour: 11, minute: 59, period: 'PM' };
 
       setLimit({ min: minLimit, max: maxLimit });
@@ -154,7 +146,7 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
     } catch (error: any) {
       handleError({ error: error, router: null });
     }
-    window.time_edit_modal.close();
+    closeModal();
   };
 
   const formik = useFormik({
@@ -165,8 +157,6 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
     },
     validationSchema: Yup.object({
       hour: Yup.number()
-        // .min(limit.min.hour)
-        // .max(limit.max.hour)
         .when(['period'], ([period], schema) => {
           if (period === limit.min.period) {
             if (limit.min.period === limit.max.period) {
@@ -209,8 +199,8 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
   });
 
   const closeModal = () => {
-    window.time_edit_modal.close();
     useStore.setState(() => ({
+      isTimeEditModalOpen: false,
       logEditStore: {
         log_id: '',
         log_dateTime: '',
@@ -220,146 +210,91 @@ const TimeEditModal: React.FC<TimeEditModalProps> = () => {
     }));
   };
 
-  const popupContainerRef = useRef(null);
-  // const [value, setValue] = useState<Dayjs | null>(null);
-
-  // const onChange = (time: Dayjs) => {
-  //   setValue(time);
-  // };
-
   return (
-    <>
-      <dialog
-        id='time_edit_modal'
-        className='modal modal-bottom sm:modal-middle'
-        ref={popupContainerRef}
-      >
-        <form method='dialog' className='modal-box'>
-          {/* <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> */}
-          <h3 className='text-center text-lg font-bold'>Edit Time</h3>
-          <div className='flex items-center'>
-            <div className='divider flex-1'></div>
-            <p className='mx-4'>
-              {`${limit.min.hour < 10 ? '0' : ''}${limit.min.hour}:${limit.min.minute < 10 ? '0' : ''}${limit.min.minute} ${limit.min.period} - ${limit.max.hour < 10 ? '0' : ''}${limit.max.hour}:${limit.max.minute < 10 ? '0' : ''}${limit.max.minute} ${limit.max.period}`}
-            </p>
-            <div className='divider flex-1'></div>
-          </div>
-          <div className='card form-control grid gap-y-5 p-5'>
-            <div>
-              <p className='label-text'>Hour</p>
-              <div className='flex w-full'>
-                <input
-                  className='input flex-1'
-                  type='number'
-                  id='hour'
-                  name='hour'
-                  value={formik.values.hour || 0}
-                  onChange={formik.handleChange}
-                />
-              </div>
+    <Dialog open={isTimeEditModalOpen} onOpenChange={closeModal}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Time</DialogTitle>
+          <DialogDescription>
+            {`${limit.min.hour < 10 ? '0' : ''}${limit.min.hour}:${limit.min.minute < 10 ? '0' : ''}${limit.min.minute} ${limit.min.period} - ${limit.max.hour < 10 ? '0' : ''}${limit.max.hour}:${limit.max.minute < 10 ? '0' : ''}${limit.max.minute} ${limit.max.period}`}
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={formik.handleSubmit}>
+          <div className='grid gap-4 py-4'>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="hour" className="text-right">
+                Hour
+              </Label>
+              <Input
+                id="hour"
+                name="hour"
+                type="number"
+                value={formik.values.hour || 0}
+                onChange={formik.handleChange}
+                className="col-span-3"
+              />
               {formik.errors.hour && (
-                <div className='error text-red-500'>{formik.errors.hour}</div>
+                <div className='error text-red-500 col-span-4'>{formik.errors.hour}</div>
               )}
             </div>
-            <div>
-              <p className='label-text'>Minute</p>
-              <div className='join flex w-full'>
-                <input
-                  className='input join-item flex-1'
-                  type='number'
-                  id='minute'
-                  name='minute'
-                  value={formik.values.minute || 0}
-                  onChange={formik.handleChange}
-                />
-                {/* <p className='btn join-item no-animation flex-1'>Search</p> */}
-              </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="minute" className="text-right">
+                Minute
+              </Label>
+              <Input
+                id="minute"
+                name="minute"
+                type="number"
+                value={formik.values.minute || 0}
+                onChange={formik.handleChange}
+                className="col-span-3"
+              />
               {formik.errors.minute && (
-                <div className='error text-red-500'>{formik.errors.minute}</div>
+                <div className='error text-red-500 col-span-4'>{formik.errors.minute}</div>
               )}
             </div>
             <div className='join join-horizontal flex'>
               {(limit.min.period === 'AM' && limit.max.period === 'PM') ||
-              (limit.min.period === 'PM' && limit.max.period === 'AM') ? (
+                (limit.min.period === 'PM' && limit.max.period === 'AM') ? (
                 <>
-                  <span
-                    className={`btn join-item btn-sm flex-1 ${
-                      formik.values.period === 'AM' ? 'btn-primary' : ''
-                    }`}
+                  <Button
+                    variant={formik.values.period === 'AM' ? 'default' : 'outline'}
                     onClick={() => formik.setFieldValue('period', 'AM')}
+                    className="flex-1"
                   >
                     AM
-                  </span>
-                  <span
-                    className={`btn join-item btn-sm flex-1 ${
-                      formik.values.period === 'PM' ? 'btn-primary' : ''
-                    }`}
+                  </Button>
+                  <Button
+                    variant={formik.values.period === 'PM' ? 'default' : 'outline'}
                     onClick={() => formik.setFieldValue('period', 'PM')}
+                    className="flex-1"
                   >
                     PM
-                  </span>
+                  </Button>
                 </>
               ) : (
-                <span
-                  className={`btn join-item btn-sm flex-1 ${
-                    formik.values.period === limit.min.period
-                      ? 'btn-primary'
-                      : ''
-                  }`}
+                <Button
+                  variant={formik.values.period === limit.min.period ? 'default' : 'outline'}
                   onClick={() =>
                     formik.setFieldValue('period', limit.min.period)
                   }
+                  className="flex-1"
                 >
                   {limit.min.period}
-                </span>
+                </Button>
               )}
             </div>
             {formik.errors.period && (
               <div className='error text-red-500'>{formik.errors.period}</div>
             )}
-            {/* <TimePicker
-              use12Hours
-              format='h:mm A'
-              defaultValue={dayjs('12:08', 'HH:mm')}
-              className='input text-inherit placeholder-inherit hover:border-secondary hover:bg-inherit active:bg-inherit '
-              getPopupContainer={() =>
-                popupContainerRef.current || document.body
-              }
-              // onChange={onChange}
-              // disabledTime={disabledTime}
-              value={value}
-              onChange={onChange}
-              needConfirm={false}
-              rootClassName=''
-              allowClear={false}
-            /> */}
           </div>
-          <div className='modal-action'>
-            {/* if there is a button in form, it will close the modal */}
-            <div className='join flex w-full'>
-              <span
-                className='btn join-item flex-1'
-                onClick={() => closeModal()}
-              >
-                Close
-              </span>
-              <span
-                className={`btn btn-primary join-item flex-1 ${!formik.isValid ? 'disabled' : ''}`}
-                onClick={(event) => {
-                  event.preventDefault();
-                  formik.handleSubmit();
-                }}
-              >
-                Save
-              </span>
-            </div>
-          </div>
+          <DialogFooter>
+            <Button onClick={closeModal} variant="outline">Close</Button>
+            <Button type="submit" disabled={!formik.isValid}>Save</Button>
+          </DialogFooter>
         </form>
-        <form method='dialog' className='modal-backdrop'>
-          <span onClick={() => closeModal()}>close</span>
-        </form>
-      </dialog>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -2,7 +2,10 @@
 import { useStore } from '@/stores/store';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Toaster } from 'react-hot-toast';
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card"
 
 export default function DashboardLayout({
   children, // will be a page or nested layout
@@ -13,10 +16,9 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   return (
-    <div data-theme={themeMode || 'caramellatte'}>
-      <div className='hero bg-base-200 min-h-screen'>
-        <Toaster position='top-left' reverseOrder={false} />
-        <div className='hero-content flex-col lg:flex-row-reverse'>
+    <div>
+      <div className='bg-muted min-h-screen flex items-center justify-center'>
+        <div className='flex-col lg:flex-row-reverse'>
           <div className='text-center lg:text-left'>
             <div className='mb-3 flex flex-row items-center gap-4'>
               <h1 className='text-5xl font-bold underline'>Breaklog</h1>
@@ -45,9 +47,11 @@ export default function DashboardLayout({
               )}
             </p>
           </div>
-          <div className='card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl'>
-            <div className='card-body p-0'>{children}</div>
-          </div>
+          <Card>
+            <CardContent className="p-0">
+              {children}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

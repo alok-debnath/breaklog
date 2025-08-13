@@ -5,6 +5,26 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import Button from '@/components/UI/Button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 const HistoryPage = () => {
   const { loading, monthLogs, summary, userData } = useStore();
@@ -108,74 +128,61 @@ const HistoryPage = () => {
 
   return (
     <>
-      <div className='bg-base-200 flex min-h-dvh min-w-fit place-items-center justify-center'>
-        <div className='hero-content text-center'>
+      <div className='bg-muted flex min-h-dvh min-w-fit place-items-center justify-center'>
+        <div className='text-center'>
           <div className='max-w-md'>
-            <div className='card bg-base-100 my-20 shadow-xl'>
-              <div className='card-body'>
-                <h3 className='text-md text-left font-semibold'>
-                  Fetch required data
-                </h3>
+            <Card className="my-20 shadow-xl">
+              <CardHeader>
+                <CardTitle>Fetch required data</CardTitle>
+              </CardHeader>
+              <CardContent>
                 <div className='mt-5 mb-2'>
-                  <div className='join'>
-                    <select
-                      className='join-item select'
-                      value={selectedMonth.toString()} // Convert to string for consistency
-                      onChange={(e) => setSelectedMonth(+e.target.value)} // Convert to number
-                    >
-                      {months.map((month, index) => (
-                        <option
-                          key={index}
-                          value={(index + 1).toString()} // Convert to string
-                          // disabled={
-                          //   index + 1 === selectedMonth ? true : undefined
-                          // }
-                        >
-                          {month}
-                        </option>
-                      ))}
-                    </select>
-                    <select
-                      className='join-item select'
-                      value={selectedYear.toString()} // Convert to string for consistency
-                      onChange={(e) => setSelectedYear(+e.target.value)} // Convert to number
-                    >
-                      {years.map((year, index) => (
-                        <option
-                          key={index}
-                          value={year.toString()} // Convert to string
-                          // disabled={year === selectedYear ? true : undefined}
-                        >
-                          {year}
-                        </option>
-                      ))}
-                    </select>
+                  <div className='flex gap-2'>
+                    <Select onValueChange={(value) => setSelectedMonth(Number(value))} defaultValue={selectedMonth.toString()}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Month" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {months.map((month, index) => (
+                          <SelectItem key={index} value={(index + 1).toString()}>
+                            {month}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select onValueChange={(value) => setSelectedYear(Number(value))} defaultValue={selectedYear.toString()}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Year" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {years.map((year, index) => (
+                          <SelectItem key={index} value={year.toString()}>
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className='mt-3'>
-                    <button
-                      className={`btn ${loading ? 'btn-disabled' : ''}`}
+                    <Button
                       onClick={() => {
                         handleSearch();
                       }}
+                      disabled={loading}
                     >
                       Search{' '}
                       {loading && (
                         <span className='loading loading-ring loading-md'></span>
                       )}
-                    </button>
+                    </Button>
                   </div>
                 </div>
-                <div className='bg-base-200 collapse'>
-                  <input
-                    type='checkbox'
-                    checked={collapseBoxState}
-                    readOnly
-                    hidden
-                  />
-                  <div className='collapse-content px-2'>
-                    <div className='pt-2'>
-                      <div className='card bg-base-100'>
-                        <div className='card-body py-5 text-sm'>
+                <Accordion type="single" collapsible className="w-full">
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Summary</AccordionTrigger>
+                    <AccordionContent>
+                      <Card>
+                        <CardContent className="py-5 text-sm">
                           <p>
                             Work Required:{' '}
                             <span className='font-semibold'>
@@ -189,8 +196,8 @@ const HistoryPage = () => {
                               className={`font-semibold ${
                                 summary.totalWorkDone >=
                                 summary.expectedWorkHours * 3600000
-                                  ? 'text-success'
-                                  : 'text-error'
+                                  ? 'text-green-500'
+                                  : 'text-red-500'
                               }`}
                             >
                               {summary.formattedTotalWorkDone}
@@ -200,7 +207,7 @@ const HistoryPage = () => {
                           <div className='divider my-1'></div>
                           <p>
                             Days Logged:{' '}
-                            <span className='text-success font-semibold'>
+                            <span className='text-green-500 font-semibold'>
                               {summary.numberOfDays}
                             </span>{' '}
                             day
@@ -218,13 +225,13 @@ const HistoryPage = () => {
                           )}
                           <p>
                             Break Taken:{' '}
-                            <span className='text-success font-semibold'>
+                            <span className='text-green-500 font-semibold'>
                               {summary.formattedTotalBreakTime}
                             </span>{' '}
                             hr
                           </p>
-                        </div>
-                      </div>
+                        </CardContent>
+                      </Card>
                       <table className='table-xs md:table-md mt-3 table w-full table-fixed text-center'>
                         <thead>
                           <tr>
@@ -272,17 +279,22 @@ const HistoryPage = () => {
                                   <td>
                                     <Link
                                       href={`/dashboard/history/${log.date}`}
-                                      className={`btn btn-sm min-w-full text-xs font-bold ${
-                                        log.isHalfDay
-                                          ? 'btn-dash'
-                                          : log.workDone >=
-                                              userData.daily_work_required *
-                                                3600000
-                                            ? 'btn-success'
-                                            : 'btn-error'
-                                      }`}
                                     >
-                                      {log.date}
+                                      <Button
+                                        variant={
+                                          log.isHalfDay
+                                            ? 'outline'
+                                            : log.workDone >=
+                                                userData.daily_work_required *
+                                                  3600000
+                                              ? 'default'
+                                              : 'destructive'
+                                        }
+                                        size="sm"
+                                        className="min-w-full text-xs font-bold"
+                                      >
+                                        {log.date}
+                                      </Button>
                                     </Link>
                                   </td>
                                   <td>{log.formattedBreakTime}</td>
@@ -292,11 +304,11 @@ const HistoryPage = () => {
                             })}
                         </tbody>
                       </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

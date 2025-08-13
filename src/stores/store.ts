@@ -77,6 +77,10 @@ interface StoreState {
   logEditStore: LogEditData;
   dialogModal: DialogModalData;
   initialPageLoadDone: boolean;
+  isConfirmationDialogOpen: boolean;
+  isSettingsModalOpen: boolean;
+  isTimeEditModalOpen: boolean;
+  isTimeZoneModalOpen: boolean;
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -138,4 +142,8 @@ export const useStore = create<StoreState>((set) => ({
     modal_cancel_btn: '',
   },
   initialPageLoadDone: false,
+  isConfirmationDialogOpen: false,
+  isSettingsModalOpen: false,
+  isTimeEditModalOpen: false,
+  isTimeZoneModalOpen: false,
 }));

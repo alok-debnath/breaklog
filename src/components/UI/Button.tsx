@@ -1,16 +1,25 @@
+import { Button as ShadcnButton } from "@/components/ui/button";
+
 interface ButtonProps {
-  className: string;
-  onclick: () => void;
-  text: React.ReactNode;
+  className?: string;
+  onClick: () => void;
+  children: React.ReactNode;
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  size?: "default" | "sm" | "lg" | "icon";
+  disabled?: boolean;
 }
 
-const Button: React.FC<ButtonProps> = ({ className, onclick, text }) => {
+const Button: React.FC<ButtonProps> = ({ className, onClick, children, variant, size, disabled }) => {
   return (
-    <>
-      <button className={className} onClick={onclick}>
-        {text}
-      </button>
-    </>
+    <ShadcnButton
+      className={className}
+      onClick={onClick}
+      variant={variant}
+      size={size}
+      disabled={disabled}
+    >
+      {children}
+    </ShadcnButton>
   );
 };
 

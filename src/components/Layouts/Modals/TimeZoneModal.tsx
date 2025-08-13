@@ -1,23 +1,35 @@
 'use client';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { useStore } from '@/stores/store';
+import Button from "@/components/UI/Button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
 import { handleError, handleSuccessToast } from '../../common/CommonCodeBlocks';
 
-declare global {
-  interface Window {
-    time_zone_modal: {
-      showModal: () => void;
-      close: () => void;
-    };
-  }
-}
-interface TimeZoneModalProps {}
-
-const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
-  const { userData, loading } = useStore();
+const TimeZoneModal: React.FC = () => {
+  const { userData, loading, isTimeZoneModalOpen } = useStore();
   const router = useRouter();
 
   const labelStyle = 'abbrev';
@@ -41,7 +53,7 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
       });
 
       if ((res.data.success = true)) {
-        window.time_zone_modal.close();
+        useStore.setState({ isTimeZoneModalOpen: false });
         useStore.setState({
           userData: {
             ...userData,
@@ -72,145 +84,110 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
   }, [options]);
 
   return (
-    <>
-      <dialog
-        id='time_zone_modal'
-        className='modal modal-bottom sm:modal-middle'
-      >
-        <form method='dialog' className='modal-box bg-base-200 px-0 pt-0 pb-0'>
-          <h3 className='py-6 text-center text-lg font-bold'>
-            Select Time Zone
-          </h3>
-          <div className='rounded-t- card bg-base-100 rounded-b-none px-5 pb-5'>
-            <div className='card-body'>
-              <p>
-                Device Timezone:{' '}
-                <span
-                  className={
-                    deviceTimeZone
-                      ? selectedTimeZone === deviceTimeZone
-                        ? 'text-success'
-                        : 'text-warning'
-                      : 'text-error'
-                  }
-                >
-                  {(deviceTimeZone && (
-                    <>
-                      {deviceTimeZone + ' '}
-                      <span className='whitespace-nowrap'>
-                        {parseTimezone(deviceTimeZone).label.split(') ')[0] +
-                          ')'}
-                      </span>
-                    </>
-                  )) ||
-                    'undefined'}
-                </span>
-              </p>
-              <p>
-                Selected Timezone:{' '}
-                <span
-                  className={selectedTimeZone ? 'text-success' : 'text-error'}
-                >
-                  {(selectedTimeZone && (
-                    <>
-                      {selectedTimeZone + ' '}
-                      <span className='whitespace-nowrap'>
-                        {parseTimezone(selectedTimeZone).label.split(') ')[0] +
-                          ')'}
-                      </span>
-                    </>
-                  )) ||
-                    'undefined'}
-                </span>
-              </p>
-              <div className='collapse-arrow bg-base-200 collapse'>
-                <input type='checkbox' />
-                <div className='collapse-title font-medium'>
-                  Click for more info
-                </div>
-                <div className='collapse-content text-sm'>
-                  <p>
-                    If your work ends within the same day then you don&apos;t
-                    have to bother and can select your own timezone
-                  </p>
-                  <div className='divider'>OR</div>
-                  <p>
-                    In the event that you have an irregular work schedule,
-                    consider using a TimeZone where your shift will start and
-                    end within the same working day (this is solely for
-                    calculation purposes only and won&apos;t affect how you see
-                    the time).
-                  </p>
-                  <h3 className='mt-3 font-bold'>Example:</h3>
-                  <p className='mb-3'>
-                    Here the work starts at May 6 but ends at May 7.
-                    <br />
-                    So selecting a timezone for example which is 2 or 3 (or
-                    maybe more) hours behind your timezone is preffered,
-                    <br />
-                    like in this case my timezone is at{' '}
-                    <span className='font-bold'>GMT+5:30</span> so I will select
-                    someting like
-                    <span className='font-bold'> GMT+2:00 or GMT+3:00</span>
-                  </p>
-                  <table className='table-zebra table text-center'>
-                    <thead>
-                      <tr>
-                        <th>Time</th>
-                        <th>Activity</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>May 7, 1:29 AM</td>
-                        <td>day end</td>
-                      </tr>
-                      <tr>
-                        <td>May 6, 3:00 PM</td>
-                        <td>day start</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className='form-control'>
-                <label className='label' htmlFor='log_type'>
-                  <span className='label-text flex items-center'>
-                    Default Time Zone
+    <Dialog open={isTimeZoneModalOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Select Time Zone</DialogTitle>
+        </DialogHeader>
+        <div>
+          <p>
+            Device Timezone:{' '}
+            <span
+              className={
+                deviceTimeZone
+                  ? selectedTimeZone === deviceTimeZone
+                    ? 'text-green-500'
+                    : 'text-yellow-500'
+                  : 'text-red-500'
+              }
+            >
+              {(deviceTimeZone && (
+                <>
+                  {deviceTimeZone + ' '}
+                  <span className='whitespace-nowrap'>
+                    {parseTimezone(deviceTimeZone).label.split(') ')[0] +
+                      ')'}
                   </span>
-                </label>
-                <select
-                  value={selectedTimeZone}
-                  className='select w-full'
-                  onChange={(e) => setSelectedTimeZone(e.currentTarget.value)}
-                >
-                  <option value=''>Select a timezone</option>
-                  {options.map((option, index) => (
-                    <option key={index} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className='modal-action'>
-              {/* if there is a button in form, it will close the modal */}
-              <div className='join flex w-full'>
-                <span
-                  className={`btn btn-primary join-item flex-1 ${!selectedTimeZone && 'btn-disabled'}`}
-                  onClick={handleSubmit}
-                >
-                  Confirm
-                </span>
-              </div>
-            </div>
+                </>
+              )) ||
+                'undefined'}
+            </span>
+          </p>
+          <p>
+            Selected Timezone:{' '}
+            <span
+              className={selectedTimeZone ? 'text-green-500' : 'text-red-500'}
+            >
+              {(selectedTimeZone && (
+                <>
+                  {selectedTimeZone + ' '}
+                  <span className='whitespace-nowrap'>
+                    {parseTimezone(selectedTimeZone).label.split(') ')[0] +
+                      ')'}
+                  </span>
+                </>
+              )) ||
+                'undefined'}
+            </span>
+          </p>
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger>More Info</AccordionTrigger>
+              <AccordionContent>
+                <p>
+                  If your work ends within the same day then you don&apos;t
+                  have to bother and can select your own timezone
+                </p>
+                <div className='divider'>OR</div>
+                <p>
+                  In the event that you have an irregular work schedule,
+                  consider using a TimeZone where your shift will start and
+                  end within the same working day (this is solely for
+                  calculation purposes only and won&apos;t affect how you see
+                  the time).
+                </p>
+                <h3 className='mt-3 font-bold'>Example:</h3>
+                <p className='mb-3'>
+                  Here the work starts at May 6 but ends at May 7.
+                  <br />
+                  So selecting a timezone for example which is 2 or 3 (or
+                  maybe more) hours behind your timezone is preffered,
+                  <br />
+                  like in this case my timezone is at{' '}
+                  <span className='font-bold'>GMT+5:30</span> so I will select
+                  someting like
+                  <span className='font-bold'> GMT+2:00 or GMT+3:00</span>
+                </p>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          <div className='form-control'>
+            <label className='label' htmlFor='log_type'>
+              <span className='label-text flex items-center'>
+                Default Time Zone
+              </span>
+            </label>
+            <Select onValueChange={(value) => setSelectedTimeZone(value)} defaultValue={selectedTimeZone}>
+              <SelectTrigger>
+                <SelectValue placeholder="Timezone" />
+              </SelectTrigger>
+              <SelectContent>
+                {options.map((option, index) => (
+                  <SelectItem key={index} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-        </form>
-        <form method='dialog' className='modal-backdrop'>
-          {/* <span onClick={onCancel}>close</span> */}
-        </form>
-      </dialog>
-    </>
+        </div>
+        <DialogFooter>
+          <Button onClick={handleSubmit} disabled={!selectedTimeZone}>
+            Confirm
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 
