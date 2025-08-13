@@ -86,6 +86,14 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting })
                   </div>
                 )}
               </Button>
+              <Button
+                onClick={() => logEntry('day end')}
+                variant="destructive"
+                className="flex-1 h-full rounded-full text-lg font-semibold"
+                disabled={loading || breaklogMode}
+              >
+                End Day
+              </Button>
             </>
           )}
 

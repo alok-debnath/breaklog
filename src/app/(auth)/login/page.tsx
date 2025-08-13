@@ -81,9 +81,9 @@ export default function LoginPage() {
         <TabsTrigger value="traditional">Traditional</TabsTrigger>
         <TabsTrigger value="oauth">OAuth</TabsTrigger>
       </TabsList>
-      <TabsContent value="traditional">
+      <TabsContent value="traditional" className="animate-enter pt-4">
         <form onSubmit={formik.handleSubmit}>
-          <div className='grid gap-4 py-4'>
+          <div className='grid gap-4'>
             <div className="grid w-full items-center gap-1.5">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -128,7 +128,7 @@ export default function LoginPage() {
           </div>
         </form>
       </TabsContent>
-      <TabsContent value="oauth">
+      <TabsContent value="oauth" className="animate-enter pt-4">
         <div className="py-4">
           <GoogleSignInButton text='Sign in with Google' />
         </div>

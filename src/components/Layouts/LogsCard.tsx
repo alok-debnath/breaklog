@@ -35,7 +35,6 @@ import { Info, AlertCircle } from 'lucide-react';
 interface LogsCardProps {
   page?: string;
   isWorkDoneSuccess?: boolean;
-  isIntersecting?: boolean;
   logsServer?: LogsData[];
   workDataServer?: WorkData;
   showAccordion?: boolean;

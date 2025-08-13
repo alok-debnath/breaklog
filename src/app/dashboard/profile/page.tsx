@@ -108,7 +108,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className='bg-muted flex min-h-dvh min-w-fit place-items-center justify-center'>
+      <div className='bg-muted flex min-w-fit place-items-center justify-center py-12'>
         <div className='text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>

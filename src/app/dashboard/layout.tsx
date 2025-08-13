@@ -28,7 +28,7 @@ export default async function DashboardLayout({
         <Loading />
         <Navbar />
         {children}
-        <Toaster />
+        <Toaster position="top-left" />
       </ThemeWrapper>
     </section>
   );

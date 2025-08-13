@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
+import { Toaster } from 'sonner';
 
 export default function DashboardLayout({
   children, // will be a page or nested layout
@@ -17,6 +18,7 @@ export default function DashboardLayout({
 
   return (
     <div className="bg-background min-h-screen flex flex-col items-center justify-center p-4">
+      <Toaster position="top-left" />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-primary">Breaklog</h1>
