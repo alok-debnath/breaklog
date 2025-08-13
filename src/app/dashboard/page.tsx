@@ -61,23 +61,9 @@ const Index = () => {
           isWorkDoneSuccess={isWorkDoneSuccess}
           isIntersecting={isIntersecting}
           showAccordion={true}
+          logEntry={logEntry}
         />
-        <div className="mt-4" ref={ref}>
-          {(isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus)) && (
-            <Button
-              onClick={() => logEntry('day end')}
-              variant="default"
-              className="w-full"
-              disabled={
-                ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
-                loading ||
-                breaklogMode
-              }
-            >
-              End Day
-            </Button>
-          )}
-        </div>
+        <div ref={ref} />
       </div>
       <BottomNavbar logEntry={logEntry} isIntersecting={isIntersecting} />
       <TimeEditModal />

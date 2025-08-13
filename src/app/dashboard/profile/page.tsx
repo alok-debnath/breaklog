@@ -112,7 +112,7 @@ const ProfilePage = () => {
         <div className='text-center'>
           <div className='max-w-md'>
             <div className='overflow-x-auto'>
-              <Card className="my-20 w-full max-w-sm shrink-0">
+              <Card className="my-20 w-full max-w-md shrink-0">
                 <CardHeader>
                   <CardTitle>Update your data</CardTitle>
                 </CardHeader>
@@ -120,9 +120,9 @@ const ProfilePage = () => {
                   <TooltipProvider>
                     <form
                       onSubmit={formik.handleSubmit}
-                      className='grid w-full max-w-xl gap-y-3'
+                      className='grid w-full gap-y-4'
                     >
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <div className="grid w-full items-center gap-1.5">
                         <div className="flex items-center">
                           <Label htmlFor="daily_work_required">Daily work hour required</Label>
                           <Tooltip>
@@ -167,7 +167,7 @@ const ProfilePage = () => {
                           )}
                       </div>
 
-                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <div className="grid w-full items-center gap-1.5">
                         <div className="flex items-center">
                           <Label htmlFor="log_type">Default Log Mode</Label>
                           <Tooltip>
@@ -210,13 +210,13 @@ const ProfilePage = () => {
                       )}
                     </div>
 
-                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <div className="grid w-full items-center gap-1.5">
                       <Label htmlFor="default_time_zone">Default Time Zone</Label>
                       <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone}>
                         <SelectTrigger>
                           <SelectValue placeholder="Timezone" />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="max-h-60">
                           {options.map((option, index) => (
                             <SelectItem key={index} value={option.value}>
                               {option.label}

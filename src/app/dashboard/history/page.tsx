@@ -143,9 +143,9 @@ const HistoryPage = () => {
           <CardTitle>Fetch required data</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className='flex items-center gap-2'>
+          <div className='flex flex-col sm:flex-row items-center gap-2'>
             <Select onValueChange={(value) => setSelectedMonth(Number(value))} defaultValue={selectedMonth.toString()}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Month" />
               </SelectTrigger>
               <SelectContent>
@@ -157,7 +157,7 @@ const HistoryPage = () => {
               </SelectContent>
             </Select>
             <Select onValueChange={(value) => setSelectedYear(Number(value))} defaultValue={selectedYear.toString()}>
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent>

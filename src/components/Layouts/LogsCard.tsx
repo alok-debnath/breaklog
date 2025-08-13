@@ -39,6 +39,7 @@ interface LogsCardProps {
   logsServer?: LogsData[];
   workDataServer?: WorkData;
   showAccordion?: boolean;
+  logEntry?: (value: string) => void;
 }
 
 const LogsCard: React.FC<LogsCardProps> = ({
@@ -47,8 +48,9 @@ const LogsCard: React.FC<LogsCardProps> = ({
   logsServer,
   workDataServer,
   showAccordion,
+  logEntry,
 }) => {
-  const { breaklogMode, logs, workData, userData } = useStore();
+  const { breaklogMode, logs, workData, userData, loading } = useStore();
 
   const openTimeEditModal = (value: any) => {
     useStore.setState(() => ({
@@ -242,6 +244,22 @@ const LogsCard: React.FC<LogsCardProps> = ({
           </div>
         )}
       </CardContent>
+      {page !== 'history' && (
+        <CardFooter>
+          <Button
+            onClick={() => logEntry && logEntry('day end')}
+            variant="destructive"
+            className="w-full"
+            disabled={
+              ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
+              loading ||
+              breaklogMode
+            }
+          >
+            End Day
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 };
