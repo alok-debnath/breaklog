@@ -1,137 +1,88 @@
+'use client';
 import { useStore } from '@/stores/store';
 import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
-import Button from '../UI/Button';
-import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus, Undo2, Menu } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { cn } from '@/lib/utils';
 
 interface BottomNavbarProps {
-  logEntry: (value: string) => void; // logEntry is a function that accepts a string
+  logEntry: (value: string) => void;
   isIntersecting: boolean;
 }
 
-const BottomNavbar: React.FC<BottomNavbarProps> = ({
-  logEntry,
-  isIntersecting,
-}) => {
+const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting }) => {
   const { breaklogMode, workData, loading } = useStore();
 
-  const btnState = ['day end'].includes(workData.lastLogStatus) || loading;
-  const showButtonLogo =
-    isIntersecting ||
-    ['exit', null, 'day end'].includes(workData.lastLogStatus);
+  const isDayEnded = ['day end', 'exit'].includes(workData.lastLogStatus);
+  const btnDisabled = isDayEnded || loading;
+
+  const getButtonContent = () => {
+    if (loading && !isIntersecting) return <span className="loading loading-ring loading-sm" />;
+
+    const status = workData.lastLogStatus;
+    if (status === null && !breaklogMode) return { text: "Start Day", icon: <BriefcaseBusiness className="w-4 h-4" /> };
+    if (status === null && breaklogMode) return { text: "Take Break", icon: <Coffee className="w-4 h-4" /> };
+    if (status === 'day start') return { text: "Take Break", icon: <Coffee className="w-4 h-4" /> };
+    if (status === 'exit') return { text: "End Break", icon: <LogIn className="w-4 h-4" /> };
+    if (status === 'enter') return { text: "Take Break", icon: <Coffee className="w-4 h-4" /> };
+    return { text: "Add Log", icon: <Plus className="w-4 h-4" /> };
+  };
+
+  const { text, icon } = getButtonContent();
+
   return (
     <>
       <LiveBreakCounter />
-      <div className='to-base-200 fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-linear-to-b from-transparent'></div>
-      <div className='fixed bottom-3 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2'>
-        <div className='bg-card text-card-foreground mx-3 rounded-full shadow-lg'>
-          <div
-            className={`mx-auto grid h-full max-w-lg items-center justify-center space-x-2 p-2 ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? 'grid-cols-3' : 'grid-cols-5'}`}
-          >
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={1.5}
-                    stroke='currentColor'
-                    className='h-6 w-6'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
-                    />
-                  </svg>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => logEntry('undo log')}>
-                  <p>Undo</p>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={1.5}
-                    stroke='currentColor'
-                    className='h-6 w-6'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3'
-                    />
-                  </svg>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            {!['exit', null, 'day end'].includes(workData.lastLogStatus) && (
-              <div
-                className={`${!isIntersecting ? '' : 'hidden'} col-span-2 flex items-center justify-center`}
-              >
-                <Button
-                  text='End Day'
-                  className={`btn bg-error/20 text-error w-full rounded-full font-semibold ${
-                    ['exit', null, 'day end'].includes(
-                      workData.lastLogStatus,
-                    ) ||
-                    loading ||
-                    breaklogMode
-                      ? 'btn-disabled'
-                      : ''
-                  }`}
-                  onclick={() => logEntry('day end')}
-                />
-              </div>
+      <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-40" />
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm px-4 z-50">
+        <div className="bg-card text-card-foreground rounded-full shadow-lg h-16 flex items-center justify-around p-2">
+
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full w-12 h-12">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="top" align="start" className="mb-2">
+              <DropdownMenuItem onClick={() => logEntry('undo log')}>
+                <Undo2 className="mr-2 h-4 w-4" />
+                <span>Undo Last Log</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <Button
+            onClick={() => breaklogMode ? logEntry('break log') : logEntry('day log')}
+            disabled={btnDisabled}
+            className={cn(
+              "flex-1 h-full rounded-full text-lg font-semibold transition-all duration-300 ease-in-out",
+              "bg-primary text-primary-foreground hover:bg-primary/90",
+              !isIntersecting && !isDayEnded && "hidden" // Hide if main button is visible
             )}
-            <div className='col-span-2 flex items-center justify-center'>
-              <button
-                onClick={() =>
-                  breaklogMode ? logEntry('break log') : logEntry('day log')
-                }
-                className={`btn ${btnState ? 'btn-disabled' : ''} group bg-success/20 text-success inline-flex w-full items-center justify-center rounded-full font-medium`}
-              >
-                <p className='font-semibold'>
-                  {workData.lastLogStatus === null && !breaklogMode
-                    ? 'Start Day'
-                    : workData.lastLogStatus === null && breaklogMode
-                      ? 'Take Break'
-                      : workData.lastLogStatus === 'day start'
-                        ? 'Take Break'
-                        : workData.lastLogStatus === 'exit'
-                          ? 'End Break'
-                          : workData.lastLogStatus === 'enter'
-                            ? 'Take Break'
-                            : 'Add Log'}
-                </p>
-                {!loading &&
-                  showButtonLogo &&
-                  (workData.lastLogStatus === null && !breaklogMode ? (
-                    <BriefcaseBusiness className='h-4 w-4' />
-                  ) : workData.lastLogStatus === null && breaklogMode ? (
-                    <Coffee className='h-4 w-4' />
-                  ) : workData.lastLogStatus === 'day start' ? (
-                    <Coffee className='h-4 w-4' />
-                  ) : workData.lastLogStatus === 'exit' ? (
-                    <LogIn className='h-4 w-4' />
-                  ) : workData.lastLogStatus === 'enter' ? (
-                    <Coffee className='h-4 w-4' />
-                  ) : (
-                    <Plus className='h-4 w-4' />
-                  ))}
-                {loading && showButtonLogo && (
-                  <span className='loading loading-ring loading-sm'></span>
-                )}
-              </button>
+          >
+            <div className="flex items-center gap-2">
+              {icon}
+              <span>{text}</span>
             </div>
-          </div>
+          </Button>
+
+          {(!isIntersecting && !isDayEnded) && (
+            <Button
+              onClick={() => logEntry('day end')}
+              variant="destructive"
+              className="flex-1 h-full rounded-full text-lg font-semibold"
+              disabled={loading || breaklogMode}
+            >
+              End Day
+            </Button>
+          )}
+
         </div>
       </div>
     </>
