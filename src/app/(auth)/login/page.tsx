@@ -76,81 +76,63 @@ export default function LoginPage() {
   }
 
   return (
-    <>
-      <Tabs defaultValue="traditional" className="w-[400px]">
-        <TabsList>
-          <TabsTrigger value="traditional">Traditional</TabsTrigger>
-          <TabsTrigger value="oauth">OAuth</TabsTrigger>
-        </TabsList>
-        <TabsContent value="traditional">
-          <form onSubmit={formik.handleSubmit}>
-            <fieldset className='fieldset grid gap-y-3'>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type='email'
-                  placeholder='email'
-                  id='email'
-                  name='email'
-                  value={formik.values.email.toLowerCase()}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.email && formik.errors.email && (
-                  <div className='error text-red-500'>
-                    {formik.errors.email}
-                  </div>
-                )}
-              </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  type='password'
-                  placeholder='password'
-                  id='password'
-                  name='password'
-                  value={formik.values.password}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                {formik.touched.password && formik.errors.password && (
-                  <div className='error text-red-500'>
-                    {formik.errors.password}
-                  </div>
-                )}
-                {/* <div><a className="link link-hover">Forgot password?</a></div> */}
-              </div>
-              <Button
-                type="submit"
-                disabled={!formik.isValid || formik.isSubmitting}
-              >
-                Sign in
-                {formik.isSubmitting ? (
-                  <span className='loading loading-spinner'></span>
-                ) : (
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={1.5}
-                    stroke='currentColor'
-                    className='h-6 w-6'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75'
-                    />
-                  </svg>
-                )}
-              </Button>
-            </fieldset>
-          </form>
-        </TabsContent>
-        <TabsContent value="oauth">
+    <Tabs defaultValue="traditional" className="w-full">
+      <TabsList className="grid w-full grid-cols-2">
+        <TabsTrigger value="traditional">Traditional</TabsTrigger>
+        <TabsTrigger value="oauth">OAuth</TabsTrigger>
+      </TabsList>
+      <TabsContent value="traditional">
+        <form onSubmit={formik.handleSubmit}>
+          <div className='grid gap-4 py-4'>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                type='email'
+                placeholder='name@example.com'
+                id='email'
+                name='email'
+                value={formik.values.email.toLowerCase()}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <div className='text-sm text-red-500'>
+                  {formik.errors.email}
+                </div>
+              )}
+            </div>
+            <div className="grid w-full items-center gap-1.5">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                type='password'
+                placeholder='Password'
+                id='password'
+                name='password'
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <div className='text-sm text-red-500'>
+                  {formik.errors.password}
+                </div>
+              )}
+            </div>
+            <Button
+              type="submit"
+              disabled={!formik.isValid || formik.isSubmitting}
+              className="w-full mt-2"
+            >
+              {formik.isSubmitting ? "Signing in..." : "Sign in"}
+            </Button>
+          </div>
+        </form>
+      </TabsContent>
+      <TabsContent value="oauth">
+        <div className="py-4">
           <GoogleSignInButton text='Sign in with Google' />
-        </TabsContent>
-      </Tabs>
-    </>
+        </div>
+      </TabsContent>
+    </Tabs>
   );
 }

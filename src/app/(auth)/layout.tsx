@@ -16,42 +16,35 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   return (
-    <div>
-      <div className='bg-muted min-h-screen flex items-center justify-center'>
-        <div className='flex-col lg:flex-row-reverse'>
-          <div className='text-center lg:text-left'>
-            <div className='mb-3 flex flex-row items-center gap-4'>
-              <h1 className='text-5xl font-bold underline'>Breaklog</h1>
-              <p className='text-2xl font-bold'>
-                {pathname === '/login' ? 'Login' : 'Sign up'}
-              </p>
-            </div>
-            <p className='py-2'>
-              {pathname === '/login' ? (
-                <>
-                  Don&apos;t have an account yet?{' '}
-                  <Link
-                    href='/signup'
-                    className='link-hover link font-semibold'
-                  >
-                    Sign up
-                  </Link>
-                </>
-              ) : (
-                <>
-                  Already have an account?{' '}
-                  <Link href='/login' className='link-hover link font-semibold'>
-                    Login
-                  </Link>
-                </>
-              )}
-            </p>
-          </div>
-          <Card>
-            <CardContent className="p-0">
-              {children}
-            </CardContent>
-          </Card>
+    <div className="bg-background min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-primary">Breaklog</h1>
+          <p className="text-muted-foreground">
+            {pathname === '/login' ? 'Sign in to your account' : 'Create a new account'}
+          </p>
+        </div>
+        <Card className="w-full">
+          <CardContent className="p-6">
+            {children}
+          </CardContent>
+        </Card>
+        <div className="text-center mt-4 text-sm">
+          {pathname === '/login' ? (
+            <>
+              Don&apos;t have an account?{' '}
+              <Link href="/signup" className="font-semibold text-primary hover:underline">
+                Sign up
+              </Link>
+            </>
+          ) : (
+            <>
+              Already have an account?{' '}
+              <Link href="/login" className="font-semibold text-primary hover:underline">
+                Login
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

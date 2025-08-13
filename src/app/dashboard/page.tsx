@@ -55,38 +55,32 @@ const Index = () => {
   const [ref, isIntersecting] = useOnScreen(-80);
 
   return (
-    <>
-      <div className='flex min-h-dvh place-items-center justify-center bg-muted'>
-        <div className='text-center'>
-          <div className='max-w-md'>
-            <LogsCard
-              isWorkDoneSuccess={isWorkDoneSuccess}
-              isIntersecting={isIntersecting}
-            />
-            <div className='mb-20'>
-              <div ref={ref}>
-                <Button
-                  onClick={() => logEntry('day end')}
-                  variant="default"
-                  className={`w-full rounded-t-none normal-case ${
-                    isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? '' : 'invisible'
-                  }`}
-                  disabled={
-                    ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
-                    loading ||
-                    breaklogMode
-                  }
-                >
-                  End Day
-                </Button>
-              </div>
-            </div>
-          </div>
+    <div className="bg-background text-foreground">
+      <div className="container mx-auto max-w-lg p-4">
+        <LogsCard
+          isWorkDoneSuccess={isWorkDoneSuccess}
+          isIntersecting={isIntersecting}
+        />
+        <div className="mt-4" ref={ref}>
+          {(isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus)) && (
+            <Button
+              onClick={() => logEntry('day end')}
+              variant="default"
+              className="w-full"
+              disabled={
+                ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
+                loading ||
+                breaklogMode
+              }
+            >
+              End Day
+            </Button>
+          )}
         </div>
       </div>
       <BottomNavbar logEntry={logEntry} isIntersecting={isIntersecting} />
       <TimeEditModal />
-    </>
+    </div>
   );
 };
 
