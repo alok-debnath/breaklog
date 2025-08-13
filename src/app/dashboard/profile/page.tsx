@@ -24,6 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const validationSchema = Yup.object().shape({
   daily_work_required: Yup.number()
@@ -114,8 +116,7 @@ const ProfilePage = () => {
                   >
 
                   <fieldset className='fieldset'>
-                    <legend className='fieldset-legend text-left'>
-                      Daily work hour required
+                    <Label htmlFor="daily_work_required">Daily work hour required</Label>
                       <span
                         className='tooltip tooltip-top ms-2 cursor-pointer'
                         data-tip='Min work hours per day'
@@ -155,8 +156,7 @@ const ProfilePage = () => {
                   </fieldset>
 
                   <fieldset className='fieldset'>
-                    <legend className='fieldset-legend text-start'>
-                      Default Log Mode
+                    <Label>Default Log Mode</Label>
                       <span
                         className='tooltip tooltip-top ms-2 cursor-pointer'
                         data-tip='Default Mode to use on a fresh setup.'
@@ -194,9 +194,7 @@ const ProfilePage = () => {
                   </fieldset>
 
                   <fieldset className='fieldset'>
-                    <legend className='fieldset-legend text-start'>
-                      Default Time Zone
-                    </legend>
+                    <Label>Default Time Zone</Label>
                     <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone}>
                       <SelectTrigger>
                         <SelectValue placeholder="Timezone" />
