@@ -143,7 +143,7 @@ const HistoryPage = () => {
           <CardTitle>Fetch required data</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className='flex gap-2'>
+          <div className='flex items-center gap-2'>
             <Select onValueChange={(value) => setSelectedMonth(Number(value))} defaultValue={selectedMonth.toString()}>
               <SelectTrigger>
                 <SelectValue placeholder="Month" />
@@ -173,7 +173,6 @@ const HistoryPage = () => {
                 handleSearch();
               }}
               disabled={loading}
-              className="w-full"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Search'}
             </Button>

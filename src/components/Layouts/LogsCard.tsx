@@ -38,6 +38,7 @@ interface LogsCardProps {
   isIntersecting?: boolean;
   logsServer?: LogsData[];
   workDataServer?: WorkData;
+  showAccordion?: boolean;
 }
 
 const LogsCard: React.FC<LogsCardProps> = ({
@@ -45,6 +46,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
   isWorkDoneSuccess,
   logsServer,
   workDataServer,
+  showAccordion,
 }) => {
   const { breaklogMode, logs, workData, userData } = useStore();
 
@@ -124,60 +126,121 @@ const LogsCard: React.FC<LogsCardProps> = ({
           </div>
         )}
 
-        <div>
-          <h3 className="text-sm font-medium mb-2">Logs</h3>
-          {currentLogs.length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Time</TableHead>
-                  <TableHead className="text-right">Activity</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {currentLogs.map((log, index, array) => {
-                  const log_time = new Date(log.log_time);
-                  const utcFormattedDate = log_time.toLocaleString('en-US', {
-                    timeZone: userData.default_time_zone || 'UTC',
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    hour12: true,
-                  });
+        {showAccordion ? (
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-sm">Logs</AccordionTrigger>
+              <AccordionContent>
+                {currentLogs.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Time</TableHead>
+                        <TableHead className="text-right">Activity</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {currentLogs.map((log, index, array) => {
+                        const log_time = new Date(log.log_time);
+                        const utcFormattedDate = log_time.toLocaleString('en-US', {
+                          timeZone: userData.default_time_zone || 'UTC',
+                          hour: 'numeric',
+                          minute: 'numeric',
+                          hour12: true,
+                        });
 
-                  const logAbove = array.length > 1 ? array[index - 1] : null;
-                  const logBelow = index < array.length - 1 ? array[index + 1] : null;
+                        const logAbove = array.length > 1 ? array[index - 1] : null;
+                        const logBelow = index < array.length - 1 ? array[index + 1] : null;
 
-                  return (
-                    <TableRow
-                      key={log.id}
-                      onClick={() => {
-                        if (page !== 'history') {
-                          openTimeEditModal({
-                            log_id: log.id,
-                            log_dateTime: log.log_time,
-                            log_dateTime_ahead: logAbove ? logAbove.log_time : null,
-                            log_dateTime_behind: logBelow ? logBelow.log_time : null,
-                          });
-                        }
-                      }}
-                      className={cn(page !== 'history' && "cursor-pointer")}
-                    >
-                      <TableCell className="font-mono">
-                        {utcFormattedDate}
-                      </TableCell>
-                      <TableCell className="text-right">{log.log_status}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className="flex items-center justify-center p-4 text-sm text-muted-foreground">
-              <AlertCircle className="w-4 h-4 mr-2" />
-              No logs to display.
-            </div>
-          )}
-        </div>
+                        return (
+                          <TableRow
+                            key={log.id}
+                            onClick={() => {
+                              if (page !== 'history') {
+                                openTimeEditModal({
+                                  log_id: log.id,
+                                  log_dateTime: log.log_time,
+                                  log_dateTime_ahead: logAbove ? logAbove.log_time : null,
+                                  log_dateTime_behind: logBelow ? logBelow.log_time : null,
+                                });
+                              }
+                            }}
+                            className={cn(page !== 'history' && "cursor-pointer")}
+                          >
+                            <TableCell className="font-mono">
+                              {utcFormattedDate}
+                            </TableCell>
+                            <TableCell className="text-right">{log.log_status}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="flex items-center justify-center p-4 text-sm text-muted-foreground">
+                    <AlertCircle className="w-4 h-4 mr-2" />
+                    No logs to display.
+                  </div>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        ) : (
+          <div>
+            <h3 className="text-sm font-medium mb-2">Logs</h3>
+            {currentLogs.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Time</TableHead>
+                    <TableHead className="text-right">Activity</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {currentLogs.map((log, index, array) => {
+                    const log_time = new Date(log.log_time);
+                    const utcFormattedDate = log_time.toLocaleString('en-US', {
+                      timeZone: userData.default_time_zone || 'UTC',
+                      hour: 'numeric',
+                      minute: 'numeric',
+                      hour12: true,
+                    });
+
+                    const logAbove = array.length > 1 ? array[index - 1] : null;
+                    const logBelow = index < array.length - 1 ? array[index + 1] : null;
+
+                    return (
+                      <TableRow
+                        key={log.id}
+                        onClick={() => {
+                          if (page !== 'history') {
+                            openTimeEditModal({
+                              log_id: log.id,
+                              log_dateTime: log.log_time,
+                              log_dateTime_ahead: logAbove ? logAbove.log_time : null,
+                              log_dateTime_behind: logBelow ? logBelow.log_time : null,
+                            });
+                          }
+                        }}
+                        className={cn(page !== 'history' && "cursor-pointer")}
+                      >
+                        <TableCell className="font-mono">
+                          {utcFormattedDate}
+                        </TableCell>
+                        <TableCell className="text-right">{log.log_status}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            ) : (
+              <div className="flex items-center justify-center p-4 text-sm text-muted-foreground">
+                <AlertCircle className="w-4 h-4 mr-2" />
+                No logs to display.
+              </div>
+            )}
+          </div>
+        )}
       </CardContent>
     </Card>
   );

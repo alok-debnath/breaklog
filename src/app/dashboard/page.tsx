@@ -60,6 +60,7 @@ const Index = () => {
         <LogsCard
           isWorkDoneSuccess={isWorkDoneSuccess}
           isIntersecting={isIntersecting}
+          showAccordion={true}
         />
         <div className="mt-4" ref={ref}>
           {(isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus)) && (
