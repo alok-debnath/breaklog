@@ -2,7 +2,7 @@
 import { useStore } from '@/stores/store';
 import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
 import { Button } from "@/components/ui/button";
-import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus, Undo2, Menu } from 'lucide-react';
+import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus, Undo2, Menu, Loader2 } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,18 +23,20 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting })
   const btnDisabled = isDayEnded || loading;
 
   const getButtonContent = () => {
-    if (loading && !isIntersecting) return <span className="loading loading-ring loading-sm" />;
+    if (loading && !isIntersecting) {
+      return { text: null, icon: <Loader2 className="h-6 w-6 animate-spin" />, isLoading: true };
+    }
 
     const status = workData.lastLogStatus;
-    if (status === null && !breaklogMode) return { text: "Start Day", icon: <BriefcaseBusiness className="w-4 h-4" /> };
-    if (status === null && breaklogMode) return { text: "Take Break", icon: <Coffee className="w-4 h-4" /> };
-    if (status === 'day start') return { text: "Take Break", icon: <Coffee className="w-4 h-4" /> };
-    if (status === 'exit') return { text: "End Break", icon: <LogIn className="w-4 h-4" /> };
-    if (status === 'enter') return { text: "Take Break", icon: <Coffee className="w-4 h-4" /> };
-    return { text: "Add Log", icon: <Plus className="w-4 h-4" /> };
+    if (status === null && !breaklogMode) return { text: "Start Day", icon: <BriefcaseBusiness className="w-4 h-4" />, isLoading: false };
+    if (status === null && breaklogMode) return { text: "Take Break", icon: <Coffee className="w-4 h-4" />, isLoading: false };
+    if (status === 'day start') return { text: "Take Break", icon: <Coffee className="w-4 h-4" />, isLoading: false };
+    if (status === 'exit') return { text: "End Break", icon: <LogIn className="w-4 h-4" />, isLoading: false };
+    if (status === 'enter') return { text: "Take Break", icon: <Coffee className="w-4 h-4" />, isLoading: false };
+    return { text: "Add Log", icon: <Plus className="w-4 h-4" />, isLoading: false };
   };
 
-  const { text, icon } = getButtonContent();
+  const { text, icon, isLoading: isButtonContentLoading } = getButtonContent();
 
   return (
     <>
@@ -66,10 +68,14 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting })
               !isIntersecting && !isDayEnded && "hidden" // Hide if main button is visible
             )}
           >
-            <div className="flex items-center gap-2">
-              {icon}
-              <span>{text}</span>
-            </div>
+            {isButtonContentLoading ? (
+              icon
+            ) : (
+              <div className="flex items-center gap-2">
+                {icon}
+                <span>{text}</span>
+              </div>
+            )}
           </Button>
 
           {(!isIntersecting && !isDayEnded) && (

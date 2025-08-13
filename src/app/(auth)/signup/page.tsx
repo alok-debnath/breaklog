@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
-import Button from '@/components/UI/Button';
+import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 // import { sendEmail } from "@/helpers/mailer";

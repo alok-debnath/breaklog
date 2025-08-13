@@ -1,6 +1,6 @@
 'use client';
 import { UserData, useStore } from '@/stores/store';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FetchedLogsDataType, saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 
 interface SaveDataToGlobalStoreProps {
@@ -16,7 +16,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
   const { breaklogMode, themeMode, userData } = useStore();
 
   // Helper function to initialize local storage data
-  const loadLocalStorageData = () => {
+  const loadLocalStorageData = useCallback(() => {
     useStore.setState({ userData: userDataServer });
     saveFetchedLogsToStore(logDataServer)
 
@@ -32,12 +32,12 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
     document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
 
     setIsFirstEffectCompleted(true);
-  };
+  }, [logDataServer, themeMode, userDataServer]);
 
   // Load data on first render if in client-side environment
   useEffect(() => {
     if (typeof window !== 'undefined') loadLocalStorageData();
-  }, []);
+  }, [loadLocalStorageData]);
 
   // Update local storage and trigger timezone modal if needed
   useEffect(() => {

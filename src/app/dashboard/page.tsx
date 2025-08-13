@@ -1,5 +1,5 @@
 'use client';
-import Button from '@/components/UI/Button';
+import { Button } from "@/components/ui/button";
 import axios from 'axios';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';

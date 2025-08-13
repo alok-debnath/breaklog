@@ -10,7 +10,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
-import Button from '@/components/UI/Button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -26,6 +26,12 @@ import {
 } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 const validationSchema = Yup.object().shape({
   daily_work_required: Yup.number()
@@ -64,6 +70,7 @@ const ProfilePage = () => {
       log_type: userData.log_type,
       default_time_zone: userData.default_time_zone,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
 
   async function handleSubmit(values: any) {
@@ -110,75 +117,84 @@ const ProfilePage = () => {
                   <CardTitle>Update your data</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <form
-                    onSubmit={formik.handleSubmit}
-                    className='grid w-full max-w-xl gap-y-3'
-                  >
-                    <div className="grid w-full max-w-sm items-center gap-1.5">
-                      <div className="flex items-center">
-                        <Label htmlFor="daily_work_required">Daily work hour required</Label>
-                        <span
-                          className='tooltip tooltip-top ms-2 cursor-pointer'
-                          data-tip='Min work hours per day'
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
-                            stroke='currentColor'
-                            className='text-warning me-1 h-6 w-6'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                            />
-                          </svg>
-                        </span>
+                  <TooltipProvider>
+                    <form
+                      onSubmit={formik.handleSubmit}
+                      className='grid w-full max-w-xl gap-y-3'
+                    >
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <div className="flex items-center">
+                          <Label htmlFor="daily_work_required">Daily work hour required</Label>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className='ms-2 cursor-pointer'>
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  fill='none'
+                                  viewBox='0 0 24 24'
+                                  strokeWidth={1.5}
+                                  stroke='currentColor'
+                                  className='text-warning me-1 h-6 w-6'
+                                >
+                                  <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                                  />
+                                </svg>
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Min work hours per day</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                        <Input
+                          type='number'
+                          step='0.01'
+                          id='daily_work_required'
+                          name='daily_work_required'
+                          placeholder='Type here'
+                          value={formik.values.daily_work_required}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.daily_work_required &&
+                          formik.errors.daily_work_required && (
+                            <div className='error my-1 text-start text-red-500'>
+                              {formik.errors.daily_work_required}
+                            </div>
+                          )}
                       </div>
-                      <Input
-                        type='number'
-                        step='0.01'
-                        id='daily_work_required'
-                        name='daily_work_required'
-                        placeholder='Type here'
-                        value={formik.values.daily_work_required}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.daily_work_required &&
-                        formik.errors.daily_work_required && (
-                          <div className='error my-1 text-start text-red-500'>
-                            {formik.errors.daily_work_required}
-                          </div>
-                        )}
-                    </div>
 
-                    <div className="grid w-full max-w-sm items-center gap-1.5">
-                      <div className="flex items-center">
-                        <Label htmlFor="log_type">Default Log Mode</Label>
-                        <span
-                          className='tooltip tooltip-top ms-2 cursor-pointer'
-                          data-tip='Default Mode to use on a fresh setup.'
-                        >
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            fill='none'
-                            viewBox='0 0 24 24'
-                            strokeWidth={1.5}
-                            stroke='currentColor'
-                            className='text-warning me-1 h-6 w-6'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                            />
-                          </svg>
-                        </span>
-                      </div>
-                      <Select onValueChange={(value) => formik.setFieldValue('log_type', value)} defaultValue={formik.values.log_type} name="log_type" id="log_type">
+                      <div className="grid w-full max-w-sm items-center gap-1.5">
+                        <div className="flex items-center">
+                          <Label htmlFor="log_type">Default Log Mode</Label>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className='ms-2 cursor-pointer'>
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  fill='none'
+                                  viewBox='0 0 24 24'
+                                  strokeWidth={1.5}
+                                  stroke='currentColor'
+                                  className='text-warning me-1 h-6 w-6'
+                                >
+                                  <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                                  />
+                                </svg>
+                              </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Default Mode to use on a fresh setup.</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                      <Select onValueChange={(value) => formik.setFieldValue('log_type', value)} defaultValue={formik.values.log_type}>
                         <SelectTrigger>
                           <SelectValue placeholder="Log Mode" />
                         </SelectTrigger>
@@ -196,7 +212,7 @@ const ProfilePage = () => {
 
                     <div className="grid w-full max-w-sm items-center gap-1.5">
                       <Label htmlFor="default_time_zone">Default Time Zone</Label>
-                      <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone} name="default_time_zone" id="default_time_zone">
+                      <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone}>
                         <SelectTrigger>
                           <SelectValue placeholder="Timezone" />
                         </SelectTrigger>
@@ -222,7 +238,8 @@ const ProfilePage = () => {
                     >
                       Update
                     </Button>
-                  </form>
+                    </form>
+                  </TooltipProvider>
                 </CardContent>
               </Card>
             </div>

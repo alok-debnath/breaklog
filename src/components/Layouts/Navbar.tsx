@@ -34,7 +34,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto flex h-14 max-w-screen-lg items-center px-4">
+      <div className="container flex h-16 items-center justify-between px-4">
         {/* Mobile Menu & Back Button */}
         <div className="flex items-center md:hidden">
           {backPath ? (
@@ -66,11 +66,11 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="mr-4 hidden md:flex">
-          <Link href="/dashboard" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold">Breaklog</span>
+        <div className="hidden items-center gap-x-6 md:flex">
+          <Link href="/dashboard" className="flex items-center">
+            <span className="text-lg font-bold">Breaklog</span>
           </Link>
-          <nav className="flex items-center space-x-6 text-sm font-medium">
+          <nav className="flex items-center gap-x-6 text-sm font-medium">
             <Link
               href="/dashboard/history"
               className={cn(
@@ -83,7 +83,8 @@ const Navbar = () => {
           </nav>
         </div>
 
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        {/* Right side */}
+        <div className="flex items-center gap-x-2">
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -96,16 +97,10 @@ const Navbar = () => {
                 <p className="text-sm">Signed in as <span className="font-semibold">{userData.username || "User"}</span></p>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem asChild className="md:hidden">
-                 <Link href="/dashboard/profile">Profile</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => useStore.setState({ isSettingsModalOpen: true })} className="md:hidden">
-                Settings
-              </DropdownMenuItem>
-               <DropdownMenuItem asChild className="hidden md:flex">
+              <DropdownMenuItem asChild>
                 <Link href="/dashboard/profile">Profile</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => useStore.setState({ isSettingsModalOpen: true })} className="hidden md:flex">
+              <DropdownMenuItem onClick={() => useStore.setState({ isSettingsModalOpen: true })}>
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />

@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { signIn } from 'next-auth/react';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
-import Button from '@/components/UI/Button';
+import { Button } from "@/components/ui/button";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"

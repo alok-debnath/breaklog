@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { useStore } from '@/stores/store';
 import useConfirm from '@/hooks/useConfirm';
-import Button from "@/components/UI/Button";
+import { Button } from "@/components/ui/button";
 
 interface ConfirmationModalProps { }
 

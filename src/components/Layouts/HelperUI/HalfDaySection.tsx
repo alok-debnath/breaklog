@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useStore } from '@/stores/store';
 import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 interface HalfDaySectionProps {
   isHalfDay: boolean;
@@ -39,10 +41,13 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
   return (
     <>
       <div
-        className={`card-body ${(isHalfDayState ? isHalfDayState : isHalfDay) !== true ? 'bg-success/30' : 'bg-warning/30'} animate-zoom-in rounded-t-xl px-5 py-3 text-amber-50`}
+        className={cn(
+          "animate-zoom-in rounded-t-xl px-5 py-3 text-white",
+          (isHalfDayState ? isHalfDayState : isHalfDay) !== true ? 'bg-green-500/30' : 'bg-yellow-500/30'
+        )}
       >
         <div className='flex items-center justify-between gap-3'>
-          <div className='label-text text-start text-wrap text-amber-50'>
+          <div className='text-start text-wrap'>
             {(isHalfDayState ? isHalfDayState : isHalfDay) !== true ? (
               <p>Should this log be marked as a half day?</p>
             ) : (
@@ -50,23 +55,23 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
             )}
           </div>
           {(isHalfDayState ? isHalfDayState : isHalfDay) !== true ? (
-            <button
-              className={`btn btn-sm btn-success px-6 ${
-                loading ? 'btn-disabled' : ''
-              }`}
+            <Button
+              size="sm"
+              variant="success"
               onClick={() => simpleLogEntry('mark-as-half-day')}
+              disabled={loading}
             >
               Yes
-            </button>
+            </Button>
           ) : (
-            <button
-              className={`btn btn-sm btn-success px-6 ${
-                loading ? 'btn-disabled' : ''
-              }`}
+            <Button
+              size="sm"
+              variant="success"
               onClick={() => simpleLogEntry('undo-half-day')}
+              disabled={loading}
             >
               Undo
-            </button>
+            </Button>
           )}
         </div>
       </div>
