@@ -59,34 +59,42 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting })
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button
-            onClick={() => breaklogMode ? logEntry('break log') : logEntry('day log')}
-            disabled={btnDisabled}
-            className={cn(
-              "flex-1 h-full rounded-full text-lg font-semibold transition-all duration-300 ease-in-out",
-              "bg-primary text-primary-foreground hover:bg-primary/90",
-              !isIntersecting && !isDayEnded && "hidden" // Hide if main button is visible
-            )}
-          >
-            {isButtonContentLoading ? (
-              icon
-            ) : (
-              <div className="flex items-center gap-2">
-                {icon}
-                <span>{text}</span>
-              </div>
-            )}
-          </Button>
-
-          {(!isIntersecting && !isDayEnded) && (
+          {isIntersecting ? (
             <Button
-              onClick={() => logEntry('day end')}
-              variant="destructive"
+              onClick={() => breaklogMode ? logEntry('break log') : logEntry('day log')}
+              disabled={btnDisabled}
               className="flex-1 h-full rounded-full text-lg font-semibold"
-              disabled={loading || breaklogMode}
             >
-              End Day
+              {isButtonContentLoading ? icon : (
+                <div className="flex items-center gap-2">
+                  {icon}
+                  <span>{text}</span>
+                </div>
+              )}
             </Button>
+          ) : (
+            <>
+              <Button
+                onClick={() => breaklogMode ? logEntry('break log') : logEntry('day log')}
+                disabled={btnDisabled}
+                className="flex-1 h-full rounded-full text-lg font-semibold"
+              >
+                {isButtonContentLoading ? icon : (
+                  <div className="flex items-center gap-2">
+                    {icon}
+                    <span>{text}</span>
+                  </div>
+                )}
+              </Button>
+              <Button
+                onClick={() => logEntry('day end')}
+                variant="destructive"
+                className="flex-1 h-full rounded-full text-lg font-semibold"
+                disabled={loading || breaklogMode}
+              >
+                End Day
+              </Button>
+            </>
           )}
 
         </div>

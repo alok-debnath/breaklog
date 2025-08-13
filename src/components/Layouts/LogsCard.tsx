@@ -129,7 +129,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
         {showAccordion ? (
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
-              <AccordionTrigger className="text-sm">Logs</AccordionTrigger>
+              <AccordionTrigger className="text-sm rounded-md bg-muted px-4 py-2">Logs</AccordionTrigger>
               <AccordionContent>
                 {currentLogs.length > 0 ? (
                   <Table>
