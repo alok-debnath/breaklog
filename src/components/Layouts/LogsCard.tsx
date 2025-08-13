@@ -7,11 +7,30 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Button } from "@/components/ui/button"
+import { cn } from '@/lib/utils';
 
 import { LogsData } from '@/stores/store';
 import { WorkData } from '@/stores/store';
 import useWorkDataUpdater from '@/hooks/useWorkDataUpdater';
 import HalfDaySection from './HelperUI/HalfDaySection';
+import { Info } from 'lucide-react';
 
 interface LogsCardProps {
   page?: string;
@@ -20,6 +39,7 @@ interface LogsCardProps {
   logsServer?: LogsData[];
   workDataServer?: WorkData;
 }
+
 const LogsCard: React.FC<LogsCardProps> = ({
   page,
   isWorkDoneSuccess,
@@ -27,7 +47,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
   logsServer,
   workDataServer,
 }) => {
-  let { breaklogMode, logs, workData, userData } = useStore();
+  const { breaklogMode, logs, workData, userData } = useStore();
   const isClient = typeof window !== 'undefined';
 
   const openTimeEditModal = (value: any) => {
@@ -47,275 +67,143 @@ const LogsCard: React.FC<LogsCardProps> = ({
     formattedWorkEndTime,
   } = useWorkDataUpdater(currentWorkData);
 
-  // is the current log half day
   const isHalfDay =
     userData.daily_work_required &&
     currentWorkData.lastLogStatus === 'day end' &&
     unformattedWorkDone >= (userData.daily_work_required * 3600000) / 2 &&
     unformattedWorkDone <= (userData.daily_work_required * 3600000 * 3) / 4;
 
-  return (
-    <>
-      <div
-        className={`card bg-card text-card-foreground mt-20 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(currentWorkData.lastLogStatus)) && 'rounded-b-none'} ${
-          page == 'history' &&
-          (isWorkDoneSuccess
-            ? 'border-success border-2'
-            : 'border-error border-2')
-        }`}
-      >
-        {isHalfDay === true && (
-          <HalfDaySection isHalfDay={currentWorkData.isHalfDay} />
-        )}
+  const dateToDisplay = (currentLogs.length > 0 && currentLogs[0].log_time)
+    ? new Date(currentLogs[0].log_time)
+    : new Date();
 
-        <div className='card-body p-5 md:p-9'>
-          {page === 'history' && (
-            <div className='mb-2 block text-left font-semibold'>
-              <p
-                className={`btn btn-outline no-animation btn-sm cursor-default ${
-                  isWorkDoneSuccess ? 'btn-success' : 'btn-error'
-                }`}
-              >
-                Data from past
+  return (
+    <Card className={cn(
+      "w-full max-w-lg mt-10",
+      page === 'history' && (isWorkDoneSuccess ? 'border-green-500' : 'border-destructive')
+    )}>
+      {isHalfDay && <HalfDaySection isHalfDay={currentWorkData.isHalfDay} />}
+
+      <CardHeader>
+        <CardTitle>
+          {dateToDisplay.toLocaleDateString('en-US', { day: 'numeric', month: 'long' })}, {' '}
+          {dateToDisplay.toLocaleDateString('en-US', { weekday: 'long' })}
+        </CardTitle>
+        {page === 'history' && <CardDescription>Data from past</CardDescription>}
+      </CardHeader>
+
+      <CardContent>
+        <div className="grid grid-cols-2 gap-4 text-center mb-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardDescription>Work Done</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className={cn(
+                "text-2xl font-bold",
+                isWorkDoneSuccess && "text-green-500"
+              )}>
+                {workDone || '00:00:00'}
               </p>
-            </div>
-          )}
-          <div className='mb-3'>
-            <div className='card bg-card text-card-foreground pb-5 text-left font-semibold'>
-              {page === 'history' || (isClient && userData.username) ? (
-                <span>
-                  {page === 'history' &&
-                  currentLogs.length > 0 &&
-                  currentLogs[0].log_time ? (
-                    <>
-                      {new Date(currentLogs[0].log_time).toLocaleDateString(
-                        'en-US',
-                        {
-                          day: 'numeric',
-                          month: 'long',
-                        },
-                      )}
-                      ,{' '}
-                      {new Date(currentLogs[0].log_time).toLocaleDateString(
-                        'en-US',
-                        {
-                          weekday: 'long',
-                        },
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {new Date().toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                      })}
-                      ,{' '}
-                      {new Date().toLocaleDateString('en-US', {
-                        weekday: 'long',
-                      })}
-                    </>
-                  )}
-                </span>
-              ) : (
-                <span className='animate-pulse'>
-                  <span className='flex space-x-4'>
-                    <span className='flex-1 space-y-9 py-1'>
-                      <span className='space-y-3'>
-                        <span className='grid grid-cols-6 gap-3'>
-                          <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
-                          <span className='col-span-1 h-2 rounded-sm bg-slate-700'></span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                </span>
-              )}
-            </div>
-            <div
-              className={`grid ${!breaklogMode || page === 'history' ? 'grid-cols-2' : 'grid-cols-1'} mt-3 gap-4 text-center`}
-            >
-              {!breaklogMode || page === 'history' ? (
-                <div
-                  className={`card bg-muted p-3 shadow-md ${
-                    page === 'history' && isWorkDoneSuccess
-                      ? 'bg-success/10 text-success'
-                      : page === 'history' && !isWorkDoneSuccess
-                        ? 'bg-error/10 text-error'
-                        : isWorkDoneSuccess && userData.username
-                          ? 'bg-success/10 text-success'
-                          : ''
-                  }`}
-                >
-                  {workDone ? (
-                    <>
-                      <p className='font-medium'>Work done</p>
-                      <p className='font-mono font-semibold'>{workDone}</p>
-                    </>
-                  ) : (
-                    <span className='animate-pulse'>
-                      <span className='flex space-x-4'>
-                        <span className='flex-1 space-y-9 py-1'>
-                          <span className='space-y-3'>
-                            <span className='grid grid-rows-2 gap-3'>
-                              <span className='col-span-3 h-2 rounded-sm bg-slate-700'></span>
-                              <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
-                            </span>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  )}
-                </div>
-              ) : null}
-              <div className='card bg-muted p-3 shadow-md'>
-                {currentWorkData.breakTime ? (
-                  <>
-                    <p className='font-medium'>Break taken</p>
-                    <p className='font-mono font-semibold'>
-                      {currentWorkData.breakTime}
-                    </p>
-                  </>
-                ) : (
-                  <span className='animate-pulse'>
-                    <span className='flex space-x-4'>
-                      <span className='flex-1 space-y-9 py-1'>
-                        <span className='space-y-3'>
-                          <span className='grid grid-rows-2 gap-3'>
-                            <span className='col-span-3 h-2 rounded-sm bg-slate-700'></span>
-                            <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                )}
-              </div>
-            </div>
-            {!breaklogMode && page !== 'history' && formattedWorkEndTime ? (
-              <div className='card bg-muted mt-3 grid grid-cols-2 items-center py-2 shadow-md'>
-                <p className='text-sm font-medium'>Work until:</p>
-                <p className='font-mono text-sm font-semibold'>
-                  {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', {
-                    hour12: true,
-                  })}
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-2">
+              <CardDescription>Break Taken</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-2xl font-bold">
+                {currentWorkData.breakTime || '00:00:00'}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {!breaklogMode && page !== 'history' && formattedWorkEndTime && (
+          <Card className="p-4 mb-4">
+            <div className='grid grid-cols-2 items-center text-center text-sm'>
+              <div>
+                <p className='font-medium text-muted-foreground'>Work until</p>
+                <p className='font-mono font-semibold'>
+                  {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', { hour12: true })}
                 </p>
-                <p className='text-sm font-medium'>Work left:</p>
-                <p className='font-mono text-sm font-semibold'>
+              </div>
+              <div>
+                <p className='font-medium text-muted-foreground'>Work left</p>
+                <p className='font-mono font-semibold'>
                   {formattedWorkLeft}
                 </p>
               </div>
-            ) : null}
-          </div>
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>
-                {page !== 'history' && (
-                  <p className='text-center text-sm font-medium'>
-                    {currentLogs.length > 0 ? (
-                      <>
-                        Recent log:{' '}
-                        <span className='text-green-500 font-bold'>
-                          {currentWorkData.lastLogStatus}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className='text-red-500'>No logs available</span>
-                      </>
-                    )}
-                  </p>
-                )}
-              </AccordionTrigger>
-              <AccordionContent>
-              <table className='table text-center'>
-                <thead>
-                  <tr>
-                    <th className='text-center'>
-                      <span
-                        className={`${page !== 'history' && 'flex items-center'}`}
-                      >
-                        {page !== 'history' && (
-                          <span
-                            className='tooltip tooltip-right cursor-pointer'
-                            data-tip='Click on any of the time to edit'
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              fill='none'
-                              viewBox='0 0 24 24'
-                              strokeWidth={1.5}
-                              stroke='currentColor'
-                              className='text-warning me-1 h-6 w-6'
-                            >
-                              <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                              />
-                            </svg>
-                          </span>
-                        )}
-                        Time
-                      </span>
-                    </th>
-                    <th>Activity</th>
-                  </tr>
-                </thead>
-                <tbody className='text-left'>
+            </div>
+          </Card>
+        )}
+
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>
+              <p className='text-sm font-medium'>
+                {currentLogs.length > 0
+                  ? <>Recent log: <span className='font-bold text-primary'>{currentWorkData.lastLogStatus}</span></>
+                  : <span className='text-muted-foreground'>No logs available</span>
+                }
+              </p>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Time</TableHead>
+                    <TableHead className="text-right">Activity</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {currentLogs &&
                     [...currentLogs].reverse().map((log, index, array) => {
                       const log_time = new Date(log.log_time);
-                      const utcFormattedDate = log_time.toLocaleString(
-                        'en-US',
-                        {
-                          timeZone: 'Asia/Kolkata', //setting this to static for now (temporarily)
-                          hour: 'numeric',
-                          minute: 'numeric',
-                          hour12: true,
-                          month: 'short',
-                          day: 'numeric',
-                        },
-                      );
+                      const utcFormattedDate = log_time.toLocaleString('en-US', {
+                        timeZone: userData.default_time_zone || 'UTC',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true,
+                      });
 
                       const logAbove = index > 0 ? array[index - 1] : null;
-                      const logBelow =
-                        index < array.length - 1 ? array[index + 1] : null;
+                      const logBelow = index < array.length - 1 ? array[index + 1] : null;
 
                       return (
-                        <tr key={log.id}>
-                          <td className='ps-0'>
-                            <button
-                              className='btn btn-ghost btn-sm'
+                        <TableRow key={log.id}>
+                          <TableCell>
+                            <Button
+                              variant="ghost"
+                              size="sm"
                               onClick={() => {
                                 if (page !== 'history') {
                                   openTimeEditModal({
                                     log_id: log.id,
                                     log_dateTime: log.log_time,
-                                    log_dateTime_ahead: logAbove
-                                      ? logAbove.log_time
-                                      : '',
-                                    log_dateTime_behind: logBelow
-                                      ? logBelow.log_time
-                                      : '',
+                                    log_dateTime_ahead: logAbove ? logAbove.log_time : '',
+                                    log_dateTime_behind: logBelow ? logBelow.log_time : '',
                                   });
                                 }
                               }}
+                              className="font-mono"
+                              disabled={page === 'history'}
                             >
                               {utcFormattedDate}
-                            </button>
-                          </td>
-                          <td className='text-center'>{log.log_status}</td>
-                        </tr>
+                              {page !== 'history' && <Info className="w-3 h-3 ml-2" />}
+                            </Button>
+                          </TableCell>
+                          <TableCell className="text-right">{log.log_status}</TableCell>
+                        </TableRow>
                       );
                     })}
-                </tbody>
-              </table>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-        </div>
-      </div>
-    </>
+                </TableBody>
+              </Table>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </CardContent>
+    </Card>
   );
 };
 
