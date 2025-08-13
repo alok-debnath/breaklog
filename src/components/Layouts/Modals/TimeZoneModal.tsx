@@ -16,12 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -130,37 +124,12 @@ const TimeZoneModal: React.FC = () => {
                 'undefined'}
             </span>
           </p>
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>More Info</AccordionTrigger>
-              <AccordionContent>
-                <p>
-                  If your work ends within the same day then you don&apos;t
-                  have to bother and can select your own timezone
-                </p>
-                <div className='divider'>OR</div>
-                <p>
-                  In the event that you have an irregular work schedule,
-                  consider using a TimeZone where your shift will start and
-                  end within the same working day (this is solely for
-                  calculation purposes only and won&apos;t affect how you see
-                  the time).
-                </p>
-                <h3 className='mt-3 font-bold'>Example:</h3>
-                <p className='mb-3'>
-                  Here the work starts at May 6 but ends at May 7.
-                  <br />
-                  So selecting a timezone for example which is 2 or 3 (or
-                  maybe more) hours behind your timezone is preffered,
-                  <br />
-                  like in this case my timezone is at{' '}
-                  <span className='font-bold'>GMT+5:30</span> so I will select
-                  someting like
-                  <span className='font-bold'> GMT+2:00 or GMT+3:00</span>
-                </p>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <div className="text-xs text-muted-foreground mt-4">
+            <p className="font-semibold">Note:</p>
+            <p>
+              If your work shift spans across midnight, select a timezone where your entire shift falls within a single calendar day for accurate calculations.
+            </p>
+          </div>
           <div className='form-control'>
             <label className='label' htmlFor='log_type'>
               <span className='label-text flex items-center'>
@@ -171,7 +140,7 @@ const TimeZoneModal: React.FC = () => {
               <SelectTrigger>
                 <SelectValue placeholder="Timezone" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-60">
                 {options.map((option, index) => (
                   <SelectItem key={index} value={option.value}>
                     {option.label}

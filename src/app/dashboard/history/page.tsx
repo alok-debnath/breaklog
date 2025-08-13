@@ -137,7 +137,7 @@ const HistoryPage = () => {
   }, [summary.numberOfDays]);
 
   return (
-    <div className='bg-muted flex min-h-dvh flex-col items-center p-4'>
+    <div className='bg-muted flex min-h-screen flex-col items-center justify-center p-4'>
       <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle>Fetch required data</CardTitle>

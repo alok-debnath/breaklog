@@ -108,11 +108,9 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className='bg-muted flex min-w-fit place-items-center justify-center py-12'>
-        <div className='text-center'>
-          <div className='max-w-md'>
-            <div className='overflow-x-auto'>
-              <Card className="my-20 w-full max-w-md shrink-0">
+      <div className='bg-muted flex min-h-screen items-center justify-center p-4'>
+        <div className='w-full max-w-md'>
+              <Card className="w-full shrink-0">
                 <CardHeader>
                   <CardTitle>Update your data</CardTitle>
                 </CardHeader>
@@ -242,8 +240,6 @@ const ProfilePage = () => {
                   </TooltipProvider>
                 </CardContent>
               </Card>
-            </div>
-          </div>
         </div>
       </div>
     </>
