@@ -114,105 +114,107 @@ const ProfilePage = () => {
                     onSubmit={formik.handleSubmit}
                     className='grid w-full max-w-xl gap-y-3'
                   >
-
-                  <fieldset className='fieldset'>
-                    <Label htmlFor="daily_work_required">Daily work hour required</Label>
-                      <span
-                        className='tooltip tooltip-top ms-2 cursor-pointer'
-                        data-tip='Min work hours per day'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          strokeWidth={1.5}
-                          stroke='currentColor'
-                          className='text-warning me-1 h-6 w-6'
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <div className="flex items-center">
+                        <Label htmlFor="daily_work_required">Daily work hour required</Label>
+                        <span
+                          className='tooltip tooltip-top ms-2 cursor-pointer'
+                          data-tip='Min work hours per day'
                         >
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                          />
-                        </svg>
-                      </span>
-                    </legend>
-                    <Input
-                      type='number'
-                      step='0.01'
-                      id='daily_work_required'
-                      name='daily_work_required'
-                      placeholder='Type here'
-                      value={formik.values.daily_work_required}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                    {formik.touched.daily_work_required &&
-                      formik.errors.daily_work_required && (
-                        <div className='error my-1 text-start text-red-500'>
-                          {formik.errors.daily_work_required}
-                        </div>
-                      )}
-                  </fieldset>
-
-                  <fieldset className='fieldset'>
-                    <Label>Default Log Mode</Label>
-                      <span
-                        className='tooltip tooltip-top ms-2 cursor-pointer'
-                        data-tip='Default Mode to use on a fresh setup.'
-                      >
-                        <svg
-                          xmlns='http://www.w3.org/2000/svg'
-                          fill='none'
-                          viewBox='0 0 24 24'
-                          strokeWidth={1.5}
-                          stroke='currentColor'
-                          className='text-warning me-1 h-6 w-6'
-                        >
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                          />
-                        </svg>
-                      </span>
-                    </legend>
-                    <Select onValueChange={(value) => formik.setFieldValue('log_type', value)} defaultValue={formik.values.log_type}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Log Mode" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="breakmode">Breaklog Mode</SelectItem>
-                        <SelectItem value="daymode">Daylog Mode</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    {formik.touched.log_type && formik.errors.log_type && (
-                      <div className='error my-1 text-start text-red-500'>
-                        {formik.errors.log_type}
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='text-warning me-1 h-6 w-6'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                            />
+                          </svg>
+                        </span>
                       </div>
-                    )}
-                  </fieldset>
+                      <Input
+                        type='number'
+                        step='0.01'
+                        id='daily_work_required'
+                        name='daily_work_required'
+                        placeholder='Type here'
+                        value={formik.values.daily_work_required}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      />
+                      {formik.touched.daily_work_required &&
+                        formik.errors.daily_work_required && (
+                          <div className='error my-1 text-start text-red-500'>
+                            {formik.errors.daily_work_required}
+                          </div>
+                        )}
+                    </div>
 
-                  <fieldset className='fieldset'>
-                    <Label>Default Time Zone</Label>
-                    <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Timezone" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {options.map((option, index) => (
-                          <SelectItem key={index} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {formik.touched.default_time_zone &&
-                      formik.errors.default_time_zone && (
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <div className="flex items-center">
+                        <Label htmlFor="log_type">Default Log Mode</Label>
+                        <span
+                          className='tooltip tooltip-top ms-2 cursor-pointer'
+                          data-tip='Default Mode to use on a fresh setup.'
+                        >
+                          <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='text-warning me-1 h-6 w-6'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                      <Select onValueChange={(value) => formik.setFieldValue('log_type', value)} defaultValue={formik.values.log_type} name="log_type" id="log_type">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Log Mode" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="breakmode">Breaklog Mode</SelectItem>
+                          <SelectItem value="daymode">Daylog Mode</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {formik.touched.log_type && formik.errors.log_type && (
                         <div className='error my-1 text-start text-red-500'>
-                          {formik.errors.default_time_zone}
+                          {formik.errors.log_type}
                         </div>
                       )}
+                    </div>
+
+                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                      <Label htmlFor="default_time_zone">Default Time Zone</Label>
+                      <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone} name="default_time_zone" id="default_time_zone">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Timezone" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {options.map((option, index) => (
+                            <SelectItem key={index} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {formik.touched.default_time_zone &&
+                        formik.errors.default_time_zone && (
+                          <div className='error my-1 text-start text-red-500'>
+                            {formik.errors.default_time_zone}
+                          </div>
+                        )}
+                    </div>
                     <Button
                       type='submit'
                       disabled={loading}
@@ -220,7 +222,6 @@ const ProfilePage = () => {
                     >
                       Update
                     </Button>
-                  </fieldset>
                   </form>
                 </CardContent>
               </Card>
