@@ -211,8 +211,8 @@ const ProfilePage = () => {
                     <div className="grid w-full items-center gap-1.5">
                       <Label htmlFor="default_time_zone">Default Time Zone</Label>
                       <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Timezone" />
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Timezone" className="truncate" />
                         </SelectTrigger>
                         <SelectContent className="max-h-60">
                           {options.map((option, index) => (
