@@ -42,8 +42,8 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
     <>
       <div
         className={cn(
-          "animate-zoom-in rounded-t-xl px-5 py-3 text-white",
-          (isHalfDayState ? isHalfDayState : isHalfDay) !== true ? 'bg-green-500/30' : 'bg-yellow-500/30'
+          "animate-zoom-in rounded-t-xl px-5 py-3 text-primary-foreground",
+          (isHalfDayState ? isHalfDayState : isHalfDay) !== true ? 'bg-primary/30' : 'bg-yellow-500/30'
         )}
       >
         <div className='flex items-center justify-between gap-3'>

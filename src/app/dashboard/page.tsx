@@ -55,7 +55,7 @@ const Index = () => {
   const [ref, isIntersecting] = useOnScreen(-80);
 
   return (
-    <div className="bg-background text-foreground">
+    <div className="bg-muted text-foreground">
       <div className="container mx-auto max-w-screen-lg p-4">
         <LogsCard
           isWorkDoneSuccess={isWorkDoneSuccess}
