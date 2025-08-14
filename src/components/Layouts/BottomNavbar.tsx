@@ -19,8 +19,7 @@ interface BottomNavbarProps {
 const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting }) => {
   const { breaklogMode, workData, loading } = useStore();
 
-  const isDayEnded = ['day end', 'exit'].includes(workData.lastLogStatus);
-  const btnDisabled = isDayEnded || loading;
+  const btnDisabled = ['day end'].includes(workData.lastLogStatus) || loading;
 
   const getButtonContent = () => {
     if (loading && !isIntersecting) {
@@ -90,7 +89,11 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting })
                 onClick={() => logEntry('day end')}
                 variant="destructive"
                 className="flex-1 h-full rounded-full text-lg font-semibold"
-                disabled={loading || breaklogMode}
+                disabled={
+                  ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
+                  loading ||
+                  breaklogMode
+                }
               >
                 End Day
               </Button>
