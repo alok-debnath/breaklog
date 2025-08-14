@@ -58,6 +58,24 @@ const SettingsModal = () => {
               disabled={logs.length > 0}
             />
           </div>
+          <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
+            <div className="flex flex-col space-y-1">
+              <Label htmlFor="theme-selector">Theme</Label>
+              <DialogDescription>
+                Select a theme for the application.
+              </DialogDescription>
+            </div>
+            <Select onValueChange={handleThemeChange} defaultValue={themeMode}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Light</SelectItem>
+                <SelectItem value="dark">Dark</SelectItem>
+                <SelectItem value="theme-zinc">Zinc</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <DialogFooter>
           <Button onClick={() => useStore.setState({ isSettingsModalOpen: false })}>Close</Button>

@@ -35,7 +35,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-4 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-[768px]">
       <header className="rounded-full border bg-background/80 px-4 py-2 shadow-lg backdrop-blur">
-        <div className="flex h-12 items-center justify-between gap-x-4">
+        <div className="flex h-12 items-center justify-start gap-x-4">
           {/* Mobile Menu & Back Button */}
           <div className="flex items-center md:hidden">
             {backPath ? (
@@ -65,6 +65,9 @@ const Navbar = () => {
               </DropdownMenu>
             )}
           </div>
+          <Link href="/dashboard" className="flex items-center md:hidden">
+            <span className="text-lg font-bold">Breaklog</span>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden items-center gap-x-6 md:flex">
@@ -85,7 +88,7 @@ const Navbar = () => {
           </div>
 
           {/* Right side */}
-          <div className="flex items-center gap-x-2">
+          <div className="ml-auto flex items-center gap-x-2">
             <ModeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
