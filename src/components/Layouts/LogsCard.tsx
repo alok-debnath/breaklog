@@ -35,6 +35,7 @@ import { Info, AlertCircle } from 'lucide-react';
 interface LogsCardProps {
   page?: string;
   isWorkDoneSuccess?: boolean;
+  isIntersecting?: boolean;
   logsServer?: LogsData[];
   workDataServer?: WorkData;
   showAccordion?: boolean;
@@ -44,6 +45,7 @@ interface LogsCardProps {
 const LogsCard: React.FC<LogsCardProps> = ({
   page,
   isWorkDoneSuccess,
+  isIntersecting,
   logsServer,
   workDataServer,
   showAccordion,
@@ -257,7 +259,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
           </div>
         )}
       </CardContent>
-      {page !== 'history' && (
+      {page !== 'history' && isIntersecting && (
         <CardFooter>
           <Button
             onClick={() => logEntry && logEntry('day end')}
