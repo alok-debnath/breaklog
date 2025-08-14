@@ -56,13 +56,12 @@ const Index = () => {
 
   return (
     <div className="bg-muted text-foreground min-h-screen flex items-center justify-center">
-      <div className="container mx-auto max-w-screen-lg p-4">
+      <div className="container mx-auto max-w-screen-lg p-4" ref={ref}>
         <LogsCard
           isWorkDoneSuccess={isWorkDoneSuccess}
           showAccordion={true}
           logEntry={logEntry}
         />
-        <div ref={ref} />
       </div>
       <BottomNavbar logEntry={logEntry} isIntersecting={isIntersecting} />
       <TimeEditModal />
