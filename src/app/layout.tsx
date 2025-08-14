@@ -5,7 +5,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { Providers } from './providers';
 import { ThemeProvider } from '@/components/theme-provider';
-import { ThemeSync } from '@/components/ThemeSync';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -33,7 +32,6 @@ export default function RootLayout({
           {/* Providers is a Client Component, so it’s the only place
               you use SessionProvider / React Context */}
           <Providers>{children}</Providers>
-          <ThemeSync />
           <Analytics />
           <SpeedInsights />
         </ThemeProvider>

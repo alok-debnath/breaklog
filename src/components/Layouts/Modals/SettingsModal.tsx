@@ -18,15 +18,16 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import { useStore } from '@/stores/store';
 import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 
 const SettingsModal = () => {
   const { breaklogMode, logs, themeMode, isSettingsModalOpen, userData } = useStore();
+  const { setTheme } = useTheme();
 
   const handleThemeChange = (value: string) => {
+    setTheme(value);
     useStore.setState({ themeMode: value });
-    // Assuming you still want to save the theme to local storage
     localStorage.setItem('thememode', value);
-    document.cookie = `theme=${value}; path=/; max-age=31536000`;
   };
 
   const handleToggleChange = (checked: boolean) => {
