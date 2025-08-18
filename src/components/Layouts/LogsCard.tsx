@@ -99,15 +99,15 @@ const LogsCard: React.FC<LogsCardProps> = ({
 
       <CardContent className="grid gap-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
-          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-4">
+          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-3">
             <p className="text-sm font-medium text-muted-foreground">Work Done</p>
-            <p className={cn("text-2xl font-bold font-mono", isWorkDoneSuccess && "text-green-500")}>
+            <p className={cn("text-lg font-bold font-mono", isWorkDoneSuccess && "text-green-500")}>
               {workDone || '00:00:00'}
             </p>
           </div>
-          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-4">
+          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-3">
             <p className="text-sm font-medium text-muted-foreground">Break Taken</p>
-            <p className="text-2xl font-bold font-mono">
+            <p className="text-lg font-bold font-mono">
               {currentWorkData.breakTime || '00:00:00'}
             </p>
           </div>

@@ -58,9 +58,6 @@ const Navbar = () => {
                   <DropdownMenuItem>
                     <Link href="/dashboard/profile" className="w-full h-full">Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => useStore.setState({ isSettingsModalOpen: true })}>
-                    Settings
-                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             )}

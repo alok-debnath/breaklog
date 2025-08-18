@@ -27,7 +27,6 @@ const SettingsModal = () => {
   const handleThemeChange = (value: string) => {
     setTheme(value);
     useStore.setState({ themeMode: value });
-    localStorage.setItem('thememode', value);
   };
 
   const handleToggleChange = (checked: boolean) => {

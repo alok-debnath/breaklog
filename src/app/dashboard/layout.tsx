@@ -3,7 +3,7 @@ import ConfirmationModal from '@/components/Layouts/Modals/ConfirmationModal';
 import Navbar from '@/components/Layouts/Navbar';
 import Loading from '@/components/Layouts/Loading';
 import TimeZoneModal from '@/components/Layouts/Modals/TimeZoneModal';
-import ThemeWrapper from '@/components/ThemeWrapper';
+import { ConnectedThemeProvider } from '@/components/ConnectedThemeProvider';
 import InitialRscFetch from '@/components/common/InitialRscFetch';
 import { cookies } from 'next/headers';
 import SettingsModal from '@/components/Layouts/Modals/SettingsModal';
@@ -18,7 +18,7 @@ export default async function DashboardLayout({
 
   return (
     <section>
-      <ThemeWrapper themeCookie={themeCookie}>
+      <ConnectedThemeProvider>
         <Suspense fallback={null}>
           <InitialRscFetch />
         </Suspense>
@@ -29,7 +29,7 @@ export default async function DashboardLayout({
         <Navbar />
         {children}
         <Toaster position="top-left" />
-      </ThemeWrapper>
+      </ConnectedThemeProvider>
     </section>
   );
 }

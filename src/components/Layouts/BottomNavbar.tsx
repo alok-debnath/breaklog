@@ -42,7 +42,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({ logEntry, isIntersecting })
       <LiveBreakCounter />
       <div className="fixed bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-40" />
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-sm px-4 z-50">
-        <div className="bg-card text-card-foreground rounded-full shadow-lg h-16 flex items-center justify-around p-2">
+        <div className="bg-card text-card-foreground rounded-full shadow-lg h-16 flex items-center justify-around p-2 border">
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
