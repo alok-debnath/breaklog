@@ -14,7 +14,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section>
+    <section className="pt-24 pb-24 px-4">
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
