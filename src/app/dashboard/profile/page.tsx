@@ -24,6 +24,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Check, ChevronsUpDown } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -46,6 +61,7 @@ const validationSchema = Yup.object().shape({
 const ProfilePage = () => {
   const { userData, loading } = useStore();
   const router = useRouter();
+  const [open, setOpen] = useState(false)
 
   const initialValues = useMemo(
     () => ({
@@ -205,18 +221,49 @@ const ProfilePage = () => {
 
                     <div className="grid w-full items-center gap-1.5">
                       <Label htmlFor="default_time_zone">Default Time Zone</Label>
-                      <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} value={formik.values.default_time_zone}>
-                        <SelectTrigger className="w-full truncate">
-                          <SelectValue placeholder="Timezone" />
-                        </SelectTrigger>
-                        <SelectContent className="max-h-60">
-                          {options.map((option, index) => (
-                            <SelectItem key={index} value={option.value}>
-                              {option.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            aria-expanded={open}
+                            className="w-full justify-between truncate"
+                          >
+                            {formik.values.default_time_zone
+                              ? options.find((option) => option.value === formik.values.default_time_zone)?.label
+                              : "Select timezone..."}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-full p-0">
+                          <Command>
+                            <CommandInput placeholder="Search timezone..." />
+                            <CommandList>
+                              <CommandEmpty>No timezone found.</CommandEmpty>
+                              <CommandGroup>
+                                {options.map((option) => (
+                                  <CommandItem
+                                    key={option.value}
+                                    value={option.value}
+                                    onSelect={(currentValue) => {
+                                      formik.setFieldValue('default_time_zone', currentValue === formik.values.default_time_zone ? "" : currentValue)
+                                      setOpen(false)
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        "mr-2 h-4 w-4",
+                                        formik.values.default_time_zone === option.value ? "opacity-100" : "opacity-0"
+                                      )}
+                                    />
+                                    {option.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                       {formik.touched.default_time_zone &&
                         formik.errors.default_time_zone && (
                           <div className='error my-1 text-start text-red-500'>
