@@ -3,9 +3,8 @@ import ConfirmationModal from '@/components/Layouts/Modals/ConfirmationModal';
 import Navbar from '@/components/Layouts/Navbar';
 import Loading from '@/components/Layouts/Loading';
 import TimeZoneModal from '@/components/Layouts/Modals/TimeZoneModal';
-import { ConnectedThemeProvider } from '@/components/ConnectedThemeProvider';
+import { ThemeProvider } from '@/components/theme-provider';
 import InitialRscFetch from '@/components/common/InitialRscFetch';
-import { cookies } from 'next/headers';
 import SettingsModal from '@/components/Layouts/Modals/SettingsModal';
 import { Toaster } from '@/components/ui/sonner';
 
@@ -14,11 +13,14 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const themeCookie = (await cookies()).get('theme')?.value || 'caramellatte';
-
   return (
     <section>
-      <ConnectedThemeProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
         <Suspense fallback={null}>
           <InitialRscFetch />
         </Suspense>
@@ -29,7 +31,7 @@ export default async function DashboardLayout({
         <Navbar />
         {children}
         <Toaster position="top-left" />
-      </ConnectedThemeProvider>
+      </ThemeProvider>
     </section>
   );
 }
