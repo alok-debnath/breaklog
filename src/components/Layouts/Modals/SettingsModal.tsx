@@ -22,11 +22,10 @@ import { useTheme } from "next-themes";
 
 const SettingsModal = () => {
   const { breaklogMode, logs, themeMode, isSettingsModalOpen, userData } = useStore();
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const handleThemeChange = (value: string) => {
     setTheme(value);
-    useStore.setState({ themeMode: value });
   };
 
   const handleToggleChange = (checked: boolean) => {
@@ -65,13 +64,14 @@ const SettingsModal = () => {
                 Select a theme for the application.
               </DialogDescription>
             </div>
-            <Select onValueChange={handleThemeChange} defaultValue={themeMode}>
+            <Select onValueChange={handleThemeChange} value={theme}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a theme" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>
                 <SelectItem value="dark">Dark</SelectItem>
+                <SelectItem value="system">System</SelectItem>
               </SelectContent>
             </Select>
           </div>

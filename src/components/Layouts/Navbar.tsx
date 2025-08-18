@@ -34,7 +34,7 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-4 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-[768px]">
-      <header className="rounded-full border bg-card/80 px-4 py-2 shadow-lg backdrop-blur">
+      <header className="rounded-full border bg-card/80 px-6 py-2 shadow-lg backdrop-blur">
         <div className="flex h-12 items-center justify-start gap-x-4">
           {/* Mobile Menu & Back Button */}
           <div className="flex items-center md:hidden">

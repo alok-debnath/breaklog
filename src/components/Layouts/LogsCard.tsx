@@ -83,7 +83,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
 
   return (
     <Card className={cn(
-      "w-full max-w-lg mx-auto mt-4",
+      "w-full max-w-lg mx-auto mt-4 min-w-full sm:min-w-[400px]",
       page === 'history' && (isWorkDoneSuccess ? 'border-green-500' : 'border-destructive')
     )}>
       {isHalfDay && <HalfDaySection isHalfDay={currentWorkData.isHalfDay} />}
@@ -98,7 +98,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
       </CardHeader>
 
       <CardContent className="grid gap-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+        <div className="grid grid-cols-2 gap-4 text-center">
           <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-3">
             <p className="text-sm font-medium text-muted-foreground">Work Done</p>
             <p className={cn("text-lg font-bold font-mono", isWorkDoneSuccess && "text-green-500")}>
