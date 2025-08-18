@@ -73,7 +73,6 @@ const SettingsModal = () => {
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>
                 <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="theme-zinc">Zinc</SelectItem>
               </SelectContent>
             </Select>
           </div>

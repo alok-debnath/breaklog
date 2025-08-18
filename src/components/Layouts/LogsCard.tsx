@@ -98,16 +98,16 @@ const LogsCard: React.FC<LogsCardProps> = ({
       </CardHeader>
 
       <CardContent className="grid gap-4">
-        <div className="grid gap-2">
-          <div className="flex items-center justify-between rounded-md bg-muted p-3">
-            <p className="text-sm font-medium">Work Done</p>
-            <p className={cn("text-sm font-bold", isWorkDoneSuccess && "text-green-500")}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-4">
+            <p className="text-sm font-medium text-muted-foreground">Work Done</p>
+            <p className={cn("text-2xl font-bold font-mono", isWorkDoneSuccess && "text-green-500")}>
               {workDone || '00:00:00'}
             </p>
           </div>
-          <div className="flex items-center justify-between rounded-md bg-muted p-3">
-            <p className="text-sm font-medium">Break Taken</p>
-            <p className="text-sm font-bold">
+          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-4">
+            <p className="text-sm font-medium text-muted-foreground">Break Taken</p>
+            <p className="text-2xl font-bold font-mono">
               {currentWorkData.breakTime || '00:00:00'}
             </p>
           </div>
@@ -197,7 +197,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
               </AccordionItem>
             </Accordion>
             {accordionValue !== 'item-1' && currentLogs.length > 0 && (
-              <div className="mt-2 text-sm text-muted-foreground">
+              <div className="mt-2 text-center text-sm text-muted-foreground">
                 <strong>Recent log:</strong> {currentLogs[currentLogs.length - 1].log_status}
               </div>
             )}

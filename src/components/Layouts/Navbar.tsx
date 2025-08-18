@@ -34,7 +34,7 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-4 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-[768px]">
-      <header className="rounded-full border bg-background/80 px-4 py-2 shadow-lg backdrop-blur">
+      <header className="rounded-full border bg-card/80 px-4 py-2 shadow-lg backdrop-blur">
         <div className="flex h-12 items-center justify-start gap-x-4">
           {/* Mobile Menu & Back Button */}
           <div className="flex items-center md:hidden">
@@ -52,11 +52,11 @@ const Navbar = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent side="bottom" align="start">
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard/history">History</Link>
+                  <DropdownMenuItem>
+                    <Link href="/dashboard/history" className="w-full h-full">History</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard/profile">Profile</Link>
+                  <DropdownMenuItem>
+                    <Link href="/dashboard/profile" className="w-full h-full">Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => useStore.setState({ isSettingsModalOpen: true })}>
                     Settings
@@ -101,8 +101,8 @@ const Navbar = () => {
                   <p className="text-sm">Signed in as <span className="font-semibold">{userData.username || "User"}</span></p>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/dashboard/profile">Profile</Link>
+                <DropdownMenuItem>
+                  <Link href="/dashboard/profile" className="w-full h-full">Profile</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => useStore.setState({ isSettingsModalOpen: true })}>
                   Settings
