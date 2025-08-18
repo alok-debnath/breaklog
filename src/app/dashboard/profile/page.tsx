@@ -63,6 +63,10 @@ const ProfilePage = () => {
     enableReinitialize: true,
   });
 
+  useEffect(() => {
+    console.log('userData', userData);
+  }, [userData]);
+
 
   async function handleSubmit(values: any) {
     useStore.setState(() => ({ loading: true }));
@@ -183,7 +187,7 @@ const ProfilePage = () => {
                             </TooltipContent>
                           </Tooltip>
                         </div>
-                      <Select onValueChange={(value) => formik.setFieldValue('log_type', value)} defaultValue={formik.values.log_type}>
+                      <Select onValueChange={(value) => formik.setFieldValue('log_type', value)} value={formik.values.log_type}>
                         <SelectTrigger>
                           <SelectValue placeholder="Log Mode" />
                         </SelectTrigger>
@@ -201,7 +205,7 @@ const ProfilePage = () => {
 
                     <div className="grid w-full items-center gap-1.5">
                       <Label htmlFor="default_time_zone">Default Time Zone</Label>
-                      <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} defaultValue={formik.values.default_time_zone}>
+                      <Select onValueChange={(value) => formik.setFieldValue('default_time_zone', value)} value={formik.values.default_time_zone}>
                         <SelectTrigger className="w-full truncate">
                           <SelectValue placeholder="Timezone" />
                         </SelectTrigger>
