@@ -198,7 +198,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
             </Accordion>
             {accordionValue !== 'item-1' && currentLogs.length > 0 && (
               <div className="mt-2 text-sm text-muted-foreground">
-                <strong>Most recent:</strong> {currentLogs[currentLogs.length - 1].log_status} at {new Date(currentLogs[currentLogs.length - 1].log_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}
+                <strong>Recent log:</strong> {currentLogs[currentLogs.length - 1].log_status}
               </div>
             )}
           </>

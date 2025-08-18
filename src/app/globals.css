@@ -3,24 +3,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
-  The default border color has changed to `currentColor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
-}
-
 .halo {
   position: fixed;
   z-index: 0;
@@ -180,7 +162,7 @@
 */
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(0.09 0.01 234); /* Black background */
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
