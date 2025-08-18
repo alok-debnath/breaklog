@@ -33,7 +33,7 @@ const LiveBreakCounter = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currBreak, diffInSeconds, workData.breakTime]);
 
-  const formatTime = (time: TimeData) => {
+  const formatTime = (time: TimeData, showSeconds: boolean = true) => {
     const parts = [];
     if (time.hours > 0) {
       parts.push(`${time.hours}h`);
@@ -41,7 +41,9 @@ const LiveBreakCounter = () => {
     if (time.minutes > 0) {
       parts.push(`${time.minutes}m`);
     }
-    parts.push(`${time.seconds}s`);
+    if (showSeconds) {
+      parts.push(`${time.seconds}s`);
+    }
     return parts.join(' ');
   };
 
@@ -54,7 +56,7 @@ const LiveBreakCounter = () => {
         <div className='flex items-center justify-center rounded-full bg-primary/20 px-4 py-2 text-sm text-primary-foreground shadow-lg backdrop-blur-md'>
           <span>
             <span className='font-normal'>{`Total break: `}</span>
-            <span className='font-mono font-semibold'>{formatTime(totalBreak.value)}</span>
+            <span className='font-mono font-semibold'>{formatTime(totalBreak.value, false)}</span>
           </span>
         </div>
       )}
