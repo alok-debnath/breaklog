@@ -60,18 +60,9 @@ const ProfilePage = () => {
     initialValues,
     validationSchema,
     onSubmit: handleSubmit,
+    enableReinitialize: true,
   });
 
-  useEffect(() => {
-    // Update form values when userData changes
-    formik.setValues({
-      ...formik.values,
-      daily_work_required: userData.daily_work_required,
-      log_type: userData.log_type,
-      default_time_zone: userData.default_time_zone,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userData]);
 
   async function handleSubmit(values: any) {
     useStore.setState(() => ({ loading: true }));

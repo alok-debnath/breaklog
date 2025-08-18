@@ -154,7 +154,6 @@ const LogsCard: React.FC<LogsCardProps> = ({
                         {[...currentLogs].reverse().map((log, index, array) => {
                           const log_time = new Date(log.log_time);
                           const utcFormattedDate = log_time.toLocaleString('en-US', {
-                            timeZone: userData.default_time_zone || 'UTC',
                             hour: 'numeric',
                             minute: 'numeric',
                             hour12: true,
@@ -219,7 +218,6 @@ const LogsCard: React.FC<LogsCardProps> = ({
                   {[...currentLogs].reverse().map((log, index, array) => {
                     const log_time = new Date(log.log_time);
                     const utcFormattedDate = log_time.toLocaleString('en-US', {
-                      timeZone: userData.default_time_zone || 'UTC',
                       hour: 'numeric',
                       minute: 'numeric',
                       hour12: true,
