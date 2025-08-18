@@ -151,16 +151,18 @@ const LogsCard: React.FC<LogsCardProps> = ({
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {currentLogs.map((log, index, array) => {
+                        {[...currentLogs].reverse().map((log, index, array) => {
                           const log_time = new Date(log.log_time);
                           const utcFormattedDate = log_time.toLocaleString('en-US', {
                             timeZone: userData.default_time_zone || 'UTC',
                             hour: 'numeric',
                             minute: 'numeric',
                             hour12: true,
+                            month: 'short',
+                            day: 'numeric',
                           });
 
-                          const logAbove = array.length > 1 ? array[index - 1] : null;
+                          const logAbove = index > 0 ? array[index - 1] : null;
                           const logBelow = index < array.length - 1 ? array[index + 1] : null;
 
                           return (
@@ -214,16 +216,18 @@ const LogsCard: React.FC<LogsCardProps> = ({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {currentLogs.map((log, index, array) => {
+                  {[...currentLogs].reverse().map((log, index, array) => {
                     const log_time = new Date(log.log_time);
                     const utcFormattedDate = log_time.toLocaleString('en-US', {
                       timeZone: userData.default_time_zone || 'UTC',
                       hour: 'numeric',
                       minute: 'numeric',
                       hour12: true,
+                      month: 'short',
+                      day: 'numeric',
                     });
 
-                    const logAbove = array.length > 1 ? array[index - 1] : null;
+                    const logAbove = index > 0 ? array[index - 1] : null;
                     const logBelow = index < array.length - 1 ? array[index + 1] : null;
 
                     return (
