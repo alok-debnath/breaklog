@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { Suspense } from 'react';
 import ConfirmationModal from '@/components/Layouts/Modals/ConfirmationModal';
 import Navbar from '@/components/Layouts/Navbar';
