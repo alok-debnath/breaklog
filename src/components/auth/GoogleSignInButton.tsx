@@ -2,6 +2,7 @@
 'use client';
 import { signIn } from 'next-auth/react';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export default function GoogleSignInButton({
   text = 'Sign in with Google',
@@ -10,9 +11,9 @@ export default function GoogleSignInButton({
 }) {
   return (
     <div className='mt-5'>
-      <button
-        type='button'
-        className='btn btn-primary flex w-full items-center gap-2 rounded-full'
+      <Button
+        variant="secondary"
+        className='w-full'
         onClick={() => signIn('google')}
       >
         <Image
@@ -20,9 +21,10 @@ export default function GoogleSignInButton({
           alt='Google'
           width={20}
           height={20}
+          className='mr-2'
         />
         {text}
-      </button>
+      </Button>
     </div>
   );
 }
