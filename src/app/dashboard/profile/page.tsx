@@ -61,7 +61,6 @@ const validationSchema = Yup.object().shape({
 const ProfilePage = () => {
   const { userData, loading } = useStore();
   const router = useRouter();
-  const [open, setOpen] = useState(false)
 
   const initialValues = useMemo(
     () => ({
@@ -79,9 +78,7 @@ const ProfilePage = () => {
     enableReinitialize: true,
   });
 
-  useEffect(() => {
-    console.log('userData', userData);
-  }, [userData]);
+  const [open, setOpen] = useState(false)
 
 
   async function handleSubmit(values: any) {
@@ -119,7 +116,7 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className='bg-background flex min-h-screen items-center justify-center p-4'>
+      <div className='bg-background flex items-center justify-center p-4'>
         <div className='w-full max-w-md'>
               <Card className="w-full shrink-0">
                 <CardHeader>
