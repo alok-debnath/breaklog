@@ -26,8 +26,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { LogsData } from '@/stores/store';
-import { WorkData } from '@/stores/store';
+import { LogsData, WorkData } from '@/stores/store';
 import useWorkDataUpdater from '@/hooks/useWorkDataUpdater';
 import HalfDaySection from './HelperUI/HalfDaySection';
 import { Info, AlertCircle } from 'lucide-react';
@@ -92,7 +91,11 @@ const LogsCard: React.FC<LogsCardProps> = ({
           (isWorkDoneSuccess ? 'border-green-500' : 'border-destructive'),
       )}
     >
-      {isHalfDay && <HalfDaySection isHalfDay={currentWorkData.isHalfDay} />}
+      {isHalfDay ? (
+        <HalfDaySection isHalfDay={currentWorkData.isHalfDay} defaultTimeZone={userData.default_time_zone} />
+      ) : (
+        <></>
+      )}
 
       <CardHeader>
         <CardTitle className='text-xl'>

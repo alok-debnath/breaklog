@@ -2,16 +2,37 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { useStore } from '@/stores/store';
-import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 interface HalfDaySectionProps {
   isHalfDay: boolean;
+  defaultTimeZone: string;
 }
 
-const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
+const getCurrentDateInTimezone = (timezone: string): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+    timeZone: timezone,
+  };
+  const formatter = new Intl.DateTimeFormat('en-GB', options);
+  const parts = formatter.formatToParts(new Date());
+
+  // Extract day, month, and year from the formatted parts
+  const day = parts.find((part) => part.type === 'day')?.value || '';
+  const month = parts.find((part) => part.type === 'month')?.value || '';
+  const year = parts.find((part) => part.type === 'year')?.value || '';
+
+  return `${day}-${month}-${year}`;
+};
+
+const HalfDaySection: React.FC<HalfDaySectionProps> = ({
+  isHalfDay,
+  defaultTimeZone,
+}) => {
   const isClient = typeof window !== 'undefined';
   const router = useRouter();
   const { initialPageLoadDone, loading } = useStore();
@@ -22,7 +43,11 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
   const simpleLogEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
     try {
-      const date = pathname?.split('/').pop();
+      let date = pathname?.split('/').pop();
+      if (date === 'dashboard') {
+        date = getCurrentDateInTimezone(defaultTimeZone);
+      }
+
       const values = {
         logtype: value,
         date: date,
@@ -40,39 +65,43 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
     }
   };
 
+  const isHalfDayActive = isHalfDayState !== null ? isHalfDayState : isHalfDay;
+
   return (
     <>
       <div
         className={cn(
-          'animate-zoom-in text-primary-foreground rounded-t-xl px-5 py-3',
-          (isHalfDayState ? isHalfDayState : isHalfDay) !== true
-            ? 'bg-primary/30'
-            : 'bg-yellow-500/30',
+          'animate-zoom-in -pt-6 -mt-6 rounded-t-xl border px-5 py-4 shadow-sm',
+          isHalfDayActive
+            ? 'bg-green-100 dark:bg-green-950'
+            : 'bg-amber-100 dark:bg-amber-950',
         )}
       >
         <div className='flex items-center justify-between gap-3'>
           <div className='text-start text-wrap'>
-            {(isHalfDayState ? isHalfDayState : isHalfDay) !== true ? (
-              <p>Should this log be marked as a half day?</p>
-            ) : (
-              <p>This log has been marked as half day</p>
-            )}
+            <p className='text-sm font-medium'>
+              {!isHalfDayActive
+                ? 'Should this log be marked as a half day?'
+                : 'This log has been marked as half day'}
+            </p>
           </div>
-          {(isHalfDayState ? isHalfDayState : isHalfDay) !== true ? (
+          {!isHalfDayActive ? (
             <Button
               size='sm'
-              variant='success'
+              variant={isHalfDayActive ? 'outline' : 'default'}
               onClick={() => simpleLogEntry('mark-as-half-day')}
               disabled={loading}
+              className='font-medium'
             >
               Yes
             </Button>
           ) : (
             <Button
               size='sm'
-              variant='success'
+              variant='outline'
               onClick={() => simpleLogEntry('undo-half-day')}
               disabled={loading}
+              className={cn('font-medium')}
             >
               Undo
             </Button>
