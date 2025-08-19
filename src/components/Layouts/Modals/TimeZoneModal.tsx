@@ -10,12 +10,26 @@ import {
 import { useStore } from '@/stores/store';
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Check, ChevronsUpDown } from "lucide-react"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { cn } from "@/lib/utils"
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -37,6 +51,7 @@ const TimeZoneModal: React.FC = () => {
 
   const [selectedTimeZone, setSelectedTimeZone] = useState('');
   const [deviceTimeZone, setDeviceTimeZone] = useState('');
+  const [open, setOpen] = useState(false)
 
   async function handleSubmit() {
     useStore.setState(() => ({ loading: true }));
@@ -126,7 +141,7 @@ const TimeZoneModal: React.FC = () => {
           </p>
           <div className="text-xs text-muted-foreground mt-4">
             <p className="font-semibold">Note:</p>
-            <p>
+            <p className="whitespace-pre-wrap">
               If your work shift spans across midnight, select a timezone where your entire shift falls within a single calendar day for accurate calculations.
             </p>
           </div>
@@ -136,18 +151,58 @@ const TimeZoneModal: React.FC = () => {
                 Default Time Zone
               </span>
             </label>
-            <Select onValueChange={(value) => setSelectedTimeZone(value)} defaultValue={selectedTimeZone}>
-              <SelectTrigger>
-                <SelectValue placeholder="Timezone" />
-              </SelectTrigger>
-              <SelectContent className="max-h-60">
-                {options.map((option, index) => (
-                  <SelectItem key={index} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Popover open={open} onOpenChange={setOpen}>
+              <PopoverTrigger asChild>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  role="combobox"
+                                  aria-expanded={open}
+                                  className="w-full justify-between truncate"
+                                >
+                                  {selectedTimeZone
+                                    ? options.find((option) => option.value === selectedTimeZone)?.label
+                                    : "Select timezone..."}
+                                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{options.find((option) => option.value === selectedTimeZone)?.label}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+              </PopoverTrigger>
+              <PopoverContent className="w-full p-0">
+                <Command>
+                  <CommandInput placeholder="Search timezone..." />
+                  <CommandList>
+                    <CommandEmpty>No timezone found.</CommandEmpty>
+                    <CommandGroup>
+                      {options.map((option) => (
+                        <CommandItem
+                          key={option.value}
+                          value={option.value}
+                          onSelect={(currentValue) => {
+                            setSelectedTimeZone(currentValue === selectedTimeZone ? "" : currentValue)
+                            setOpen(false)
+                          }}
+                        >
+                          <Check
+                            className={cn(
+                              "mr-2 h-4 w-4",
+                              selectedTimeZone === option.value ? "opacity-100" : "opacity-0"
+                            )}
+                          />
+                          {option.label}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
         <DialogFooter>
