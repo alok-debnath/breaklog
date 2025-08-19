@@ -80,7 +80,6 @@ const ProfilePage = () => {
 
   const [open, setOpen] = useState(false)
 
-
   async function handleSubmit(values: any) {
     useStore.setState(() => ({ loading: true }));
     try {
