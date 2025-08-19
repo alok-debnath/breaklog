@@ -5,9 +5,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog';
 import { useStore } from '@/stores/store';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -15,25 +15,20 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Check, ChevronsUpDown } from "lucide-react"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from "@/lib/utils"
+} from '@/components/ui/popover';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
 import { handleError, handleSuccessToast } from '../../common/CommonCodeBlocks';
+import { Label } from '@/components/ui/label';
 
 const TimeZoneModal: React.FC = () => {
   const { userData, loading, isTimeZoneModalOpen } = useStore();
@@ -50,7 +45,7 @@ const TimeZoneModal: React.FC = () => {
 
   const [selectedTimeZone, setSelectedTimeZone] = useState('');
   const [deviceTimeZone, setDeviceTimeZone] = useState('');
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   async function handleSubmit() {
     useStore.setState(() => ({ loading: true }));
@@ -89,11 +84,12 @@ const TimeZoneModal: React.FC = () => {
       setDeviceTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
       setSelectedTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
     }
-  }, [options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Dialog open={isTimeZoneModalOpen}>
-      <DialogContent>
+      <DialogContent id='timezone-dialog-content'>
         <DialogHeader>
           <DialogTitle>Select Time Zone</DialogTitle>
         </DialogHeader>
@@ -113,8 +109,7 @@ const TimeZoneModal: React.FC = () => {
                 <>
                   {deviceTimeZone + ' '}
                   <span className='whitespace-nowrap'>
-                    {parseTimezone(deviceTimeZone).label.split(') ')[0] +
-                      ')'}
+                    {parseTimezone(deviceTimeZone).label.split(') ')[0] + ')'}
                   </span>
                 </>
               )) ||
@@ -130,52 +125,42 @@ const TimeZoneModal: React.FC = () => {
                 <>
                   {selectedTimeZone + ' '}
                   <span className='whitespace-nowrap'>
-                    {parseTimezone(selectedTimeZone).label.split(') ')[0] +
-                      ')'}
+                    {parseTimezone(selectedTimeZone).label.split(') ')[0] + ')'}
                   </span>
                 </>
               )) ||
                 'undefined'}
             </span>
           </p>
-          <div className="text-xs text-muted-foreground mt-4">
-            <p className="font-semibold">Note:</p>
-            <p className="whitespace-pre-wrap">
-              If your work shift spans across midnight, select a timezone where your entire shift falls within a single calendar day for accurate calculations.
+          <div className='text-muted-foreground m-4 text-xs'>
+            <p className='font-semibold'>Note:</p>
+            <p className='whitespace-pre-wrap'>
+              If your work shift spans across midnight, select a timezone where
+              your entire shift falls within a single calendar day for accurate
+              calculations.
             </p>
           </div>
-          <div className='form-control'>
-            <label className='label' htmlFor='log_type'>
-              <span className='label-text flex items-center'>
-                Default Time Zone
-              </span>
-            </label>
+          <div className='grid w-full items-center gap-1.5'>
+            <Label htmlFor='log_type'>Default Time Zone</Label>
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={open}
-                        className="w-full justify-between truncate"
-                      >
-                        {selectedTimeZone
-                          ? options.find((option) => option.value === selectedTimeZone)?.label
-                          : "Select timezone..."}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{options.find((option) => option.value === selectedTimeZone)?.label}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Button
+                  variant='outline'
+                  role='combobox'
+                  aria-expanded={open}
+                  className='w-full justify-between truncate'
+                >
+                  {selectedTimeZone
+                    ? options.find(
+                        (option) => option.value === selectedTimeZone,
+                      )?.label
+                    : 'Select timezone...'}
+                  <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-full p-0">
+              <PopoverContent className='w-full p-0'>
                 <Command>
-                  <CommandInput placeholder="Search timezone..." />
+                  <CommandInput placeholder='Search timezone...' />
                   <CommandList>
                     <CommandEmpty>No timezone found.</CommandEmpty>
                     <CommandGroup>
@@ -184,14 +169,20 @@ const TimeZoneModal: React.FC = () => {
                           key={option.value}
                           value={option.value}
                           onSelect={(currentValue) => {
-                            setSelectedTimeZone(currentValue === selectedTimeZone ? "" : currentValue)
-                            setOpen(false)
+                            setSelectedTimeZone(
+                              currentValue === selectedTimeZone
+                                ? ''
+                                : currentValue,
+                            );
+                            setOpen(false);
                           }}
                         >
                           <Check
                             className={cn(
-                              "mr-2 h-4 w-4",
-                              selectedTimeZone === option.value ? "opacity-100" : "opacity-0"
+                              'mr-2 h-4 w-4',
+                              selectedTimeZone === option.value
+                                ? 'opacity-100'
+                                : 'opacity-0',
                             )}
                           />
                           {option.label}

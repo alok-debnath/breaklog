@@ -7,7 +7,9 @@ const InitialRscFetch = async () => {
   const { userData, errorMessage: profileError } = await fetchProfileDataRsc();
   const { logData, errorMessage: logError } = await fetchLogDataRsc();
 
-  return <SaveDataToGlobalStore userDataServer={userData} logDataServer={logData} />;
+  return (
+    <SaveDataToGlobalStore userDataServer={userData} logDataServer={logData} />
+  );
 };
 
 export default InitialRscFetch;

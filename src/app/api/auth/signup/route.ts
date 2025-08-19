@@ -1,7 +1,7 @@
 // signup route (fixed)
 import { NextRequest, NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
-import { prisma } from "@/lib/prisma"
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,13 +24,14 @@ export async function POST(request: NextRequest) {
       if (existingUser.email === email) conflicts.push('email');
       if (existingUser.username === username) conflicts.push('username');
 
-      const errorMessage = conflicts.length === 2
-        ? 'email and username already exist'
-        : `${conflicts[0]} already exists`;
+      const errorMessage =
+        conflicts.length === 2
+          ? 'email and username already exist'
+          : `${conflicts[0]} already exists`;
 
       return NextResponse.json(
         { error: errorMessage, focusOn: conflicts },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -44,14 +45,14 @@ export async function POST(request: NextRequest) {
         data: {
           email,
           username,
-          password: hashedPassword,  // Now including the hashed password here
+          password: hashedPassword, // Now including the hashed password here
         },
       });
 
       await tx.account.create({
         data: {
           userId: user.id,
-          provider: "credentials", // Set provider to 'credentials' for this case
+          provider: 'credentials', // Set provider to 'credentials' for this case
           providerAccountId: email, // Using email as provider account ID
           access_token: hashedPassword, // Store hashed password as access token
           type: 'credentials', // The 'type' field is required

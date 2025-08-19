@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from "@/lib/prisma"
+import { prisma } from '@/lib/prisma';
 import { getUserIdFromSession } from '@/lib/authHelpers';
 
 export async function POST(request: NextRequest) {
@@ -34,7 +34,10 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     if (error.name === 'SessionError') {
-      return NextResponse.json({ SessionError: error.message }, { status: 400 });
+      return NextResponse.json(
+        { SessionError: error.message },
+        { status: 400 },
+      );
     } else {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

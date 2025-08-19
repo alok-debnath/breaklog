@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 // import { sendEmail } from "@/helpers/mailer";
@@ -70,8 +70,8 @@ export default function SignupPage() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className='grid gap-4'>
-        <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="username">Username</Label>
+        <div className='grid w-full items-center gap-1.5'>
+          <Label htmlFor='username'>Username</Label>
           <Input
             type='text'
             placeholder='johndoe'
@@ -82,13 +82,11 @@ export default function SignupPage() {
             onBlur={formik.handleBlur}
           />
           {formik.touched.username && formik.errors.username && (
-            <div className='text-sm text-red-500'>
-              {formik.errors.username}
-            </div>
+            <div className='text-sm text-red-500'>{formik.errors.username}</div>
           )}
         </div>
-        <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="email">Email</Label>
+        <div className='grid w-full items-center gap-1.5'>
+          <Label htmlFor='email'>Email</Label>
           <Input
             type='email'
             placeholder='name@example.com'
@@ -99,13 +97,11 @@ export default function SignupPage() {
             onBlur={formik.handleBlur}
           />
           {formik.touched.email && formik.errors.email && (
-            <div className='text-sm text-red-500'>
-              {formik.errors.email}
-            </div>
+            <div className='text-sm text-red-500'>{formik.errors.email}</div>
           )}
         </div>
-        <div className="grid w-full items-center gap-1.5">
-          <Label htmlFor="password">Password</Label>
+        <div className='grid w-full items-center gap-1.5'>
+          <Label htmlFor='password'>Password</Label>
           <Input
             type='password'
             placeholder='Password'
@@ -116,17 +112,15 @@ export default function SignupPage() {
             onBlur={formik.handleBlur}
           />
           {formik.touched.password && formik.errors.password && (
-            <div className='text-sm text-red-500'>
-              {formik.errors.password}
-            </div>
+            <div className='text-sm text-red-500'>{formik.errors.password}</div>
           )}
         </div>
         <Button
-          type="submit"
+          type='submit'
           disabled={!formik.isValid || formik.isSubmitting}
-          className="w-full mt-2"
+          className='mt-2 w-full'
         >
-          {formik.isSubmitting ? "Signing up..." : "Sign up"}
+          {formik.isSubmitting ? 'Signing up...' : 'Sign up'}
         </Button>
       </div>
     </form>

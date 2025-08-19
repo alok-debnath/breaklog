@@ -1,7 +1,10 @@
 'use client';
 import { UserData, useStore } from '@/stores/store';
 import React, { useCallback, useEffect, useState } from 'react';
-import { FetchedLogsDataType, saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
+import {
+  FetchedLogsDataType,
+  saveFetchedLogsToStore,
+} from '@/utils/saveFetchedLogsToStore';
 
 interface SaveDataToGlobalStoreProps {
   userDataServer: UserData;
@@ -18,7 +21,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
   // Helper function to initialize local storage data
   const loadLocalStorageData = useCallback(() => {
     useStore.setState({ userData: userDataServer });
-    saveFetchedLogsToStore(logDataServer)
+    saveFetchedLogsToStore(logDataServer);
 
     const storedBreaklogMode = localStorage.getItem('breaklogMode');
     const savedTheme = localStorage.getItem('thememode');
@@ -42,7 +45,8 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
   // Update local storage and trigger timezone modal if needed
   useEffect(() => {
     if (isFirstEffectCompleted) {
-      if (!userData.default_time_zone) useStore.setState({ isTimeZoneModalOpen: true });
+      if (!userData.default_time_zone)
+        useStore.setState({ isTimeZoneModalOpen: true });
       localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
       localStorage.setItem('thememode', themeMode);
       document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;

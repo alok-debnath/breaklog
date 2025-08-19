@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from "@/lib/prisma"
+import { prisma } from '@/lib/prisma';
 import { fetchLogs } from '@/helpers/fetchLogs';
 import getStartAndEndOfDay from '@/helpers/getStartAndEndOfDay';
 import { DateTime } from 'luxon';
@@ -68,7 +68,10 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     if (error.name === 'SessionError') {
-      return NextResponse.json({ SessionError: error.message }, { status: 400 });
+      return NextResponse.json(
+        { SessionError: error.message },
+        { status: 400 },
+      );
     } else {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

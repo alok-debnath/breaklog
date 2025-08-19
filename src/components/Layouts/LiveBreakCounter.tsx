@@ -48,15 +48,19 @@ const LiveBreakCounter = () => {
   };
 
   return (
-    <div className={`fixed bottom-24 left-4 z-50 ${currBreak === null ? 'hidden' : 'grid'} gap-2`}>
-      <div className='flex items-center justify-center rounded-full bg-primary/20 px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg backdrop-blur-md'>
+    <div
+      className={`fixed bottom-24 left-4 z-50 ${currBreak === null ? 'hidden' : 'grid'} gap-2`}
+    >
+      <div className='bg-primary/20 text-primary-foreground flex items-center justify-center rounded-full px-4 py-2 text-sm font-semibold shadow-lg backdrop-blur-md'>
         <span className='font-mono'>{formatTime(liveBreak.value)}</span>
       </div>
       {JSON.stringify(liveBreak.value) !== JSON.stringify(totalBreak.value) && (
-        <div className='flex items-center justify-center rounded-full bg-primary/20 px-4 py-2 text-sm text-primary-foreground shadow-lg backdrop-blur-md'>
+        <div className='bg-primary/20 text-primary-foreground flex items-center justify-center rounded-full px-4 py-2 text-sm shadow-lg backdrop-blur-md'>
           <span>
             <span className='font-normal'>{`Total break: `}</span>
-            <span className='font-mono font-semibold'>{formatTime(totalBreak.value, false)}</span>
+            <span className='font-mono font-semibold'>
+              {formatTime(totalBreak.value, false)}
+            </span>
           </span>
         </div>
       )}

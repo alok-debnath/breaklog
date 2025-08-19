@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma"
+import { prisma } from '@/lib/prisma';
 import { DateTime } from 'luxon';
 import getStartAndEndOfDay from './getStartAndEndOfDay';
 

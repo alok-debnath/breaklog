@@ -5,28 +5,23 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from '@/components/ui/select';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Separator } from "@/components/ui/separator"
-import { Loader2 } from "lucide-react"
+} from '@/components/ui/tooltip';
+import { Separator } from '@/components/ui/separator';
+import { Loader2 } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -34,7 +29,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from '@/components/ui/table';
 
 const HistoryPage = () => {
   const { loading, monthLogs, summary, userData } = useStore();
@@ -138,15 +133,18 @@ const HistoryPage = () => {
 
   return (
     <div className='bg-background flex min-h-screen flex-col items-center justify-center p-4'>
-      <Card className="w-full max-w-2xl">
+      <Card className='w-full max-w-2xl'>
         <CardHeader>
           <CardTitle>Fetch required data</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className='flex flex-col sm:flex-row items-center gap-2'>
-            <Select onValueChange={(value) => setSelectedMonth(Number(value))} defaultValue={selectedMonth.toString()}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Month" />
+          <div className='flex flex-col items-center gap-2 sm:flex-row'>
+            <Select
+              onValueChange={(value) => setSelectedMonth(Number(value))}
+              defaultValue={selectedMonth.toString()}
+            >
+              <SelectTrigger className='w-full'>
+                <SelectValue placeholder='Month' />
               </SelectTrigger>
               <SelectContent>
                 {months.map((month, index) => (
@@ -156,9 +154,12 @@ const HistoryPage = () => {
                 ))}
               </SelectContent>
             </Select>
-            <Select onValueChange={(value) => setSelectedYear(Number(value))} defaultValue={selectedYear.toString()}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Year" />
+            <Select
+              onValueChange={(value) => setSelectedYear(Number(value))}
+              defaultValue={selectedYear.toString()}
+            >
+              <SelectTrigger className='w-full'>
+                <SelectValue placeholder='Year' />
               </SelectTrigger>
               <SelectContent>
                 {years.map((year, index) => (
@@ -174,49 +175,59 @@ const HistoryPage = () => {
               }}
               disabled={loading}
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Search'}
+              {loading ? (
+                <Loader2 className='h-4 w-4 animate-spin' />
+              ) : (
+                'Search'
+              )}
             </Button>
           </div>
         </CardContent>
       </Card>
 
       {collapseBoxState && (
-        <Card className="mt-4 w-full max-w-2xl">
+        <Card className='mt-4 w-full max-w-2xl'>
           <CardHeader>
             <CardTitle>Summary</CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-2 text-sm">
-            <div className="flex items-center justify-between rounded-md bg-muted p-3">
+          <CardContent className='grid gap-2 text-sm'>
+            <div className='bg-muted flex items-center justify-between rounded-md p-3'>
               <p>Work Required</p>
-              <p className="font-semibold">{summary.expectedWorkHours} hr</p>
+              <p className='font-semibold'>{summary.expectedWorkHours} hr</p>
             </div>
-            <div className="flex items-center justify-between rounded-md bg-muted p-3">
+            <div className='bg-muted flex items-center justify-between rounded-md p-3'>
               <p>Work Done</p>
-              <p className={`font-semibold ${summary.totalWorkDone >= summary.expectedWorkHours * 3600000 ? 'text-green-500' : 'text-red-500'}`}>
+              <p
+                className={`font-semibold ${summary.totalWorkDone >= summary.expectedWorkHours * 3600000 ? 'text-green-500' : 'text-red-500'}`}
+              >
                 {summary.formattedTotalWorkDone} hr
               </p>
             </div>
             <Separator />
-            <div className="flex items-center justify-between rounded-md bg-muted p-3">
+            <div className='bg-muted flex items-center justify-between rounded-md p-3'>
               <p>Days Logged</p>
-              <p className="font-semibold text-green-500">{summary.numberOfDays} day</p>
+              <p className='font-semibold text-green-500'>
+                {summary.numberOfDays} day
+              </p>
             </div>
             {summary.halfDayCount > 0 && (
-              <div className="flex items-center justify-between rounded-md bg-muted p-3">
+              <div className='bg-muted flex items-center justify-between rounded-md p-3'>
                 <p>Half-Days</p>
-                <p className="font-semibold">{summary.halfDayCount} Day</p>
+                <p className='font-semibold'>{summary.halfDayCount} Day</p>
               </div>
             )}
-            <div className="flex items-center justify-between rounded-md bg-muted p-3">
+            <div className='bg-muted flex items-center justify-between rounded-md p-3'>
               <p>Break Taken</p>
-              <p className="font-semibold text-green-500">{summary.formattedTotalBreakTime} hr</p>
+              <p className='font-semibold text-green-500'>
+                {summary.formattedTotalBreakTime} hr
+              </p>
             </div>
           </CardContent>
         </Card>
       )}
 
       {collapseBoxState && monthLogs.length > 0 && (
-        <Card className="mt-4 w-full max-w-2xl">
+        <Card className='mt-4 w-full max-w-2xl'>
           <CardHeader>
             <CardTitle>Logs</CardTitle>
           </CardHeader>
@@ -236,7 +247,8 @@ const HistoryPage = () => {
                                 viewBox='0 0 24 24'
                                 strokeWidth={1.5}
                                 stroke='currentColor'
-                                className='text-warning me-1 h-6 w-6'>
+                                className='text-warning me-1 h-6 w-6'
+                              >
                                 <path
                                   strokeLinecap='round'
                                   strokeLinejoin='round'
@@ -252,40 +264,41 @@ const HistoryPage = () => {
                         Date
                       </span>
                     </TableHead>
-                    <TableHead className="text-center">Break</TableHead>
-                    <TableHead className="text-center">Work</TableHead>
+                    <TableHead className='text-center'>Break</TableHead>
+                    <TableHead className='text-center'>Work</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {monthLogs.map((log, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <TableCell>
-                            <Link
-                              href={`/dashboard/history/${log.date}`}
+                    return (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <Link href={`/dashboard/history/${log.date}`}>
+                            <Button
+                              variant={
+                                log.isHalfDay
+                                  ? 'outline'
+                                  : log.workDone >=
+                                      userData.daily_work_required * 3600000
+                                    ? 'default'
+                                    : 'destructive'
+                              }
+                              size='sm'
+                              className='w-full text-xs font-bold'
                             >
-                              <Button
-                                variant={
-                                  log.isHalfDay
-                                    ? 'outline'
-                                    : log.workDone >=
-                                      userData.daily_work_required *
-                                      3600000
-                                      ? 'default'
-                                      : 'destructive'
-                                }
-                                size="sm"
-                                className="w-full text-xs font-bold"
-                              >
-                                {log.date}
-                              </Button>
-                            </Link>
-                          </TableCell>
-                          <TableCell className="text-center font-mono">{log.formattedBreakTime}</TableCell>
-                          <TableCell className="text-center font-mono">{log.formattedWorkDone}</TableCell>
-                        </TableRow>
-                      );
-                    })}
+                              {log.date}
+                            </Button>
+                          </Link>
+                        </TableCell>
+                        <TableCell className='text-center font-mono'>
+                          {log.formattedBreakTime}
+                        </TableCell>
+                        <TableCell className='text-center font-mono'>
+                          {log.formattedWorkDone}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </TooltipProvider>

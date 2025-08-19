@@ -6,11 +6,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from '@/components/ui/dialog';
 import { useStore } from '@/stores/store';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import axios from 'axios';
 import { handleError } from '../../common/CommonCodeBlocks';
 import { useEffect, useRef, useState } from 'react';
@@ -73,34 +73,31 @@ const TimeEditModal: React.FC = () => {
 
       const minLimit = logEditStore.log_dateTime_behind
         ? parseTimeString(
-          new Date(logEditStore.log_dateTime_behind).toLocaleString('en-US', {
-            timeZone: localTimeZone,
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-          }),
-        )
+            new Date(logEditStore.log_dateTime_behind).toLocaleString('en-US', {
+              timeZone: localTimeZone,
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            }),
+          )
         : { hour: 5, minute: 31, period: 'AM' };
 
       const maxLimit = logEditStore.log_dateTime_ahead
         ? parseTimeString(
-          new Date(logEditStore.log_dateTime_ahead).toLocaleString('en-US', {
-            timeZone: localTimeZone,
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-          }),
-        )
+            new Date(logEditStore.log_dateTime_ahead).toLocaleString('en-US', {
+              timeZone: localTimeZone,
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: true,
+            }),
+          )
         : { hour: 11, minute: 59, period: 'PM' };
 
       setLimit({ min: minLimit, max: maxLimit });
     };
 
     updateLocalTime();
-  }, [
-    logEditStore,
-    localTimeZone
-  ]);
+  }, [logEditStore, localTimeZone]);
 
   const logEdit = async (data: {
     hour: number;
@@ -221,64 +218,76 @@ const TimeEditModal: React.FC = () => {
         </DialogHeader>
         <form onSubmit={formik.handleSubmit}>
           <div className='grid gap-4 py-4'>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="hour" className="text-right">
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='hour' className='text-right'>
                 Hour
               </Label>
               <Input
-                id="hour"
-                name="hour"
-                type="number"
+                id='hour'
+                name='hour'
+                type='number'
                 value={formik.values.hour || 0}
                 onChange={formik.handleChange}
-                className="col-span-3"
+                className='col-span-3'
               />
               {formik.errors.hour && (
-                <div className='error text-red-500 col-span-4'>{formik.errors.hour}</div>
+                <div className='error col-span-4 text-red-500'>
+                  {formik.errors.hour}
+                </div>
               )}
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="minute" className="text-right">
+            <div className='grid grid-cols-4 items-center gap-4'>
+              <Label htmlFor='minute' className='text-right'>
                 Minute
               </Label>
               <Input
-                id="minute"
-                name="minute"
-                type="number"
+                id='minute'
+                name='minute'
+                type='number'
                 value={formik.values.minute || 0}
                 onChange={formik.handleChange}
-                className="col-span-3"
+                className='col-span-3'
               />
               {formik.errors.minute && (
-                <div className='error text-red-500 col-span-4'>{formik.errors.minute}</div>
+                <div className='error col-span-4 text-red-500'>
+                  {formik.errors.minute}
+                </div>
               )}
             </div>
             <div className='join join-horizontal flex'>
               {(limit.min.period === 'AM' && limit.max.period === 'PM') ||
-                (limit.min.period === 'PM' && limit.max.period === 'AM') ? (
+              (limit.min.period === 'PM' && limit.max.period === 'AM') ? (
                 <>
                   <Button
-                    variant={formik.values.period === 'AM' ? 'default' : 'outline'}
+                    variant={
+                      formik.values.period === 'AM' ? 'default' : 'outline'
+                    }
                     onClick={() => formik.setFieldValue('period', 'AM')}
-                    className="flex-1"
+                    className='flex-1'
                   >
                     AM
                   </Button>
                   <Button
-                    variant={formik.values.period === 'PM' ? 'default' : 'outline'}
+                    variant={
+                      formik.values.period === 'PM' ? 'default' : 'outline'
+                    }
                     onClick={() => formik.setFieldValue('period', 'PM')}
-                    className="flex-1"
+                    className='flex-1'
                   >
                     PM
                   </Button>
                 </>
               ) : (
                 <Button
-                  variant={formik.values.period === limit.min.period ? 'default' : 'outline'}
+                  variant={
+                    formik.values.period === limit.min.period
+                      ? 'default'
+                      : 'outline'
+                  }
                   onClick={() =>
                     formik.setFieldValue('period', limit.min.period)
                   }
-                  className="flex-1"
+                  className='flex-1'
                 >
                   {limit.min.period}
                 </Button>
@@ -289,8 +298,12 @@ const TimeEditModal: React.FC = () => {
             )}
           </div>
           <DialogFooter>
-            <Button onClick={closeModal} variant="outline">Close</Button>
-            <Button type="submit" disabled={!formik.isValid}>Save</Button>
+            <Button onClick={closeModal} variant='outline'>
+              Close
+            </Button>
+            <Button type='submit' disabled={!formik.isValid}>
+              Save
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

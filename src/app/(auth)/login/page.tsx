@@ -5,10 +5,10 @@ import * as Yup from 'yup';
 import { handleError } from '@/components/common/CommonCodeBlocks';
 import { signIn } from 'next-auth/react';
 import GoogleSignInButton from '@/components/auth/GoogleSignInButton';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -76,16 +76,16 @@ export default function LoginPage() {
   }
 
   return (
-    <Tabs defaultValue="traditional" className="w-full">
-      <TabsList className="grid w-full grid-cols-2">
-        <TabsTrigger value="traditional">Traditional</TabsTrigger>
-        <TabsTrigger value="oauth">OAuth</TabsTrigger>
+    <Tabs defaultValue='traditional' className='w-full'>
+      <TabsList className='grid w-full grid-cols-2'>
+        <TabsTrigger value='traditional'>Traditional</TabsTrigger>
+        <TabsTrigger value='oauth'>OAuth</TabsTrigger>
       </TabsList>
-      <TabsContent value="traditional" className="animate-enter pt-4">
+      <TabsContent value='traditional' className='animate-enter pt-4'>
         <form onSubmit={formik.handleSubmit}>
           <div className='grid gap-4'>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="email">Email</Label>
+            <div className='grid w-full items-center gap-1.5'>
+              <Label htmlFor='email'>Email</Label>
               <Input
                 type='email'
                 placeholder='name@example.com'
@@ -101,8 +101,8 @@ export default function LoginPage() {
                 </div>
               )}
             </div>
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="password">Password</Label>
+            <div className='grid w-full items-center gap-1.5'>
+              <Label htmlFor='password'>Password</Label>
               <Input
                 type='password'
                 placeholder='Password'
@@ -119,17 +119,17 @@ export default function LoginPage() {
               )}
             </div>
             <Button
-              type="submit"
+              type='submit'
               disabled={!formik.isValid || formik.isSubmitting}
-              className="w-full mt-2"
+              className='mt-2 w-full'
             >
-              {formik.isSubmitting ? "Signing in..." : "Sign in"}
+              {formik.isSubmitting ? 'Signing in...' : 'Sign in'}
             </Button>
           </div>
         </form>
       </TabsContent>
-      <TabsContent value="oauth" className="animate-enter pt-4">
-        <div className="py-4">
+      <TabsContent value='oauth' className='animate-enter pt-4'>
+        <div className='py-4'>
           <GoogleSignInButton text='Sign in with Google' />
         </div>
       </TabsContent>

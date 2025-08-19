@@ -12,7 +12,7 @@ export default function GoogleSignInButton({
   return (
     <div className='mt-5'>
       <Button
-        variant="secondary"
+        variant='secondary'
         className='w-full'
         onClick={() => signIn('google')}
       >

@@ -22,7 +22,6 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
   const simpleLogEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
     try {
-
       const date = pathname?.split('/').pop();
       const values = {
         logtype: value,
@@ -30,7 +29,10 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
       };
 
       useStore.setState(() => ({ loading: true }));
-      const res = await axios.post('/api/users/submitlog/submitHalfday', values);
+      const res = await axios.post(
+        '/api/users/submitlog/submitHalfday',
+        values,
+      );
       setIsHalfDayState(res.data.fetchedLog.workdata.isHalfDay);
       useStore.setState(() => ({ loading: false }));
     } catch (error: any) {
@@ -42,8 +44,10 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
     <>
       <div
         className={cn(
-          "animate-zoom-in rounded-t-xl px-5 py-3 text-primary-foreground",
-          (isHalfDayState ? isHalfDayState : isHalfDay) !== true ? 'bg-primary/30' : 'bg-yellow-500/30'
+          'animate-zoom-in text-primary-foreground rounded-t-xl px-5 py-3',
+          (isHalfDayState ? isHalfDayState : isHalfDay) !== true
+            ? 'bg-primary/30'
+            : 'bg-yellow-500/30',
         )}
       >
         <div className='flex items-center justify-between gap-3'>
@@ -56,8 +60,8 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
           </div>
           {(isHalfDayState ? isHalfDayState : isHalfDay) !== true ? (
             <Button
-              size="sm"
-              variant="success"
+              size='sm'
+              variant='success'
               onClick={() => simpleLogEntry('mark-as-half-day')}
               disabled={loading}
             >
@@ -65,8 +69,8 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({ isHalfDay }) => {
             </Button>
           ) : (
             <Button
-              size="sm"
-              variant="success"
+              size='sm'
+              variant='success'
               onClick={() => simpleLogEntry('undo-half-day')}
               disabled={loading}
             >

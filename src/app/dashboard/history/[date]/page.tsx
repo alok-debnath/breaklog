@@ -11,9 +11,13 @@ export default async function SpecificDayLog({
   const { fetchDynamicLogDataRsc, fetchProfileDataRsc } = fetchRscData();
 
   // Fetch logs data with the specific date
-  const { logs, workData, errorMessage: logsError } = await fetchDynamicLogDataRsc(date);
+  const {
+    logs,
+    workData,
+    errorMessage: logsError,
+  } = await fetchDynamicLogDataRsc(date);
   // Fetch profile data independently
-  const { userData, errorMessage: profileError } = await fetchProfileDataRsc();  
+  const { userData, errorMessage: profileError } = await fetchProfileDataRsc();
 
   const isWorkDone =
     workData.unformattedWorkDone >=
@@ -22,8 +26,8 @@ export default async function SpecificDayLog({
   const isWorkDoneSuccess = isWorkDone && userData.daily_work_required > 0;
 
   return (
-    <div className="bg-background text-foreground flex items-center justify-center">
-      <div className="container mx-auto max-w-screen-lg p-4">
+    <div className='bg-background text-foreground flex items-center justify-center'>
+      <div className='container mx-auto max-w-screen-lg p-4'>
         <LogsCard
           page='history'
           isWorkDoneSuccess={isWorkDoneSuccess}

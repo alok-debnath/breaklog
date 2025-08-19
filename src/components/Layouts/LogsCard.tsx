@@ -6,7 +6,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from '@/components/ui/accordion';
 import {
   Card,
   CardContent,
@@ -14,7 +14,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -22,8 +22,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 import { LogsData } from '@/stores/store';
@@ -52,12 +52,14 @@ const LogsCard: React.FC<LogsCardProps> = ({
   logEntry,
 }) => {
   const { breaklogMode, logs, workData, userData, loading } = useStore();
-  const [accordionValue, setAccordionValue] = useState<string | undefined>(undefined);
+  const [accordionValue, setAccordionValue] = useState<string | undefined>(
+    undefined,
+  );
 
   const openTimeEditModal = (value: any) => {
     useStore.setState(() => ({
       logEditStore: value,
-      isTimeEditModalOpen: true
+      isTimeEditModalOpen: true,
     }));
   };
 
@@ -77,55 +79,72 @@ const LogsCard: React.FC<LogsCardProps> = ({
     unformattedWorkDone >= (userData.daily_work_required * 3600000) / 2 &&
     unformattedWorkDone <= (userData.daily_work_required * 3600000 * 3) / 4;
 
-  const dateToDisplay = (currentLogs.length > 0 && currentLogs[0].log_time)
-    ? new Date(currentLogs[0].log_time)
-    : new Date();
+  const dateToDisplay =
+    currentLogs.length > 0 && currentLogs[0].log_time
+      ? new Date(currentLogs[0].log_time)
+      : new Date();
 
   return (
-    <Card className={cn(
-      "w-full max-w-lg mx-auto mt-4 min-w-full sm:min-w-[400px]",
-      page === 'history' && (isWorkDoneSuccess ? 'border-green-500' : 'border-destructive')
-    )}>
+    <Card
+      className={cn(
+        'mx-auto mt-4 w-full max-w-lg min-w-full sm:min-w-[400px]',
+        page === 'history' &&
+          (isWorkDoneSuccess ? 'border-green-500' : 'border-destructive'),
+      )}
+    >
       {isHalfDay && <HalfDaySection isHalfDay={currentWorkData.isHalfDay} />}
 
       <CardHeader>
-        <CardTitle className="text-xl">
+        <CardTitle className='text-xl'>
           {dateToDisplay.toLocaleDateString('en-US', { weekday: 'long' })}
         </CardTitle>
         <CardDescription>
-          {dateToDisplay.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+          {dateToDisplay.toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })}
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="grid gap-4">
-        <div className="grid grid-cols-2 gap-4 text-center">
-          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-3">
-            <p className="text-sm font-medium text-muted-foreground">Work Done</p>
-            <p className={cn("text-lg font-bold font-mono", isWorkDoneSuccess && "text-green-500")}>
+      <CardContent className='grid gap-4'>
+        <div className='grid grid-cols-2 gap-4 text-center'>
+          <div className='flex flex-col items-center justify-center space-y-1 rounded-md border p-3'>
+            <p className='text-muted-foreground text-sm font-medium'>
+              Work Done
+            </p>
+            <p
+              className={cn(
+                'font-mono text-lg font-bold',
+                isWorkDoneSuccess && 'text-green-500',
+              )}
+            >
               {workDone || '00:00:00'}
             </p>
           </div>
-          <div className="flex flex-col items-center justify-center space-y-1 rounded-md border p-3">
-            <p className="text-sm font-medium text-muted-foreground">Break Taken</p>
-            <p className="text-lg font-bold font-mono">
+          <div className='flex flex-col items-center justify-center space-y-1 rounded-md border p-3'>
+            <p className='text-muted-foreground text-sm font-medium'>
+              Break Taken
+            </p>
+            <p className='font-mono text-lg font-bold'>
               {currentWorkData.breakTime || '00:00:00'}
             </p>
           </div>
         </div>
 
         {!breaklogMode && page !== 'history' && formattedWorkEndTime && (
-          <div className='flex items-center justify-between rounded-md bg-muted p-3 text-sm'>
-            <div className="text-center">
-              <p className='font-medium text-muted-foreground'>Work until</p>
+          <div className='bg-muted flex items-center justify-between rounded-md p-3 text-sm'>
+            <div className='text-center'>
+              <p className='text-muted-foreground font-medium'>Work until</p>
               <p className='font-mono font-semibold'>
-                {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', { hour12: true })}
+                {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', {
+                  hour12: true,
+                })}
               </p>
             </div>
-            <div className="text-center">
-              <p className='font-medium text-muted-foreground'>Work left</p>
-              <p className='font-mono font-semibold'>
-                {formattedWorkLeft}
-              </p>
+            <div className='text-center'>
+              <p className='text-muted-foreground font-medium'>Work left</p>
+              <p className='font-mono font-semibold'>{formattedWorkLeft}</p>
             </div>
           </div>
         )}
@@ -133,36 +152,42 @@ const LogsCard: React.FC<LogsCardProps> = ({
         {showAccordion ? (
           <>
             <Accordion
-              type="single"
+              type='single'
               collapsible
-              className="w-full"
+              className='w-full'
               value={accordionValue}
               onValueChange={setAccordionValue}
             >
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="text-sm rounded-md bg-muted px-4 py-2">Logs</AccordionTrigger>
+              <AccordionItem value='item-1'>
+                <AccordionTrigger className='bg-muted rounded-md px-4 py-2 text-sm'>
+                  Logs
+                </AccordionTrigger>
                 <AccordionContent>
                   {currentLogs.length > 0 ? (
                     <Table>
                       <TableHeader>
                         <TableRow>
                           <TableHead>Time</TableHead>
-                          <TableHead className="text-right">Activity</TableHead>
+                          <TableHead className='text-right'>Activity</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {[...currentLogs].reverse().map((log, index, array) => {
                           const log_time = new Date(log.log_time);
-                          const utcFormattedDate = log_time.toLocaleString('en-US', {
-                            hour: 'numeric',
-                            minute: 'numeric',
-                            hour12: true,
-                            month: 'short',
-                            day: 'numeric',
-                          });
+                          const utcFormattedDate = log_time.toLocaleString(
+                            'en-US',
+                            {
+                              hour: 'numeric',
+                              minute: 'numeric',
+                              hour12: true,
+                              month: 'short',
+                              day: 'numeric',
+                            },
+                          );
 
                           const logAbove = index > 0 ? array[index - 1] : null;
-                          const logBelow = index < array.length - 1 ? array[index + 1] : null;
+                          const logBelow =
+                            index < array.length - 1 ? array[index + 1] : null;
 
                           return (
                             <TableRow
@@ -172,25 +197,33 @@ const LogsCard: React.FC<LogsCardProps> = ({
                                   openTimeEditModal({
                                     log_id: log.id,
                                     log_dateTime: log.log_time,
-                                    log_dateTime_ahead: logAbove ? logAbove.log_time : null,
-                                    log_dateTime_behind: logBelow ? logBelow.log_time : null,
+                                    log_dateTime_ahead: logAbove
+                                      ? logAbove.log_time
+                                      : null,
+                                    log_dateTime_behind: logBelow
+                                      ? logBelow.log_time
+                                      : null,
                                   });
                                 }
                               }}
-                              className={cn(page !== 'history' && "cursor-pointer")}
+                              className={cn(
+                                page !== 'history' && 'cursor-pointer',
+                              )}
                             >
-                              <TableCell className="font-mono">
+                              <TableCell className='font-mono'>
                                 {utcFormattedDate}
                               </TableCell>
-                              <TableCell className="text-right">{log.log_status}</TableCell>
+                              <TableCell className='text-right'>
+                                {log.log_status}
+                              </TableCell>
                             </TableRow>
                           );
                         })}
                       </TableBody>
                     </Table>
                   ) : (
-                    <div className="flex items-center justify-center p-4 text-sm text-muted-foreground">
-                      <AlertCircle className="w-4 h-4 mr-2" />
+                    <div className='text-muted-foreground flex items-center justify-center p-4 text-sm'>
+                      <AlertCircle className='mr-2 h-4 w-4' />
                       No logs to display.
                     </div>
                   )}
@@ -198,20 +231,21 @@ const LogsCard: React.FC<LogsCardProps> = ({
               </AccordionItem>
             </Accordion>
             {accordionValue !== 'item-1' && currentLogs.length > 0 && (
-              <div className="mt-2 text-center text-sm text-muted-foreground">
-                <strong>Recent log:</strong> {currentLogs[currentLogs.length - 1].log_status}
+              <div className='text-muted-foreground mt-2 text-center text-sm'>
+                <strong>Recent log:</strong>{' '}
+                {currentLogs[currentLogs.length - 1].log_status}
               </div>
             )}
           </>
         ) : (
           <div>
-            <h3 className="text-sm font-medium mb-2">Logs</h3>
+            <h3 className='mb-2 text-sm font-medium'>Logs</h3>
             {currentLogs.length > 0 ? (
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Time</TableHead>
-                    <TableHead className="text-right">Activity</TableHead>
+                    <TableHead className='text-right'>Activity</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -226,7 +260,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
                     });
 
                     const logAbove = index > 0 ? array[index - 1] : null;
-                    const logBelow = index < array.length - 1 ? array[index + 1] : null;
+                    const logBelow =
+                      index < array.length - 1 ? array[index + 1] : null;
 
                     return (
                       <TableRow
@@ -236,25 +271,31 @@ const LogsCard: React.FC<LogsCardProps> = ({
                             openTimeEditModal({
                               log_id: log.id,
                               log_dateTime: log.log_time,
-                              log_dateTime_ahead: logAbove ? logAbove.log_time : null,
-                              log_dateTime_behind: logBelow ? logBelow.log_time : null,
+                              log_dateTime_ahead: logAbove
+                                ? logAbove.log_time
+                                : null,
+                              log_dateTime_behind: logBelow
+                                ? logBelow.log_time
+                                : null,
                             });
                           }
                         }}
-                        className={cn(page !== 'history' && "cursor-pointer")}
+                        className={cn(page !== 'history' && 'cursor-pointer')}
                       >
-                        <TableCell className="font-mono">
+                        <TableCell className='font-mono'>
                           {utcFormattedDate}
                         </TableCell>
-                        <TableCell className="text-right">{log.log_status}</TableCell>
+                        <TableCell className='text-right'>
+                          {log.log_status}
+                        </TableCell>
                       </TableRow>
                     );
                   })}
                 </TableBody>
               </Table>
             ) : (
-              <div className="flex items-center justify-center p-4 text-sm text-muted-foreground">
-                <AlertCircle className="w-4 h-4 mr-2" />
+              <div className='text-muted-foreground flex items-center justify-center p-4 text-sm'>
+                <AlertCircle className='mr-2 h-4 w-4' />
                 No logs to display.
               </div>
             )}
@@ -265,8 +306,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
         <CardFooter>
           <Button
             onClick={() => logEntry && logEntry('day end')}
-            variant="destructive"
-            className="w-full"
+            variant='destructive'
+            className='w-full'
             disabled={
               ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
               loading ||

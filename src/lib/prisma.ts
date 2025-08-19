@@ -1,8 +1,8 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 declare global {
   // allow global var across hot-reloads in dev
-  var prisma: PrismaClient | undefined
+  var prisma: PrismaClient | undefined;
 }
 
 export const prisma =
@@ -12,8 +12,8 @@ export const prisma =
       process.env.NEXT_ENV === 'development'
         ? ['query', 'warn', 'error']
         : ['error'],
-  })
+  });
 
 if (process.env.NEXT_ENV !== 'production') {
-  global.prisma = prisma
+  global.prisma = prisma;
 }

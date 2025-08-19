@@ -1,5 +1,5 @@
 'use client';
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import axios from 'axios';
 import { useStore } from '@/stores/store';
 import { handleError } from '@/components/common/CommonCodeBlocks';
@@ -12,7 +12,8 @@ import useOnScreen from '@/hooks/useOnScreen';
 import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
 
 const Index = () => {
-  const { breaklogMode, workData, loading, userData,initialPageLoadDone } = useStore();
+  const { breaklogMode, workData, loading, userData, initialPageLoadDone } =
+    useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== 'undefined';
@@ -55,8 +56,8 @@ const Index = () => {
   const [ref, isIntersecting] = useOnScreen(-80);
 
   return (
-    <div className="bg-background text-foreground min-h-screen flex items-center justify-center">
-      <div className="container mx-auto max-w-screen-lg p-4" ref={ref}>
+    <div className='bg-background text-foreground flex min-h-screen items-center justify-center'>
+      <div className='container mx-auto max-w-screen-lg p-4' ref={ref}>
         <LogsCard
           isWorkDoneSuccess={isWorkDoneSuccess}
           isIntersecting={isIntersecting}

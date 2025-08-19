@@ -7,11 +7,12 @@ const useTimeDifference = (startTime: Date | string | null): number => {
     if (startTime === null) return;
 
     // converts to date if its type is string
-    const start = typeof startTime === 'string' ? new Date(startTime) : startTime;
+    const start =
+      typeof startTime === 'string' ? new Date(startTime) : startTime;
 
     const calculateDiffInSeconds = () => {
       if (!(start instanceof Date) || isNaN(start.getTime())) {
-        console.error("startTime is not a valid Date object");
+        console.error('startTime is not a valid Date object');
         return;
       }
 
