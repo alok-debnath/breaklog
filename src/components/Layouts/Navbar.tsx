@@ -166,7 +166,7 @@ const Navbar = () => {
                     href='/dashboard/profile'
                     className='flex h-full w-full items-center gap-2'
                   >
-                    <UserCircle className='h-4 w-4' />
+                    <UserCircle className='mr-2 h-4 w-4' />
                     Profile
                   </Link>
                 </DropdownMenuItem>

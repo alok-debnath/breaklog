@@ -96,7 +96,7 @@ const SettingsModal = () => {
                 </DialogDescription>
               </div>
               <Select onValueChange={handleThemeChange} value={theme}>
-                <SelectTrigger className='bg-background/50 border-border/50 hover:bg-background/70 w-[180px] backdrop-blur-sm transition-colors'>
+                <SelectTrigger className='bg-background/50 border-border/50 hover:bg-background/70 min-w-[100px] backdrop-blur-sm transition-colors'>
                   <SelectValue placeholder='Select a theme' />
                 </SelectTrigger>
                 <SelectContent className='bg-popover/90 border-border/50 backdrop-blur-xl'>
