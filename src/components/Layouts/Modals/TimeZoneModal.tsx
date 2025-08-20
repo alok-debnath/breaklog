@@ -9,20 +9,13 @@ import {
 import { useStore } from '@/stores/store';
 import { Button } from '@/components/ui/button';
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from '@/components/ui/command';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -194,66 +187,35 @@ const TimeZoneModal: React.FC = () => {
 
           <div className='grid w-full items-center gap-2'>
             <Label
-              htmlFor='log_type'
+              htmlFor='timezone'
               className='text-foreground/90 font-medium'
             >
               Default Time Zone
             </Label>
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant='outline'
-                  role='combobox'
-                  aria-expanded={open}
-                  className='bg-background/50 border-border/50 hover:bg-background/70 h-12 w-full justify-between truncate rounded-xl backdrop-blur-sm transition-colors'
-                >
-                  {selectedTimeZone
-                    ? options.find(
-                        (option) => option.value === selectedTimeZone,
-                      )?.label
-                    : 'Select timezone...'}
-                  <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className='bg-popover/90 border-border/50 w-full p-0 backdrop-blur-xl'>
-                <Command>
-                  <CommandInput
-                    placeholder='Search timezone...'
-                    className='bg-transparent'
-                  />
-                  <CommandList>
-                    <CommandEmpty>No timezone found.</CommandEmpty>
-                    <CommandGroup>
-                      {options.map((option) => (
-                        <CommandItem
-                          key={option.value}
-                          value={option.value}
-                          onSelect={(currentValue) => {
-                            setSelectedTimeZone(
-                              currentValue === selectedTimeZone
-                                ? ''
-                                : currentValue,
-                            );
-                            setOpen(false);
-                          }}
-                          className='hover:bg-accent/50'
-                        >
-                          <Check
-                            className={cn(
-                              'mr-2 h-4 w-4',
-                              selectedTimeZone === option.value
-                                ? 'opacity-100'
-                                : 'opacity-0',
-                            )}
-                          />
-                          {option.label}
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <Select
+              value={selectedTimeZone}
+              onValueChange={(value) => setSelectedTimeZone(value)}
+            >
+              <SelectTrigger
+                id='timezone'
+                className='bg-background/50 border-border/50 hover:bg-background/70 h-12 w-full justify-between truncate rounded-xl backdrop-blur-sm transition-colors'
+              >
+                <SelectValue placeholder='Select timezone...' />
+              </SelectTrigger>
+              <SelectContent className='bg-popover/90 border-border/50 backdrop-blur-xl'>
+                <SelectGroup>
+                  {options.map((option) => (
+                    <SelectItem
+                      key={option.value}
+                      value={option.value}
+                      className='hover:bg-accent/50'
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
