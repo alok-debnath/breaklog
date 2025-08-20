@@ -5,6 +5,7 @@ import { useStore } from '@/stores/store';
 import axios from 'axios';
 import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { Clock, CheckCircle2, Undo2 } from "lucide-react"
 
 interface HalfDaySectionProps {
   isHalfDay: boolean;
@@ -71,48 +72,108 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
     <>
       <div
         className={cn(
-          'animate-zoom-in -pt-6 -mt-6 rounded-t-xl border px-5 py-4 shadow-sm',
+          'relative overflow-hidden rounded-t-2xl border border-b-0 p-6 shadow-sm backdrop-blur-sm transition-all duration-500',
           isHalfDayActive
-            ? 'bg-green-100 dark:bg-green-950'
-            : 'bg-amber-100 dark:bg-amber-950',
+            ? 'border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-100 dark:border-emerald-800/50 dark:from-emerald-950/50 dark:to-green-900/30'
+            : 'border-amber-200 bg-gradient-to-br from-amber-50 to-orange-100 dark:border-amber-800/50 dark:from-amber-950/50 dark:to-orange-900/30',
         )}
       >
-        <div className='flex items-center justify-between gap-3'>
-          <div className='text-start text-wrap'>
-            <p className='text-sm font-medium'>
-              {!isHalfDayActive
-                ? 'Should this log be marked as a half day?'
-                : 'This log has been marked as half day'}
-            </p>
+        {/* Background decoration */}
+        <div className='absolute inset-0 opacity-5'>
+          <div
+            className={cn(
+              'absolute -top-4 -right-4 h-24 w-24 rounded-full',
+              isHalfDayActive ? 'bg-emerald-400' : 'bg-amber-400',
+            )}
+          />
+          <div
+            className={cn(
+              'absolute -bottom-6 -left-6 h-32 w-32 rounded-full',
+              isHalfDayActive ? 'bg-green-400' : 'bg-orange-400',
+            )}
+          />
+        </div>
+
+        <div className='relative flex items-center justify-between gap-4'>
+          <div className='flex flex-1 items-start gap-3'>
+            <div
+              className={cn(
+                'flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300',
+                isHalfDayActive
+                  ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400'
+                  : 'bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400',
+              )}
+            >
+              {isHalfDayActive ? (
+                <CheckCircle2 className='h-5 w-5' />
+              ) : (
+                <Clock className='h-5 w-5' />
+              )}
+            </div>
+            <div className='min-w-0 flex-1'>
+              <h3
+                className={cn(
+                  'mb-1 text-base leading-tight font-semibold',
+                  isHalfDayActive
+                    ? 'text-emerald-800 dark:text-emerald-200'
+                    : 'text-amber-800 dark:text-amber-200',
+                )}
+              >
+                {!isHalfDayActive ? 'Half Day Option' : 'Half Day Marked'}
+              </h3>
+              <p
+                className={cn(
+                  'text-sm leading-relaxed',
+                  isHalfDayActive
+                    ? 'text-emerald-700 dark:text-emerald-300'
+                    : 'text-amber-700 dark:text-amber-300',
+                )}
+              >
+                {!isHalfDayActive
+                  ? 'Mark this log as a half day if you worked reduced hours'
+                  : 'This log has been successfully marked as a half day'}
+              </p>
+            </div>
           </div>
-          {!isHalfDayActive ? (
-            <Button
-              size='sm'
-              variant={isHalfDayActive ? 'outline' : 'default'}
-              onClick={() => simpleLogEntry('mark-as-half-day')}
-              disabled={loading}
-              className='font-medium'
-            >
-              Yes
-            </Button>
-          ) : (
-            <Button
-              size='sm'
-              variant='outline'
-              onClick={() => simpleLogEntry('undo-half-day')}
-              disabled={loading}
-              className={cn('font-medium')}
-            >
-              Undo
-            </Button>
-          )}
+
+          <div className='flex-shrink-0'>
+            {!isHalfDayActive ? (
+              <Button
+                size='sm'
+                onClick={() => simpleLogEntry('mark-as-half-day')}
+                disabled={loading}
+                className={cn(
+                  'h-9 rounded-full px-4 py-2 font-medium transition-all duration-200 hover:scale-105',
+                  'bg-amber-600 text-white shadow-md hover:bg-amber-700 hover:shadow-lg',
+                  'dark:bg-amber-500 dark:hover:bg-amber-600',
+                )}
+              >
+                Mark Half Day
+              </Button>
+            ) : (
+              <Button
+                size='sm'
+                variant='outline'
+                onClick={() => simpleLogEntry('undo-half-day')}
+                disabled={loading}
+                className={cn(
+                  'h-9 rounded-full px-4 py-2 font-medium transition-all duration-200 hover:scale-105',
+                  'border-emerald-300 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-50',
+                  'dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20',
+                )}
+              >
+                <Undo2 className='mr-1 h-3 w-3' />
+                Undo
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
       <style jsx>{`
         @keyframes zoom-in {
           from {
-            transform: scale(0.9);
+            transform: scale(0.95);
             opacity: 0;
           }
           to {
@@ -121,7 +182,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
           }
         }
         .animate-zoom-in {
-          animation: zoom-in 0.3s ease-in-out forwards;
+          animation: zoom-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
       `}</style>
     </>

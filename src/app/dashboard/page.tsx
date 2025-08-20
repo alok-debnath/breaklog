@@ -51,19 +51,21 @@ const Index = () => {
     workData.unformattedWorkDone >=
     (userData.daily_work_required || 0) * 3600000;
 
-  let isWorkDoneSuccess = isWorkDone && Boolean(userData.daily_work_required);
+  const isWorkDoneSuccess = isWorkDone && Boolean(userData.daily_work_required);
 
   const [ref, isIntersecting] = useOnScreen(-80);
 
   return (
-    <div className='bg-background text-foreground flex min-h-screen items-center justify-center'>
-      <div className='container mx-auto max-w-screen-lg p-4' ref={ref}>
-        <LogsCard
-          isWorkDoneSuccess={isWorkDoneSuccess}
-          isIntersecting={isIntersecting}
-          showAccordion={true}
-          logEntry={logEntry}
-        />
+    <div className='from-background via-background/95 to-muted/20 min-h-screen bg-gradient-to-br'>
+      <div className='flex min-h-screen items-center justify-center p-4'>
+        <div className='container mx-auto max-w-screen-lg' ref={ref}>
+          <LogsCard
+            isWorkDoneSuccess={isWorkDoneSuccess}
+            isIntersecting={isIntersecting}
+            showAccordion={true}
+            logEntry={logEntry}
+          />
+        </div>
       </div>
       <BottomNavbar logEntry={logEntry} isIntersecting={isIntersecting} />
       <TimeEditModal />
