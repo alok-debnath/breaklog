@@ -132,7 +132,7 @@ const HistoryPage = () => {
   }, [summary.numberOfDays]);
 
   return (
-    <div className='from-background via-background/95 to-background/90 flex min-h-screen flex-col items-center justify-center bg-gradient-to-br p-4'>
+    <div className='from-background via-background/95 to-background/90 flex flex-col items-center justify-center bg-gradient-to-br p-4'>
       <div className='border-border/50 from-card/80 to-card/40 relative w-full max-w-2xl overflow-hidden rounded-3xl border bg-gradient-to-br shadow-2xl backdrop-blur-xl'>
         <div className='from-primary/5 absolute inset-0 bg-gradient-to-br to-transparent' />
         <div className='relative p-8'>

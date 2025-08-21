@@ -57,18 +57,14 @@ const Index = () => {
   const [ref, isIntersecting] = useOnScreen(-100);
 
   return (
-    <div className='from-background via-background/95 to-muted/20 min-h-screen bg-gradient-to-br'>
-      <div className='flex min-h-screen items-center justify-center p-4'>
-        <div className='container mx-auto max-w-screen-lg'>
-          <LogsCard
-            isWorkDoneSuccess={isWorkDoneSuccess}
-            isIntersecting={isIntersecting}
-            showAccordion={true}
-            logEntry={logEntry}
-          />
-          <div ref={ref}></div>
-        </div>
-      </div>
+    <div className='from-background via-background/95 to-muted/20 bg-gradient-to-br'>
+      <LogsCard
+        isWorkDoneSuccess={isWorkDoneSuccess}
+        isIntersecting={isIntersecting}
+        showAccordion={true}
+        logEntry={logEntry}
+      />
+      <div ref={ref}></div>
       <BottomNavbar logEntry={logEntry} isIntersecting={isIntersecting} />
       <TimeEditModal />
     </div>

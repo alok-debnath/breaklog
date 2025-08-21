@@ -26,7 +26,7 @@ export default async function SpecificDayLog({
   const isWorkDoneSuccess = isWorkDone && userData.daily_work_required > 0;
 
   return (
-    <div className='bg-background text-foreground flex min-h-screen items-center justify-center'>
+    <div className='bg-background text-foreground flex items-center justify-center'>
       <div className='container mx-auto max-w-screen-lg p-4'>
         <LogsCard
           page='history'

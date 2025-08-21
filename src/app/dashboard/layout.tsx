@@ -16,7 +16,7 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <section className='flex flex-col'>
+    <section className='flex flex-col pt-20 pb-20'>
       <ThemeProvider
         attribute='class'
         defaultTheme='system'
@@ -31,7 +31,9 @@ export default async function DashboardLayout({
         <TimeZoneModal />
         <Loading />
         <Navbar />
-        <main className='flex-grow'>{children}</main>
+        <main className='flex-grow'>
+          <div className='flex items-center justify-center p-4'>{children}</div>
+        </main>
         <Toaster position='top-left' />
       </ThemeProvider>
     </section>
