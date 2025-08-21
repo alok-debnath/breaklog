@@ -26,16 +26,14 @@ export default async function SpecificDayLog({
   const isWorkDoneSuccess = isWorkDone && userData.daily_work_required > 0;
 
   return (
-    <div className='bg-background text-foreground flex items-center justify-center'>
-      <div className='container mx-auto max-w-screen-lg p-4'>
-        <LogsCard
-          page='history'
-          isWorkDoneSuccess={isWorkDoneSuccess}
-          logsServer={logs} // logs fetched from server
-          workDataServer={workData} // workData fetched from server
-          // errorMessage={errorMessage} // Uncomment if you want to handle error messages
-        />
-      </div>
+    <div className='from-background via-background/95 to-muted/20 bg-gradient-to-br'>
+      <LogsCard
+        page='history'
+        isWorkDoneSuccess={isWorkDoneSuccess}
+        logsServer={logs} // logs fetched from server
+        workDataServer={workData} // workData fetched from server
+        // errorMessage={errorMessage} // Uncomment if you want to handle error messages
+      />
     </div>
   );
 }
