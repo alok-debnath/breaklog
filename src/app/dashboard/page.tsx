@@ -10,6 +10,7 @@ import LogsCard from '@/components/Layouts/LogsCard';
 import BottomNavbar from '@/components/Layouts/BottomNavbar';
 import useOnScreen from '@/hooks/useOnScreen';
 import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
+import { useEffect } from 'react';
 
 const Index = () => {
   const { breaklogMode, workData, loading, userData, initialPageLoadDone } =
@@ -53,18 +54,19 @@ const Index = () => {
 
   const isWorkDoneSuccess = isWorkDone && Boolean(userData.daily_work_required);
 
-  const [ref, isIntersecting] = useOnScreen(-80);
+  const [ref, isIntersecting] = useOnScreen(-100);
 
   return (
     <div className='from-background via-background/95 to-muted/20 min-h-screen bg-gradient-to-br'>
       <div className='flex min-h-screen items-center justify-center p-4'>
-        <div className='container mx-auto max-w-screen-lg' ref={ref}>
+        <div className='container mx-auto max-w-screen-lg'>
           <LogsCard
             isWorkDoneSuccess={isWorkDoneSuccess}
             isIntersecting={isIntersecting}
             showAccordion={true}
             logEntry={logEntry}
           />
+          <div ref={ref}></div>
         </div>
       </div>
       <BottomNavbar logEntry={logEntry} isIntersecting={isIntersecting} />

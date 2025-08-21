@@ -238,7 +238,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                     )}
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className='pt-4'>
+                <AccordionContent className='pt-4 pb-0'>
                   {currentLogs.length > 0 ? (
                     <div className='border-border/50 from-background/50 to-muted/20 overflow-hidden rounded-2xl border bg-gradient-to-br'>
                       <Table>
@@ -420,7 +420,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
         )}
       </CardContent>
 
-      {page !== 'history' && isIntersecting && (
+      {page !== 'history' && (
         <CardFooter className='pt-2'>
           <Button
             onClick={() => logEntry && logEntry('day end')}
@@ -429,7 +429,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
             disabled={
               ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
               loading ||
-              breaklogMode
+              breaklogMode ||
+              !isIntersecting
             }
           >
             End Day

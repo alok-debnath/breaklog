@@ -117,73 +117,49 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                   className='hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200'
                 >
                   <Undo2 className='mr-2 h-4 w-4' />
-                  <span>Undo Last Log</span>
+                  <span>Undo Recent Log</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
             {/* Main Action Button(s) */}
-            {isIntersecting ? (
+            {!isIntersecting &&
+            !['exit', null, 'day end'].includes(workData.lastLogStatus) ? (
               <Button
-                onClick={() =>
-                  breaklogMode ? logEntry('break log') : logEntry('day log')
-                }
-                disabled={btnDisabled}
+                onClick={() => logEntry('day end')}
+                variant='destructive'
                 className={cn(
-                  'h-12 flex-1 rounded-2xl text-base font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl',
-                  'from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r',
+                  'h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl',
+                  'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700',
                 )}
+                disabled={
+                  ['exit', null, 'day end'].includes(workData.lastLogStatus) ||
+                  loading ||
+                  breaklogMode
+                }
               >
-                {isButtonContentLoading ? (
-                  icon
-                ) : (
-                  <div className='flex items-center gap-2'>
-                    {icon}
-                    <span>{text}</span>
-                  </div>
-                )}
+                End Day
               </Button>
             ) : (
-              <>
-                <Button
-                  onClick={() =>
-                    breaklogMode ? logEntry('break log') : logEntry('day log')
-                  }
-                  disabled={btnDisabled}
-                  className={cn(
-                    'h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl',
-                    'from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r',
-                  )}
-                >
-                  {isButtonContentLoading ? (
-                    icon
-                  ) : (
-                    <div className='flex items-center gap-2'>
-                      {icon}
-                      <span className='hidden sm:inline'>{text}</span>
-                    </div>
-                  )}
-                </Button>
-                <Button
-                  onClick={() => logEntry('day end')}
-                  variant='destructive'
-                  className={cn(
-                    'h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl',
-                    'bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700',
-                  )}
-                  disabled={
-                    ['exit', null, 'day end'].includes(
-                      workData.lastLogStatus,
-                    ) ||
-                    loading ||
-                    breaklogMode
-                  }
-                >
-                  <span className='hidden sm:inline'>End Day</span>
-                  <span className='sm:hidden'>End</span>
-                </Button>
-              </>
+              <></>
             )}
+            <Button
+              onClick={() =>
+                breaklogMode ? logEntry('break log') : logEntry('day log')
+              }
+              disabled={btnDisabled}
+              className={cn(
+                'h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl',
+                'from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r',
+              )}
+            >
+              <span
+                className={`${!isIntersecting && !['exit', null, 'day end'].includes(workData.lastLogStatus) ? 'hidden' : ''}`}
+              >
+                {icon}
+              </span>
+              {text}
+            </Button>
           </div>
         </div>
       </div>
