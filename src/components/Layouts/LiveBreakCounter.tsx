@@ -58,14 +58,8 @@ const LiveBreakCounter = () => {
         <div className='absolute -top-2 -right-2 h-8 w-8 rounded-full bg-white/20' />
 
         <div className='relative flex items-center gap-3'>
-          <div className='flex h-8 w-8 items-center justify-center rounded-full bg-white/20'>
-            <Coffee className='h-4 w-4 text-white' />
-          </div>
           <div>
-            <p className='text-xs font-medium tracking-wide text-white/80 uppercase'>
-              Current Break
-            </p>
-            <p className='font-mono text-lg font-bold text-white'>
+            <p className='font-mono text-sm font-bold text-white'>
               {formatTime(liveBreak.value)}
             </p>
           </div>
@@ -79,14 +73,11 @@ const LiveBreakCounter = () => {
           <div className='absolute -bottom-2 -left-2 h-6 w-6 rounded-full bg-white/20' />
 
           <div className='relative flex items-center gap-3'>
-            <div className='flex h-8 w-8 items-center justify-center rounded-full bg-white/20'>
-              <Clock className='h-4 w-4 text-white' />
-            </div>
             <div>
               <p className='text-xs font-medium tracking-wide text-white/80 uppercase'>
                 Total Break
               </p>
-              <p className='font-mono text-lg font-bold text-white'>
+              <p className='font-mono text-sm font-bold text-white'>
                 {formatTime(totalBreak.value, false)}
               </p>
             </div>

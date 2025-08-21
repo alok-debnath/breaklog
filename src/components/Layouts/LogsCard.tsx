@@ -112,7 +112,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
         <></>
       )}
 
-      <CardHeader className='pb-4'>
+      <CardHeader className=''>
         <div className='flex items-center gap-3'>
           <div className='from-primary/10 to-primary/5 border-primary/10 flex h-12 w-12 items-center justify-center rounded-2xl border bg-gradient-to-br'>
             <Calendar className='text-primary h-6 w-6' />
@@ -138,12 +138,14 @@ const LogsCard: React.FC<LogsCardProps> = ({
           <div className='group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg'>
             <div className='absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
             <div className='relative flex flex-col items-center space-y-2'>
-              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30'>
-                <Clock className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+              <div className='flex items-center space-x-2'>
+                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30'>
+                  <Clock className='h-4 w-4 text-emerald-600 dark:text-emerald-400' />
+                </div>
+                <p className='text-muted-foreground text-xs font-semibold tracking-wide uppercase'>
+                  Work Done
+                </p>
               </div>
-              <p className='text-muted-foreground text-xs font-semibold tracking-wide uppercase'>
-                Work Done
-              </p>
               <p
                 className={cn(
                   'font-mono text-lg font-bold transition-colors duration-300',
@@ -160,12 +162,14 @@ const LogsCard: React.FC<LogsCardProps> = ({
           <div className='group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg'>
             <div className='absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
             <div className='relative flex flex-col items-center space-y-2'>
-              <div className='flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30'>
-                <Coffee className='h-4 w-4 text-orange-600 dark:text-orange-400' />
+              <div className='flex items-center space-x-2'>
+                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30'>
+                  <Coffee className='h-4 w-4 text-orange-600 dark:text-orange-400' />
+                </div>
+                <p className='text-muted-foreground text-xs font-semibold tracking-wide uppercase'>
+                  Break Taken
+                </p>
               </div>
-              <p className='text-muted-foreground text-xs font-semibold tracking-wide uppercase'>
-                Break Taken
-              </p>
               <p className='text-foreground font-mono text-lg font-bold'>
                 {currentWorkData.breakTime || '00:00:00'}
               </p>
@@ -212,7 +216,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
             <Accordion
               type='single'
               collapsible
-              className='w-full'
+              className='from-primary/5 to-primary/10 border-primary/10 w-full rounded-xl border bg-gradient-to-r'
               value={accordionValue}
               onValueChange={setAccordionValue}
             >
@@ -222,7 +226,16 @@ const LogsCard: React.FC<LogsCardProps> = ({
                     <div className='bg-primary/10 flex h-6 w-6 items-center justify-center rounded-full'>
                       <Info className='text-primary h-3 w-3' />
                     </div>
-                    Activity Logs
+                    {accordionValue !== 'item-1' && currentLogs.length > 0 ? (
+                      <p className='text-muted-foreground text-sm'>
+                        <span className='text-foreground font-semibold'>
+                          Recent log:
+                        </span>{' '}
+                        {currentLogs[currentLogs.length - 1].log_status}
+                      </p>
+                    ) : (
+                      <>Activity Logs</>
+                    )}
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className='pt-4'>
@@ -313,14 +326,6 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-            {accordionValue !== 'item-1' && currentLogs.length > 0 && (
-              <div className='from-primary/5 to-primary/10 border-primary/10 rounded-xl border bg-gradient-to-r p-3 text-center'>
-                <p className='text-muted-foreground text-sm'>
-                  <span className='text-foreground font-semibold'>Recent:</span>{' '}
-                  {currentLogs[currentLogs.length - 1].log_status}
-                </p>
-              </div>
-            )}
           </>
         ) : (
           <div className='space-y-4'>

@@ -346,7 +346,7 @@ const HistoryPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {monthLogs.map((log, index) => {
+                    {[...monthLogs].reverse().map((log, index) => {
                       return (
                         <TableRow
                           key={index}
