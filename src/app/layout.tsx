@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "./providers";
+import { themeModes, themes } from "@/lib/constants";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,11 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
+          themes={themes
+						.map((theme) =>
+							themeModes.map((mode) => `${theme.value}-${mode}`)
+						)
+						.flat()}
         >
           {/* Providers is a Client Component, so it’s the only place
               you use SessionProvider / React Context */}

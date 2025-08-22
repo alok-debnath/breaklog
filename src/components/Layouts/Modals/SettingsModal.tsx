@@ -21,25 +21,14 @@ import {
   DrawerTitle as DrawerTitleComponent,
 } from "@/components/ui/drawer";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
+import { ThemeSelector } from "@/components/theme-selector";
 
 const SettingsForm = ({ className }: { className?: string }) => {
   const { breaklogMode, logs } = useStore();
-  const { theme, setTheme } = useTheme();
-
-  const handleThemeChange = (value: string) => {
-    setTheme(value);
-  };
 
   const handleToggleChange = (checked: boolean) => {
     useStore.setState({ breaklogMode: checked });
@@ -85,22 +74,7 @@ const SettingsForm = ({ className }: { className?: string }) => {
               Select a theme for the application.
             </DialogDescription>
           </div>
-          <Select onValueChange={handleThemeChange} value={theme}>
-            <SelectTrigger className="bg-background/50 border-border/50 hover:bg-background/70 min-w-[100px] backdrop-blur-sm transition-colors">
-              <SelectValue placeholder="Select a theme" />
-            </SelectTrigger>
-            <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
-              <SelectItem value="light" className="hover:bg-accent/50">
-                Light
-              </SelectItem>
-              <SelectItem value="dark" className="hover:bg-accent/50">
-                Dark
-              </SelectItem>
-              <SelectItem value="system" className="hover:bg-accent/50">
-                System
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <ThemeSelector />
         </div>
       </div>
     </div>
