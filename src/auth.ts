@@ -1,19 +1,19 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import GoogleProvider from 'next-auth/providers/google';
-import { PrismaAdapter } from '@auth/prisma-adapter';
-import { prisma } from '@/lib/prisma';
-import { compare } from 'bcryptjs';
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { compare } from "bcryptjs";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import { prisma } from "@/lib/prisma";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'jwt' },
+  session: { strategy: "jwt" },
   providers: [
     CredentialsProvider({
-      name: 'Email',
+      name: "Email",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -23,7 +23,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
         const account = await prisma.account.findFirst({
           where: {
-            provider: 'credentials',
+            provider: "credentials",
             providerAccountId: credentials.email,
           },
           include: { user: true },
@@ -42,7 +42,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (
           !credentials?.email ||
           !credentials?.password ||
-          typeof credentials.password !== 'string'
+          typeof credentials.password !== "string"
         ) {
           // throw new Error('Email and password are required');
           return null;
@@ -80,7 +80,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session;
     },
     async signIn({ user, account }) {
-      if (account?.provider === 'google') {
+      if (account?.provider === "google") {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email! },
         });
@@ -100,15 +100,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           await prisma.account.upsert({
             where: {
               provider_providerAccountId: {
-                provider: 'google',
+                provider: "google",
                 providerAccountId: account.providerAccountId,
               },
             },
             update: {},
             create: {
               userId: existingUser.id,
-              type: 'oauth',
-              provider: 'google',
+              type: "oauth",
+              provider: "google",
               providerAccountId: account.providerAccountId,
               access_token: account.access_token ?? undefined,
               refresh_token: account.refresh_token ?? undefined,

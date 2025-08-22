@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from "@/lib/prisma"
-import { fetchLogs } from '@/helpers/fetchLogs';
-import { getUserIdFromSession } from '@/lib/authHelpers';
+import { type NextRequest, NextResponse } from "next/server";
+import { fetchLogs } from "@/helpers/fetchLogs";
+import { getUserIdFromSession } from "@/lib/authHelpers";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,13 +25,13 @@ export async function POST(request: NextRequest) {
 
     if (!existingLog) {
       return NextResponse.json({
-        message: 'No matching log entry found',
+        message: "No matching log entry found",
         status: 404,
       });
     }
 
     // Update the specific log entry within the composite type array
-    const updatedLog = await prisma.log.update({
+    await prisma.log.update({
       where: { id: existingLog.id },
       data: {
         logEntries: {
@@ -47,12 +47,15 @@ export async function POST(request: NextRequest) {
     const fetchedLog = await fetchLogs(reqBody, userId);
 
     return NextResponse.json({
-      message: 'Log updated successfully',
+      message: "Log updated successfully",
       fetchedLog,
     });
   } catch (error: any) {
-    if (error.name === 'SessionError') {
-      return NextResponse.json({ SessionError: error.message }, { status: 400 });
+    if (error.name === "SessionError") {
+      return NextResponse.json(
+        { SessionError: error.message },
+        { status: 400 },
+      );
     } else {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

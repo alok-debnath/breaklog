@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -23,6 +23,15 @@
     },
     "types": ["next-auth"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/dashboard/page.tsx", "src/components/Layouts/Navbar.tsx", "src/components/Layouts/Modals/SettingsModal.tsx", "src/types"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/app/dashboard/page.tsx",
+    "src/components/Layouts/Navbar.tsx",
+    "src/components/Layouts/Modals/SettingsModal.tsx",
+    "src/types"
+  ],
   "exclude": ["node_modules"]
 }

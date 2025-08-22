@@ -2,4 +2,4 @@
 cmds = ["pnpm dlx prisma generate", "pnpm build"]
 
 [variables]
-NIXPACKS_NODE_VERSION = "23"
+NIXPACKS_NODE_VERSION = "24"

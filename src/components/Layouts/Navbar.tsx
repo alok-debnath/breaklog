@@ -1,173 +1,198 @@
-'use client';
-import { usePathname } from 'next/navigation';
-import { Toaster } from 'react-hot-toast';
-import { useStore } from '@/stores/store';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import SettingsModal from './Modals/SettingsModal';
-import { signOut } from 'next-auth/react';
+"use client";
+import {
+  ArrowLeft,
+  History,
+  LogOut,
+  Menu,
+  Settings,
+  User,
+  UserCircle,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { useStore } from "@/stores/store";
+import { ModeToggle } from "../mode-toggle";
 
 const Navbar = () => {
-  const { breaklogMode, userData } = useStore();
-  const isClient = typeof window !== 'undefined';
-
-  const [backPath, setBackPath] = useState('');
+  const { userData } = useStore();
   const pathname = usePathname();
+  const [backPath, setBackPath] = useState("");
+
   useEffect(() => {
-    if (pathname !== '/dashboard') {
-      const parts = pathname.split('/');
-      const modifiedPath = parts.slice(0, -1).join('/');
-      setBackPath(modifiedPath);
+    if (pathname !== "/dashboard") {
+      const parts = pathname.split("/");
+      setBackPath(parts.slice(0, -1).join("/"));
     } else {
-      setBackPath('');
+      setBackPath("");
     }
   }, [pathname]);
 
-  const logout = async (): Promise<void> => {
-    signOut({ callbackUrl: '/login' })
-  };
+  const logout = () => signOut({ callbackUrl: "/login" });
 
   return (
-    <>
-      <div className='fixed z-10 w-full bg-linear-to-b from-base-200 to-transparent px-3 pt-3'>
-        <div className='navbar mx-auto max-w-(--breakpoint-lg) rounded-box bg-base-100 shadow-lg'>
-          <div className='navbar-start'>
-            <div className='dropdown'>
-              <label tabIndex={0} className='btn btn-ghost'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='h-5 w-5'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
+    <div className="fixed top-6 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-[768px]">
+      <header className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-gradient-to-r shadow-2xl backdrop-blur-xl">
+        {/* Background decoration */}
+        <div className="from-primary/5 to-primary/5 absolute inset-0 bg-gradient-to-r via-transparent" />
+        <div className="bg-primary/10 absolute -top-2 -right-2 h-8 w-8 rounded-full" />
+        <div className="bg-primary/5 absolute -bottom-2 -left-2 h-6 w-6 rounded-full" />
+
+        <div className="relative flex h-16 items-center justify-between px-6">
+          {/* Mobile Menu & Back Button */}
+          <div className="flex items-center md:hidden">
+            {backPath ? (
+              <Link href={backPath} passHref>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
                 >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    d='M4 6h16M4 12h16M4 18h7'
-                  />
-                </svg>
-              </label>
-              <ul
-                tabIndex={0}
-                className='menu dropdown-content menu-lg z-1 mt-3 w-52 space-y-2 rounded-box bg-base-100 p-2 shadow-lg'
-              >
-                <li>
-                  <Link
-                    href='/dashboard'
-                    className={`${pathname === '/dashboard' ? 'menu-focus' : ''}`}
-                  >
-                    Homepage
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href='/dashboard/history'
-                    className={`${pathname === '/dashboard/history' ? 'menu-focus' : ''}`}
-                  >
-                    History
-                  </Link>
-                </li>
-                {/* <li><label>About</label></li> */}
-              </ul>
-            </div>
-            <div className='flex-1'>
-              <Link
-                href='/dashboard'
-                className='btn btn-ghost gap-1 text-xl normal-case'
-              >
-                {isClient && userData.username ? (
-                  breaklogMode ? (
-                    <span className='whitespace-nowrap'>BreakLog.v4</span>
-                  ) : (
-                    <span className='whitespace-nowrap'>DayLog.v4</span>
-                  )
-                ) : (
-                  <span className='animate-pulse'>
-                    <span className='flex space-x-4'>
-                      <span className='flex-1 space-y-9 py-1'>
-                        <span className='space-y-3'>
-                          <span className='grid grid-cols-6 gap-5'>
-                            <span className='col-span-4 h-2 rounded-sm bg-slate-700'></span>
-                            <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                )}
+                  <ArrowLeft className="h-5 w-5" />
+                </Button>
               </Link>
-            </div>
-          </div>
-          <div className='join navbar-end gap-1'>
-            {backPath !== '' && (
-              <Link
-                href={backPath}
-                className='btn join-item btn-neutral join-horizontal'
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth={2}
-                  stroke='currentColor'
-                  className='h-6 w-6'
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
+                  >
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="bottom"
+                  align="start"
+                  className="border-border/50 bg-card/95 rounded-2xl backdrop-blur-xl"
                 >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M15.75 19.5L8.25 12l7.5-7.5'
-                  />
-                </svg>
-              </Link>
+                  <DropdownMenuItem className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200">
+                    <Link
+                      href="/dashboard/history"
+                      className="flex h-full w-full items-center gap-2"
+                    >
+                      <History className="h-4 w-4" />
+                      History
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200">
+                    <Link
+                      href="/dashboard/profile"
+                      className="flex h-full w-full items-center gap-2"
+                    >
+                      <UserCircle className="h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
-            <div className='dropdown dropdown-end'>
-              <label tabIndex={0} className='btn join-item normal-case'>
-                {userData.username ? (
-                  <span className=''>{userData.username}</span>
-                ) : (
-                  <>
-                    <div className='flex animate-pulse space-x-4'>
-                      <div className='flex-1 space-y-9 py-1'>
-                        <div className='space-y-3'>
-                          <div className='grid grid-cols-3 gap-3'>
-                            <div className='col-span-3 h-2 rounded-sm bg-slate-700'></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </label>
-              <ul
-                tabIndex={0}
-                className='menu dropdown-content menu-lg z-1 mt-3 w-52 rounded-box bg-base-100 p-2 shadow-lg'
-              >
-                <li>
-                  <Link href='/dashboard/profile' className='justify-between'>
-                    Profile
-                    <span className='badge'>New</span>
-                  </Link>
-                </li>
-                <li onClick={() => window.setting_modal.showModal()}>
-                  <label>Settings</label>
-                </li>
-                <li>
-                  <label onClick={logout}>Logout</label>
-                </li>
-              </ul>
+          </div>
+
+          {/* Brand */}
+          <Link href="/dashboard" className="flex items-center gap-3 md:hidden">
+            <div className="from-primary/20 to-primary/10 border-primary/20 flex h-8 w-8 items-center justify-center rounded-xl border bg-gradient-to-br">
+              <div className="from-primary to-primary/80 h-4 w-4 rounded-md bg-gradient-to-br" />
             </div>
+            <span className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+              Breaklog
+            </span>
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden items-center gap-8 md:flex">
+            <Link href="/dashboard" className="flex items-center gap-3">
+              <div className="from-primary/20 to-primary/10 border-primary/20 flex h-10 w-10 items-center justify-center rounded-2xl border bg-gradient-to-br">
+                <div className="from-primary to-primary/80 h-5 w-5 rounded-lg bg-gradient-to-br" />
+              </div>
+              <span className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+                Breaklog
+              </span>
+            </Link>
+            <nav className="flex items-center gap-6">
+              <Link
+                href="/dashboard/history"
+                className={cn(
+                  "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
+                  pathname.startsWith("/dashboard/history")
+                    ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-gradient-to-r"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+                )}
+              >
+                <History className="h-4 w-4" />
+                History
+              </Link>
+            </nav>
+          </div>
+
+          {/* Right side */}
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
+                >
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="border-border/50 bg-card/95 min-w-[200px] rounded-2xl backdrop-blur-xl"
+              >
+                <div className="border-border/50 border-b px-3 py-2">
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Signed in as
+                  </p>
+                  <p className="text-foreground truncate text-sm font-semibold">
+                    {userData.username || "User"}
+                  </p>
+                </div>
+                <DropdownMenuItem className="hover:bg-accent/50 mt-1 cursor-pointer rounded-xl transition-colors duration-200">
+                  <Link
+                    href="/dashboard/profile"
+                    className="flex h-full w-full items-center gap-2"
+                  >
+                    <UserCircle className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    useStore.setState({ isSettingsModalOpen: true })
+                  }
+                  className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200"
+                >
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-border/50" />
+                <DropdownMenuItem
+                  onClick={logout}
+                  className="cursor-pointer rounded-xl text-red-500 transition-colors duration-200 hover:bg-red-500/10 hover:text-red-600"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
-        <Toaster
-          containerClassName='mt-18'
-          position='top-left'
-          reverseOrder={false}
-        />
-        <SettingsModal />
-      </div>
-    </>
+      </header>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 type UseOnScreenResult = [React.RefObject<HTMLDivElement | null>, boolean];
 

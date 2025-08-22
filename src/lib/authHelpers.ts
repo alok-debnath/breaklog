@@ -1,6 +1,7 @@
 // lib/authHelpers.ts
-import { auth } from "@/auth";
+
 import { cookies } from "next/headers";
+import { auth } from "@/auth";
 
 export const getUserIdFromSession = async () => {
   const session = await auth();

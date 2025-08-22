@@ -1,11 +1,44 @@
-'use client';
-import { useStore } from '@/stores/store';
-import React from 'react';
-
-import { LogsData } from '@/stores/store';
-import { WorkData } from '@/stores/store';
-import useWorkDataUpdater from '@/hooks/useWorkDataUpdater';
-import HalfDaySection from './HelperUI/HalfDaySection';
+"use client";
+import {
+  AlertCircle,
+  Calendar,
+  ChevronDown,
+  Clock,
+  Coffee,
+  Edit3,
+  Info,
+  Target,
+} from "lucide-react";
+import type React from "react";
+import { useState } from "react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import useWorkDataUpdater from "@/hooks/useWorkDataUpdater";
+import { cn } from "@/lib/utils";
+import type { LogsData, WorkData } from "@/stores/store";
+import { useStore } from "@/stores/store";
+import HalfDaySection from "./HelperUI/HalfDaySection";
 
 interface LogsCardProps {
   page?: string;
@@ -13,20 +46,29 @@ interface LogsCardProps {
   isIntersecting?: boolean;
   logsServer?: LogsData[];
   workDataServer?: WorkData;
+  showAccordion?: boolean;
+  logEntry?: (value: string) => void;
 }
+
 const LogsCard: React.FC<LogsCardProps> = ({
   page,
   isWorkDoneSuccess,
   isIntersecting,
   logsServer,
   workDataServer,
+  showAccordion,
+  logEntry,
 }) => {
-  let { breaklogMode, logs, workData, userData } = useStore();
-  const isClient = typeof window !== 'undefined';
+  const { breaklogMode, logs, workData, userData, loading } = useStore();
+  const [accordionValue, setAccordionValue] = useState<string | undefined>(
+    undefined,
+  );
 
   const openTimeEditModal = (value: any) => {
-    useStore.setState(() => ({ logEditStore: value }));
-    window.time_edit_modal.showModal();
+    useStore.setState(() => ({
+      logEditStore: value,
+      isTimeEditModalOpen: true,
+    }));
   };
 
   const currentLogs = logsServer ?? logs;
@@ -39,237 +81,286 @@ const LogsCard: React.FC<LogsCardProps> = ({
     formattedWorkEndTime,
   } = useWorkDataUpdater(currentWorkData);
 
-  // is the current log half day
   const isHalfDay =
     userData.daily_work_required &&
-    currentWorkData.lastLogStatus === 'day end' &&
+    currentWorkData.lastLogStatus === "day end" &&
     unformattedWorkDone >= (userData.daily_work_required * 3600000) / 2 &&
     unformattedWorkDone <= (userData.daily_work_required * 3600000 * 3) / 4;
 
-  return (
-    <>
-      <div
-        className={`card bg-base-100 mt-20 ${page === 'history' ? 'shadow-xl' : (isIntersecting || ['exit', null, 'day end'].includes(currentWorkData.lastLogStatus)) && 'rounded-b-none'} ${
-          page == 'history' &&
-          (isWorkDoneSuccess
-            ? 'border-success border-2'
-            : 'border-error border-2')
-        }`}
-      >
-        {isHalfDay === true && (
-          <HalfDaySection isHalfDay={currentWorkData.isHalfDay} />
-        )}
+  const dateToDisplay =
+    currentLogs.length > 0 && currentLogs[0].log_time
+      ? new Date(currentLogs[0].log_time)
+      : new Date();
 
-        <div className='card-body p-5 md:p-9'>
-          {page === 'history' && (
-            <div className='mb-2 block text-left font-semibold'>
+  return (
+    <Card
+      className={cn(
+        "mx-auto mt-4 w-full max-w-lg min-w-full overflow-hidden transition-all duration-300 sm:min-w-[400px]",
+        "from-card/95 to-card/80 border-0 bg-gradient-to-br shadow-xl backdrop-blur-sm",
+        page === "history" &&
+          (isWorkDoneSuccess
+            ? "ring-2 shadow-emerald-500/10 ring-emerald-500/20"
+            : "ring-2 shadow-red-500/10 ring-red-500/20"),
+      )}
+    >
+      {isHalfDay ? (
+        <HalfDaySection
+          isHalfDay={currentWorkData.isHalfDay}
+          defaultTimeZone={userData.default_time_zone}
+        />
+      ) : (
+        <></>
+      )}
+
+      <CardHeader className="">
+        <div className="flex items-center gap-3">
+          <div className="from-primary/10 to-primary/5 border-primary/10 flex h-12 w-12 items-center justify-center rounded-2xl border bg-gradient-to-br">
+            <Calendar className="text-primary h-6 w-6" />
+          </div>
+          <div>
+            <CardTitle className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+              {dateToDisplay.toLocaleDateString("en-US", { weekday: "long" })}
+            </CardTitle>
+            <CardDescription className="text-sm font-medium">
+              {dateToDisplay.toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {/* Work Stats Grid */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="relative flex flex-col items-center space-y-2">
+              <div className="flex items-center space-x-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
+                  <Clock className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                </div>
+                <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                  Work Done
+                </p>
+              </div>
               <p
-                className={`btn btn-outline no-animation btn-sm cursor-default ${
-                  isWorkDoneSuccess ? 'btn-success' : 'btn-error'
-                }`}
+                className={cn(
+                  "font-mono text-lg font-bold transition-colors duration-300",
+                  isWorkDoneSuccess
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-foreground",
+                )}
               >
-                Data from past
+                {workDone || "00:00:00"}
               </p>
             </div>
-          )}
-          <div className='mb-3'>
-            <div className='card bg-base-100 pb-5 text-left font-semibold'>
-              {page === 'history' || (isClient && userData.username) ? (
-                <span>
-                  {page === 'history' &&
-                  currentLogs.length > 0 &&
-                  currentLogs[0].log_time ? (
-                    <>
-                      {new Date(currentLogs[0].log_time).toLocaleDateString(
-                        'en-US',
-                        {
-                          day: 'numeric',
-                          month: 'long',
-                        },
-                      )}
-                      ,{' '}
-                      {new Date(currentLogs[0].log_time).toLocaleDateString(
-                        'en-US',
-                        {
-                          weekday: 'long',
-                        },
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {new Date().toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                      })}
-                      ,{' '}
-                      {new Date().toLocaleDateString('en-US', {
-                        weekday: 'long',
-                      })}
-                    </>
-                  )}
-                </span>
-              ) : (
-                <span className='animate-pulse'>
-                  <span className='flex space-x-4'>
-                    <span className='flex-1 space-y-9 py-1'>
-                      <span className='space-y-3'>
-                        <span className='grid grid-cols-6 gap-3'>
-                          <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
-                          <span className='col-span-1 h-2 rounded-sm bg-slate-700'></span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                </span>
-              )}
-            </div>
-            <div
-              className={`grid ${!breaklogMode || page === 'history' ? 'grid-cols-2' : 'grid-cols-1'} mt-3 gap-4 text-center`}
-            >
-              {!breaklogMode || page === 'history' ? (
-                <div
-                  className={`card bg-base-200 p-3 shadow-md ${
-                    page === 'history' && isWorkDoneSuccess
-                      ? 'bg-success/10 text-success'
-                      : page === 'history' && !isWorkDoneSuccess
-                        ? 'bg-error/10 text-error'
-                        : isWorkDoneSuccess && userData.username
-                          ? 'bg-success/10 text-success'
-                          : ''
-                  }`}
-                >
-                  {workDone ? (
-                    <>
-                      <p className='font-medium'>Work done</p>
-                      <p className='font-mono font-semibold'>{workDone}</p>
-                    </>
-                  ) : (
-                    <span className='animate-pulse'>
-                      <span className='flex space-x-4'>
-                        <span className='flex-1 space-y-9 py-1'>
-                          <span className='space-y-3'>
-                            <span className='grid grid-rows-2 gap-3'>
-                              <span className='col-span-3 h-2 rounded-sm bg-slate-700'></span>
-                              <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
-                            </span>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  )}
+          </div>
+
+          <div className="group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+            <div className="relative flex flex-col items-center space-y-2">
+              <div className="flex items-center space-x-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
+                  <Coffee className="h-4 w-4 text-orange-600 dark:text-orange-400" />
                 </div>
-              ) : null}
-              <div className='card bg-base-200 p-3 shadow-md'>
-                {currentWorkData.breakTime ? (
-                  <>
-                    <p className='font-medium'>Break taken</p>
-                    <p className='font-mono font-semibold'>
-                      {currentWorkData.breakTime}
-                    </p>
-                  </>
-                ) : (
-                  <span className='animate-pulse'>
-                    <span className='flex space-x-4'>
-                      <span className='flex-1 space-y-9 py-1'>
-                        <span className='space-y-3'>
-                          <span className='grid grid-rows-2 gap-3'>
-                            <span className='col-span-3 h-2 rounded-sm bg-slate-700'></span>
-                            <span className='col-span-2 h-2 rounded-sm bg-slate-700'></span>
-                          </span>
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                )}
+                <p className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                  Break Taken
+                </p>
               </div>
+              <p className="text-foreground font-mono text-lg font-bold">
+                {currentWorkData.breakTime || "00:00:00"}
+              </p>
             </div>
-            {!breaklogMode && page !== 'history' && formattedWorkEndTime ? (
-              <div className='card bg-base-200 mt-3 grid grid-cols-2 items-center py-2 shadow-md'>
-                <p className='text-sm font-medium'>Work until:</p>
-                <p className='font-mono text-sm font-semibold'>
-                  {new Date(formattedWorkEndTime).toLocaleTimeString('en-US', {
+          </div>
+        </div>
+
+        {/* Work Progress Info */}
+        {!breaklogMode && page !== "history" && formattedWorkEndTime && (
+          <div className="from-primary/5 to-primary/10 border-primary/10 relative overflow-hidden rounded-2xl border bg-gradient-to-r p-4">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+            <div className="relative grid grid-cols-2 gap-4 text-center">
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-2">
+                  <Target className="text-primary h-4 w-4" />
+                  <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+                    Work Until
+                  </p>
+                </div>
+                <p className="text-foreground font-mono text-sm font-bold">
+                  {new Date(formattedWorkEndTime).toLocaleTimeString("en-US", {
                     hour12: true,
                   })}
                 </p>
-                <p className='text-sm font-medium'>Work left:</p>
-                <p className='font-mono text-sm font-semibold'>
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center justify-center gap-2">
+                  <Clock className="text-primary h-4 w-4" />
+                  <p className="text-primary text-xs font-semibold tracking-wide uppercase">
+                    Work Left
+                  </p>
+                </div>
+                <p className="text-foreground font-mono text-sm font-bold">
                   {formattedWorkLeft}
                 </p>
               </div>
-            ) : null}
+            </div>
           </div>
-          <div className='collapse-arrow border-base-300 collapse border'>
-            <input type='checkbox' className='peer' />
-            <div className='collapse-title ps-5 text-left font-medium peer-checked:hidden'>
-              show logs
+        )}
+
+        {/* Logs Section */}
+        {showAccordion ? (
+          <>
+            <Accordion
+              type="single"
+              collapsible
+              className="from-primary/5 to-primary/10 border-primary/10 w-full rounded-xl border bg-gradient-to-r"
+              value={accordionValue}
+              onValueChange={setAccordionValue}
+            >
+              <AccordionItem value="item-1" className="border-0">
+                <AccordionTrigger className="group from-muted/50 to-muted/30 hover:from-muted/70 hover:to-muted/50 rounded-2xl bg-gradient-to-r px-4 py-3 text-sm font-semibold transition-all duration-300 hover:no-underline">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-primary/10 flex h-6 w-6 items-center justify-center rounded-full">
+                      <Info className="text-primary h-3 w-3" />
+                    </div>
+                    {accordionValue !== "item-1" && currentLogs.length > 0 ? (
+                      <p className="text-muted-foreground text-sm">
+                        <span className="text-foreground font-semibold">
+                          Recent log:
+                        </span>{" "}
+                        {currentLogs[currentLogs.length - 1].log_status}
+                      </p>
+                    ) : (
+                      <>Activity Logs</>
+                    )}
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pt-4 pb-0">
+                  {currentLogs.length > 0 ? (
+                    <div className="border-border/50 from-background/50 to-muted/20 overflow-hidden rounded-2xl border bg-gradient-to-br">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="border-border/50 hover:bg-muted/30">
+                            <TableHead className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                              Time
+                            </TableHead>
+                            <TableHead className="text-muted-foreground text-right text-xs font-semibold tracking-wide uppercase">
+                              Activity
+                            </TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {[...currentLogs]
+                            .reverse()
+                            .map((log, index, array) => {
+                              const log_time = new Date(log.log_time);
+                              const utcFormattedDate = log_time.toLocaleString(
+                                "en-US",
+                                {
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                  hour12: true,
+                                  month: "short",
+                                  day: "numeric",
+                                },
+                              );
+
+                              const logAbove =
+                                index > 0 ? array[index - 1] : null;
+                              const logBelow =
+                                index < array.length - 1
+                                  ? array[index + 1]
+                                  : null;
+
+                              return (
+                                <TableRow
+                                  key={log.id}
+                                  onClick={() => {
+                                    if (page !== "history") {
+                                      openTimeEditModal({
+                                        log_id: log.id,
+                                        log_dateTime: log.log_time,
+                                        log_dateTime_ahead: logAbove
+                                          ? logAbove.log_time
+                                          : null,
+                                        log_dateTime_behind: logBelow
+                                          ? logBelow.log_time
+                                          : null,
+                                      });
+                                    }
+                                  }}
+                                  className={cn(
+                                    "border-border/30 transition-all duration-200",
+                                    page !== "history" &&
+                                      "hover:bg-muted/50 group cursor-pointer",
+                                  )}
+                                >
+                                  <TableCell className="font-mono text-sm font-medium">
+                                    {utcFormattedDate}
+                                  </TableCell>
+                                  <TableCell className="text-right">
+                                    <div className="flex items-center justify-end gap-2">
+                                      <span className="text-sm font-medium">
+                                        {log.log_status}
+                                      </span>
+                                      {page !== "history" && (
+                                        <Edit3 className="text-muted-foreground h-3 w-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                                      )}
+                                    </div>
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  ) : (
+                    <div className="text-muted-foreground from-muted/20 to-muted/10 border-muted-foreground/20 flex items-center justify-center rounded-2xl border border-dashed bg-gradient-to-br p-8 text-sm">
+                      <AlertCircle className="mr-2 h-4 w-4" />
+                      No logs to display.
+                    </div>
+                  )}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          </>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="bg-primary/10 flex h-6 w-6 items-center justify-center rounded-full">
+                <Info className="text-primary h-3 w-3" />
+              </div>
+              <h3 className="text-foreground text-sm font-semibold">
+                Activity Logs
+              </h3>
             </div>
-            <div className='collapse-title bg-base-300 hidden ps-5 text-left font-medium peer-checked:block'>
-              hide logs
-            </div>
-            {page !== 'history' && (
-              <p className='bg-base-300 py-0.5 text-center text-sm font-medium peer-checked:hidden'>
-                {currentLogs.length > 0 ? (
-                  <>
-                    Recent log:{' '}
-                    <span className='text-success font-bold'>
-                      {currentWorkData.lastLogStatus}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className='text-error'>No logs available</span>
-                  </>
-                )}
-              </p>
-            )}
-            <div className='collapse-content px-2'>
-              <table className='table text-center'>
-                <thead>
-                  <tr>
-                    <th className='text-center'>
-                      <span
-                        className={`${page !== 'history' && 'flex items-center'}`}
-                      >
-                        {page !== 'history' && (
-                          <span
-                            className='tooltip tooltip-right cursor-pointer'
-                            data-tip='Click on any of the time to edit'
-                          >
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              fill='none'
-                              viewBox='0 0 24 24'
-                              strokeWidth={1.5}
-                              stroke='currentColor'
-                              className='text-warning me-1 h-6 w-6'
-                            >
-                              <path
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                                d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                              />
-                            </svg>
-                          </span>
-                        )}
+            {currentLogs.length > 0 ? (
+              <div className="border-border/50 from-background/50 to-muted/20 overflow-hidden rounded-2xl border bg-gradient-to-br">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-border/50 hover:bg-muted/30">
+                      <TableHead className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
                         Time
-                      </span>
-                    </th>
-                    <th>Activity</th>
-                  </tr>
-                </thead>
-                <tbody className='text-left'>
-                  {currentLogs &&
-                    [...currentLogs].reverse().map((log, index, array) => {
+                      </TableHead>
+                      <TableHead className="text-muted-foreground text-right text-xs font-semibold tracking-wide uppercase">
+                        Activity
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {[...currentLogs].reverse().map((log, index, array) => {
                       const log_time = new Date(log.log_time);
                       const utcFormattedDate = log_time.toLocaleString(
-                        'en-US',
+                        "en-US",
                         {
-                          timeZone: 'Asia/Kolkata', //setting this to static for now (temporarily)
-                          hour: 'numeric',
-                          minute: 'numeric',
+                          hour: "numeric",
+                          minute: "numeric",
                           hour12: true,
-                          month: 'short',
-                          day: 'numeric',
+                          month: "short",
+                          day: "numeric",
                         },
                       );
 
@@ -278,39 +369,75 @@ const LogsCard: React.FC<LogsCardProps> = ({
                         index < array.length - 1 ? array[index + 1] : null;
 
                       return (
-                        <tr key={log.id}>
-                          <td className='ps-0'>
-                            <button
-                              className='btn btn-ghost btn-sm'
-                              onClick={() => {
-                                if (page !== 'history') {
-                                  openTimeEditModal({
-                                    log_id: log.id,
-                                    log_dateTime: log.log_time,
-                                    log_dateTime_ahead: logAbove
-                                      ? logAbove.log_time
-                                      : '',
-                                    log_dateTime_behind: logBelow
-                                      ? logBelow.log_time
-                                      : '',
-                                  });
-                                }
-                              }}
-                            >
-                              {utcFormattedDate}
-                            </button>
-                          </td>
-                          <td className='text-center'>{log.log_status}</td>
-                        </tr>
+                        <TableRow
+                          key={log.id}
+                          onClick={() => {
+                            if (page !== "history") {
+                              openTimeEditModal({
+                                log_id: log.id,
+                                log_dateTime: log.log_time,
+                                log_dateTime_ahead: logAbove
+                                  ? logAbove.log_time
+                                  : null,
+                                log_dateTime_behind: logBelow
+                                  ? logBelow.log_time
+                                  : null,
+                              });
+                            }
+                          }}
+                          className={cn(
+                            "border-border/30 transition-all duration-200",
+                            page !== "history" &&
+                              "hover:bg-muted/50 group cursor-pointer",
+                          )}
+                        >
+                          <TableCell className="font-mono text-sm font-medium">
+                            {utcFormattedDate}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <span className="text-sm font-medium">
+                                {log.log_status}
+                              </span>
+                              {page !== "history" && (
+                                <Edit3 className="text-muted-foreground h-3 w-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                              )}
+                            </div>
+                          </TableCell>
+                        </TableRow>
                       );
                     })}
-                </tbody>
-              </table>
-            </div>
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="text-muted-foreground from-muted/20 to-muted/10 border-muted-foreground/20 flex items-center justify-center rounded-2xl border border-dashed bg-gradient-to-br p-8 text-sm">
+                <AlertCircle className="mr-2 h-4 w-4" />
+                No logs to display.
+              </div>
+            )}
           </div>
-        </div>
-      </div>
-    </>
+        )}
+      </CardContent>
+
+      {page !== "history" && (
+        <CardFooter className="pt-2">
+          <Button
+            onClick={() => logEntry && logEntry("day end")}
+            variant="destructive"
+            className="h-12 w-full rounded-2xl bg-gradient-to-r from-red-500 to-red-600 text-base font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:from-red-600 hover:to-red-700 hover:shadow-xl"
+            disabled={
+              ["exit", null, "day end"].includes(workData.lastLogStatus) ||
+              loading ||
+              breaklogMode ||
+              !isIntersecting
+            }
+          >
+            End Day
+          </Button>
+        </CardFooter>
+      )}
+    </Card>
   );
 };
 

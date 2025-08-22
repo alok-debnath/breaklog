@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from "@/lib/prisma"
-import { fetchLogs } from '@/helpers/fetchLogs';
-import getStartAndEndOfDay from '@/helpers/getStartAndEndOfDay';
-import { DateTime } from 'luxon';
-import { getUserIdFromSession } from '@/lib/authHelpers';
+import { DateTime } from "luxon";
+import { type NextRequest, NextResponse } from "next/server";
+import { fetchLogs } from "@/helpers/fetchLogs";
+import getStartAndEndOfDay from "@/helpers/getStartAndEndOfDay";
+import { getUserIdFromSession } from "@/lib/authHelpers";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,11 +21,11 @@ export async function POST(request: NextRequest) {
     let [startOfDay, endOfDay, timeZone] = getStartAndEndOfDay(user);
 
     if (date) {
-      const parts = date.split('-');
+      const parts = date.split("-");
       const correctedDate = `20${parts[2]}-${parts[1]}-${parts[0]}`;
       const dateObj = DateTime.fromISO(correctedDate, { zone: timeZone });
-      startOfDay = dateObj.startOf('day').toJSDate();
-      endOfDay = dateObj.endOf('day').toJSDate();
+      startOfDay = dateObj.startOf("day").toJSDate();
+      endOfDay = dateObj.endOf("day").toJSDate();
     }
 
     const logDoc = await prisma.log.findFirst({
@@ -38,20 +38,20 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (logtype === 'mark-as-half-day') {
+    if (logtype === "mark-as-half-day") {
       if (logDoc && logDoc.logEntries.length > 1) {
         const lastEntry = logDoc.logEntries[logDoc.logEntries.length - 1];
-        if (lastEntry.log_status === 'day end') {
+        if (lastEntry.log_status === "day end") {
           await prisma.log.update({
             where: { id: logDoc.id },
             data: { isHalfDay: true },
           });
         }
       }
-    } else if (logtype === 'undo-half-day') {
+    } else if (logtype === "undo-half-day") {
       if (logDoc && logDoc.logEntries.length > 1) {
         const lastEntry = logDoc.logEntries[logDoc.logEntries.length - 1];
-        if (lastEntry.log_status === 'day end') {
+        if (lastEntry.log_status === "day end") {
           await prisma.log.update({
             where: { id: logDoc.id },
             data: { isHalfDay: false },
@@ -63,12 +63,15 @@ export async function POST(request: NextRequest) {
     const fetchedLog = await fetchLogs(reqBody, userId);
 
     return NextResponse.json({
-      message: 'Log submitted successfully',
+      message: "Log submitted successfully",
       fetchedLog,
     });
   } catch (error: any) {
-    if (error.name === 'SessionError') {
-      return NextResponse.json({ SessionError: error.message }, { status: 400 });
+    if (error.name === "SessionError") {
+      return NextResponse.json(
+        { SessionError: error.message },
+        { status: 400 },
+      );
     } else {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

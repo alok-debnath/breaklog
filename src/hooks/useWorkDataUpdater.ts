@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import { WorkData } from '../stores/store';
+import { useCallback, useEffect, useState } from "react";
+import type { WorkData } from "../stores/store";
 
 interface UpdatedWorkData {
   workDone: string;
@@ -11,11 +11,11 @@ interface UpdatedWorkData {
 const calculateTimeData = (seconds: number): string => {
   const hours = Math.floor(seconds / 3600)
     .toString()
-    .padStart(2, '0');
+    .padStart(2, "0");
   const minutes = Math.floor((seconds % 3600) / 60)
     .toString()
-    .padStart(2, '0');
-  const secs = (seconds % 60).toString().padStart(2, '0');
+    .padStart(2, "0");
+  const secs = (seconds % 60).toString().padStart(2, "0");
   return `${hours}:${minutes}:${secs}`;
 };
 
@@ -30,8 +30,8 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
   let updatedFormattedWorkEndTime = workData.formattedWorkEndTime;
 
   if (
-    workData.lastLogStatus === 'day start' ||
-    workData.lastLogStatus === 'enter'
+    workData.lastLogStatus === "day start" ||
+    workData.lastLogStatus === "enter"
   ) {
     const totalWorkDoneSeconds =
       Math.floor(updatedUnformattedWorkDone / 1000) + timeDifferenceInSeconds;
@@ -39,7 +39,7 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
     updatedWorkDone = calculateTimeData(totalWorkDoneSeconds);
 
     const [leftHours, leftMinutes, leftSeconds] = workData.formattedWorkLeft
-      .split(':')
+      .split(":")
       .map(Number);
     const totalLeftSeconds =
       leftHours * 3600 +
@@ -48,7 +48,7 @@ const calculateUpdatedWorkData = (workData: WorkData): UpdatedWorkData => {
       timeDifferenceInSeconds;
     updatedFormattedWorkLeft = calculateTimeData(Math.max(totalLeftSeconds, 0));
   } else if (
-    workData.lastLogStatus === 'exit' &&
+    workData.lastLogStatus === "exit" &&
     workData.formattedWorkEndTime
   ) {
     const endTimeDate = new Date(workData.formattedWorkEndTime);

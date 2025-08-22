@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from "@/lib/prisma"
-import { getUserIdFromSession } from '@/lib/authHelpers';
+import { type NextRequest, NextResponse } from "next/server";
+import { getUserIdFromSession } from "@/lib/authHelpers";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     // Organize logs by date from logEntries
     logs.forEach((log) => {
       log.logEntries.forEach((entry) => {
-        const date = entry.log_time.toISOString().split('T')[0];
+        const date = entry.log_time.toISOString().split("T")[0];
 
         if (!logsByDate[date]) {
           logsByDate[date] = [];
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
 
     // Sort logEntries by log_time for each date
     for (const date in logsByDate) {
-      if (logsByDate.hasOwnProperty(date)) {
+      if (Object.hasOwn(logsByDate, date)) {
         logsByDate[date].sort(
           (a, b) =>
             new Date(a.log_time).getTime() - new Date(b.log_time).getTime(),
@@ -69,12 +69,12 @@ export async function POST(request: NextRequest) {
     // Format time helper function
     const formatTime = (milliseconds: number) => {
       const totalSeconds = Math.floor(milliseconds / 1000);
-      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
       const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
         2,
-        '0',
+        "0",
       );
-      const seconds = String(totalSeconds % 60).padStart(2, '0');
+      const seconds = String(totalSeconds % 60).padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
     };
 
@@ -83,14 +83,14 @@ export async function POST(request: NextRequest) {
 
     // Process logs to calculate work and break time
     for (const date in logsByDate) {
-      if (logsByDate.hasOwnProperty(date)) {
+      if (Object.hasOwn(logsByDate, date)) {
         const logEntries = logsByDate[date];
 
         const startsWithDayStart =
-          logEntries.length > 0 && logEntries[0].log_status === 'day start';
+          logEntries.length > 0 && logEntries[0].log_status === "day start";
         const endsWithDayEnd =
           logEntries.length > 0 &&
-          logEntries[logEntries.length - 1].log_status === 'day end';
+          logEntries[logEntries.length - 1].log_status === "day end";
 
         if (startsWithDayStart && endsWithDayEnd) {
           // Initialize variables for each date
@@ -103,20 +103,20 @@ export async function POST(request: NextRequest) {
 
           // Process log entries for this date
           for (const log of logEntries) {
-            if (log.log_status === 'day start') {
+            if (log.log_status === "day start") {
               isDayStarted = true;
               dayStart = new Date(log.log_time).getTime();
-            } else if (log.log_status === 'day end') {
+            } else if (log.log_status === "day end") {
               isDayEnded = true;
               dayEnd = new Date(log.log_time).getTime();
             }
 
             // Calculate break time
-            if (log.log_status === 'exit') {
+            if (log.log_status === "exit") {
               const logExit = new Date(log.log_time).getTime();
               const nextLog = logEntries.find(
                 (entry) =>
-                  entry.log_time > log.log_time && entry.log_status === 'enter',
+                  entry.log_time > log.log_time && entry.log_status === "enter",
               );
               if (nextLog) {
                 const logEnter = new Date(nextLog.log_time).getTime();
@@ -134,7 +134,7 @@ export async function POST(request: NextRequest) {
               workDone = currDay.getTime() - dayStart - breakTime;
 
               const lastLog = logEntries[logEntries.length - 1];
-              if (lastLog.log_status === 'exit') {
+              if (lastLog.log_status === "exit") {
                 const exitTime =
                   currDay.getTime() - new Date(lastLog.log_time).getTime();
                 workDone = workDone - exitTime;
@@ -146,8 +146,8 @@ export async function POST(request: NextRequest) {
             const formattedWorkDone = formatTime(workDone);
 
             const parsedDate = new Date(date);
-            const day = String(parsedDate.getDate()).padStart(2, '0');
-            const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
+            const day = String(parsedDate.getDate()).padStart(2, "0");
+            const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
             const year = parsedDate.getFullYear().toString().slice(-2);
             const formattedDate = `${day}-${month}-${year}`;
 
@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
             const isHalfDay = logs.some(
               (log) =>
                 log.isHalfDay &&
-                log.createdAt.toISOString().split('T')[0] === date,
+                log.createdAt.toISOString().split("T")[0] === date,
             );
 
             if (isHalfDay) {
@@ -181,7 +181,7 @@ export async function POST(request: NextRequest) {
       // Initialize variables to store the totals and count.
       let totalBreakTime = 0;
       let totalWorkDone = 0;
-      let numberOfDays = dateMetrics.length;
+      const numberOfDays = dateMetrics.length;
 
       // Iterate through the data to calculate totals.
       for (const metrics of dateMetrics) {
@@ -210,14 +210,17 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({
-      message: 'Logs fetched successfully',
-      status: dateMetrics.length === 0 ? 'No fullday logs found' : 200,
-      data: dateMetrics.length === 0 ? '' : dateMetrics,
+      message: "Logs fetched successfully",
+      status: dateMetrics.length === 0 ? "No fullday logs found" : 200,
+      data: dateMetrics.length === 0 ? "" : dateMetrics,
       summary: summary,
     });
   } catch (error: any) {
-    if (error.name === 'SessionError') {
-      return NextResponse.json({ SessionError: error.message }, { status: 400 });
+    if (error.name === "SessionError") {
+      return NextResponse.json(
+        { SessionError: error.message },
+        { status: 400 },
+      );
     } else {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }

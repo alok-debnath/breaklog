@@ -1,10 +1,28 @@
-import { useStore } from '@/stores/store';
-import LiveBreakCounter from '@/components/Layouts/LiveBreakCounter';
-import Button from '../UI/Button';
-import { BriefcaseBusiness, Coffee, LogIn, LogOut, Plus } from 'lucide-react';
+"use client";
+import {
+  BriefcaseBusiness,
+  Coffee,
+  Loader2,
+  LogIn,
+  LogOut,
+  Menu,
+  MoreHorizontal,
+  Plus,
+  Undo2,
+} from "lucide-react";
+import LiveBreakCounter from "@/components/Layouts/LiveBreakCounter";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import { useStore } from "@/stores/store";
 
 interface BottomNavbarProps {
-  logEntry: (value: string) => void; // logEntry is a function that accepts a string
+  logEntry: (value: string) => void;
   isIntersecting: boolean;
 }
 
@@ -14,148 +32,134 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
 }) => {
   const { breaklogMode, workData, loading } = useStore();
 
-  const btnState = ['day end'].includes(workData.lastLogStatus) || loading;
-  const showButtonLogo =
-    isIntersecting ||
-    ['exit', null, 'day end'].includes(workData.lastLogStatus);
+  const btnDisabled = ["day end"].includes(workData.lastLogStatus) || loading;
+
+  const getButtonContent = () => {
+    if (loading && !isIntersecting) {
+      return {
+        text: null,
+        icon: <Loader2 className="h-5 w-5 animate-spin" />,
+        isLoading: true,
+      };
+    }
+
+    const status = workData.lastLogStatus;
+    if (status === null && !breaklogMode)
+      return {
+        text: "Start Day",
+        icon: <BriefcaseBusiness className="h-5 w-5" />,
+        isLoading: false,
+      };
+    if (status === null && breaklogMode)
+      return {
+        text: "Take Break",
+        icon: <Coffee className="h-5 w-5" />,
+        isLoading: false,
+      };
+    if (status === "day start")
+      return {
+        text: "Take Break",
+        icon: <Coffee className="h-5 w-5" />,
+        isLoading: false,
+      };
+    if (status === "exit")
+      return {
+        text: "End Break",
+        icon: <LogIn className="h-5 w-5" />,
+        isLoading: false,
+      };
+    if (status === "enter")
+      return {
+        text: "Take Break",
+        icon: <Coffee className="h-5 w-5" />,
+        isLoading: false,
+      };
+    return {
+      text: "Add Log",
+      icon: <Plus className="h-5 w-5" />,
+      isLoading: false,
+    };
+  };
+
+  const { text, icon, isLoading: isButtonContentLoading } = getButtonContent();
+
   return (
     <>
       <LiveBreakCounter />
-      <div className='to-base-200 fixed bottom-0 left-1/2 z-30 h-20 w-full -translate-x-1/2 bg-linear-to-b from-transparent'></div>
-      <div className='fixed bottom-3 left-1/2 z-50 h-16 w-full max-w-lg -translate-x-1/2'>
-        <div className='bg-base-100 mx-3 rounded-full shadow-lg'>
-          <div
-            className={`mx-auto grid h-full max-w-lg items-center justify-center space-x-2 p-2 ${isIntersecting || ['exit', null, 'day end'].includes(workData.lastLogStatus) ? 'grid-cols-3' : 'grid-cols-5'}`}
-          >
-            <div className='dropdown dropdown-top m-0 inline-flex w-full items-center p-0'>
-              <label
-                tabIndex={0}
-                className='group btn inline-flex flex-1 flex-col items-center justify-center rounded-full px-5'
-              >
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth={1.5}
-                  stroke='currentColor'
-                  className='h-6 w-6'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
-                  />
-                </svg>
-              </label>
-              <ul
-                tabIndex={0}
-                className='menu dropdown-content rounded-box bg-base-100 mb-2 shadow-sm'
-              >
-                {/* <li>
-                  <span
-                    className='items-center justify-center'
-                    onClick={() => fetchLogFunction()}
-                  >
-                    <p>Refresh</p>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth={1.5}
-                      stroke='currentColor'
-                      className='h-6 w-6'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99'
-                      />
-                    </svg>
-                  </span>
-                </li> */}
-                <li>
-                  <span
-                    className='items-center justify-center'
-                    onClick={() => logEntry('undo log')}
-                  >
-                    <p>Undo</p>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      viewBox='0 0 24 24'
-                      strokeWidth={1.5}
-                      stroke='currentColor'
-                      className='h-6 w-6'
-                    >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        d='M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3'
-                      />
-                    </svg>
-                  </span>
-                </li>
-              </ul>
-            </div>
-            {!['exit', null, 'day end'].includes(workData.lastLogStatus) && (
-              <div
-                className={`${!isIntersecting ? '' : 'hidden'} col-span-2 flex items-center justify-center`}
-              >
+      <div className="from-background via-background/80 pointer-events-none fixed right-0 bottom-0 left-0 z-40 h-32 bg-gradient-to-t to-transparent" />
+
+      <div className="fixed bottom-6 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 px-4">
+        <div className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-gradient-to-r shadow-2xl backdrop-blur-xl">
+          {/* Background decoration */}
+          <div className="from-primary/5 to-primary/5 absolute inset-0 bg-gradient-to-r via-transparent" />
+          <div className="bg-primary/10 absolute -top-2 -right-2 h-8 w-8 rounded-full" />
+          <div className="bg-primary/5 absolute -bottom-2 -left-2 h-6 w-6 rounded-full" />
+
+          <div className="relative flex h-16 items-center justify-between gap-2 p-2">
+            {/* Menu Button */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button
-                  text='End Day'
-                  className={`btn bg-error/20 text-error w-full rounded-full font-semibold ${
-                    ['exit', null, 'day end'].includes(
-                      workData.lastLogStatus,
-                    ) ||
-                    loading ||
-                    breaklogMode
-                      ? 'btn-disabled'
-                      : ''
-                  }`}
-                  onclick={() => logEntry('day end')}
-                />
-              </div>
-            )}
-            <div className='col-span-2 flex items-center justify-center'>
-              <button
-                onClick={() =>
-                  breaklogMode ? logEntry('break log') : logEntry('day log')
-                }
-                className={`btn ${btnState ? 'btn-disabled' : ''} group bg-success/20 text-success inline-flex w-full items-center justify-center rounded-full font-medium`}
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-accent/50 h-12 w-12 rounded-2xl transition-all duration-200 hover:scale-105"
+                >
+                  <MoreHorizontal className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                side="top"
+                align="start"
+                className="border-border/50 bg-card/95 mb-2 rounded-2xl backdrop-blur-xl"
               >
-                <p className='font-semibold'>
-                  {workData.lastLogStatus === null && !breaklogMode
-                    ? 'Start Day'
-                    : workData.lastLogStatus === null && breaklogMode
-                      ? 'Take Break'
-                      : workData.lastLogStatus === 'day start'
-                        ? 'Take Break'
-                        : workData.lastLogStatus === 'exit'
-                          ? 'End Break'
-                          : workData.lastLogStatus === 'enter'
-                            ? 'Take Break'
-                            : 'Add Log'}
-                </p>
-                {!loading &&
-                  showButtonLogo &&
-                  (workData.lastLogStatus === null && !breaklogMode ? (
-                    <BriefcaseBusiness className='h-4 w-4' />
-                  ) : workData.lastLogStatus === null && breaklogMode ? (
-                    <Coffee className='h-4 w-4' />
-                  ) : workData.lastLogStatus === 'day start' ? (
-                    <Coffee className='h-4 w-4' />
-                  ) : workData.lastLogStatus === 'exit' ? (
-                    <LogIn className='h-4 w-4' />
-                  ) : workData.lastLogStatus === 'enter' ? (
-                    <Coffee className='h-4 w-4' />
-                  ) : (
-                    <Plus className='h-4 w-4' />
-                  ))}
-                {loading && showButtonLogo && (
-                  <span className='loading loading-ring loading-sm'></span>
+                <DropdownMenuItem
+                  onClick={() => logEntry("undo log")}
+                  className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200"
+                >
+                  <Undo2 className="mr-2 h-4 w-4" />
+                  <span>Undo Recent Log</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Main Action Button(s) */}
+            {!isIntersecting &&
+            !["exit", null, "day end"].includes(workData.lastLogStatus) ? (
+              <Button
+                onClick={() => logEntry("day end")}
+                variant="destructive"
+                className={cn(
+                  "h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
+                  "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700",
                 )}
-              </button>
-            </div>
+                disabled={
+                  ["exit", null, "day end"].includes(workData.lastLogStatus) ||
+                  loading ||
+                  breaklogMode
+                }
+              >
+                End Day
+              </Button>
+            ) : (
+              <></>
+            )}
+            <Button
+              onClick={() =>
+                breaklogMode ? logEntry("break log") : logEntry("day log")
+              }
+              disabled={btnDisabled}
+              className={cn(
+                "h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
+                "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r",
+              )}
+            >
+              <span
+                className={`${!isIntersecting && !["exit", null, "day end"].includes(workData.lastLogStatus) ? "hidden" : ""}`}
+              >
+                {icon}
+              </span>
+              {text}
+            </Button>
           </div>
         </div>
       </div>

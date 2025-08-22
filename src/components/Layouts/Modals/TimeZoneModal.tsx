@@ -1,26 +1,50 @@
-'use client';
-import { useStore } from '@/stores/store';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useTimezoneSelect, allTimezones } from 'react-timezone-select';
-import { handleError, handleSuccessToast } from '../../common/CommonCodeBlocks';
+"use client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import type * as React from "react";
+import { useEffect, useState } from "react";
+import { allTimezones, useTimezoneSelect } from "react-timezone-select";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle as DrawerTitleComponent,
+} from "@/components/ui/drawer";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
+import { useStore } from "@/stores/store";
+import { handleError, handleSuccessToast } from "../../common/CommonCodeBlocks";
 
-declare global {
-  interface Window {
-    time_zone_modal: {
-      showModal: () => void;
-      close: () => void;
-    };
-  }
-}
-interface TimeZoneModalProps {}
-
-const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
+const TimeZoneForm = ({
+  className,
+  isDesktop,
+}: {
+  className?: string;
+  isDesktop: boolean;
+}) => {
   const { userData, loading } = useStore();
   const router = useRouter();
 
-  const labelStyle = 'abbrev';
+  const labelStyle = "abbrev";
   const timezones = {
     ...allTimezones,
   };
@@ -29,26 +53,26 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
     timezones,
   });
 
-  const [selectedTimeZone, setSelectedTimeZone] = useState('');
-  const [deviceTimeZone, setDeviceTimeZone] = useState('');
+  const [selectedTimeZone, setSelectedTimeZone] = useState("");
+  const [deviceTimeZone, setDeviceTimeZone] = useState("");
 
   async function handleSubmit() {
     useStore.setState(() => ({ loading: true }));
     try {
-      const res = await axios.post('/api/users/profile/updateprofile', {
+      const res = await axios.post("/api/users/profile/updateprofile", {
         ...userData,
         default_time_zone: selectedTimeZone,
       });
 
-      if ((res.data.success = true)) {
-        window.time_zone_modal.close();
+      if (res.data.success) {
+        useStore.setState({ isTimeZoneModalOpen: false });
         useStore.setState({
           userData: {
             ...userData,
           },
         });
         handleSuccessToast({
-          message: 'Data saved successfully',
+          message: "Data saved successfully",
         });
       }
     } catch (error: any) {
@@ -69,148 +93,217 @@ const TimeZoneModal: React.FC<TimeZoneModalProps> = () => {
       setDeviceTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
       setSelectedTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
     }
-  }, [options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const Footer = isDesktop ? DialogFooter : DrawerFooter;
 
   return (
-    <>
-      <dialog
-        id='time_zone_modal'
-        className='modal modal-bottom sm:modal-middle'
-      >
-        <form method='dialog' className='modal-box bg-base-200 px-0 pt-0 pb-0'>
-          <h3 className='py-6 text-center text-lg font-bold'>
-            Select Time Zone
-          </h3>
-          <div className='rounded-t- card bg-base-100 rounded-b-none px-5 pb-5'>
-            <div className='card-body'>
-              <p>
-                Device Timezone:{' '}
-                <span
-                  className={
-                    deviceTimeZone
-                      ? selectedTimeZone === deviceTimeZone
-                        ? 'text-success'
-                        : 'text-warning'
-                      : 'text-error'
-                  }
-                >
-                  {(deviceTimeZone && (
-                    <>
-                      {deviceTimeZone + ' '}
-                      <span className='whitespace-nowrap'>
-                        {parseTimezone(deviceTimeZone).label.split(') ')[0] +
-                          ')'}
-                      </span>
-                    </>
-                  )) ||
-                    'undefined'}
+    <div className={cn("space-y-6", className)}>
+      <div className="space-y-3">
+        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-gradient-to-br p-4 backdrop-blur-sm">
+          <p className="text-foreground/80 mb-1 text-sm font-medium">
+            Device Timezone:
+          </p>
+          <span
+            className={`font-mono text-sm ${
+              deviceTimeZone
+                ? selectedTimeZone === deviceTimeZone
+                  ? "text-green-500"
+                  : "text-yellow-500"
+                : "text-red-500"
+            }`}
+          >
+            {(deviceTimeZone && (
+              <>
+                {deviceTimeZone + " "}
+                <span className="whitespace-nowrap">
+                  {parseTimezone(deviceTimeZone).label.split(") ")[0] + ")"}
                 </span>
-              </p>
-              <p>
-                Selected Timezone:{' '}
-                <span
-                  className={selectedTimeZone ? 'text-success' : 'text-error'}
-                >
-                  {(selectedTimeZone && (
-                    <>
-                      {selectedTimeZone + ' '}
-                      <span className='whitespace-nowrap'>
-                        {parseTimezone(selectedTimeZone).label.split(') ')[0] +
-                          ')'}
-                      </span>
-                    </>
-                  )) ||
-                    'undefined'}
+              </>
+            )) ||
+              "undefined"}
+          </span>
+        </div>
+
+        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-gradient-to-br p-4 backdrop-blur-sm">
+          <p className="text-foreground/80 mb-1 text-sm font-medium">
+            Selected Timezone:
+          </p>
+          <span
+            className={`font-mono text-sm ${
+              selectedTimeZone ? "text-green-500" : "text-red-500"
+            }`}
+          >
+            {(selectedTimeZone && (
+              <>
+                {selectedTimeZone + " "}
+                <span className="whitespace-nowrap">
+                  {parseTimezone(selectedTimeZone).label.split(") ")[0] + ")"}
                 </span>
-              </p>
-              <div className='collapse-arrow bg-base-200 collapse'>
-                <input type='checkbox' />
-                <div className='collapse-title font-medium'>
-                  Click for more info
-                </div>
-                <div className='collapse-content text-sm'>
-                  <p>
-                    If your work ends within the same day then you don&apos;t
-                    have to bother and can select your own timezone
-                  </p>
-                  <div className='divider'>OR</div>
-                  <p>
-                    In the event that you have an irregular work schedule,
-                    consider using a TimeZone where your shift will start and
-                    end within the same working day (this is solely for
-                    calculation purposes only and won&apos;t affect how you see
-                    the time).
-                  </p>
-                  <h3 className='mt-3 font-bold'>Example:</h3>
-                  <p className='mb-3'>
-                    Here the work starts at May 6 but ends at May 7.
-                    <br />
-                    So selecting a timezone for example which is 2 or 3 (or
-                    maybe more) hours behind your timezone is preffered,
-                    <br />
-                    like in this case my timezone is at{' '}
-                    <span className='font-bold'>GMT+5:30</span> so I will select
-                    someting like
-                    <span className='font-bold'> GMT+2:00 or GMT+3:00</span>
-                  </p>
-                  <table className='table-zebra table text-center'>
-                    <thead>
-                      <tr>
-                        <th>Time</th>
-                        <th>Activity</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>May 7, 1:29 AM</td>
-                        <td>day end</td>
-                      </tr>
-                      <tr>
-                        <td>May 6, 3:00 PM</td>
-                        <td>day start</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div className='form-control'>
-                <label className='label' htmlFor='log_type'>
-                  <span className='label-text flex items-center'>
-                    Default Time Zone
-                  </span>
-                </label>
-                <select
-                  value={selectedTimeZone}
-                  className='select w-full'
-                  onChange={(e) => setSelectedTimeZone(e.currentTarget.value)}
-                >
-                  <option value=''>Select a timezone</option>
-                  {options.map((option, index) => (
-                    <option key={index} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className='modal-action'>
-              {/* if there is a button in form, it will close the modal */}
-              <div className='join flex w-full'>
-                <span
-                  className={`btn btn-primary join-item flex-1 ${!selectedTimeZone && 'btn-disabled'}`}
-                  onClick={handleSubmit}
-                >
-                  Confirm
-                </span>
-              </div>
-            </div>
+              </>
+            )) ||
+              "undefined"}
+          </span>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-orange-200/20 bg-gradient-to-br from-orange-500/10 to-yellow-500/10 p-4 backdrop-blur-sm dark:border-orange-800/20">
+        <div className="flex items-start gap-2">
+          <svg
+            className="mt-0.5 h-4 w-4 flex-shrink-0 text-orange-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <div>
+            <p className="mb-1 text-sm font-semibold text-orange-700 dark:text-orange-300">
+              Note:
+            </p>
+            <p className="text-xs leading-relaxed text-orange-600 dark:text-orange-400">
+              If your work shift spans across midnight, select a timezone where
+              your entire shift falls within a single calendar day for accurate
+              calculations.
+            </p>
           </div>
-        </form>
-        <form method='dialog' className='modal-backdrop'>
-          {/* <span onClick={onCancel}>close</span> */}
-        </form>
-      </dialog>
-    </>
+        </div>
+      </div>
+
+      <div className="grid w-full items-center gap-2">
+        <Label htmlFor="timezone" className="text-foreground/90 font-medium">
+          Default Time Zone
+        </Label>
+        <Select
+          value={selectedTimeZone}
+          onValueChange={(value) => setSelectedTimeZone(value)}
+        >
+          <SelectTrigger
+            id="timezone"
+            className="bg-background/50 border-border/50 hover:bg-background/70 h-12 w-full justify-between truncate rounded-xl backdrop-blur-sm transition-colors"
+          >
+            <SelectValue placeholder="Select timezone..." />
+          </SelectTrigger>
+          <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
+            <SelectGroup>
+              {options.map((option) => (
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="hover:bg-accent/50"
+                >
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+      <Footer className="pt-6">
+        <Button
+          onClick={handleSubmit}
+          disabled={!selectedTimeZone || loading}
+          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-gradient-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
+        >
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <div className="border-primary-foreground/30 border-t-primary-foreground h-4 w-4 animate-spin rounded-full border-2" />
+              Saving...
+            </div>
+          ) : (
+            "Confirm"
+          )}
+        </Button>
+        {!isDesktop && (
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        )}
+      </Footer>
+    </div>
+  );
+};
+
+const TimeZoneModal: React.FC = () => {
+  const { isTimeZoneModalOpen } = useStore();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  const onOpenChange = (isOpen: boolean) => {
+    useStore.setState({ isTimeZoneModalOpen: isOpen });
+  };
+
+  const Header = isDesktop ? DialogHeader : DrawerHeader;
+  const Title = isDesktop ? DialogTitle : DrawerTitleComponent;
+
+  if (isDesktop) {
+    return (
+      <Dialog open={isTimeZoneModalOpen} onOpenChange={onOpenChange}>
+        <DialogContent
+          id="timezone-dialog-content"
+          className="bg-background/80 border-border/50 shadow-2xl backdrop-blur-xl sm:max-w-[550px]"
+        >
+          <Header className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+                <svg
+                  className="h-5 w-5 text-blue-600 dark:text-blue-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <Title className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+                Select Time Zone
+              </Title>
+            </div>
+          </Header>
+          <TimeZoneForm isDesktop={true} />
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Drawer open={isTimeZoneModalOpen} onOpenChange={onOpenChange}>
+      <DrawerContent>
+        <Header className="space-y-3 text-left">
+          <div className="flex items-center gap-3 p-4">
+            <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+              <svg
+                className="h-5 w-5 text-blue-600 dark:text-blue-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <Title className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+              Select Time Zone
+            </Title>
+          </div>
+        </Header>
+        <TimeZoneForm className="px-4" isDesktop={false} />
+      </DrawerContent>
+    </Drawer>
   );
 };
 

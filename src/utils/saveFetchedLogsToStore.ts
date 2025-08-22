@@ -1,7 +1,6 @@
-'use client';
-import { useStore } from '@/stores/store';
-import { WorkData } from '@/stores/store';
-import { LogsData } from '@/stores/store';
+"use client";
+import type { LogsData, WorkData } from "@/stores/store";
+import { useStore } from "@/stores/store";
 
 export interface FetchedLogsDataType {
   message: string;
@@ -27,7 +26,7 @@ export const saveFetchedLogsToStore = (data: FetchedLogsDataType) => {
       liveBreaks: 0,
     }));
   }
-  if (data.workdata.firstLogStatus === 'day start') {
+  if (data.workdata.firstLogStatus === "day start") {
     useStore.setState(() => ({ breaklogMode: false }));
   }
 };

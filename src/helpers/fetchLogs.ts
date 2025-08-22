@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma"
-import { DateTime } from 'luxon';
-import getStartAndEndOfDay from './getStartAndEndOfDay';
+import { DateTime } from "luxon";
+import { prisma } from "@/lib/prisma";
+import getStartAndEndOfDay from "./getStartAndEndOfDay";
 
 // Function to fetch logs for a user for a specific date
 export const fetchLogs = async (reqBody: any, userId: string) => {
@@ -17,11 +17,11 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
   let [startOfDay, endOfDay, timeZone] = getStartAndEndOfDay(userData);
 
   if (date) {
-    const parts = date.split('-');
+    const parts = date.split("-");
     const correctedDate = `20${parts[2]}-${parts[1]}-${parts[0]}`;
     const dateObj = DateTime.fromISO(correctedDate, { zone: timeZone });
-    startOfDay = dateObj.startOf('day').toJSDate();
-    endOfDay = dateObj.endOf('day').toJSDate();
+    startOfDay = dateObj.startOf("day").toJSDate();
+    endOfDay = dateObj.endOf("day").toJSDate();
   }
 
   const logDoc = await prisma.log.findFirst({
@@ -62,17 +62,17 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
   let logExit = 0,
     logEnter = 0;
   for (const log of logs) {
-    if (log.log_status === 'day start') {
+    if (log.log_status === "day start") {
       isDayStarted = true;
       dayStart = log.log_time.getTime();
-    } else if (log.log_status === 'day end') {
+    } else if (log.log_status === "day end") {
       isDayEnded = true;
       dayEnd = log.log_time.getTime();
     }
 
-    if (log.log_status === 'exit') {
+    if (log.log_status === "exit") {
       logExit = log.log_time.getTime();
-    } else if (log.log_status === 'enter') {
+    } else if (log.log_status === "enter") {
       logEnter = log.log_time.getTime();
     }
 
@@ -95,7 +95,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
       const currentTime = Date.now();
       workDone = currentTime - dayStart - breakTime;
 
-      if (lastLog && recentLog === 'exit') {
+      if (lastLog && recentLog === "exit") {
         const exitDuration = currentTime - lastLog.log_time.getTime();
         workDone -= exitDuration;
       }
@@ -103,19 +103,19 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
   }
 
   // Set current break time
-  if (lastLog && recentLog === 'exit') {
+  if (lastLog && recentLog === "exit") {
     currentBreakTime = lastLog.log_time;
   }
 
   // Format time utility
   const formatTime = (ms: number) => {
     const totalSeconds = Math.floor(ms / 1000);
-    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+    const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
     const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
       2,
-      '0',
+      "0",
     );
-    const seconds = String(totalSeconds % 60).padStart(2, '0');
+    const seconds = String(totalSeconds % 60).padStart(2, "0");
     return `${hours}:${minutes}:${seconds}`;
   };
 
@@ -123,8 +123,8 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
   const formattedWorkDone = formatTime(workDone);
 
   // Calculate work left and end time
-  let formattedWorkLeft = '';
-  let formattedWorkEndTime = '';
+  let formattedWorkLeft = "";
+  let formattedWorkEndTime = "";
 
   if (userData?.daily_work_required && workDone > 0) {
     const workRequiredMs = userData.daily_work_required * 3600000;
@@ -132,7 +132,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
       formattedWorkLeft = formatTime(workRequiredMs - workDone);
 
       const [hours, minutes, seconds] = formattedWorkLeft
-        .split(':')
+        .split(":")
         .map(Number);
       const endTime = new Date(
         Date.now() + (hours * 3600 + minutes * 60 + seconds) * 1000,
@@ -142,7 +142,7 @@ export const fetchLogs = async (reqBody: any, userId: string) => {
   }
 
   return {
-    message: logs.length ? 'Logs fetched successfully' : 'No logs found',
+    message: logs.length ? "Logs fetched successfully" : "No logs found",
     status: logs.length ? 200 : 404,
     data: logs,
     workdata: {
