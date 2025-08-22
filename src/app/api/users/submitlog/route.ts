@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { fetchLogs } from '@/helpers/fetchLogs';
-import { v4 as uuidv4 } from 'uuid';
-import getStartAndEndOfDay from '@/helpers/getStartAndEndOfDay';
-import { getUserIdFromSession } from '@/lib/authHelpers';
+import { type NextRequest, NextResponse } from "next/server";
+import { v4 as uuidv4 } from "uuid";
+import { fetchLogs } from "@/helpers/fetchLogs";
+import getStartAndEndOfDay from "@/helpers/getStartAndEndOfDay";
+import { getUserIdFromSession } from "@/lib/authHelpers";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     const [startOfDay, endOfDay, timeZone] = getStartAndEndOfDay(user);
 
     // Find the log document for today
-    let logDoc = await prisma.log.findFirst({
+    const logDoc = await prisma.log.findFirst({
       where: {
         userId: userId,
         createdAt: {
@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    let logToBeSaved = '';
-    if (logtype === 'undo log') {
+    let logToBeSaved = "";
+    if (logtype === "undo log") {
       if (logDoc && logDoc.logEntries.length > 0) {
         const lastEntry = logDoc.logEntries.pop(); // Remove the last log entry
         await prisma.log.update({
@@ -40,20 +40,20 @@ export async function POST(request: NextRequest) {
           data: { logEntries: logDoc.logEntries, isHalfDay: false },
         });
       }
-    } else if (logtype === 'mark-as-half-day') {
+    } else if (logtype === "mark-as-half-day") {
       if (logDoc && logDoc.logEntries.length > 1) {
         const lastEntry = logDoc.logEntries[logDoc.logEntries.length - 1];
-        if (lastEntry.log_status === 'day end') {
+        if (lastEntry.log_status === "day end") {
           await prisma.log.update({
             where: { id: logDoc.id },
             data: { isHalfDay: true },
           });
         }
       }
-    } else if (logtype === 'undo-half-day') {
+    } else if (logtype === "undo-half-day") {
       if (logDoc && logDoc.logEntries.length > 1) {
         const lastEntry = logDoc.logEntries[logDoc.logEntries.length - 1];
-        if (lastEntry.log_status === 'day end') {
+        if (lastEntry.log_status === "day end") {
           await prisma.log.update({
             where: { id: logDoc.id },
             data: { isHalfDay: false },
@@ -62,28 +62,28 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (logtype === 'day log') {
+    if (logtype === "day log") {
       if (!logDoc || logDoc.logEntries.length === 0) {
-        logToBeSaved = 'day start';
+        logToBeSaved = "day start";
       } else {
         const lastLogStatus =
           logDoc.logEntries[logDoc.logEntries.length - 1].log_status;
         logToBeSaved =
-          lastLogStatus === 'enter' || lastLogStatus === 'day start'
-            ? 'exit'
-            : 'enter';
+          lastLogStatus === "enter" || lastLogStatus === "day start"
+            ? "exit"
+            : "enter";
       }
-    } else if (logtype === 'day end') {
-      logToBeSaved = 'day end';
-    } else if (logtype === 'break log') {
+    } else if (logtype === "day end") {
+      logToBeSaved = "day end";
+    } else if (logtype === "break log") {
       if (
         !logDoc ||
         logDoc.logEntries.length === 0 ||
-        logDoc.logEntries[logDoc.logEntries.length - 1].log_status === 'enter'
+        logDoc.logEntries[logDoc.logEntries.length - 1].log_status === "enter"
       ) {
-        logToBeSaved = 'exit';
+        logToBeSaved = "exit";
       } else {
-        logToBeSaved = 'enter';
+        logToBeSaved = "enter";
       }
     }
 
@@ -118,11 +118,11 @@ export async function POST(request: NextRequest) {
     const fetchedLog = await fetchLogs(reqBody, userId);
 
     return NextResponse.json({
-      message: 'Log submitted successfully',
+      message: "Log submitted successfully",
       fetchedLog,
     });
   } catch (error: any) {
-    if (error.name === 'SessionError') {
+    if (error.name === "SessionError") {
       return NextResponse.json(
         { SessionError: error.message },
         { status: 400 },

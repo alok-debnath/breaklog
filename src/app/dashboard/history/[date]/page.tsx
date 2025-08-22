@@ -1,6 +1,5 @@
-import React from 'react';
-import LogsCard from '@/components/Layouts/LogsCard';
-import fetchRscData from '@/helpers/fetchRscData';
+import LogsCard from "@/components/Layouts/LogsCard";
+import fetchRscData from "@/helpers/fetchRscData";
 
 export default async function SpecificDayLog({
   params,
@@ -26,9 +25,9 @@ export default async function SpecificDayLog({
   const isWorkDoneSuccess = isWorkDone && userData.daily_work_required > 0;
 
   return (
-    <div className='from-background via-background/95 to-muted/20 bg-gradient-to-br'>
+    <div className="from-background via-background/95 to-muted/20 bg-gradient-to-br">
       <LogsCard
-        page='history'
+        page="history"
         isWorkDoneSuccess={isWorkDoneSuccess}
         logsServer={logs} // logs fetched from server
         workDataServer={workData} // workData fetched from server

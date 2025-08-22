@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { getUserIdFromSession } from '@/lib/authHelpers';
+import { type NextRequest, NextResponse } from "next/server";
+import { getUserIdFromSession } from "@/lib/authHelpers";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,17 +23,17 @@ export async function POST(request: NextRequest) {
 
     if (!result) {
       return NextResponse.json({
-        message: 'No user found',
+        message: "No user found",
         status: 404,
       });
     }
 
     return NextResponse.json({
-      message: 'Profile updated successfully',
+      message: "Profile updated successfully",
       status: 200,
     });
   } catch (error: any) {
-    if (error.name === 'SessionError') {
+    if (error.name === "SessionError") {
       return NextResponse.json(
         { SessionError: error.message },
         { status: 400 },

@@ -1,5 +1,5 @@
-'use client';
-import { useEffect, useState } from 'react';
+"use client";
+import { useEffect, useState } from "react";
 
 const MouseHalo = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -9,16 +9,16 @@ const MouseHalo = () => {
       setPosition({ x: e.clientX, y: e.clientY });
     };
 
-    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove);
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
   return (
     <div
-      className='halo hidden md:block'
+      className="halo hidden md:block"
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,

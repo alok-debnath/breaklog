@@ -1,6 +1,6 @@
-'use server';
-import { SaveDataToGlobalStore } from './SaveDataToGlobalStore';
-import fetchRscData from '@/helpers/fetchRscData';
+"use server";
+import fetchRscData from "@/helpers/fetchRscData";
+import { SaveDataToGlobalStore } from "./SaveDataToGlobalStore";
 
 const InitialRscFetch = async () => {
   const { fetchProfileDataRsc, fetchLogDataRsc } = fetchRscData();

@@ -1,34 +1,31 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import axios from 'axios';
-import { useStore } from '@/stores/store';
-import { handleError } from '@/components/common/CommonCodeBlocks';
-import TimeEditModal from '@/components/Layouts/Modals/TimeEditModal';
-import { useRouter } from 'next/navigation';
-import useConfirm from '@/hooks/useConfirm';
-import LogsCard from '@/components/Layouts/LogsCard';
-import BottomNavbar from '@/components/Layouts/BottomNavbar';
-import useOnScreen from '@/hooks/useOnScreen';
-import { saveFetchedLogsToStore } from '@/utils/saveFetchedLogsToStore';
-import { useEffect } from 'react';
+"use client";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { handleError } from "@/components/common/CommonCodeBlocks";
+import BottomNavbar from "@/components/Layouts/BottomNavbar";
+import LogsCard from "@/components/Layouts/LogsCard";
+import TimeEditModal from "@/components/Layouts/Modals/TimeEditModal";
+import useConfirm from "@/hooks/useConfirm";
+import useOnScreen from "@/hooks/useOnScreen";
+import { useStore } from "@/stores/store";
+import { saveFetchedLogsToStore } from "@/utils/saveFetchedLogsToStore";
 
 const Index = () => {
-  const { breaklogMode, workData, loading, userData, initialPageLoadDone } =
-    useStore();
+  const { workData, userData, initialPageLoadDone } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
-  const isClient = typeof window !== 'undefined';
+  const isClient = typeof window !== "undefined";
 
   const logEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
     try {
-      if (value === 'undo log') {
+      if (value === "undo log") {
         const isConfirmed = await confirm({
           modal_body:
-            'Your most recent log will be permanently deleted, proceed with caution.',
-          modal_head: 'Delete most recent log?',
-          modal_confirm_btn: 'Delete',
-          modal_cancel_btn: 'Cancel',
+            "Your most recent log will be permanently deleted, proceed with caution.",
+          modal_head: "Delete most recent log?",
+          modal_confirm_btn: "Delete",
+          modal_cancel_btn: "Cancel",
         });
         if (!isConfirmed) {
           useStore.setState(() => ({ loading: false }));
@@ -41,9 +38,9 @@ const Index = () => {
       };
 
       useStore.setState(() => ({ loading: true }));
-      const res = await axios.post('/api/users/submitlog', values);
+      const res = await axios.post("/api/users/submitlog", values);
       saveFetchedLogsToStore(res.data.fetchedLog);
-    } catch (error: any) {
+    } catch (error: unknown) {
       handleError({ error: error, router: router });
     }
   };
@@ -57,7 +54,7 @@ const Index = () => {
   const [ref, isIntersecting] = useOnScreen(-100);
 
   return (
-    <div className='from-background via-background/95 to-muted/20 bg-gradient-to-br'>
+    <div className="from-background via-background/95 to-muted/20 bg-gradient-to-br">
       <LogsCard
         isWorkDoneSuccess={isWorkDoneSuccess}
         isIntersecting={isIntersecting}

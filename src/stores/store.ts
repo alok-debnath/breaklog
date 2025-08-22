@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export interface WorkData {
   firstLogStatus: string | null;
@@ -84,42 +84,42 @@ interface StoreState {
 }
 
 export const useStore = create<StoreState>((set) => ({
-  themeMode: '',
+  themeMode: "",
   logs: [],
   monthLogs: [
     {
-      date: '',
+      date: "",
       breakTime: 0,
       workDone: 0,
-      formattedBreakTime: '',
-      formattedWorkDone: '',
+      formattedBreakTime: "",
+      formattedWorkDone: "",
       isHalfDay: false,
     },
   ],
   userData: {
-    username: '',
+    username: "",
     daily_work_required: 0,
-    log_type: '',
-    default_time_zone: '',
+    log_type: "",
+    default_time_zone: "",
   },
   summary: {
     totalWorkDone: 0,
-    formattedTotalBreakTime: '',
-    formattedTotalWorkDone: '',
-    numberOfDays: '',
+    formattedTotalBreakTime: "",
+    formattedTotalWorkDone: "",
+    numberOfDays: "",
     expectedWorkHours: 0,
     halfDayCount: 0,
     // actualWorkHours: "",
   },
   breaklogMode: true,
   workData: {
-    firstLogStatus: '',
-    lastLogStatus: '',
-    breakTime: '',
-    workDone: '',
+    firstLogStatus: "",
+    lastLogStatus: "",
+    breakTime: "",
+    workDone: "",
     unformattedWorkDone: 0,
-    formattedWorkEndTime: '',
-    formattedWorkLeft: '',
+    formattedWorkEndTime: "",
+    formattedWorkLeft: "",
     calculatedOn: 0,
     isHalfDay: false,
   },
@@ -130,16 +130,16 @@ export const useStore = create<StoreState>((set) => ({
     totalBreak: { hours: 0, minutes: 0, seconds: 0 },
   },
   logEditStore: {
-    log_id: '',
-    log_dateTime: '',
-    log_dateTime_ahead: '',
-    log_dateTime_behind: '',
+    log_id: "",
+    log_dateTime: "",
+    log_dateTime_ahead: "",
+    log_dateTime_behind: "",
   },
   dialogModal: {
-    modal_body: '',
-    modal_head: '',
-    modal_confirm_btn: '',
-    modal_cancel_btn: '',
+    modal_body: "",
+    modal_head: "",
+    modal_confirm_btn: "",
+    modal_cancel_btn: "",
   },
   initialPageLoadDone: false,
   isConfirmationDialogOpen: false,

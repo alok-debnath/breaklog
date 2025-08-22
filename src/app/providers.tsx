@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { SessionProvider } from 'next-auth/react';
-import type { Session } from 'next-auth';
-import type { ReactNode } from 'react';
+import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import type { ReactNode } from "react";
 
 interface ProvidersProps {
   children: ReactNode;

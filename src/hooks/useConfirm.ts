@@ -1,5 +1,5 @@
-'use client';
-import { useStore } from '@/stores/store';
+"use client";
+import { useStore } from "@/stores/store";
 
 let resolveCallback: (value: boolean) => void;
 
@@ -38,10 +38,10 @@ function useConfirm() {
   const closeConfirm = () => {
     useStore.setState(() => ({
       dialogModal: {
-        modal_body: '',
-        modal_head: '',
-        modal_confirm_btn: '',
-        modal_cancel_btn: '',
+        modal_body: "",
+        modal_head: "",
+        modal_confirm_btn: "",
+        modal_cancel_btn: "",
       },
       isConfirmationDialogOpen: false,
     }));

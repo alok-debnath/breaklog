@@ -1,5 +1,8 @@
-'use client';
-import * as React from 'react';
+"use client";
+import { Palette, Settings, ToggleLeft } from "lucide-react";
+import { useTheme } from "next-themes";
+import * as React from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +10,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerClose,
@@ -16,22 +19,19 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle as DrawerTitleComponent,
-} from '@/components/ui/drawer';
+} from "@/components/ui/drawer";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
-import { useStore } from '@/stores/store';
-import { Button } from '@/components/ui/button';
-import { useTheme } from 'next-themes';
-import { Settings, Palette, ToggleLeft } from 'lucide-react';
-import { useMediaQuery } from '@/hooks/use-media-query';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
+import { useStore } from "@/stores/store";
 
 const SettingsForm = ({ className }: { className?: string }) => {
   const { breaklogMode, logs } = useStore();
@@ -43,60 +43,60 @@ const SettingsForm = ({ className }: { className?: string }) => {
 
   const handleToggleChange = (checked: boolean) => {
     useStore.setState({ breaklogMode: checked });
-    localStorage.setItem('breaklogMode', JSON.stringify(checked));
+    localStorage.setItem("breaklogMode", JSON.stringify(checked));
   };
 
   return (
-    <div className={cn('grid gap-6 py-6', className)}>
-      <div className='group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg'>
-        <div className='flex items-start justify-between space-x-4'>
-          <div className='flex flex-1 flex-col space-y-2'>
-            <div className='flex items-center gap-2'>
-              <ToggleLeft className='text-primary h-4 w-4' />
-              <Label htmlFor='breaklog-mode' className='font-medium'>
+    <div className={cn("grid gap-6 py-6", className)}>
+      <div className="group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg">
+        <div className="flex items-start justify-between space-x-4">
+          <div className="flex flex-1 flex-col space-y-2">
+            <div className="flex items-center gap-2">
+              <ToggleLeft className="text-primary h-4 w-4" />
+              <Label htmlFor="breaklog-mode" className="font-medium">
                 BreakLog Mode
               </Label>
             </div>
-            <DialogDescription className='text-sm leading-relaxed'>
+            <DialogDescription className="text-sm leading-relaxed">
               Logs breaks instead of work entries. (Cannot be changed after
               first log of the day)
             </DialogDescription>
           </div>
           <Switch
-            id='breaklog-mode'
+            id="breaklog-mode"
             checked={breaklogMode}
             onCheckedChange={handleToggleChange}
             disabled={logs.length > 0}
-            className='data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-green-500 data-[state=checked]:to-emerald-500'
+            className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-green-500 data-[state=checked]:to-emerald-500"
           />
         </div>
       </div>
 
-      <div className='group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg'>
-        <div className='flex items-start justify-between space-x-4'>
-          <div className='flex flex-1 flex-col space-y-2'>
-            <div className='flex items-center gap-2'>
-              <Palette className='text-primary h-4 w-4' />
-              <Label htmlFor='theme-selector' className='font-medium'>
+      <div className="group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg">
+        <div className="flex items-start justify-between space-x-4">
+          <div className="flex flex-1 flex-col space-y-2">
+            <div className="flex items-center gap-2">
+              <Palette className="text-primary h-4 w-4" />
+              <Label htmlFor="theme-selector" className="font-medium">
                 Theme
               </Label>
             </div>
-            <DialogDescription className='text-sm leading-relaxed'>
+            <DialogDescription className="text-sm leading-relaxed">
               Select a theme for the application.
             </DialogDescription>
           </div>
           <Select onValueChange={handleThemeChange} value={theme}>
-            <SelectTrigger className='bg-background/50 border-border/50 hover:bg-background/70 min-w-[100px] backdrop-blur-sm transition-colors'>
-              <SelectValue placeholder='Select a theme' />
+            <SelectTrigger className="bg-background/50 border-border/50 hover:bg-background/70 min-w-[100px] backdrop-blur-sm transition-colors">
+              <SelectValue placeholder="Select a theme" />
             </SelectTrigger>
-            <SelectContent className='bg-popover/90 border-border/50 backdrop-blur-xl'>
-              <SelectItem value='light' className='hover:bg-accent/50'>
+            <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
+              <SelectItem value="light" className="hover:bg-accent/50">
                 Light
               </SelectItem>
-              <SelectItem value='dark' className='hover:bg-accent/50'>
+              <SelectItem value="dark" className="hover:bg-accent/50">
                 Dark
               </SelectItem>
-              <SelectItem value='system' className='hover:bg-accent/50'>
+              <SelectItem value="system" className="hover:bg-accent/50">
                 System
               </SelectItem>
             </SelectContent>
@@ -109,7 +109,7 @@ const SettingsForm = ({ className }: { className?: string }) => {
 
 const SettingsModal = () => {
   const { isSettingsModalOpen } = useStore();
-  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const onOpenChange = (isOpen: boolean) => {
     useStore.setState({ isSettingsModalOpen: isOpen });
@@ -118,17 +118,17 @@ const SettingsModal = () => {
   if (isDesktop) {
     return (
       <Dialog open={isSettingsModalOpen} onOpenChange={onOpenChange}>
-        <DialogContent className='bg-background/80 border-border/50 shadow-2xl backdrop-blur-xl sm:max-w-[500px]'>
-          <DialogHeader className='space-y-3'>
-            <div className='flex items-center gap-3'>
-              <div className='rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm'>
-                <Settings className='h-5 w-5 text-blue-600 dark:text-blue-400' />
+        <DialogContent className="bg-background/80 border-border/50 shadow-2xl backdrop-blur-xl sm:max-w-[500px]">
+          <DialogHeader className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+                <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
-              <DialogTitle className='from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold'>
+              <DialogTitle className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
                 Settings
               </DialogTitle>
             </div>
-            <DialogDescription className='text-muted-foreground'>
+            <DialogDescription className="text-muted-foreground">
               Manage your application settings and preferences.
             </DialogDescription>
           </DialogHeader>
@@ -136,7 +136,7 @@ const SettingsModal = () => {
           <DialogFooter>
             <Button
               onClick={() => onOpenChange(false)}
-              className='from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-gradient-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg'
+              className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-gradient-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg"
             >
               Close
             </Button>
@@ -149,23 +149,23 @@ const SettingsModal = () => {
   return (
     <Drawer open={isSettingsModalOpen} onOpenChange={onOpenChange}>
       <DrawerContent>
-        <DrawerHeader className='space-y-3 text-left'>
-          <div className='flex items-center gap-3'>
-            <div className='rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm'>
-              <Settings className='h-5 w-5 text-blue-600 dark:text-blue-400' />
+        <DrawerHeader className="space-y-3 text-left">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+              <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
-            <DrawerTitleComponent className='from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold'>
+            <DrawerTitleComponent className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
               Settings
             </DrawerTitleComponent>
           </div>
-          <DrawerDescriptionComponent className='text-muted-foreground'>
+          <DrawerDescriptionComponent className="text-muted-foreground">
             Manage your application settings and preferences.
           </DrawerDescriptionComponent>
         </DrawerHeader>
-        <SettingsForm className='px-4' />
+        <SettingsForm className="px-4" />
         <DrawerFooter>
           <DrawerClose asChild>
-            <Button variant='outline'>Close</Button>
+            <Button variant="outline">Close</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>

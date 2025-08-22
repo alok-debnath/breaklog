@@ -1,10 +1,11 @@
-'use client';
-import { UserData, useStore } from '@/stores/store';
-import React, { useCallback, useEffect, useState } from 'react';
+"use client";
+import type React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { type UserData, useStore } from "@/stores/store";
 import {
-  FetchedLogsDataType,
+  type FetchedLogsDataType,
   saveFetchedLogsToStore,
-} from '@/utils/saveFetchedLogsToStore';
+} from "@/utils/saveFetchedLogsToStore";
 
 interface SaveDataToGlobalStoreProps {
   userDataServer: UserData;
@@ -23,13 +24,13 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
     useStore.setState({ userData: userDataServer });
     saveFetchedLogsToStore(logDataServer);
 
-    const storedBreaklogMode = localStorage.getItem('breaklogMode');
-    const savedTheme = localStorage.getItem('thememode');
+    const storedBreaklogMode = localStorage.getItem("breaklogMode");
+    const savedTheme = localStorage.getItem("thememode");
 
     useStore.setState({
       breaklogMode: storedBreaklogMode
         ? JSON.parse(storedBreaklogMode)
-        : userDataServer.log_type === 'breakmode',
+        : userDataServer.log_type === "breakmode",
       themeMode: savedTheme || themeMode,
     });
     document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
@@ -39,7 +40,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
 
   // Load data on first render if in client-side environment
   useEffect(() => {
-    if (typeof window !== 'undefined') loadLocalStorageData();
+    if (typeof window !== "undefined") loadLocalStorageData();
   }, [loadLocalStorageData]);
 
   // Update local storage and trigger timezone modal if needed
@@ -47,8 +48,8 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
     if (isFirstEffectCompleted) {
       if (!userData.default_time_zone)
         useStore.setState({ isTimeZoneModalOpen: true });
-      localStorage.setItem('breaklogMode', JSON.stringify(breaklogMode));
-      localStorage.setItem('thememode', themeMode);
+      localStorage.setItem("breaklogMode", JSON.stringify(breaklogMode));
+      localStorage.setItem("thememode", themeMode);
       document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
       useStore.setState({
         initialPageLoadDone: true,

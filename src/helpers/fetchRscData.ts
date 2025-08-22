@@ -1,10 +1,10 @@
-'use server';
-import { headers } from 'next/headers';
+"use server";
+import { headers } from "next/headers";
 
 const fetchRscData = () => {
   const getHeaders = async () => {
     const headerObject = Object.fromEntries(await headers());
-    const protocol = process.env.NEXT_ENV === 'development' ? 'http' : 'https';
+    const protocol = process.env.NEXT_ENV === "development" ? "http" : "https";
     const host = headerObject.host;
     const url = `${protocol}://${host}/api`;
     return { headerObject, url };
@@ -13,10 +13,10 @@ const fetchRscData = () => {
   const fetchDynamicLogDataRsc = async (date: string) => {
     try {
       const { headerObject, url } = await getHeaders();
-      const response = await fetch(url + '/users/fetchlog', {
-        method: 'POST',
+      const response = await fetch(url + "/users/fetchlog", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...headerObject,
         },
         body: JSON.stringify({ date }),
@@ -29,11 +29,11 @@ const fetchRscData = () => {
         errorMessage: logsData.status === 404 ? logsData.message : null,
       };
     } catch (error) {
-      console.error('Error fetching log data:', error);
+      console.error("Error fetching log data:", error);
       return {
         logs: [],
         workData: {},
-        errorMessage: 'Error fetching log data',
+        errorMessage: "Error fetching log data",
       };
     }
   };
@@ -41,7 +41,7 @@ const fetchRscData = () => {
   const fetchProfileDataRsc = async () => {
     try {
       const { headerObject, url } = await getHeaders();
-      const response = await fetch(url + '/users/profile/fetchprofile', {
+      const response = await fetch(url + "/users/profile/fetchprofile", {
         headers: headerObject,
       });
 
@@ -51,10 +51,10 @@ const fetchRscData = () => {
         errorMessage: null,
       };
     } catch (error) {
-      console.error('Error fetching profile data:', error);
+      console.error("Error fetching profile data:", error);
       return {
         userData: null,
-        errorMessage: 'Error fetching profile data',
+        errorMessage: "Error fetching profile data",
       };
     }
   };
@@ -63,10 +63,10 @@ const fetchRscData = () => {
     try {
       const { headerObject, url } = await getHeaders();
       const values = {};
-      const response = await fetch(url + '/users/fetchlog', {
-        method: 'POST',
+      const response = await fetch(url + "/users/fetchlog", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           ...headerObject,
         },
         body: JSON.stringify({ values }),
@@ -78,10 +78,10 @@ const fetchRscData = () => {
         errorMessage: null,
       };
     } catch (error) {
-      console.error('Error fetching log data:', error);
+      console.error("Error fetching log data:", error);
       return {
         logData: null,
-        errorMessage: 'Error fetching log data',
+        errorMessage: "Error fetching log data",
       };
     }
   };

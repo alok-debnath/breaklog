@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { getUserIdFromSession } from '@/lib/authHelpers';
+import { type NextRequest, NextResponse } from "next/server";
+import { getUserIdFromSession } from "@/lib/authHelpers";
+import { prisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,11 +18,11 @@ export async function GET(request: NextRequest) {
       },
     });
     return NextResponse.json({
-      message: 'User found',
+      message: "User found",
       data: user,
     });
   } catch (error: any) {
-    if (error.name === 'SessionError') {
+    if (error.name === "SessionError") {
       return NextResponse.json(
         { SessionError: error.message },
         { status: 400 },
