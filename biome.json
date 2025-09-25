@@ -21,7 +21,12 @@
   },
   "linter": {
     "enabled": true,
-    "rules": { "recommended": true },
+    "rules": {
+      "recommended": true,
+      "correctness": {
+        "noUnusedVariables": "off"
+      }
+    },
     "domains": { "react": "recommended", "next": "recommended" }
   },
   "javascript": {
