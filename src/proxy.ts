@@ -3,7 +3,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isPublicPath = path === "/login" || path === "/signup" || path === "/";
 
