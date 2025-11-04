@@ -82,7 +82,7 @@ export default function LoginPage() {
         </TabsList>
 
         <TabsContent value="traditional" className="animate-enter pt-6">
-          <form onSubmit={formik.handleSubmit} className="spacebg-card/50 border-border/50 grid w-full grid-cols-2 rounded-xl border p-1 backdrop-blur-sm-y-6">
+          <form onSubmit={formik.handleSubmit} className="space-y-6">
             <div className="grid gap-6">
               <div className="grid w-full items-center gap-2">
                 <Label
