@@ -1,8 +1,8 @@
 // components/auth/GoogleSignInButton.tsx
 "use client";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { authClient } from "@/lib/auth-client";
 
 export default function GoogleSignInButton({
   text = "Sign in with Google",
@@ -14,7 +14,7 @@ export default function GoogleSignInButton({
       <Button
         variant="secondary"
         className="w-full"
-        onClick={() => signIn("google")}
+        onClick={() => authClient.signIn.social({ provider: "google" })}
       >
         <Image
           src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"

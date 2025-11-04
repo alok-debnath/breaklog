@@ -1,4 +1,4 @@
-import axios from "axios";
+import { useMutation } from "convex/react";
 import { CheckCircle2, Clock, Undo2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -6,6 +6,7 @@ import { handleError } from "@/components/common/CommonCodeBlocks";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
+import { api } from "../../../../convex/_generated/api";
 
 interface HalfDaySectionProps {
   isHalfDay: boolean;
@@ -39,7 +40,9 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
   const { initialPageLoadDone, loading } = useStore();
   const pathname = usePathname();
 
-  const [isHalfDayState, setIsHalfDayState] = useState(null);
+  const [isHalfDayState, setIsHalfDayState] = useState<boolean | null>(null);
+
+  const toggleHalfDayMutation = useMutation(api.toggleHalfDay.toggleHalfDay);
 
   const simpleLogEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
@@ -49,19 +52,16 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
         date = getCurrentDateInTimezone(defaultTimeZone);
       }
 
-      const values = {
-        logtype: value,
-        date: date,
-      };
+      const isMarkingHalfDay = value === "mark-as-half-day";
 
       useStore.setState(() => ({ loading: true }));
-      const res = await axios.post(
-        "/api/users/submitlog/submitHalfday",
-        values,
-      );
-      setIsHalfDayState(res.data.fetchedLog.workdata.isHalfDay);
+      await toggleHalfDayMutation({
+        date: date,
+        isHalfDay: isMarkingHalfDay,
+      });
+      setIsHalfDayState(isMarkingHalfDay);
       useStore.setState(() => ({ loading: false }));
-    } catch (error: any) {
+    } catch (error) {
       handleError({ error: error, router: router });
     }
   };

@@ -10,6 +10,11 @@ if (!siteUrl) {
   throw new Error("Environment variable SITE_URL is required");
 }
 
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+if (!googleClientId) {
+  throw new Error("Environment variable GOOGLE_CLIENT_ID is required");
+}
+
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
 export const authComponent = createClient<DataModel>(components.betterAuth);
@@ -30,6 +35,12 @@ export const createAuth = (
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: false,
+    },
+    socialProviders: {
+      google: {
+        clientId: googleClientId,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      },
     },
     plugins: [
       // The Convex plugin is required for Convex compatibility

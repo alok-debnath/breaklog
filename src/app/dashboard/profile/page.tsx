@@ -1,9 +1,9 @@
 "use client";
-import axios from "axios";
+import { useMutation } from "convex/react";
 import { useFormik } from "formik";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { allTimezones, useTimezoneSelect } from "react-timezone-select";
 import * as Yup from "yup";
 import {
@@ -11,7 +11,6 @@ import {
   handleSuccessToast,
 } from "@/components/common/CommonCodeBlocks";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Command,
   CommandEmpty,
@@ -42,6 +41,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
+import { api } from "../../../../convex/_generated/api";
 
 const validationSchema = Yup.object().shape({
   daily_work_required: Yup.number()
@@ -57,14 +57,15 @@ const ProfilePage = () => {
   const { userData, loading } = useStore();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const updateProfileMutation = useMutation(api.updateProfile.updateProfile);
 
   const initialValues = useMemo(
     () => ({
-      daily_work_required: userData.daily_work_required,
+      daily_work_required: userData.daily_work_required || 0,
       log_type: userData.log_type,
-      default_time_zone: userData.default_time_zone,
+      default_time_zone: userData.default_time_zone || "",
     }),
-    [userData],
+    [userData]
   );
 
   const formik = useFormik({
@@ -74,23 +75,31 @@ const ProfilePage = () => {
     enableReinitialize: true,
   });
 
-  async function handleSubmit(values: any) {
+  async function handleSubmit(values: {
+    daily_work_required: number;
+    log_type: string;
+    default_time_zone: string;
+  }) {
     useStore.setState(() => ({ loading: true }));
     try {
-      const res = await axios.post("/api/users/profile/updateprofile", values);
+      const res = await updateProfileMutation({
+        dailyWorkRequired: values.daily_work_required,
+        logType: values.log_type,
+        defaultTimeZone: values.default_time_zone,
+      });
 
-      if ((res.data.success = true)) {
+      if (res.status === 200) {
         useStore.setState({
           userData: {
             ...userData,
-            ...formik.values,
+            ...values,
           },
         });
         handleSuccessToast({
           message: "Data saved successfully",
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       handleError({ error: error, router: router });
     } finally {
       formik.setSubmitting(false);
@@ -109,20 +118,21 @@ const ProfilePage = () => {
 
   return (
     <>
-      <div className="from-background via-background/95 to-background/90 bg-gradient-to-br p-4">
+      <div className="from-background via-background/95 to-background/90 bg-linear-to-br p-4">
         <div className="w-full max-w-lg">
-          <div className="border-border/50 from-card/80 to-card/40 relative overflow-hidden rounded-3xl border bg-gradient-to-br shadow-2xl backdrop-blur-xl">
-            <div className="from-primary/5 absolute inset-0 bg-gradient-to-br to-transparent" />
+          <div className="border-border/50 from-card/80 to-card/40 relative overflow-hidden rounded-3xl border bg-linear-to-br shadow-2xl backdrop-blur-xl">
+            <div className="from-primary/5 absolute inset-0 bg-linear-to-br to-transparent" />
             <div className="relative">
               <div className="p-8">
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+                  <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
                     <svg
                       className="h-6 w-6 text-blue-600 dark:text-blue-400"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
+                      <title>User icon</title>
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -131,7 +141,7 @@ const ProfilePage = () => {
                       />
                     </svg>
                   </div>
-                  <h1 className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-2xl font-bold">
+                  <h1 className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-2xl font-bold">
                     Update your data
                   </h1>
                 </div>
@@ -160,6 +170,7 @@ const ProfilePage = () => {
                                 stroke="currentColor"
                                 className="text-primary hover:text-primary/80 h-5 w-5 transition-colors"
                               >
+                                <title>Help information</title>
                                 <path
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
@@ -211,6 +222,7 @@ const ProfilePage = () => {
                                 stroke="currentColor"
                                 className="text-primary hover:text-primary/80 h-5 w-5 transition-colors"
                               >
+                                <title>Help information</title>
                                 <path
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
@@ -274,7 +286,7 @@ const ProfilePage = () => {
                               ? options.find(
                                   (option) =>
                                     option.value ===
-                                    formik.values.default_time_zone,
+                                    formik.values.default_time_zone
                                 )?.label
                               : "Select timezone..."}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -299,7 +311,7 @@ const ProfilePage = () => {
                                         currentValue ===
                                           formik.values.default_time_zone
                                           ? ""
-                                          : currentValue,
+                                          : currentValue
                                       );
                                       setOpen(false);
                                     }}
@@ -311,7 +323,7 @@ const ProfilePage = () => {
                                         formik.values.default_time_zone ===
                                           option.value
                                           ? "opacity-100"
-                                          : "opacity-0",
+                                          : "opacity-0"
                                       )}
                                     />
                                     {option.label}
@@ -333,7 +345,7 @@ const ProfilePage = () => {
                     <Button
                       type="submit"
                       disabled={loading}
-                      className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 mt-4 rounded-xl bg-gradient-to-r py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
+                      className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 mt-4 rounded-xl bg-linear-to-r py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
                     >
                       {loading ? (
                         <div className="flex items-center gap-2">

@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
 import { handleError } from "@/components/common/CommonCodeBlocks";
 import BottomNavbar from "@/components/Layouts/BottomNavbar";
@@ -9,12 +9,14 @@ import useConfirm from "@/hooks/useConfirm";
 import useOnScreen from "@/hooks/useOnScreen";
 import { useStore } from "@/stores/store";
 import { saveFetchedLogsToStore } from "@/utils/saveFetchedLogsToStore";
+import { api } from "../../../convex/_generated/api";
 
 const Index = () => {
   const { workData, userData, initialPageLoadDone } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== "undefined";
+  const submitLogMutation = useMutation(api.submitLog.submitLog);
 
   const logEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
@@ -33,13 +35,14 @@ const Index = () => {
         }
       }
 
-      const values = {
-        logtype: value,
-      };
-
       useStore.setState(() => ({ loading: true }));
-      const res = await axios.post("/api/users/submitlog", values);
-      saveFetchedLogsToStore(res.data.fetchedLog);
+      const res = await submitLogMutation({ logtype: value });
+      saveFetchedLogsToStore({
+        message: res.message,
+        status: res.status,
+        data: res.data,
+        workdata: res.workdata,
+      });
     } catch (error: unknown) {
       handleError({ error: error, router: router });
     }
@@ -54,7 +57,7 @@ const Index = () => {
   const [ref, isIntersecting] = useOnScreen(-100);
 
   return (
-    <div className="from-background via-background/95 to-muted/20 bg-gradient-to-br">
+    <div className="from-background via-background/95 to-muted/20 bg-linear-to-br">
       <LogsCard
         isWorkDoneSuccess={isWorkDoneSuccess}
         isIntersecting={isIntersecting}

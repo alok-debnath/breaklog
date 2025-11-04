@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
@@ -7,6 +6,7 @@ import { handleError } from "@/components/common/CommonCodeBlocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { authClient } from "@/lib/auth-client";
 
 // import { sendEmail } from "@/helpers/mailer";
 
@@ -45,27 +45,22 @@ export default function SignupPage() {
     password: string;
   }) {
     try {
-      const res = await axios.post("/api/auth/signup", values);
+      const res = await authClient.signUp.email({
+        email: values.email,
+        password: values.password,
+        name: values.username,
+      });
 
-      // send email
-      // await sendEmail({ email: values.email, emailType: "VERIFY", userID: res.data.data.id })
-      if (res.data.success === true) {
+      if (res.data) {
         router.push("/login");
-      }
-    } catch (error: any) {
-      if (error.response.data.error !== undefined) {
+      } else {
         handleError({
-          error: { message: error.response.data.error },
+          error: { message: res.error?.message || "Signup failed" },
           router: router,
         });
-        if (error.response.data.focusOn.length > 0) {
-          error.response.data.focusOn.forEach((field: string) => {
-            formik.setFieldError(field, `Change ${field}`);
-          });
-        }
-      } else {
-        handleError({ error: error, router: null });
       }
+    } catch (error: unknown) {
+      handleError({ error: error, router: null });
     } finally {
       formik.setSubmitting(false);
     }
@@ -140,7 +135,7 @@ export default function SignupPage() {
         <Button
           type="submit"
           disabled={!formik.isValid || formik.isSubmitting}
-          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 mt-4 h-12 w-full rounded-xl bg-gradient-to-r py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
+          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 mt-4 h-12 w-full rounded-xl bg-linear-to-r py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
         >
           {formik.isSubmitting ? (
             <div className="flex items-center gap-2">

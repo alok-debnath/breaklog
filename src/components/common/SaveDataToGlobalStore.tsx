@@ -33,6 +33,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
         : userDataServer.log_type === "breakmode",
       themeMode: savedTheme || themeMode,
     });
+    // Setting theme cookie for proper theme persistence
     document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
 
     setIsFirstEffectCompleted(true);

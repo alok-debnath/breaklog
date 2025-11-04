@@ -10,7 +10,7 @@ import {
   Target,
 } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -87,10 +87,13 @@ const LogsCard: React.FC<LogsCardProps> = ({
     unformattedWorkDone >= (userData.daily_work_required * 3600000) / 2 &&
     unformattedWorkDone <= (userData.daily_work_required * 3600000 * 3) / 4;
 
-  const dateToDisplay =
-    currentLogs.length > 0 && currentLogs[0].log_time
-      ? new Date(currentLogs[0].log_time)
-      : new Date();
+  // Always show today's date - use state to avoid hydration mismatch
+  const [dateToDisplay, setDateToDisplay] = useState(new Date());
+
+  // Update date on client mount to ensure consistency
+  useEffect(() => {
+    setDateToDisplay(new Date());
+  }, []);
 
   return (
     <Card
@@ -106,7 +109,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
       {isHalfDay ? (
         <HalfDaySection
           isHalfDay={currentWorkData.isHalfDay}
-          defaultTimeZone={userData.default_time_zone}
+          defaultTimeZone={userData.default_time_zone || "Etc/GMT"}
         />
       ) : (
         <></>
@@ -423,7 +426,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
       {page !== "history" && (
         <CardFooter className="pt-2">
           <Button
-            onClick={() => logEntry && logEntry("day end")}
+            onClick={() => logEntry?.("day end")}
             variant="destructive"
             className="h-12 w-full rounded-2xl bg-gradient-to-r from-red-500 to-red-600 text-base font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:from-red-600 hover:to-red-700 hover:shadow-xl"
             disabled={

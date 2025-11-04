@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
 import { ModeToggle } from "../mode-toggle";
@@ -38,13 +38,13 @@ const Navbar = () => {
     }
   }, [pathname]);
 
-  const logout = () => signOut({ callbackUrl: "/login" });
+  const logout = () => authClient.signOut();
 
   return (
-    <div className="fixed top-6 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-[768px]">
-      <header className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-gradient-to-r shadow-2xl backdrop-blur-xl">
+    <div className="fixed top-6 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-3xl">
+      <header className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-linear-to-r shadow-2xl backdrop-blur-xl">
         {/* Background decoration */}
-        <div className="from-primary/5 to-primary/5 absolute inset-0 bg-gradient-to-r via-transparent" />
+        <div className="from-primary/5 to-primary/5 absolute inset-0 bg-linear-to-r via-transparent" />
         <div className="bg-primary/10 absolute -top-2 -right-2 h-8 w-8 rounded-full" />
         <div className="bg-primary/5 absolute -bottom-2 -left-2 h-6 w-6 rounded-full" />
 
@@ -102,10 +102,10 @@ const Navbar = () => {
 
           {/* Brand */}
           <Link href="/dashboard" className="flex items-center gap-3 md:hidden">
-            <div className="from-primary/20 to-primary/10 border-primary/20 flex h-8 w-8 items-center justify-center rounded-xl border bg-gradient-to-br">
-              <div className="from-primary to-primary/80 h-4 w-4 rounded-md bg-gradient-to-br" />
+            <div className="from-primary/20 to-primary/10 border-primary/20 flex h-8 w-8 items-center justify-center rounded-xl border bg-linear-to-br">
+              <div className="from-primary to-primary/80 h-4 w-4 rounded-md bg-linear-to-br" />
             </div>
-            <span className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+            <span className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
               Breaklog
             </span>
           </Link>
@@ -113,10 +113,10 @@ const Navbar = () => {
           {/* Desktop Menu */}
           <div className="hidden items-center gap-8 md:flex">
             <Link href="/dashboard" className="flex items-center gap-3">
-              <div className="from-primary/20 to-primary/10 border-primary/20 flex h-10 w-10 items-center justify-center rounded-2xl border bg-gradient-to-br">
-                <div className="from-primary to-primary/80 h-5 w-5 rounded-lg bg-gradient-to-br" />
+              <div className="from-primary/20 to-primary/10 border-primary/20 flex h-10 w-10 items-center justify-center rounded-2xl border bg-linear-to-br">
+                <div className="from-primary to-primary/80 h-5 w-5 rounded-lg bg-linear-to-br" />
               </div>
-              <span className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+              <span className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
                 Breaklog
               </span>
             </Link>
@@ -126,7 +126,7 @@ const Navbar = () => {
                 className={cn(
                   "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   pathname.startsWith("/dashboard/history")
-                    ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-gradient-to-r"
+                    ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-linear-to-r"
                     : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                 )}
               >

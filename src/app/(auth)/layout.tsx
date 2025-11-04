@@ -12,15 +12,15 @@ export default function DashboardLayout({
   const pathname = usePathname();
 
   return (
-    <div className="from-background via-background to-muted/20 relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-br p-4">
-      <div className="from-primary/5 to-secondary/5 absolute inset-0 bg-gradient-to-br via-transparent" />
+    <div className="from-background via-background to-muted/20 relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-linear-to-br p-4">
+      <div className="from-primary/5 to-secondary/5 absolute inset-0 bg-linear-to-br via-transparent" />
       <div className="bg-primary/10 absolute top-1/4 left-1/4 h-96 w-96 animate-pulse rounded-full blur-3xl" />
       <div className="bg-secondary/10 absolute right-1/4 bottom-1/4 h-96 w-96 animate-pulse rounded-full blur-3xl delay-1000" />
 
       <Toaster position="top-left" />
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-8 text-center">
-          <h1 className="from-primary via-primary/80 to-secondary mb-2 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent">
+          <h1 className="from-primary via-primary/80 to-secondary mb-2 bg-linear-to-r bg-clip-text text-4xl font-bold text-transparent">
             Breaklog
           </h1>
           <p className="text-muted-foreground text-lg">
@@ -31,7 +31,7 @@ export default function DashboardLayout({
         </div>
 
         <Card className="bg-card/80 border-border/50 w-full overflow-hidden rounded-3xl shadow-2xl backdrop-blur-xl">
-          <div className="from-primary/5 to-secondary/5 pointer-events-none absolute inset-0 bg-gradient-to-br" />
+          <div className="from-primary/5 to-secondary/5 pointer-events-none absolute inset-0 bg-linear-to-br" />
           <CardContent className="relative z-10 p-8">{children}</CardContent>
         </Card>
 

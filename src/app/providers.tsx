@@ -2,14 +2,11 @@
 
 import { ConvexBetterAuthProvider } from "@convex-dev/better-auth/react";
 import { ConvexReactClient } from "convex/react";
-import type { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import type { ReactNode } from "react";
 import { authClient } from "@/lib/auth-client";
 
 interface ProvidersProps {
   children: ReactNode;
-  session?: Session | null;
 }
 
 const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
@@ -21,12 +18,10 @@ const convex = new ConvexReactClient(convexUrl, {
   expectAuth: true,
 });
 
-export function Providers({ children, session }: ProvidersProps) {
+export function Providers({ children }: ProvidersProps) {
   return (
-    <SessionProvider session={session}>
-      <ConvexBetterAuthProvider client={convex} authClient={authClient}>
-        {children}
-      </ConvexBetterAuthProvider>
-    </SessionProvider>
+    <ConvexBetterAuthProvider client={convex} authClient={authClient}>
+      {children}
+    </ConvexBetterAuthProvider>
   );
 }

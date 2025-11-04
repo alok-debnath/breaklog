@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export interface WorkData {
   firstLogStatus: string | null;
-  lastLogStatus: string;
+  lastLogStatus: string | null;
   breakTime: string;
   workDone: string;
   unformattedWorkDone: number;
@@ -21,10 +21,10 @@ interface summary {
   // actualWorkHours: string;
 }
 export interface UserData {
-  username: string;
-  daily_work_required: number;
+  username: string | undefined;
+  daily_work_required: number | undefined;
   log_type: string;
-  default_time_zone: string;
+  default_time_zone: string | undefined;
 }
 interface MonthLogData {
   date: string;
@@ -59,7 +59,7 @@ interface BreakData {
 
 export interface LogsData {
   id: string;
-  log_time: string;
+  log_time: Date;
   log_status: string;
 }
 
@@ -72,7 +72,7 @@ interface StoreState {
   breaklogMode: boolean;
   workData: WorkData;
   loading: boolean;
-  currBreak: null | Date; // Change 'null' to 'null | Date' for date type
+  currBreak: null | number; // Change to number (timestamp) instead of Date
   breaks: BreakData;
   logEditStore: LogEditData;
   dialogModal: DialogModalData;
@@ -83,7 +83,7 @@ interface StoreState {
   isTimeZoneModalOpen: boolean;
 }
 
-export const useStore = create<StoreState>((set) => ({
+export const useStore = create<StoreState>((_set) => ({
   themeMode: "",
   logs: [],
   monthLogs: [

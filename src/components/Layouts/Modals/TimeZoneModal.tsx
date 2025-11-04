@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
 import type * as React from "react";
 import { useEffect, useState } from "react";
@@ -32,6 +32,7 @@ import {
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
+import { api } from "../../../../convex/_generated/api";
 import { handleError, handleSuccessToast } from "../../common/CommonCodeBlocks";
 
 const TimeZoneForm = ({
@@ -43,6 +44,7 @@ const TimeZoneForm = ({
 }) => {
   const { userData, loading } = useStore();
   const router = useRouter();
+  const updateProfile = useMutation(api.updateProfile.updateProfile);
 
   const labelStyle = "abbrev";
   const timezones = {
@@ -59,23 +61,21 @@ const TimeZoneForm = ({
   async function handleSubmit() {
     useStore.setState(() => ({ loading: true }));
     try {
-      const res = await axios.post("/api/users/profile/updateprofile", {
-        ...userData,
-        default_time_zone: selectedTimeZone,
+      await updateProfile({
+        defaultTimeZone: selectedTimeZone,
       });
 
-      if (res.data.success) {
-        useStore.setState({ isTimeZoneModalOpen: false });
-        useStore.setState({
-          userData: {
-            ...userData,
-          },
-        });
-        handleSuccessToast({
-          message: "Data saved successfully",
-        });
-      }
-    } catch (error: any) {
+      useStore.setState({ isTimeZoneModalOpen: false });
+      useStore.setState({
+        userData: {
+          ...userData,
+          default_time_zone: selectedTimeZone,
+        },
+      });
+      handleSuccessToast({
+        message: "Data saved successfully",
+      });
+    } catch (error: unknown) {
       handleError({ error: error, router: router });
     } finally {
       useStore.setState(() => ({ loading: false }));
@@ -87,21 +87,20 @@ const TimeZoneForm = ({
       .resolvedOptions()
       .timeZone.toLowerCase();
     const isTimeZoneMatch = options.some(
-      (option) => option.value.toLowerCase() === userDeviceTimezone
+      (option) => option.value.toLowerCase() === userDeviceTimezone,
     );
     if (isTimeZoneMatch) {
       setDeviceTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
       setSelectedTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [options]);
 
   const Footer = isDesktop ? DialogFooter : DrawerFooter;
 
   return (
     <div className={cn("space-y-6", className)}>
       <div className="space-y-3">
-        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-gradient-to-br p-4 backdrop-blur-sm">
+        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-linear-to-br p-4 backdrop-blur-sm">
           <p className="text-foreground/80 mb-1 text-sm font-medium">
             Device Timezone:
           </p>
@@ -126,7 +125,7 @@ const TimeZoneForm = ({
           </span>
         </div>
 
-        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-gradient-to-br p-4 backdrop-blur-sm">
+        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-linear-to-br p-4 backdrop-blur-sm">
           <p className="text-foreground/80 mb-1 text-sm font-medium">
             Selected Timezone:
           </p>
@@ -148,14 +147,15 @@ const TimeZoneForm = ({
         </div>
       </div>
 
-      <div className="rounded-xl border border-orange-200/20 bg-gradient-to-br from-orange-500/10 to-yellow-500/10 p-4 backdrop-blur-sm dark:border-orange-800/20">
+      <div className="rounded-xl border border-orange-200/20 bg-linear-to-br from-orange-500/10 to-yellow-500/10 p-4 backdrop-blur-sm dark:border-orange-800/20">
         <div className="flex items-start gap-2">
           <svg
-            className="mt-0.5 h-4 w-4 flex-shrink-0 text-orange-500"
+            className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
+            <title>Warning icon</title>
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -209,7 +209,7 @@ const TimeZoneForm = ({
         <Button
           onClick={handleSubmit}
           disabled={!selectedTimeZone || loading}
-          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-gradient-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
+          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-linear-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
         >
           {loading ? (
             <div className="flex items-center gap-2">
@@ -250,13 +250,14 @@ const TimeZoneModal: React.FC = () => {
         >
           <Header className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+              <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
                 <svg
                   className="h-5 w-5 text-blue-600 dark:text-blue-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
+                  <title>Clock icon</title>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -265,7 +266,7 @@ const TimeZoneModal: React.FC = () => {
                   />
                 </svg>
               </div>
-              <Title className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+              <Title className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
                 Select Time Zone
               </Title>
             </div>
@@ -281,13 +282,14 @@ const TimeZoneModal: React.FC = () => {
       <DrawerContent>
         <Header className="space-y-3 text-left">
           <div className="flex items-center gap-3 p-4">
-            <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+            <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
               <svg
                 className="h-5 w-5 text-blue-600 dark:text-blue-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
+                <title>Clock icon</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -296,7 +298,7 @@ const TimeZoneModal: React.FC = () => {
                 />
               </svg>
             </div>
-            <Title className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+            <Title className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
               Select Time Zone
             </Title>
           </div>

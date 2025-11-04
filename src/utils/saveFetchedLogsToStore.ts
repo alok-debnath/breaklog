@@ -6,7 +6,7 @@ export interface FetchedLogsDataType {
   message: string;
   status: number;
   data: LogsData[];
-  workdata: WorkData & { currentBreak: null | Date };
+  workdata: WorkData & { currentBreak: null | number };
 }
 
 export const saveFetchedLogsToStore = (data: FetchedLogsDataType) => {

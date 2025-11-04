@@ -1,12 +1,11 @@
 "use client";
-import axios from "axios";
+import { useQuery } from "convex/react";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { handleError } from "@/components/common/CommonCodeBlocks";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -30,6 +29,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useStore } from "@/stores/store";
+import { api } from "../../../../convex/_generated/api";
+
+interface ConvexSummary {
+  totalWorkDone: number;
+  formattedTotalBreakTime: string;
+  formattedTotalWorkDone: string;
+  numberOfDays: number;
+  expectedWorkHours: number;
+  halfDayCount: number;
+}
 
 const HistoryPage = () => {
   const { loading, monthLogs, summary, userData } = useStore();
@@ -39,6 +48,17 @@ const HistoryPage = () => {
   // Initialize selectedMonth and selectedYear with the current month and year.
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Months are zero-based, so add 1.
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  const nextMonth = selectedMonth === 12 ? 1 : selectedMonth + 1;
+  const nextYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear;
+
+  const monthStart =
+    selectedYear +
+    "-" +
+    String(selectedMonth).padStart(2, "0") +
+    "-01T00:00:00.000Z";
+  const monthEnd =
+    nextYear + "-" + String(nextMonth).padStart(2, "0") + "-01T00:00:00.000Z";
 
   const years = Array.from(
     { length: new Date().getFullYear() - 2022 },
@@ -60,7 +80,43 @@ const HistoryPage = () => {
     "December",
   ];
 
-  const handleSearch = async () => {
+  const fetchMonthlyLogs = useQuery(api.fetchLogs.fetchMonthlyLogs, {
+    monthStart: monthStart,
+    monthEnd: monthEnd,
+  });
+
+  // Update store when query result changes
+  useEffect(() => {
+    if (fetchMonthlyLogs) {
+      // Transform query data to match store interface
+      const transformedMonthLogs = fetchMonthlyLogs.data?.map(log => ({
+        date: log.date,
+        breakTime: log.formattedBreakTime.split(':').reduce((acc, val, idx) =>
+          acc + parseInt(val) * [3600000, 60000, 1000][idx], 0),
+        workDone: log.workDone,
+        formattedBreakTime: log.formattedBreakTime,
+        formattedWorkDone: log.formattedWorkDone,
+        isHalfDay: log.isHalfDay,
+      })) || [];
+
+      useStore.setState({
+        monthLogs: transformedMonthLogs,
+        summary: (fetchMonthlyLogs.summary as ConvexSummary)?.expectedWorkHours !== undefined ? {
+          ...(fetchMonthlyLogs.summary as ConvexSummary),
+          numberOfDays: (fetchMonthlyLogs.summary as ConvexSummary).numberOfDays.toString(),
+        } : {
+          expectedWorkHours: 0,
+          totalWorkDone: 0,
+          formattedTotalWorkDone: "",
+          numberOfDays: "",
+          halfDayCount: 0,
+          formattedTotalBreakTime: "",
+        },
+      });
+    }
+  }, [fetchMonthlyLogs]);
+
+  const handleSearch = () => {
     if (
       userData.daily_work_required === 0 ||
       userData.daily_work_required === undefined ||
@@ -75,55 +131,13 @@ const HistoryPage = () => {
       return;
     }
 
-    const nextMonth = selectedMonth === 12 ? 1 : selectedMonth + 1;
-    const nextYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear;
-
-    const monthStart =
-      selectedYear +
-      "-" +
-      String(selectedMonth).padStart(2, "0") +
-      "-01T00:00:00.000Z";
-    const monthEnd =
-      nextYear + "-" + String(nextMonth).padStart(2, "0") + "-01T00:00:00.000Z";
-
-    try {
-      // setCollapseBoxState(false);
-      useStore.setState(() => ({ loading: true }));
-
-      const values = {
-        monthStart: monthStart,
-        monthEnd: monthEnd,
-      };
-
-      const res = await axios.post(
-        "/api/users/fetchlog/fetchdynamiclog",
-        values,
-      );
-
-      if (res.data.status === 200) {
-        setCollapseBoxState(true);
-
-        useStore.setState(() => ({
-          monthLogs: res.data.data,
-          loading: false,
-          summary: res.data.summary,
-        }));
-      } else {
-        setCollapseBoxState(false);
-        useStore.setState(() => ({ loading: false }));
-        handleError({
-          error: { message: res.data.status },
-          router: router,
-        });
-      }
-    } catch (error: any) {
-      handleError({ error: error, router: router });
-    }
+    // The query will automatically run with the new dates
+    setCollapseBoxState(true);
   };
 
   useEffect(() => {
     setCollapseBoxState(false);
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear]); // Hide results when user changes month/year selectors
 
   useEffect(() => {
     if (Number(summary.numberOfDays) > 0) {
@@ -144,6 +158,7 @@ const HistoryPage = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
+                <title>Chart icon</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -168,7 +183,7 @@ const HistoryPage = () => {
               <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
                 {months.map((month, index) => (
                   <SelectItem
-                    key={index}
+                    key={month}
                     value={(index + 1).toString()}
                     className="hover:bg-accent/50"
                   >
@@ -185,9 +200,9 @@ const HistoryPage = () => {
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
-                {years.map((year, index) => (
+                {years.map((year) => (
                   <SelectItem
-                    key={index}
+                    key={year}
                     value={year.toString()}
                     className="hover:bg-accent/50"
                   >
@@ -225,6 +240,7 @@ const HistoryPage = () => {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
+                  <title>Summary icon</title>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -291,6 +307,7 @@ const HistoryPage = () => {
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
+                  <title>Logs icon</title>
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -322,6 +339,7 @@ const HistoryPage = () => {
                                   stroke="currentColor"
                                   className="text-primary me-2 h-5 w-5"
                                 >
+                                  <title>Information icon</title>
                                   <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
@@ -346,10 +364,10 @@ const HistoryPage = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {[...monthLogs].reverse().map((log, index) => {
+                    {[...monthLogs].reverse().map((log) => {
                       return (
                         <TableRow
-                          key={index}
+                          key={log.date}
                           className="border-border/30 hover:bg-muted/20 transition-colors"
                         >
                           <TableCell>
@@ -359,7 +377,7 @@ const HistoryPage = () => {
                                   log.isHalfDay
                                     ? "outline"
                                     : log.workDone >=
-                                        userData.daily_work_required * 3600000
+                                        (userData.daily_work_required ?? 0) * 3600000
                                       ? "default"
                                       : "destructive"
                                 }

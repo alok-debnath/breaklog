@@ -1,7 +1,6 @@
 "use client";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import * as Yup from "yup";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import { handleError } from "@/components/common/CommonCodeBlocks";
@@ -9,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { authClient } from "@/lib/auth-client";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -39,28 +39,16 @@ export default function LoginPage() {
   }
   async function handleSubmit(values: FormValues) {
     try {
-      const res = await signIn("credentials", {
-        redirect: false,
+      const res = await authClient.signIn.email({
         email: values.email,
         password: values.password,
       });
 
-      if (!res) {
-        // signIn() failed unexpectedly (network or internal error)
-        handleError({
-          error: { message: "Unexpected error. Please try again" },
-          router: router,
-        });
-      } else if (res.ok && !res.error) {
+      if (res.data) {
         router.push("/dashboard");
       } else {
-        // Invalid credentials or handled failure
         handleError({
-          error: {
-            message:
-              //  res.error ||
-              "Invalid credentials",
-          },
+          error: { message: res.error?.message || "Invalid credentials" },
           router: router,
         });
       }
@@ -147,7 +135,7 @@ export default function LoginPage() {
               <Button
                 type="submit"
                 disabled={!formik.isValid || formik.isSubmitting}
-                className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 mt-4 h-12 w-full rounded-xl bg-gradient-to-r py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
+                className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 mt-4 h-12 w-full rounded-xl bg-linear-to-r py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
               >
                 {formik.isSubmitting ? (
                   <div className="flex items-center gap-2">

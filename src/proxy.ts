@@ -7,11 +7,8 @@ export function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isPublicPath = path === "/login" || path === "/signup" || path === "/";
 
-  // NextAuth session token cookie (works both dev & prod)
-  const token =
-    request.cookies.get("authjs.session-token")?.value ||
-    request.cookies.get("__Secure-authjs.session-token")?.value ||
-    "";
+  // BetterAuth session token
+  const token = request.cookies.get("better-auth.session_token")?.value || "";
 
   if (path === "/home" && token) {
     return NextResponse.rewrite(new URL("/", request.nextUrl));

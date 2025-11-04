@@ -1,8 +1,8 @@
 "use client";
-import axios from "axios";
+import { useMutation } from "convex/react";
 import { useFormik } from "formik";
 import { Clock, Save, X } from "lucide-react";
-import type * as React from "react";
+import * as React from "react";
 import { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ import { Label } from "@/components/ui/label";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { saveFetchedLogsToStore } from "@/utils/saveFetchedLogsToStore";
+import { api } from "../../../../convex/_generated/api";
 import { handleError } from "../../common/CommonCodeBlocks";
 
 type TimeEditFormProps = {
@@ -39,6 +39,10 @@ type TimeEditFormProps = {
   localTime: { hour: number; minute: number; period: string };
   localTimeZone: string;
   isDesktop: boolean;
+  editLogMutation: (args: {
+    logId: string;
+    logDateTime: number;
+  }) => Promise<{ message: string }>;
 };
 
 const TimeEditForm = ({
@@ -47,6 +51,7 @@ const TimeEditForm = ({
   localTime,
   localTimeZone,
   isDesktop,
+  editLogMutation,
 }: TimeEditFormProps) => {
   const { loading, logEditStore } = useStore();
 
@@ -79,15 +84,14 @@ const TimeEditForm = ({
     const updatedDateTimeUTC = localDateTime.toISOString();
 
     const values = {
-      log_id: logEditStore.log_id,
-      log_dateTime: updatedDateTimeUTC,
+      logId: logEditStore.log_id,
+      logDateTime: new Date(updatedDateTimeUTC).getTime(),
     };
 
     try {
       useStore.setState(() => ({ loading: true }));
-      const res = await axios.post("/api/users/logedit", values);
-      saveFetchedLogsToStore(res.data.fetchedLog);
-    } catch (error: any) {
+      await editLogMutation(values);
+    } catch (error: unknown) {
       handleError({ error: error, router: null });
     }
     closeModal();
@@ -166,10 +170,10 @@ const TimeEditForm = ({
             value={formik.values.hour || 0}
             onChange={formik.handleChange}
             className={cn(
-              "border-border/50 from-background/50 to-muted/20 h-12 rounded-xl bg-gradient-to-r font-mono text-lg transition-all duration-200",
+              "border-border/50 from-background/50 to-muted/20 h-12 rounded-xl bg-linear-to-r font-mono text-lg transition-all duration-200",
               "focus:ring-primary/20 focus:border-primary/50 focus:ring-2",
               formik.errors.hour &&
-                "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20",
+                "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
             )}
           />
           {formik.errors.hour && (
@@ -195,10 +199,10 @@ const TimeEditForm = ({
             value={formik.values.minute || 0}
             onChange={formik.handleChange}
             className={cn(
-              "border-border/50 from-background/50 to-muted/20 h-12 rounded-xl bg-gradient-to-r font-mono text-lg transition-all duration-200",
+              "border-border/50 from-background/50 to-muted/20 h-12 rounded-xl bg-linear-to-r font-mono text-lg transition-all duration-200",
               "focus:ring-primary/20 focus:border-primary/50 focus:ring-2",
               formik.errors.minute &&
-                "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20",
+                "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
             )}
           />
           {formik.errors.minute && (
@@ -227,8 +231,8 @@ const TimeEditForm = ({
                   className={cn(
                     "h-12 flex-1 rounded-xl font-semibold transition-all duration-200",
                     formik.values.period === "AM"
-                      ? "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r shadow-lg"
-                      : "border-border/50 hover:bg-muted/50",
+                      ? "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-linear-to-r shadow-lg"
+                      : "border-border/50 hover:bg-muted/50"
                   )}
                 >
                   AM
@@ -242,8 +246,8 @@ const TimeEditForm = ({
                   className={cn(
                     "h-12 flex-1 rounded-xl font-semibold transition-all duration-200",
                     formik.values.period === "PM"
-                      ? "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r shadow-lg"
-                      : "border-border/50 hover:bg-muted/50",
+                      ? "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-linear-to-r shadow-lg"
+                      : "border-border/50 hover:bg-muted/50"
                   )}
                 >
                   PM
@@ -261,8 +265,8 @@ const TimeEditForm = ({
                 className={cn(
                   "h-12 flex-1 rounded-xl font-semibold transition-all duration-200",
                   formik.values.period === limit.min.period
-                    ? "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r shadow-lg"
-                    : "border-border/50 hover:bg-muted/50",
+                    ? "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-linear-to-r shadow-lg"
+                    : "border-border/50 hover:bg-muted/50"
                 )}
               >
                 {limit.min.period}
@@ -290,7 +294,7 @@ const TimeEditForm = ({
         <Button
           type="submit"
           disabled={!formik.isValid || loading}
-          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 h-12 flex-1 rounded-xl bg-gradient-to-r font-semibold shadow-lg transition-all duration-200 hover:shadow-xl disabled:opacity-50"
+          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 h-12 flex-1 rounded-xl bg-linear-to-r font-semibold shadow-lg transition-all duration-200 hover:shadow-xl disabled:opacity-50"
         >
           <Save className="mr-2 h-4 w-4" />
           Save Changes
@@ -303,6 +307,7 @@ const TimeEditForm = ({
 const TimeEditModal: React.FC = () => {
   const { logEditStore, isTimeEditModalOpen } = useStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const editLogMutation = useMutation(api.editLog.editLog);
   const [localTime, setLocalTime] = useState({
     hour: 0,
     minute: 0,
@@ -323,7 +328,7 @@ const TimeEditModal: React.FC = () => {
 
   const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  const parseTimeString = (timeString: string) => {
+  const parseTimeString = React.useCallback((timeString: string) => {
     const [hour, minute, period] = timeString.split(/:|\s/);
 
     return {
@@ -331,13 +336,13 @@ const TimeEditModal: React.FC = () => {
       minute: Number(minute),
       period: period || "AM",
     };
-  };
+  }, []);
 
   useEffect(() => {
     const updateLocalTime = () => {
       if (!logEditStore.log_dateTime) return;
       const updatedLocalTime = new Date(
-        logEditStore.log_dateTime,
+        logEditStore.log_dateTime
       ).toLocaleString("en-US", {
         timeZone: localTimeZone,
         hour: "numeric",
@@ -360,7 +365,7 @@ const TimeEditModal: React.FC = () => {
               hour: "numeric",
               minute: "numeric",
               hour12: true,
-            }),
+            })
           )
         : { hour: 5, minute: 31, period: "AM" };
 
@@ -371,7 +376,7 @@ const TimeEditModal: React.FC = () => {
               hour: "numeric",
               minute: "numeric",
               hour12: true,
-            }),
+            })
           )
         : { hour: 11, minute: 59, period: "PM" };
 
@@ -379,7 +384,7 @@ const TimeEditModal: React.FC = () => {
     };
 
     updateLocalTime();
-  }, [logEditStore, localTimeZone]);
+  }, [logEditStore, localTimeZone, parseTimeString]);
 
   const closeModal = () => {
     useStore.setState(() => ({
@@ -401,13 +406,13 @@ const TimeEditModal: React.FC = () => {
 
   const headerContent = (
     <Header className="space-y-3 pb-2 text-center">
-      <div className="from-primary/10 to-primary/5 border-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border bg-gradient-to-br">
+      <div className="from-primary/10 to-primary/5 border-primary/10 mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border bg-linear-to-br">
         <Clock className="text-primary h-6 w-6" />
       </div>
-      <Title className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+      <Title className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
         Edit Time
       </Title>
-      <Description className="from-muted/50 to-muted/30 border-muted-foreground/10 rounded-xl border bg-gradient-to-r px-4 py-2 text-sm font-medium">
+      <Description className="from-muted/50 to-muted/30 border-muted-foreground/10 rounded-xl border bg-linear-to-r px-4 py-2 text-sm font-medium">
         {`${limit.min.hour < 10 ? "0" : ""}${limit.min.hour}:${
           limit.min.minute < 10 ? "0" : ""
         }${limit.min.minute} ${limit.min.period} - ${
@@ -422,7 +427,7 @@ const TimeEditModal: React.FC = () => {
   if (isDesktop) {
     return (
       <Dialog open={isTimeEditModalOpen} onOpenChange={closeModal}>
-        <DialogContent className="from-background/95 to-background/80 rounded-3xl border-0 bg-gradient-to-br shadow-2xl backdrop-blur-xl sm:max-w-md">
+        <DialogContent className="from-background/95 to-background/80 rounded-3xl border-0 bg-linear-to-br shadow-2xl backdrop-blur-xl sm:max-w-md">
           {headerContent}
           <TimeEditForm
             closeModal={closeModal}
@@ -430,6 +435,7 @@ const TimeEditModal: React.FC = () => {
             localTime={localTime}
             localTimeZone={localTimeZone}
             isDesktop={true}
+            editLogMutation={editLogMutation}
           />
         </DialogContent>
       </Dialog>
@@ -446,6 +452,7 @@ const TimeEditModal: React.FC = () => {
           localTime={localTime}
           localTimeZone={localTimeZone}
           isDesktop={false}
+          editLogMutation={editLogMutation}
         />
       </DrawerContent>
     </Drawer>
