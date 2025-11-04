@@ -1,9 +1,9 @@
 "use client";
 import { useQuery } from "convex/react";
-import { Loader2 } from "lucide-react";
+import { BarChart3, FileText, Info, Loader2, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { handleError } from "@/components/common/CommonCodeBlocks";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,105 +40,179 @@ interface ConvexSummary {
   halfDayCount: number;
 }
 
+// Constants
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
+const CURRENT_YEAR = new Date().getFullYear();
+const YEARS = Array.from(
+  { length: CURRENT_YEAR - 2022 },
+  (_, index) => 2023 + index
+);
+
+// Helper functions
+const formatDateRange = (year: number, month: number) => {
+  const nextMonth = month === 12 ? 1 : month + 1;
+  const nextYear = month === 12 ? year + 1 : year;
+
+  const monthStart = `${year}-${String(month).padStart(
+    2,
+    "0"
+  )}-01T00:00:00.000Z`;
+  const monthEnd = `${nextYear}-${String(nextMonth).padStart(
+    2,
+    "0"
+  )}-01T00:00:00.000Z`;
+
+  return { monthStart, monthEnd };
+};
+
+const transformMonthLogs = (
+  data: {
+    date: string;
+    formattedBreakTime: string;
+    workDone: number;
+    formattedWorkDone: string;
+    isHalfDay: boolean;
+  }[]
+) => {
+  return (
+    data?.map((log) => ({
+      date: log.date,
+      breakTime: log.formattedBreakTime
+        .split(":")
+        .reduce(
+          (acc: number, val: string, idx: number) =>
+            acc + parseInt(val) * [3600000, 60000, 1000][idx],
+          0
+        ),
+      workDone: log.workDone,
+      formattedBreakTime: log.formattedBreakTime,
+      formattedWorkDone: log.formattedWorkDone,
+      isHalfDay: log.isHalfDay,
+    })) || []
+  );
+};
+
+const createDefaultSummary = () => ({
+  expectedWorkHours: 0,
+  totalWorkDone: 0,
+  formattedTotalWorkDone: "",
+  numberOfDays: "",
+  halfDayCount: 0,
+  formattedTotalBreakTime: "",
+});
+
+const SummaryCard = ({
+  label,
+  value,
+  color = "text-primary",
+}: {
+  label: string;
+  value: string | number;
+  color?: string;
+}) => (
+  <div className="from-background/60 to-background/40 border-border/30 flex items-center justify-between rounded-xl border bg-linear-to-r p-4 backdrop-blur-sm">
+    <p className="text-foreground/80 font-medium">{label}</p>
+    <p className={`text-lg font-bold ${color}`}>{value}</p>
+  </div>
+);
+
 const HistoryPage = () => {
   const { loading, monthLogs, summary, userData } = useStore();
   const [collapseBoxState, setCollapseBoxState] = useState(false);
   const router = useRouter();
 
   // Initialize selectedMonth and selectedYear with the current month and year.
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Months are zero-based, so add 1.
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(
+    () => new Date().getMonth() + 1
+  );
+  const [selectedYear, setSelectedYear] = useState(() =>
+    new Date().getFullYear()
+  );
+  const [queryArgs, setQueryArgs] = useState<
+    { monthStart: string; monthEnd: string } | "skip"
+  >("skip");
 
-  const nextMonth = selectedMonth === 12 ? 1 : selectedMonth + 1;
-  const nextYear = selectedMonth === 12 ? selectedYear + 1 : selectedYear;
-
-  const monthStart =
-    selectedYear +
-    "-" +
-    String(selectedMonth).padStart(2, "0") +
-    "-01T00:00:00.000Z";
-  const monthEnd =
-    nextYear + "-" + String(nextMonth).padStart(2, "0") + "-01T00:00:00.000Z";
-
-  const years = Array.from(
-    { length: new Date().getFullYear() - 2022 },
-    (_, index) => 2023 + index,
+  // Memoized date calculations
+  const { monthStart, monthEnd } = useMemo(
+    () => formatDateRange(selectedYear, selectedMonth),
+    [selectedYear, selectedMonth]
   );
 
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const fetchMonthlyLogs = useQuery(api.fetchLogs.fetchMonthlyLogs, queryArgs);
 
-  const fetchMonthlyLogs = useQuery(api.fetchLogs.fetchMonthlyLogs, {
-    monthStart: monthStart,
-    monthEnd: monthEnd,
-  });
+  // Memoized data transformation
+  const transformedData = useMemo(() => {
+    if (!fetchMonthlyLogs)
+      return { monthLogs: [], summary: createDefaultSummary() };
+
+    const transformedMonthLogs = transformMonthLogs(
+      fetchMonthlyLogs.data || []
+    );
+
+    const summaryData =
+      (fetchMonthlyLogs.summary as ConvexSummary)?.expectedWorkHours !==
+      undefined
+        ? {
+            ...(fetchMonthlyLogs.summary as ConvexSummary),
+            numberOfDays: (
+              fetchMonthlyLogs.summary as ConvexSummary
+            ).numberOfDays.toString(),
+          }
+        : createDefaultSummary();
+
+    return { monthLogs: transformedMonthLogs, summary: summaryData };
+  }, [fetchMonthlyLogs]);
 
   // Update store when query result changes
   useEffect(() => {
-    if (fetchMonthlyLogs) {
-      // Transform query data to match store interface
-      const transformedMonthLogs = fetchMonthlyLogs.data?.map(log => ({
-        date: log.date,
-        breakTime: log.formattedBreakTime.split(':').reduce((acc, val, idx) =>
-          acc + parseInt(val) * [3600000, 60000, 1000][idx], 0),
-        workDone: log.workDone,
-        formattedBreakTime: log.formattedBreakTime,
-        formattedWorkDone: log.formattedWorkDone,
-        isHalfDay: log.isHalfDay,
-      })) || [];
+    useStore.setState({
+      monthLogs: transformedData.monthLogs,
+      summary: transformedData.summary,
+    });
+  }, [transformedData]);
 
-      useStore.setState({
-        monthLogs: transformedMonthLogs,
-        summary: (fetchMonthlyLogs.summary as ConvexSummary)?.expectedWorkHours !== undefined ? {
-          ...(fetchMonthlyLogs.summary as ConvexSummary),
-          numberOfDays: (fetchMonthlyLogs.summary as ConvexSummary).numberOfDays.toString(),
-        } : {
-          expectedWorkHours: 0,
-          totalWorkDone: 0,
-          formattedTotalWorkDone: "",
-          numberOfDays: "",
-          halfDayCount: 0,
-          formattedTotalBreakTime: "",
-        },
-      });
+  // Show toast for no logs found
+  useEffect(() => {
+    if (fetchMonthlyLogs && fetchMonthlyLogs.status === 404) {
+      handleError({ error: { message: fetchMonthlyLogs.message } });
     }
   }, [fetchMonthlyLogs]);
 
-  const handleSearch = () => {
-    if (
-      userData.daily_work_required === 0 ||
-      userData.daily_work_required === undefined ||
-      userData.daily_work_required === null
-    ) {
+  const handleSearch = useCallback(() => {
+    if (!userData.daily_work_required) {
       handleError({
         error: {
           message: "Please set required work hour from profile section",
         },
-        router: router,
+        router,
       });
       return;
     }
 
-    // The query will automatically run with the new dates
-    setCollapseBoxState(true);
-  };
+    setQueryArgs({ monthStart, monthEnd });
+  }, [userData.daily_work_required, router, monthStart, monthEnd]);
 
+  // Reset state when selectors change
   useEffect(() => {
     setCollapseBoxState(false);
-  }, [selectedMonth, selectedYear]); // Hide results when user changes month/year selectors
+    setQueryArgs("skip");
+  }, [selectedMonth, selectedYear]);
 
+  // Auto-show results if data exists
   useEffect(() => {
     if (Number(summary.numberOfDays) > 0) {
       setCollapseBoxState(true);
@@ -146,28 +220,15 @@ const HistoryPage = () => {
   }, [summary.numberOfDays]);
 
   return (
-    <div className="from-background via-background/95 to-background/90 bg-gradient-to-br p-4">
-      <div className="border-border/50 from-card/80 to-card/40 relative w-full max-w-2xl overflow-hidden rounded-3xl border bg-gradient-to-br shadow-2xl backdrop-blur-xl">
-        <div className="from-primary/5 absolute inset-0 bg-gradient-to-br to-transparent" />
+    <div className="from-background via-background/95 to-background/90 bg-linear-to-br p-4">
+      <div className="border-border/50 from-card/80 to-card/40 relative w-full max-w-2xl overflow-hidden rounded-3xl border bg-linear-to-br shadow-2xl backdrop-blur-xl">
+        <div className="from-primary/5 absolute inset-0 bg-linear-to-br to-transparent" />
         <div className="relative p-8">
           <div className="mb-6 flex items-center gap-3">
-            <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
-              <svg
-                className="h-6 w-6 text-blue-600 dark:text-blue-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <title>Chart icon</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 00-2-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
+            <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+              <BarChart3 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
             </div>
-            <h1 className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-2xl font-bold">
+            <h1 className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-2xl font-bold">
               Fetch required data
             </h1>
           </div>
@@ -181,7 +242,7 @@ const HistoryPage = () => {
                 <SelectValue placeholder="Month" />
               </SelectTrigger>
               <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
-                {months.map((month, index) => (
+                {MONTHS.map((month, index) => (
                   <SelectItem
                     key={month}
                     value={(index + 1).toString()}
@@ -200,7 +261,7 @@ const HistoryPage = () => {
                 <SelectValue placeholder="Year" />
               </SelectTrigger>
               <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
-                {years.map((year) => (
+                {YEARS.map((year) => (
                   <SelectItem
                     key={year}
                     value={year.toString()}
@@ -212,11 +273,9 @@ const HistoryPage = () => {
               </SelectContent>
             </Select>
             <Button
-              onClick={() => {
-                handleSearch();
-              }}
+              onClick={handleSearch}
               disabled={loading}
-              className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 h-12 min-w-[120px] rounded-xl bg-gradient-to-r px-8 py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
+              className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 h-12 min-w-[120px] rounded-xl bg-linear-to-r px-8 py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -229,94 +288,64 @@ const HistoryPage = () => {
       </div>
 
       {collapseBoxState && (
-        <div className="border-border/50 from-card/80 to-card/40 relative mt-6 w-full max-w-2xl overflow-hidden rounded-3xl border bg-gradient-to-br shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent" />
+        <div className="border-border/50 from-card/80 to-card/40 relative mt-6 w-full max-w-2xl overflow-hidden rounded-3xl border bg-linear-to-br shadow-2xl backdrop-blur-xl">
+          <div className="absolute inset-0 bg-linear-to-br from-green-500/5 to-transparent" />
           <div className="relative p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 p-2 backdrop-blur-sm">
-                <svg
-                  className="h-5 w-5 text-green-600 dark:text-green-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <title>Summary icon</title>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 00-2-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
+              <div className="rounded-xl bg-linear-to-br from-green-500/20 to-emerald-500/20 p-2 backdrop-blur-sm">
+                <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
-              <h2 className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+              <h2 className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
                 Summary
               </h2>
             </div>
 
             <div className="grid gap-4 text-sm">
-              <div className="from-background/60 to-background/40 border-border/30 flex items-center justify-between rounded-xl border bg-gradient-to-r p-4 backdrop-blur-sm">
-                <p className="text-foreground/80 font-medium">Work Required</p>
-                <p className="text-primary text-lg font-bold">
-                  {summary.expectedWorkHours} hr
-                </p>
-              </div>
-              <div className="from-background/60 to-background/40 border-border/30 flex items-center justify-between rounded-xl border bg-gradient-to-r p-4 backdrop-blur-sm">
-                <p className="text-foreground/80 font-medium">Work Done</p>
-                <p
-                  className={`text-lg font-bold ${summary.totalWorkDone >= summary.expectedWorkHours * 3600000 ? "text-green-500" : "text-red-500"}`}
-                >
-                  {summary.formattedTotalWorkDone} hr
-                </p>
-              </div>
+              <SummaryCard
+                label="Work Required"
+                value={`${summary.expectedWorkHours} hr`}
+              />
+              <SummaryCard
+                label="Work Done"
+                value={`${summary.formattedTotalWorkDone} hr`}
+                color={
+                  summary.totalWorkDone >= summary.expectedWorkHours * 3600000
+                    ? "text-green-500"
+                    : "text-red-500"
+                }
+              />
               <Separator className="bg-border/50" />
-              <div className="from-background/60 to-background/40 border-border/30 flex items-center justify-between rounded-xl border bg-gradient-to-r p-4 backdrop-blur-sm">
-                <p className="text-foreground/80 font-medium">Days Logged</p>
-                <p className="text-lg font-bold text-green-500">
-                  {summary.numberOfDays} day
-                </p>
-              </div>
+              <SummaryCard
+                label="Days Logged"
+                value={`${summary.numberOfDays} day`}
+                color="text-green-500"
+              />
               {summary.halfDayCount > 0 && (
-                <div className="from-background/60 to-background/40 border-border/30 flex items-center justify-between rounded-xl border bg-gradient-to-r p-4 backdrop-blur-sm">
-                  <p className="text-foreground/80 font-medium">Half-Days</p>
-                  <p className="text-lg font-bold text-orange-500">
-                    {summary.halfDayCount} Day
-                  </p>
-                </div>
+                <SummaryCard
+                  label="Half-Days"
+                  value={`${summary.halfDayCount} Day`}
+                  color="text-orange-500"
+                />
               )}
-              <div className="from-background/60 to-background/40 border-border/30 flex items-center justify-between rounded-xl border bg-gradient-to-r p-4 backdrop-blur-sm">
-                <p className="text-foreground/80 font-medium">Break Taken</p>
-                <p className="text-lg font-bold text-blue-500">
-                  {summary.formattedTotalBreakTime} hr
-                </p>
-              </div>
+              <SummaryCard
+                label="Break Taken"
+                value={`${summary.formattedTotalBreakTime} hr`}
+                color="text-blue-500"
+              />
             </div>
           </div>
         </div>
       )}
 
       {collapseBoxState && monthLogs.length > 0 && (
-        <div className="border-border/50 from-card/80 to-card/40 relative mt-6 w-full max-w-2xl overflow-hidden rounded-3xl border bg-gradient-to-br shadow-2xl backdrop-blur-xl">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent" />
+        <div className="border-border/50 from-card/80 to-card/40 relative mt-6 w-full max-w-2xl overflow-hidden rounded-3xl border bg-linear-to-br shadow-2xl backdrop-blur-xl">
+          <div className="absolute inset-0 bg-linear-to-br from-purple-500/5 to-transparent" />
           <div className="relative p-8">
             <div className="mb-6 flex items-center gap-3">
-              <div className="rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 p-2 backdrop-blur-sm">
-                <svg
-                  className="h-5 w-5 text-purple-600 dark:text-purple-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <title>Logs icon</title>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                  />
-                </svg>
+              <div className="rounded-xl bg-linear-to-br from-purple-500/20 to-pink-500/20 p-2 backdrop-blur-sm">
+                <FileText className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               </div>
-              <h2 className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+              <h2 className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
                 Logs
               </h2>
             </div>
@@ -331,21 +360,7 @@ const HistoryPage = () => {
                           <Tooltip>
                             <TooltipTrigger asChild>
                               <span className="cursor-pointer">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.5}
-                                  stroke="currentColor"
-                                  className="text-primary me-2 h-5 w-5"
-                                >
-                                  <title>Information icon</title>
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-                                  />
-                                </svg>
+                                <Info className="text-primary me-2 h-5 w-5" />
                               </span>
                             </TooltipTrigger>
                             <TooltipContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
@@ -377,9 +392,10 @@ const HistoryPage = () => {
                                   log.isHalfDay
                                     ? "outline"
                                     : log.workDone >=
-                                        (userData.daily_work_required ?? 0) * 3600000
-                                      ? "default"
-                                      : "destructive"
+                                      (userData.daily_work_required ?? 0) *
+                                        3600000
+                                    ? "default"
+                                    : "destructive"
                                 }
                                 size="sm"
                                 className="w-full rounded-lg text-xs font-bold transition-all duration-300 hover:scale-105"
