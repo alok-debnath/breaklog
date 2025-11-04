@@ -4,7 +4,7 @@ export const fetchProfile = query({
   args: {},
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Unauthorized");
+    if (!identity) return { error: "unauthorized" };
 
     const userId = identity.subject;
 

@@ -9,7 +9,7 @@ import {
   UserCircle,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,6 +27,7 @@ import { ModeToggle } from "../mode-toggle";
 const Navbar = () => {
   const { userData } = useStore();
   const pathname = usePathname();
+  const router = useRouter();
   const [backPath, setBackPath] = useState("");
 
   useEffect(() => {
@@ -38,7 +39,9 @@ const Navbar = () => {
     }
   }, [pathname]);
 
-  const logout = () => authClient.signOut();
+  const logout = async () => {
+    await authClient.signOut();
+  };
 
   return (
     <div className="fixed top-6 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-3xl">

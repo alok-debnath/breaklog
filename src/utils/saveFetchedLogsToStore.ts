@@ -5,14 +5,18 @@ import { useStore } from "@/stores/store";
 export interface FetchedLogsDataType {
   message: string;
   status: number;
-  data: LogsData[];
+  data: { id: string; log_time: number; log_status: string }[];
   workdata: WorkData & { currentBreak: null | number };
 }
 
 export const saveFetchedLogsToStore = (data: FetchedLogsDataType) => {
+  const convertedLogs: LogsData[] = data.data.map(log => ({
+    ...log,
+    log_time: new Date(log.log_time),
+  }));
   useStore.setState(() => ({
     loading: false,
-    logs: data.data,
+    logs: convertedLogs,
     workData: data.workdata,
   }));
 
