@@ -87,7 +87,7 @@ const TimeZoneForm = ({
       .resolvedOptions()
       .timeZone.toLowerCase();
     const isTimeZoneMatch = options.some(
-      (option) => option.value.toLowerCase() === userDeviceTimezone,
+      (option) => option.value.toLowerCase() === userDeviceTimezone
     );
     if (isTimeZoneMatch) {
       setDeviceTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
