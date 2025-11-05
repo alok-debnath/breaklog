@@ -1,12 +1,14 @@
 import { mutation, query } from "./_generated/server";
+import { authComponent } from "./auth"; // Import the component client
 
 export const fetchProfile = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return { error: "unauthorized" };
+    // Get the Better Auth user using the component client
+    const authUser = await authComponent.safeGetAuthUser(ctx);
+    if (!authUser) return { error: "unauthorized" };
 
-    const userId = identity.subject;
+    const userId = authUser._id; // Use the Better Auth user ID
 
     const userProfile = await ctx.db
       .query("userProfiles")
@@ -15,10 +17,10 @@ export const fetchProfile = query({
 
     // If userProfile doesn't exist, return default values
     const profileData = userProfile || {
-      username: identity.name || identity.email?.split("@")[0] || "user",
-      dailyWorkRequired: 8,
-      logType: "breakmode",
-      defaultTimeZone: "Etc/GMT",
+      username: authUser.name || authUser.email?.split("@")[0] || "user",
+      dailyWorkRequired: 0,
+      logType: "daymode",
+      defaultTimeZone: "",
     };
 
     return {
@@ -26,12 +28,13 @@ export const fetchProfile = query({
       userProfileExists: !!userProfile,
       data: {
         id: userId,
-        name: identity.name,
-        email: identity.email,
+        name: authUser.name,
+        email: authUser.email,
         username: profileData.username,
         daily_work_required: profileData.dailyWorkRequired,
         log_type: profileData.logType,
         default_time_zone: profileData.defaultTimeZone,
+        user_image: authUser.image || null,
       },
     };
   },
@@ -40,10 +43,10 @@ export const fetchProfile = query({
 export const createUserProfile = mutation({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error("Unauthorized");
+    const authUser = await authComponent.safeGetAuthUser(ctx);
+    if (!authUser) throw new Error("Unauthorized");
 
-    const userId = identity.subject;
+    const userId = authUser._id;
 
     const existingProfile = await ctx.db
       .query("userProfiles")
@@ -56,7 +59,7 @@ export const createUserProfile = mutation({
 
     const newProfileId = await ctx.db.insert("userProfiles", {
       userId,
-      username: identity.name || identity.email?.split("@")[0] || "user",
+      username: authUser.name || authUser.email?.split("@")[0] || "user",
       logType: "daymode",
       dailyWorkRequired: 0,
       defaultTimeZone: "",

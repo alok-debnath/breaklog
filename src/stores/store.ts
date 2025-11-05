@@ -25,6 +25,7 @@ export interface UserData {
   daily_work_required: number | undefined;
   log_type: string;
   default_time_zone: string | undefined;
+  user_image: string | null;
 }
 interface MonthLogData {
   date: string;
@@ -101,6 +102,7 @@ export const useStore = create<StoreState>((_set) => ({
     daily_work_required: 0,
     log_type: "",
     default_time_zone: "",
+    user_image: "",
   },
   summary: {
     totalWorkDone: 0,

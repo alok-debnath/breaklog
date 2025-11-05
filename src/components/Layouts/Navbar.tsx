@@ -8,8 +8,9 @@ import {
   User,
   UserCircle,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,7 +28,6 @@ import { ModeToggle } from "../mode-toggle";
 const Navbar = () => {
   const { userData } = useStore();
   const pathname = usePathname();
-  const router = useRouter();
   const [backPath, setBackPath] = useState("");
 
   useEffect(() => {
@@ -130,7 +130,7 @@ const Navbar = () => {
                   "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   pathname.startsWith("/dashboard/history")
                     ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-linear-to-r"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                 )}
               >
                 <History className="h-4 w-4" />
@@ -149,7 +149,17 @@ const Navbar = () => {
                   size="icon"
                   className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
                 >
-                  <User className="h-5 w-5" />
+                  {userData.user_image ? (
+                    <Image
+                      src={userData.user_image}
+                      alt="User Avatar"
+                      className="rounded-2xl border-primary/40 border-2"
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    <User className="h-5 w-5" />
+                  )}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
