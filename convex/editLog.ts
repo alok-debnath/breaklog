@@ -15,7 +15,7 @@ export const editLog = mutation({
     // Find the log document containing the entry
     const allLogs = await ctx.db
       .query("logs")
-      .withIndex("userId", (q) => q.eq("userId", userId))
+      .withIndex("userId_creationTime", (q) => q.eq("userId", userId))
       .collect();
 
     const logDoc = allLogs.find((log) =>

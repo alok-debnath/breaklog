@@ -39,11 +39,11 @@ export const toggleHalfDay = mutation({
     // Find the log document for this date
     const logDoc = await ctx.db
       .query("logs")
-      .withIndex("userId_createdAt", (q) =>
+      .withIndex("userId_creationTime", (q) =>
         q
           .eq("userId", userId)
-          .gte("createdAt", startOfDay)
-          .lte("createdAt", endOfDay),
+          .gte("_creationTime", startOfDay)
+          .lte("_creationTime", endOfDay),
       )
       .first();
 

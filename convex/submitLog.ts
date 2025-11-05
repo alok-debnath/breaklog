@@ -57,11 +57,11 @@ export const submitLog = mutation({
     // Find the log document for today
     const logDoc = await ctx.db
       .query("logs")
-      .withIndex("userId_createdAt", (q) =>
+      .withIndex("userId_creationTime", (q) =>
         q
           .eq("userId", userId)
-          .gte("createdAt", startOfDay)
-          .lte("createdAt", endOfDay),
+          .gte("_creationTime", startOfDay)
+          .lte("_creationTime", endOfDay),
       )
       .first();
 
@@ -143,7 +143,6 @@ export const submitLog = mutation({
           timeZone,
           logEntries: [newLogEntry],
           isHalfDay: false,
-          createdAt: Date.now(),
           updatedAt: Date.now(),
         });
       }
@@ -152,11 +151,11 @@ export const submitLog = mutation({
     // Return the updated logs
     const updatedLogDoc = await ctx.db
       .query("logs")
-      .withIndex("userId_createdAt", (q) =>
+      .withIndex("userId_creationTime", (q) =>
         q
           .eq("userId", userId)
-          .gte("createdAt", startOfDay)
-          .lte("createdAt", endOfDay),
+          .gte("_creationTime", startOfDay)
+          .lte("_creationTime", endOfDay),
       )
       .first();
 

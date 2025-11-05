@@ -54,11 +54,11 @@ export const fetchLogs = query({
 
     const logDoc = await ctx.db
       .query("logs")
-      .withIndex("userId_createdAt", (q) =>
+      .withIndex("userId_creationTime", (q) =>
         q
           .eq("userId", userId)
-          .gte("createdAt", startOfDay)
-          .lte("createdAt", endOfDay),
+          .gte("_creationTime", startOfDay)
+          .lte("_creationTime", endOfDay),
       )
       .first();
 
@@ -201,14 +201,14 @@ export const fetchMonthlyLogs = query({
     const startDate = new Date(args.monthStart);
     const endDate = new Date(args.monthEnd);
 
-    // Get all logs in the month based on log document createdAt
+    // Get all logs in the month based on log document _creationTime
     const logs = await ctx.db
       .query("logs")
-      .withIndex("userId_createdAt", (q) =>
+      .withIndex("userId_creationTime", (q) =>
         q
           .eq("userId", userId)
-          .gte("createdAt", startDate.getTime())
-          .lte("createdAt", endDate.getTime()),
+          .gte("_creationTime", startDate.getTime())
+          .lte("_creationTime", endDate.getTime()),
       )
       .collect();
 
