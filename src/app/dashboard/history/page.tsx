@@ -1,6 +1,6 @@
 "use client";
 import { useQuery } from "convex/react";
-import { BarChart3, FileText, Info, Loader2, TrendingUp } from "lucide-react";
+import { BarChart3, FileText, Info, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -59,7 +59,7 @@ const MONTHS = [
 const CURRENT_YEAR = new Date().getFullYear();
 const YEARS = Array.from(
   { length: CURRENT_YEAR - 2022 },
-  (_, index) => 2023 + index
+  (_, index) => 2023 + index,
 );
 
 // Helper functions
@@ -69,11 +69,11 @@ const formatDateRange = (year: number, month: number) => {
 
   const monthStart = `${year}-${String(month).padStart(
     2,
-    "0"
+    "0",
   )}-01T00:00:00.000Z`;
   const monthEnd = `${nextYear}-${String(nextMonth).padStart(
     2,
-    "0"
+    "0",
   )}-01T00:00:00.000Z`;
 
   return { monthStart, monthEnd };
@@ -86,7 +86,7 @@ const transformMonthLogs = (
     workDone: number;
     formattedWorkDone: string;
     isHalfDay: boolean;
-  }[]
+  }[],
 ) => {
   return (
     data?.map((log) => ({
@@ -96,7 +96,7 @@ const transformMonthLogs = (
         .reduce(
           (acc: number, val: string, idx: number) =>
             acc + parseInt(val) * [3600000, 60000, 1000][idx],
-          0
+          0,
         ),
       workDone: log.workDone,
       formattedBreakTime: log.formattedBreakTime,
@@ -137,10 +137,10 @@ const HistoryPage = () => {
 
   // Initialize selectedMonth and selectedYear with the current month and year.
   const [selectedMonth, setSelectedMonth] = useState(
-    () => new Date().getMonth() + 1
+    () => new Date().getMonth() + 1,
   );
   const [selectedYear, setSelectedYear] = useState(() =>
-    new Date().getFullYear()
+    new Date().getFullYear(),
   );
   const [queryArgs, setQueryArgs] = useState<
     { monthStart: string; monthEnd: string } | "skip"
@@ -149,7 +149,7 @@ const HistoryPage = () => {
   // Memoized date calculations
   const { monthStart, monthEnd } = useMemo(
     () => formatDateRange(selectedYear, selectedMonth),
-    [selectedYear, selectedMonth]
+    [selectedYear, selectedMonth],
   );
 
   const fetchMonthlyLogs = useQuery(api.fetchLogs.fetchMonthlyLogs, queryArgs);
@@ -160,7 +160,7 @@ const HistoryPage = () => {
       return { monthLogs: [], summary: createDefaultSummary() };
 
     const transformedMonthLogs = transformMonthLogs(
-      fetchMonthlyLogs.data || []
+      fetchMonthlyLogs.data || [],
     );
 
     const summaryData =
@@ -183,6 +183,7 @@ const HistoryPage = () => {
       monthLogs: transformedData.monthLogs,
       summary: transformedData.summary,
     });
+    useStore.setState({ loading: false });
   }, [transformedData]);
 
   // Show toast for no logs found
@@ -193,6 +194,7 @@ const HistoryPage = () => {
   }, [fetchMonthlyLogs]);
 
   const handleSearch = useCallback(() => {
+    useStore.setState({ loading: true });
     if (!userData.daily_work_required) {
       handleError({
         error: {
@@ -200,6 +202,7 @@ const HistoryPage = () => {
         },
         router,
       });
+      useStore.setState({ loading: false });
       return;
     }
 
@@ -274,11 +277,14 @@ const HistoryPage = () => {
             </Select>
             <Button
               onClick={handleSearch}
-              disabled={loading}
+              disabled={loading || collapseBoxState}
               className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 h-12 min-w-[120px] rounded-xl bg-linear-to-r px-8 py-3 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
             >
               {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <div className="flex items-center gap-2">
+                  <div className="border-primary-foreground/30 border-t-primary-foreground h-4 w-4 animate-spin rounded-full border-2" />
+                  Searching...
+                </div>
               ) : (
                 "Search"
               )}
@@ -392,10 +398,10 @@ const HistoryPage = () => {
                                   log.isHalfDay
                                     ? "outline"
                                     : log.workDone >=
-                                      (userData.daily_work_required ?? 0) *
-                                        3600000
-                                    ? "default"
-                                    : "destructive"
+                                        (userData.daily_work_required ?? 0) *
+                                          3600000
+                                      ? "default"
+                                      : "destructive"
                                 }
                                 size="sm"
                                 className="w-full rounded-lg text-xs font-bold transition-all duration-300 hover:scale-105"

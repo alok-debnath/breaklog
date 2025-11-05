@@ -2,7 +2,7 @@
 import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
 import type * as React from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { allTimezones, useTimezoneSelect } from "react-timezone-select";
 import { Button } from "@/components/ui/button";
 import {
@@ -35,162 +35,164 @@ import { useStore } from "@/stores/store";
 import { api } from "../../../../convex/_generated/api";
 import { handleError, handleSuccessToast } from "../../common/CommonCodeBlocks";
 
-const TimeZoneForm = ({
-  className,
-  isDesktop,
+// Reusable styled components
+const InfoCard = ({
+  title,
+  value,
+  status,
 }: {
-  className?: string;
-  isDesktop: boolean;
+  title: string;
+  value: string;
+  status: "success" | "warning" | "error";
 }) => {
+  const statusColors = {
+    success: "text-green-500",
+    warning: "text-yellow-500",
+    error: "text-red-500",
+  };
+
+  return (
+    <div className="rounded-xl border border-border/50 bg-linear-to-br from-card/50 to-card/30 p-4 backdrop-blur-sm">
+      <p className="mb-1 text-sm font-medium text-foreground/80">{title}:</p>
+      <span className={cn("font-mono text-sm", statusColors[status])}>
+        {value || "undefined"}
+      </span>
+    </div>
+  );
+};
+
+const WarningNote = () => (
+  <div className="rounded-xl border border-orange-200/20 bg-linear-to-br from-orange-500/10 to-yellow-500/10 p-4 backdrop-blur-sm dark:border-orange-800/20">
+    <div className="flex items-start gap-2">
+      <svg
+        className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <div>
+        <p className="mb-1 text-sm font-semibold text-orange-700 dark:text-orange-300">
+          Note:
+        </p>
+        <p className="text-xs leading-relaxed text-orange-600 dark:text-orange-400">
+          If your work shift spans across midnight, select a timezone where your
+          entire shift falls within a single calendar day for accurate
+          calculations.
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
+const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
   const { userData, loading } = useStore();
   const router = useRouter();
   const updateProfile = useMutation(api.updateProfile.updateProfile);
 
-  const labelStyle = "abbrev";
-  const timezones = {
-    ...allTimezones,
-  };
   const { options, parseTimezone } = useTimezoneSelect({
-    labelStyle,
-    timezones,
+    labelStyle: "abbrev",
+    timezones: allTimezones,
   });
 
   const [selectedTimeZone, setSelectedTimeZone] = useState("");
   const [deviceTimeZone, setDeviceTimeZone] = useState("");
 
-  async function handleSubmit() {
-    useStore.setState(() => ({ loading: true }));
+  const formatTimezoneDisplay = useCallback(
+    (timezone: string) => {
+      if (!timezone) return "";
+      const parsed = parseTimezone(timezone);
+      const offset = `${parsed.label.split(") ")[0]})`;
+      return `${timezone} ${offset}`;
+    },
+    [parseTimezone],
+  );
+
+  const handleSubmit = useCallback(async () => {
+    if (!selectedTimeZone) return;
+
+    useStore.setState({ loading: true });
     try {
-      await updateProfile({
-        defaultTimeZone: selectedTimeZone,
+      await updateProfile({ defaultTimeZone: selectedTimeZone });
+
+      useStore.setState({
+        isTimeZoneModalOpen: false,
+        userData: { ...userData, default_time_zone: selectedTimeZone },
       });
 
-      useStore.setState({ isTimeZoneModalOpen: false });
-      useStore.setState({
-        userData: {
-          ...userData,
-          default_time_zone: selectedTimeZone,
-        },
-      });
-      handleSuccessToast({
-        message: "Data saved successfully",
-      });
+      handleSuccessToast({ message: "Timezone updated successfully" });
     } catch (error: unknown) {
-      handleError({ error: error, router: router });
+      handleError({ error, router });
     } finally {
-      useStore.setState(() => ({ loading: false }));
+      useStore.setState({ loading: false });
     }
-  }
+  }, [selectedTimeZone, updateProfile, userData, router]);
 
   useEffect(() => {
-    const userDeviceTimezone = Intl.DateTimeFormat()
-      .resolvedOptions()
-      .timeZone.toLowerCase();
-    const isTimeZoneMatch = options.some(
-      (option) => option.value.toLowerCase() === userDeviceTimezone,
+    const userDeviceTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const normalizedDeviceTimezone = userDeviceTimezone.toLowerCase();
+
+    const matchingOption = options.find(
+      (option) => option.value.toLowerCase() === normalizedDeviceTimezone,
     );
-    if (isTimeZoneMatch) {
-      setDeviceTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
-      setSelectedTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+    if (matchingOption) {
+      setDeviceTimeZone(userDeviceTimezone);
+      setSelectedTimeZone(userDeviceTimezone);
     }
   }, [options]);
+
+  const getTimezoneStatus = (device: string, selected: string) => {
+    if (!device) return "error";
+    return selected === device ? "success" : "warning";
+  };
 
   const Footer = isDesktop ? DialogFooter : DrawerFooter;
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div
+      className={cn(
+        "space-y-4",
+        !isDesktop && "max-h-[70vh] overflow-y-auto px-4",
+      )}
+    >
       <div className="space-y-3">
-        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-linear-to-br p-4 backdrop-blur-sm">
-          <p className="text-foreground/80 mb-1 text-sm font-medium">
-            Device Timezone:
-          </p>
-          <span
-            className={`font-mono text-sm ${
-              deviceTimeZone
-                ? selectedTimeZone === deviceTimeZone
-                  ? "text-green-500"
-                  : "text-yellow-500"
-                : "text-red-500"
-            }`}
-          >
-            {(deviceTimeZone && (
-              <>
-                {deviceTimeZone + " "}
-                <span className="whitespace-nowrap">
-                  {parseTimezone(deviceTimeZone).label.split(") ")[0] + ")"}
-                </span>
-              </>
-            )) ||
-              "undefined"}
-          </span>
-        </div>
+        <InfoCard
+          title="Device Timezone"
+          value={deviceTimeZone ? formatTimezoneDisplay(deviceTimeZone) : ""}
+          status={getTimezoneStatus(deviceTimeZone, selectedTimeZone)}
+        />
 
-        <div className="from-card/50 to-card/30 border-border/50 rounded-xl border bg-linear-to-br p-4 backdrop-blur-sm">
-          <p className="text-foreground/80 mb-1 text-sm font-medium">
-            Selected Timezone:
-          </p>
-          <span
-            className={`font-mono text-sm ${
-              selectedTimeZone ? "text-green-500" : "text-red-500"
-            }`}
-          >
-            {(selectedTimeZone && (
-              <>
-                {selectedTimeZone + " "}
-                <span className="whitespace-nowrap">
-                  {parseTimezone(selectedTimeZone).label.split(") ")[0] + ")"}
-                </span>
-              </>
-            )) ||
-              "undefined"}
-          </span>
-        </div>
+        <InfoCard
+          title="Selected Timezone"
+          value={
+            selectedTimeZone ? formatTimezoneDisplay(selectedTimeZone) : ""
+          }
+          status={selectedTimeZone ? "success" : "error"}
+        />
       </div>
 
-      <div className="rounded-xl border border-orange-200/20 bg-linear-to-br from-orange-500/10 to-yellow-500/10 p-4 backdrop-blur-sm dark:border-orange-800/20">
-        <div className="flex items-start gap-2">
-          <svg
-            className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <title>Warning icon</title>
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <div>
-            <p className="mb-1 text-sm font-semibold text-orange-700 dark:text-orange-300">
-              Note:
-            </p>
-            <p className="text-xs leading-relaxed text-orange-600 dark:text-orange-400">
-              If your work shift spans across midnight, select a timezone where
-              your entire shift falls within a single calendar day for accurate
-              calculations.
-            </p>
-          </div>
-        </div>
-      </div>
+      <WarningNote />
 
-      <div className="grid w-full items-center gap-2">
-        <Label htmlFor="timezone" className="text-foreground/90 font-medium">
+      <div className="space-y-2">
+        <Label htmlFor="timezone" className="font-medium text-foreground/90">
           Default Time Zone
         </Label>
-        <Select
-          value={selectedTimeZone}
-          onValueChange={(value) => setSelectedTimeZone(value)}
-        >
+        <Select value={selectedTimeZone} onValueChange={setSelectedTimeZone}>
           <SelectTrigger
             id="timezone"
-            className="bg-background/50 border-border/50 hover:bg-background/70 h-12 w-full justify-between truncate rounded-xl backdrop-blur-sm transition-colors"
+            className="h-12 w-full rounded-xl border-border/50 bg-background/50 backdrop-blur-sm transition-colors hover:bg-background/70"
           >
             <SelectValue placeholder="Select timezone..." />
           </SelectTrigger>
-          <SelectContent className="bg-popover/90 border-border/50 backdrop-blur-xl">
+          <SelectContent className="max-h-[200px] border-border/50 bg-popover/90 backdrop-blur-xl">
             <SelectGroup>
               {options.map((option) => (
                 <SelectItem
@@ -198,22 +200,23 @@ const TimeZoneForm = ({
                   value={option.value}
                   className="hover:bg-accent/50"
                 >
-                  {option.label}
+                  <span className="truncate">{option.label}</span>
                 </SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>
         </Select>
       </div>
-      <Footer className="pt-6">
+
+      <Footer className="pt-4">
         <Button
           onClick={handleSubmit}
           disabled={!selectedTimeZone || loading}
-          className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-linear-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg disabled:opacity-50"
+          className="rounded-xl bg-linear-to-r from-primary to-primary/80 px-8 py-2 font-medium text-primary-foreground transition-all duration-300 hover:from-primary/90 hover:to-primary/70 hover:shadow-lg hover:shadow-primary/25 disabled:opacity-50"
         >
           {loading ? (
             <div className="flex items-center gap-2">
-              <div className="border-primary-foreground/30 border-t-primary-foreground h-4 w-4 animate-spin rounded-full border-2" />
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
               Saving...
             </div>
           ) : (
@@ -222,7 +225,9 @@ const TimeZoneForm = ({
         </Button>
         {!isDesktop && (
           <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline" className="rounded-xl">
+              Cancel
+            </Button>
           </DrawerClose>
         )}
       </Footer>
@@ -230,47 +235,50 @@ const TimeZoneForm = ({
   );
 };
 
+const ModalHeader = ({ isDesktop }: { isDesktop: boolean }) => {
+  const Header = isDesktop ? DialogHeader : DrawerHeader;
+  const Title = isDesktop ? DialogTitle : DrawerTitleComponent;
+
+  return (
+    <Header className={cn("space-y-3", !isDesktop && "text-left")}>
+      <div className={cn("flex items-center gap-3", !isDesktop && "p-4")}>
+        <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+          <svg
+            className="h-5 w-5 text-blue-600 dark:text-blue-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </div>
+        <Title className="bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-xl font-semibold">
+          Select Time Zone
+        </Title>
+      </div>
+    </Header>
+  );
+};
+
 const TimeZoneModal: React.FC = () => {
   const { isTimeZoneModalOpen } = useStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const onOpenChange = (isOpen: boolean) => {
+  const handleOpenChange = (isOpen: boolean) => {
     useStore.setState({ isTimeZoneModalOpen: isOpen });
   };
 
-  const Header = isDesktop ? DialogHeader : DrawerHeader;
-  const Title = isDesktop ? DialogTitle : DrawerTitleComponent;
-
   if (isDesktop) {
     return (
-      <Dialog open={isTimeZoneModalOpen} onOpenChange={onOpenChange}>
-        <DialogContent
-          id="timezone-dialog-content"
-          className="bg-background/80 border-border/50 shadow-2xl backdrop-blur-xl sm:max-w-[550px]"
-        >
-          <Header className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
-                <svg
-                  className="h-5 w-5 text-blue-600 dark:text-blue-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <title>Clock icon</title>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <Title className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
-                Select Time Zone
-              </Title>
-            </div>
-          </Header>
+      <Dialog open={isTimeZoneModalOpen} onOpenChange={handleOpenChange}>
+        <DialogContent className="border-border/50 bg-background/80 shadow-2xl backdrop-blur-xl sm:max-w-[550px]">
+          <ModalHeader isDesktop={true} />
           <TimeZoneForm isDesktop={true} />
         </DialogContent>
       </Dialog>
@@ -278,32 +286,10 @@ const TimeZoneModal: React.FC = () => {
   }
 
   return (
-    <Drawer open={isTimeZoneModalOpen} onOpenChange={onOpenChange}>
-      <DrawerContent>
-        <Header className="space-y-3 text-left">
-          <div className="flex items-center gap-3 p-4">
-            <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
-              <svg
-                className="h-5 w-5 text-blue-600 dark:text-blue-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <title>Clock icon</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <Title className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
-              Select Time Zone
-            </Title>
-          </div>
-        </Header>
-        <TimeZoneForm className="px-4" isDesktop={false} />
+    <Drawer open={isTimeZoneModalOpen} onOpenChange={handleOpenChange}>
+      <DrawerContent className="max-h-[90vh]">
+        <ModalHeader isDesktop={false} />
+        <TimeZoneForm isDesktop={false} />
       </DrawerContent>
     </Drawer>
   );
