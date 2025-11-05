@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { Suspense } from "react";
-import InitialRscFetch from "@/components/common/InitialRscFetch";
+import InitialDataWrapper from "@/components/common/InitialDataWrapper";
 import Loading from "@/components/Layouts/Loading";
 import ConfirmationModal from "@/components/Layouts/Modals/ConfirmationModal";
 import SettingsModal from "@/components/Layouts/Modals/SettingsModal";
@@ -24,7 +24,7 @@ export default async function DashboardLayout({
         disableTransitionOnChange
       >
         <Suspense fallback={null}>
-          <InitialRscFetch />
+          <InitialDataWrapper />
         </Suspense>
         <ConfirmationModal />
         <SettingsModal />
