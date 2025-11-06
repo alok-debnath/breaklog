@@ -8,7 +8,6 @@ import TimeEditModal from "@/components/Layouts/Modals/TimeEditModal";
 import useConfirm from "@/hooks/useConfirm";
 import useOnScreen from "@/hooks/useOnScreen";
 import { useStore } from "@/stores/store";
-import { saveFetchedLogsToStore } from "@/utils/saveFetchedLogsToStore";
 import { api } from "../../../convex/_generated/api";
 
 const Index = () => {
@@ -37,12 +36,6 @@ const Index = () => {
 
       useStore.setState(() => ({ loading: true }));
       const res = await submitLogMutation({ logtype: value });
-      saveFetchedLogsToStore({
-        message: res.message,
-        status: res.status,
-        data: res.data,
-        workdata: res.workdata,
-      });
     } catch (error: unknown) {
       handleError({ error: error, router: router });
     }

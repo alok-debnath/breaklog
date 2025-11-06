@@ -31,26 +31,26 @@ export const submitLog = mutation({
       startOfDay = new Date(
         dateObj.getFullYear(),
         dateObj.getMonth(),
-        dateObj.getDate(),
+        dateObj.getDate()
       ).getTime();
       endOfDay =
         new Date(
           dateObj.getFullYear(),
           dateObj.getMonth(),
-          dateObj.getDate() + 1,
+          dateObj.getDate() + 1
         ).getTime() - 1;
     } else {
       const now = new Date();
       startOfDay = new Date(
         now.getFullYear(),
         now.getMonth(),
-        now.getDate(),
+        now.getDate()
       ).getTime();
       endOfDay =
         new Date(
           now.getFullYear(),
           now.getMonth(),
-          now.getDate() + 1,
+          now.getDate() + 1
         ).getTime() - 1;
     }
 
@@ -61,7 +61,7 @@ export const submitLog = mutation({
         q
           .eq("userId", userId)
           .gte("_creationTime", startOfDay)
-          .lte("_creationTime", endOfDay),
+          .lte("_creationTime", endOfDay)
       )
       .first();
 
@@ -148,130 +148,9 @@ export const submitLog = mutation({
       }
     }
 
-    // Return the updated logs
-    const updatedLogDoc = await ctx.db
-      .query("logs")
-      .withIndex("userId_creationTime", (q) =>
-        q
-          .eq("userId", userId)
-          .gte("_creationTime", startOfDay)
-          .lte("_creationTime", endOfDay),
-      )
-      .first();
-
-    const logs =
-      updatedLogDoc?.logEntries.map((entry) => ({
-        id: entry.uniqueId,
-        log_time: entry.logTime, // Use timestamp directly instead of Date object
-        log_status: entry.logStatus,
-      })) || [];
-
-    // Calculate work data (similar to fetchLogs)
-    let breakTime = 0;
-    let workDone = 0;
-    let dayStart = 0;
-    let dayEnd = 0;
-    let currentBreakTime: number | null = null;
-    let firstLog = null;
-    let lastLog = null;
-    let recentLog = null;
-    let isDayStarted = false;
-    let isDayEnded = false;
-
-    let logExit = 0,
-      logEnter = 0;
-    for (const log of logs) {
-      const logTime = new Date(log.log_time); // Convert timestamp back to Date for calculations
-      if (log.log_status === "day start") {
-        isDayStarted = true;
-        dayStart = logTime.getTime();
-      } else if (log.log_status === "day end") {
-        isDayEnded = true;
-        dayEnd = logTime.getTime();
-      }
-
-      if (log.log_status === "exit") {
-        logExit = logTime.getTime();
-      } else if (log.log_status === "enter") {
-        logEnter = logTime.getTime();
-      }
-
-      if (logExit !== 0 && logEnter !== 0) {
-        breakTime += logEnter - logExit;
-        logExit = logEnter = 0;
-      }
-    }
-
-    firstLog = logs.length > 0 ? logs[0].log_status : null;
-    lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
-    recentLog = lastLog?.log_status || null;
-
-    if (isDayStarted) {
-      if (isDayEnded) {
-        workDone = dayEnd - dayStart - breakTime;
-      } else {
-        const currentTime = Date.now();
-        workDone = currentTime - dayStart - breakTime;
-
-        if (lastLog && recentLog === "exit") {
-          const exitDuration = currentTime - new Date(lastLog.log_time).getTime();
-          workDone -= exitDuration;
-        }
-      }
-    }
-
-    if (lastLog && recentLog === "exit") {
-      currentBreakTime = lastLog.log_time; // Use timestamp directly
-    }
-
-    const formatTime = (ms: number) => {
-      const totalSeconds = Math.floor(ms / 1000);
-      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
-      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
-        2,
-        "0",
-      );
-      const seconds = String(totalSeconds % 60).padStart(2, "0");
-      return `${hours}:${minutes}:${seconds}`;
-    };
-
-    const formattedBreakTime = formatTime(breakTime);
-    const formattedWorkDone = formatTime(workDone);
-
-    let formattedWorkLeft = "";
-    let formattedWorkEndTime = "";
-
-    if (userProfile.dailyWorkRequired && workDone > 0) {
-      const workRequiredMs = userProfile.dailyWorkRequired * 3600000;
-      if (workDone < workRequiredMs) {
-        formattedWorkLeft = formatTime(workRequiredMs - workDone);
-
-        const [hours, minutes, seconds] = formattedWorkLeft
-          .split(":")
-          .map(Number);
-        const endTime = new Date(
-          Date.now() + (hours * 3600 + minutes * 60 + seconds) * 1000,
-        );
-        formattedWorkEndTime = endTime.toISOString();
-      }
-    }
-
     return {
       message: "Log submitted successfully",
       status: 200,
-      data: logs,
-      workdata: {
-        breakTime: formattedBreakTime,
-        workDone: formattedWorkDone,
-        unformattedWorkDone: workDone,
-        currentBreak: currentBreakTime,
-        firstLogStatus: firstLog,
-        lastLogStatus: recentLog,
-        formattedWorkEndTime,
-        formattedWorkLeft,
-        calculatedOn: Date.now(),
-        isHalfDay: updatedLogDoc?.isHalfDay || false,
-      },
     };
   },
 });
