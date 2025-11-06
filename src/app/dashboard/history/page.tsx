@@ -38,6 +38,8 @@ interface ConvexSummary {
   numberOfDays: number;
   expectedWorkHours: number;
   halfDayCount: number;
+  monthStart: string;
+  monthEnd: string;
 }
 
 // Constants
@@ -113,6 +115,8 @@ const createDefaultSummary = () => ({
   numberOfDays: "",
   halfDayCount: 0,
   formattedTotalBreakTime: "",
+  monthStart: "",
+  monthEnd: "",
 });
 
 const SummaryCard = ({
@@ -142,9 +146,10 @@ const HistoryPage = () => {
   const [selectedYear, setSelectedYear] = useState(() =>
     new Date().getFullYear(),
   );
-  const [queryArgs, setQueryArgs] = useState<
-    { monthStart: string; monthEnd: string } | "skip"
-  >("skip");
+  const [queryArgs, setQueryArgs] = useState({
+    monthStart: summary.monthStart,
+    monthEnd: summary.monthEnd,
+  });
 
   // Memoized date calculations
   const { monthStart, monthEnd } = useMemo(
@@ -152,7 +157,10 @@ const HistoryPage = () => {
     [selectedYear, selectedMonth],
   );
 
-  const fetchMonthlyLogs = useQuery(api.user.fetchLogs.fetchMonthlyLogs, queryArgs);
+  const fetchMonthlyLogs = useQuery(
+    api.user.fetchLogs.fetchMonthlyLogs,
+    queryArgs,
+  );
 
   // Memoized data transformation
   const transformedData = useMemo(() => {
@@ -209,12 +217,6 @@ const HistoryPage = () => {
     setQueryArgs({ monthStart, monthEnd });
   }, [userData.daily_work_required, router, monthStart, monthEnd]);
 
-  // Reset state when selectors change
-  useEffect(() => {
-    setCollapseBoxState(false);
-    setQueryArgs("skip");
-  }, [selectedMonth, selectedYear]);
-
   // Auto-show results if data exists
   useEffect(() => {
     if (Number(summary.numberOfDays) > 0) {
@@ -238,7 +240,10 @@ const HistoryPage = () => {
 
           <div className="flex flex-col items-center gap-4 sm:flex-row">
             <Select
-              onValueChange={(value) => setSelectedMonth(Number(value))}
+              onValueChange={(value) => {
+                setSelectedMonth(Number(value));
+                setCollapseBoxState(false);
+              }}
               defaultValue={selectedMonth.toString()}
             >
               <SelectTrigger className="bg-background/50 border-border/50 hover:bg-background/70 h-12 w-full rounded-xl backdrop-blur-sm transition-colors">

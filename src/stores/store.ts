@@ -18,6 +18,8 @@ interface summary {
   numberOfDays: string;
   expectedWorkHours: number;
   halfDayCount: number;
+  monthStart: string;
+  monthEnd: string;
   // actualWorkHours: string;
 }
 export interface UserData {
@@ -111,6 +113,8 @@ export const useStore = create<StoreState>((_set) => ({
     numberOfDays: "",
     expectedWorkHours: 0,
     halfDayCount: 0,
+    monthStart: "",
+    monthEnd: "",
     // actualWorkHours: "",
   },
   breaklogMode: true,

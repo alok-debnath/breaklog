@@ -28,13 +28,13 @@ export const fetchLogs = query({
       startOfDay = new Date(
         dateObj.getFullYear(),
         dateObj.getMonth(),
-        dateObj.getDate(),
+        dateObj.getDate()
       ).getTime();
       endOfDay =
         new Date(
           dateObj.getFullYear(),
           dateObj.getMonth(),
-          dateObj.getDate() + 1,
+          dateObj.getDate() + 1
         ).getTime() - 1;
     } else {
       // Current day
@@ -42,13 +42,13 @@ export const fetchLogs = query({
       startOfDay = new Date(
         now.getFullYear(),
         now.getMonth(),
-        now.getDate(),
+        now.getDate()
       ).getTime();
       endOfDay =
         new Date(
           now.getFullYear(),
           now.getMonth(),
-          now.getDate() + 1,
+          now.getDate() + 1
         ).getTime() - 1;
     }
 
@@ -58,7 +58,7 @@ export const fetchLogs = query({
         q
           .eq("userId", userId)
           .gte("_creationTime", startOfDay)
-          .lte("_creationTime", endOfDay),
+          .lte("_creationTime", endOfDay)
       )
       .first();
 
@@ -131,7 +131,7 @@ export const fetchLogs = query({
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
       const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
         2,
-        "0",
+        "0"
       );
       const seconds = String(totalSeconds % 60).padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
@@ -152,7 +152,7 @@ export const fetchLogs = query({
           .split(":")
           .map(Number);
         const endTime = new Date(
-          Date.now() + (hours * 3600 + minutes * 60 + seconds) * 1000,
+          Date.now() + (hours * 3600 + minutes * 60 + seconds) * 1000
         );
         formattedWorkEndTime = endTime.toISOString();
       }
@@ -187,6 +187,8 @@ export const fetchMonthlyLogs = query({
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error("Unauthorized");
 
+    if (!args.monthStart || !args.monthEnd) return;
+
     const userId = identity.subject;
 
     const userProfile = await ctx.db
@@ -208,18 +210,21 @@ export const fetchMonthlyLogs = query({
         q
           .eq("userId", userId)
           .gte("_creationTime", startDate.getTime())
-          .lte("_creationTime", endDate.getTime()),
+          .lte("_creationTime", endDate.getTime())
       )
       .collect();
 
     // Initialize an object to store logs by date from logEntries
-    const logsByDate: Record<string, Array<{
-      uniqueId: string;
-      logStatus: string;
-      logTime: number;
-      createdAt: number;
-      isHalfDay: boolean;
-    }>> = {};
+    const logsByDate: Record<
+      string,
+      Array<{
+        uniqueId: string;
+        logStatus: string;
+        logTime: number;
+        createdAt: number;
+        isHalfDay: boolean;
+      }>
+    > = {};
 
     // Organize logs by date from logEntries
     logs.forEach((log) => {
@@ -239,9 +244,7 @@ export const fetchMonthlyLogs = query({
 
     // Sort logEntries by log_time for each date
     for (const date in logsByDate) {
-      logsByDate[date].sort(
-        (a, b) => a.logTime - b.logTime,
-      );
+      logsByDate[date].sort((a, b) => a.logTime - b.logTime);
     }
 
     // Format time helper function
@@ -250,7 +253,7 @@ export const fetchMonthlyLogs = query({
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
       const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
         2,
-        "0",
+        "0"
       );
       const seconds = String(totalSeconds % 60).padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
@@ -293,7 +296,7 @@ export const fetchMonthlyLogs = query({
             const logExit = log.logTime;
             const nextLog = logEntries.find(
               (entry) =>
-                entry.logTime > log.logTime && entry.logStatus === "enter",
+                entry.logTime > log.logTime && entry.logStatus === "enter"
             );
             if (nextLog) {
               const logEnter = nextLog.logTime;
@@ -317,7 +320,7 @@ export const fetchMonthlyLogs = query({
           const formattedDate = `${day}-${month}-${year}`;
 
           // Check if any log for this date is marked as half-day
-          const isHalfDay = logEntries.some(entry => entry.isHalfDay);
+          const isHalfDay = logEntries.some((entry) => entry.isHalfDay);
 
           if (isHalfDay) {
             halfDayCount++;
@@ -366,11 +369,16 @@ export const fetchMonthlyLogs = query({
         numberOfDays,
         expectedWorkHours,
         halfDayCount,
+        monthStart: args.monthStart,
+        monthEnd: args.monthEnd,
       });
     }
 
     return {
-      message: dateMetrics.length === 0 ? "No fullday logs found" : "Logs fetched successfully",
+      message:
+        dateMetrics.length === 0
+          ? "No fullday logs found"
+          : "Logs fetched successfully",
       status: dateMetrics.length === 0 ? 404 : 200,
       data: dateMetrics,
       summary: summary,
