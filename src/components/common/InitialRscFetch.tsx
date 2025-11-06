@@ -9,8 +9,8 @@ import { api } from "../../../convex/_generated/api";
 import { SaveDataToGlobalStore } from "./SaveDataToGlobalStore";
 
 interface InitialRscFetchProps {
-  preloadedProfile?: Preloaded<typeof api.fetchProfile.fetchProfile>;
-  preloadedLogs?: Preloaded<typeof api.fetchLogs.fetchLogs>;
+  preloadedProfile?: Preloaded<typeof api.user.profile.fetch>;
+  preloadedLogs?: Preloaded<typeof api.user.fetchLogs.fetchLogs>;
 }
 
 // Component that uses preloaded data
@@ -18,15 +18,15 @@ const PreloadedComponent = ({
   preloadedProfile,
   preloadedLogs,
 }: {
-  preloadedProfile: Preloaded<typeof api.fetchProfile.fetchProfile>;
-  preloadedLogs: Preloaded<typeof api.fetchLogs.fetchLogs>;
+  preloadedProfile: Preloaded<typeof api.user.profile.fetch>;
+  preloadedLogs: Preloaded<typeof api.user.fetchLogs.fetchLogs>;
 }) => {
   const router = useRouter();
   const { data: session } = authClient.useSession();
 
   const profileData = usePreloadedQuery(preloadedProfile);
   const logsData = usePreloadedQuery(preloadedLogs);
-  const createUserProfile = useMutation(api.fetchProfile.createUserProfile);
+  const createUserProfile = useMutation(api.user.profile.create);
 
   useEffect(() => {
     if (!session) {
@@ -78,9 +78,9 @@ const QueryComponent = () => {
   const router = useRouter();
   const { data: session } = authClient.useSession();
 
-  const profileData = useQuery(api.fetchProfile.fetchProfile);
-  const logsData = useQuery(api.fetchLogs.fetchLogs, { date: undefined });
-  const createUserProfile = useMutation(api.fetchProfile.createUserProfile);
+  const profileData = useQuery(api.user.profile.fetch);
+  const logsData = useQuery(api.user.fetchLogs.fetchLogs, { date: undefined });
+  const createUserProfile = useMutation(api.user.profile.create);
 
   useEffect(() => {
     if (!session) {

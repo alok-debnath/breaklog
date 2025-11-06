@@ -47,7 +47,7 @@ interface TimeEditFormProps {
   limit: TimeLimit;
   localTime: TimeValue;
   localTimeZone: string;
-  editLogMutation: ReturnType<typeof useMutation<typeof api.editLog.editLog>>;
+  editLogMutation: ReturnType<typeof useMutation<typeof api.user.editLog.editLog>>;
 }
 
 // ========== Constants ==========
@@ -338,7 +338,7 @@ const ModalHeader: React.FC<{ limit: TimeLimit }> = ({ limit }) => (
 const TimeEditModal: React.FC = () => {
   const { logEditStore, isTimeEditModalOpen } = useStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const editLogMutation = useMutation(api.editLog.editLog);
+  const editLogMutation = useMutation(api.user.editLog.editLog);
   
   const [localTime, setLocalTime] = React.useState<TimeValue>(
     DEFAULT_TIME_LIMIT.min

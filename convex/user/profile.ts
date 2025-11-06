@@ -1,7 +1,8 @@
-import { mutation, query } from "./_generated/server";
-import { authComponent } from "./auth"; // Import the component client
+import { v } from "convex/values";
+import { mutation, query } from "../_generated/server";
+import { authComponent } from "../auth"; // Import the component client
 
-export const fetchProfile = query({
+export const fetch = query({
   args: {},
   handler: async (ctx) => {
     // Get the Better Auth user using the component client
@@ -40,7 +41,7 @@ export const fetchProfile = query({
   },
 });
 
-export const createUserProfile = mutation({
+export const create = mutation({
   args: {},
   handler: async (ctx) => {
     const authUser = await authComponent.safeGetAuthUser(ctx);
@@ -68,5 +69,46 @@ export const createUserProfile = mutation({
     });
 
     return { message: "User profile created", profileId: newProfileId };
+  },
+});
+
+export const update = mutation({
+  args: {
+    dailyWorkRequired: v.optional(v.number()),
+    logType: v.optional(v.string()),
+    defaultTimeZone: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+
+    const userId = identity.subject;
+
+    const userProfile = await ctx.db
+      .query("userProfiles")
+      .withIndex("userId", (q) => q.eq("userId", userId))
+      .first();
+
+    if (!userProfile) {
+      throw new Error("User profile not found");
+    }
+
+    const updates: {
+      dailyWorkRequired?: number;
+      logType?: string;
+      defaultTimeZone?: string;
+    } = {};
+    if (args.dailyWorkRequired !== undefined)
+      updates.dailyWorkRequired = args.dailyWorkRequired;
+    if (args.logType !== undefined) updates.logType = args.logType;
+    if (args.defaultTimeZone !== undefined)
+      updates.defaultTimeZone = args.defaultTimeZone;
+
+    await ctx.db.patch(userProfile._id, updates);
+
+    return {
+      message: "Profile updated successfully",
+      status: 200,
+    };
   },
 });

@@ -57,7 +57,7 @@ const ProfilePage = () => {
   const { userData, loading } = useStore();
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const updateProfileMutation = useMutation(api.updateProfile.updateProfile);
+  const updateProfileMutation = useMutation(api.user.profile.update);
 
   const initialValues = useMemo(
     () => ({

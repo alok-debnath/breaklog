@@ -95,7 +95,7 @@ const WarningNote = () => (
 const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
   const { userData, loading } = useStore();
   const router = useRouter();
-  const updateProfile = useMutation(api.updateProfile.updateProfile);
+  const updateProfile = useMutation(api.user.profile.update);
 
   const { options, parseTimezone } = useTimezoneSelect({
     labelStyle: "abbrev",

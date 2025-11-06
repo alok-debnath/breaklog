@@ -152,7 +152,7 @@ const HistoryPage = () => {
     [selectedYear, selectedMonth],
   );
 
-  const fetchMonthlyLogs = useQuery(api.fetchLogs.fetchMonthlyLogs, queryArgs);
+  const fetchMonthlyLogs = useQuery(api.user.fetchLogs.fetchMonthlyLogs, queryArgs);
 
   // Memoized data transformation
   const transformedData = useMemo(() => {

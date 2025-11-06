@@ -27,12 +27,12 @@ export default async function InitialDataWrapper() {
 
     // Preload the data server-side with proper authentication
     const preloadedLogs = await preloadQuery(
-      api.fetchLogs.fetchLogs,
+      api.user.fetchLogs.fetchLogs,
       {},
       { token },
     );
     const preloadedProfile = await preloadQuery(
-      api.fetchProfile.fetchProfile,
+      api.user.profile.fetch,
       {},
       { token },
     );

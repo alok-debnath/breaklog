@@ -15,7 +15,7 @@ const Index = () => {
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== "undefined";
-  const submitLogMutation = useMutation(api.submitLog.submitLog);
+  const submitLogMutation = useMutation(api.user.submitLog.submitLog);
 
   const logEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;

@@ -8,8 +8,8 @@ export default function SpecificDayLog() {
   const params = useParams();
   const date = params.date as string;
 
-  const logsData = useQuery(api.fetchLogs.fetchLogs, { date });
-  const profileData = useQuery(api.fetchProfile.fetchProfile);
+  const logsData = useQuery(api.user.fetchLogs.fetchLogs, { date });
+  const profileData = useQuery(api.user.profile.fetch);
 
   const logs = logsData?.data || [];
   const workData = logsData?.workdata;

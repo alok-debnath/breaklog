@@ -39,7 +39,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
   const { initialPageLoadDone, loading } = useStore();
   const pathname = usePathname();
 
-  const submitLogMutation = useMutation(api.submitLog.submitLog);
+  const submitLogMutation = useMutation(api.user.submitLog.submitLog);
 
   const simpleLogEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
