@@ -2,6 +2,7 @@
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import LogsCard from "@/components/Layouts/LogsCard";
+import { useStore } from "@/stores/store";
 import { api } from "../../../../../convex/_generated/api";
 
 export default function SpecificDayLog() {
@@ -9,11 +10,10 @@ export default function SpecificDayLog() {
   const date = params.date as string;
 
   const logsData = useQuery(api.user.fetchLogs.fetchLogs, { date });
-  const profileData = useQuery(api.user.profile.fetch);
+  const { userData } = useStore();
 
   const logs = logsData?.data || [];
   const workData = logsData?.workdata;
-  const userData = profileData?.data;
 
   if (!workData || !userData) {
     return <div>Loading...</div>;
@@ -23,7 +23,8 @@ export default function SpecificDayLog() {
     workData.unformattedWorkDone >=
     (userData.daily_work_required || 0) * 3600000;
 
-  const isWorkDoneSuccess = isWorkDone && (userData.daily_work_required || 0) > 0;
+  const isWorkDoneSuccess =
+    isWorkDone && (userData.daily_work_required || 0) > 0;
 
   return (
     <div className="from-background via-background/95 to-muted/20 bg-linear-to-br">
