@@ -72,10 +72,10 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
     <>
       <div
         className={cn(
-          "relative overflow-hidden rounded-t-2xl border border-b-0 p-6 shadow-sm backdrop-blur-sm transition-all duration-500",
+          "relative overflow-hidden rounded-t-2xl border border-b-0 p-4 shadow-sm backdrop-blur-sm transition-all duration-500 -mt-6",
           isHalfDayActive
-            ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-100 dark:border-emerald-800/50 dark:from-emerald-950/50 dark:to-green-900/30"
-            : "border-amber-200 bg-gradient-to-br from-amber-50 to-orange-100 dark:border-amber-800/50 dark:from-amber-950/50 dark:to-orange-900/30",
+            ? "border-emerald-200 bg-linear-to-br from-emerald-50 to-green-100 dark:border-emerald-800/50 dark:from-emerald-950/50 dark:to-green-900/30"
+            : "border-amber-200 bg-linear-to-br from-amber-50 to-orange-100 dark:border-amber-800/50 dark:from-amber-950/50 dark:to-orange-900/30"
         )}
       >
         {/* Background decoration */}
@@ -83,50 +83,52 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
           <div
             className={cn(
               "absolute -top-4 -right-4 h-24 w-24 rounded-full",
-              isHalfDayActive ? "bg-emerald-400" : "bg-amber-400",
+              isHalfDayActive ? "bg-emerald-400" : "bg-amber-400"
             )}
           />
           <div
             className={cn(
               "absolute -bottom-6 -left-6 h-32 w-32 rounded-full",
-              isHalfDayActive ? "bg-green-400" : "bg-orange-400",
+              isHalfDayActive ? "bg-green-400" : "bg-orange-400"
             )}
           />
         </div>
 
         <div className="relative flex items-center justify-between gap-4">
           <div className="flex flex-1 items-start gap-3">
-            <div
-              className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300",
-                isHalfDayActive
-                  ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400"
-                  : "bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400",
-              )}
-            >
-              {isHalfDayActive ? (
-                <CheckCircle2 className="h-5 w-5" />
-              ) : (
-                <Clock className="h-5 w-5" />
-              )}
-            </div>
             <div className="min-w-0 flex-1">
-              <h3
-                className={cn(
-                  "mb-1 text-base leading-tight font-semibold",
-                  isHalfDayActive
-                    ? "text-emerald-800 dark:text-emerald-200"
-                    : "text-amber-800 dark:text-amber-200",
-                )}
-              >
-                {!isHalfDayActive ? "Half Day Option" : "Half Day Marked"}
-              </h3>
+              <div className="flex items-center gap-2 mb-1">
+                <div
+                  className={cn(
+                    "flex h-6 w-6 items-center justify-center rounded-full transition-colors duration-300",
+                    isHalfDayActive
+                      ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400"
+                      : "bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400"
+                  )}
+                >
+                  {isHalfDayActive ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : (
+                    <Clock className="h-4 w-4" />
+                  )}
+                </div>
+                <h3
+                  className={cn(
+                    "text-base leading-tight font-semibold",
+                    isHalfDayActive
+                      ? "text-emerald-800 dark:text-emerald-200"
+                      : "text-amber-800 dark:text-amber-200"
+                  )}
+                >
+                  {!isHalfDayActive ? "Half Day Option" : "Half Day Marked"}
+                </h3>
+              </div>
               <p
                 className={cn(
                   "text-sm leading-relaxed",
                   isHalfDayActive
                     ? "text-emerald-700 dark:text-emerald-300"
-                    : "text-amber-700 dark:text-amber-300",
+                    : "text-amber-700 dark:text-amber-300"
                 )}
               >
                 {!isHalfDayActive
@@ -136,7 +138,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
             </div>
           </div>
 
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             {!isHalfDayActive ? (
               <Button
                 size="sm"
@@ -145,7 +147,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
                 className={cn(
                   "h-9 rounded-full px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   "bg-amber-600 text-white shadow-md hover:bg-amber-700 hover:shadow-lg",
-                  "dark:bg-amber-500 dark:hover:bg-amber-600",
+                  "dark:bg-amber-500 dark:hover:bg-amber-600"
                 )}
               >
                 Mark Half Day
@@ -159,7 +161,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
                 className={cn(
                   "h-9 rounded-full px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   "border-emerald-300 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-50",
-                  "dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20",
+                  "dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
                 )}
               >
                 <Undo2 className="mr-1 h-3 w-3" />

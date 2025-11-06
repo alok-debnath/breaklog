@@ -22,13 +22,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {/* Providers is a Client Component, so it’s the only place
+        {/* Providers is a Client Component, so it’s the only place
               you use SessionProvider / React Context */}
-          <Providers>{children}</Providers>
-          <Analytics />
-          <SpeedInsights />
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            <Analytics />
+            <SpeedInsights />
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
