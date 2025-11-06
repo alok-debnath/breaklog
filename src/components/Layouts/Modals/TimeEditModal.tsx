@@ -241,7 +241,7 @@ const TimeEditForm: React.FC<TimeEditFormProps> = ({
     try {
       useStore.setState({ loading: true });
       
-      const originalDateTime = new Date(logEditStore.log_dateTime);
+      const originalDateTime = logEditStore.log_dateTime ? new Date(logEditStore.log_dateTime) : new Date();
       const logDateTime = convertToUTC(values, originalDateTime, localTimeZone);
 
       await editLogMutation({
@@ -393,9 +393,9 @@ const TimeEditModal: React.FC = () => {
       isTimeEditModalOpen: false,
       logEditStore: {
         log_id: "",
-        log_dateTime: "",
-        log_dateTime_ahead: "",
-        log_dateTime_behind: "",
+        log_dateTime: null,
+        log_dateTime_ahead: null,
+        log_dateTime_behind: null,
       },
     });
   }, []);

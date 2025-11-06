@@ -35,11 +35,11 @@ interface MonthLogData {
   formattedWorkDone: string;
   isHalfDay: boolean;
 }
-interface LogEditData {
+export interface LogEditData {
   log_id: string;
-  log_dateTime: string;
-  log_dateTime_ahead: string;
-  log_dateTime_behind: string;
+  log_dateTime: Date | null;
+  log_dateTime_ahead: Date | null;
+  log_dateTime_behind: Date | null;
 }
 interface DialogModalData {
   modal_body: string;
@@ -133,9 +133,9 @@ export const useStore = create<StoreState>((_set) => ({
   },
   logEditStore: {
     log_id: "",
-    log_dateTime: "",
-    log_dateTime_ahead: "",
-    log_dateTime_behind: "",
+    log_dateTime: null,
+    log_dateTime_ahead: null,
+    log_dateTime_behind: null,
   },
   dialogModal: {
     modal_body: "",

@@ -2,7 +2,6 @@
 import {
   AlertCircle,
   Calendar,
-  ChevronDown,
   Clock,
   Coffee,
   Edit3,
@@ -10,7 +9,7 @@ import {
   Target,
 } from "lucide-react";
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -36,7 +35,7 @@ import {
 } from "@/components/ui/table";
 import useWorkDataUpdater from "@/hooks/useWorkDataUpdater";
 import { cn } from "@/lib/utils";
-import type { LogsData, WorkData } from "@/stores/store";
+import type { LogEditData, LogsData, WorkData } from "@/stores/store";
 import { useStore } from "@/stores/store";
 import HalfDaySection from "./HelperUI/HalfDaySection";
 
@@ -64,7 +63,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
     undefined,
   );
 
-  const openTimeEditModal = (value: any) => {
+  const openTimeEditModal = (value: LogEditData) => {
     useStore.setState(() => ({
       logEditStore: value,
       isTimeEditModalOpen: true,
@@ -96,7 +95,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
     <Card
       className={cn(
         "mx-auto mt-4 w-full max-w-lg min-w-full overflow-hidden transition-all duration-300 sm:min-w-[400px]",
-        "from-card/95 to-card/80 border-0 bg-gradient-to-br shadow-xl backdrop-blur-sm",
+        "from-card/95 to-card/80 border-0 bg-linear-to-br shadow-xl backdrop-blur-sm",
         page === "history" &&
           (isWorkDoneSuccess
             ? "ring-2 shadow-emerald-500/10 ring-emerald-500/20"
@@ -114,11 +113,11 @@ const LogsCard: React.FC<LogsCardProps> = ({
 
       <CardHeader className="">
         <div className="flex items-center gap-3">
-          <div className="from-primary/10 to-primary/5 border-primary/10 flex h-12 w-12 items-center justify-center rounded-2xl border bg-gradient-to-br">
+          <div className="from-primary/10 to-primary/5 border-primary/10 flex h-12 w-12 items-center justify-center rounded-2xl border bg-linear-to-br">
             <Calendar className="text-primary h-6 w-6" />
           </div>
           <div>
-            <CardTitle className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">
+            <CardTitle className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
               {dateToDisplay.toLocaleDateString("en-US", { weekday: "long" })}
             </CardTitle>
             <CardDescription className="text-sm font-medium">
@@ -135,8 +134,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
       <CardContent className="space-y-6">
         {/* Work Stats Grid */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-linear-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+            <div className="absolute inset-0 bg-linear-to-br from-emerald-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="relative flex flex-col items-center space-y-2">
               <div className="flex items-center space-x-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
@@ -159,8 +158,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
             </div>
           </div>
 
-          <div className="group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="group border-border/50 from-background/50 to-muted/30 relative overflow-hidden rounded-2xl border bg-linear-to-br p-4 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+            <div className="absolute inset-0 bg-linear-to-br from-orange-500/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
             <div className="relative flex flex-col items-center space-y-2">
               <div className="flex items-center space-x-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
@@ -179,8 +178,8 @@ const LogsCard: React.FC<LogsCardProps> = ({
 
         {/* Work Progress Info */}
         {!breaklogMode && page !== "history" && formattedWorkEndTime && (
-          <div className="from-primary/5 to-primary/10 border-primary/10 relative overflow-hidden rounded-2xl border bg-gradient-to-r p-4">
-            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+          <div className="from-primary/5 to-primary/10 border-primary/10 relative overflow-hidden rounded-2xl border bg-linear-to-r p-4">
+            <div className="absolute inset-0 bg-linear-to-br from-white/5 to-transparent" />
             <div className="relative grid grid-cols-2 gap-4 text-center">
               <div className="space-y-1">
                 <div className="flex items-center justify-center gap-2">
@@ -212,121 +211,114 @@ const LogsCard: React.FC<LogsCardProps> = ({
 
         {/* Logs Section */}
         {showAccordion ? (
-          <>
-            <Accordion
-              type="single"
-              collapsible
-              className="from-primary/5 to-primary/10 border-primary/10 w-full rounded-xl border bg-gradient-to-r"
-              value={accordionValue}
-              onValueChange={setAccordionValue}
-            >
-              <AccordionItem value="item-1" className="border-0">
-                <AccordionTrigger className="group from-muted/50 to-muted/30 hover:from-muted/70 hover:to-muted/50 rounded-2xl bg-gradient-to-r px-4 py-3 text-sm font-semibold transition-all duration-300 hover:no-underline">
-                  <div className="flex items-center gap-2">
-                    <div className="bg-primary/10 flex h-6 w-6 items-center justify-center rounded-full">
-                      <Info className="text-primary h-3 w-3" />
-                    </div>
-                    {accordionValue !== "item-1" && currentLogs.length > 0 ? (
-                      <p className="text-muted-foreground text-sm">
-                        <span className="text-foreground font-semibold">
-                          Recent log:
-                        </span>{" "}
-                        {currentLogs[currentLogs.length - 1].log_status}
-                      </p>
-                    ) : (
-                      <>Activity Logs</>
-                    )}
+          <Accordion
+            type="single"
+            collapsible
+            className="from-primary/5 to-primary/10 border-primary/10 w-full rounded-xl border bg-linear-to-r"
+            value={accordionValue}
+            onValueChange={setAccordionValue}
+          >
+            <AccordionItem value="item-1" className="border-0">
+              <AccordionTrigger className="group from-muted/50 to-muted/30 hover:from-muted/70 hover:to-muted/50 rounded-2xl bg-linear-to-r px-4 py-3 text-sm font-semibold transition-all duration-300 hover:no-underline">
+                <div className="flex items-center gap-2">
+                  <div className="bg-primary/10 flex h-6 w-6 items-center justify-center rounded-full">
+                    <Info className="text-primary h-3 w-3" />
                   </div>
-                </AccordionTrigger>
-                <AccordionContent className="pt-4 pb-0">
-                  {currentLogs.length > 0 ? (
-                    <div className="border-border/50 from-background/50 to-muted/20 overflow-hidden rounded-2xl border bg-gradient-to-br">
-                      <Table>
-                        <TableHeader>
-                          <TableRow className="border-border/50 hover:bg-muted/30">
-                            <TableHead className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
-                              Time
-                            </TableHead>
-                            <TableHead className="text-muted-foreground text-right text-xs font-semibold tracking-wide uppercase">
-                              Activity
-                            </TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {[...currentLogs]
-                            .reverse()
-                            .map((log, index, array) => {
-                              const log_time = new Date(log.log_time);
-                              const utcFormattedDate = log_time.toLocaleString(
-                                "en-US",
-                                {
-                                  hour: "numeric",
-                                  minute: "numeric",
-                                  hour12: true,
-                                  month: "short",
-                                  day: "numeric",
-                                },
-                              );
-
-                              const logAbove =
-                                index > 0 ? array[index - 1] : null;
-                              const logBelow =
-                                index < array.length - 1
-                                  ? array[index + 1]
-                                  : null;
-
-                              return (
-                                <TableRow
-                                  key={log.id}
-                                  onClick={() => {
-                                    if (page !== "history") {
-                                      openTimeEditModal({
-                                        log_id: log.id,
-                                        log_dateTime: log.log_time,
-                                        log_dateTime_ahead: logAbove
-                                          ? logAbove.log_time
-                                          : null,
-                                        log_dateTime_behind: logBelow
-                                          ? logBelow.log_time
-                                          : null,
-                                      });
-                                    }
-                                  }}
-                                  className={cn(
-                                    "border-border/30 transition-all duration-200",
-                                    page !== "history" &&
-                                      "hover:bg-muted/50 group cursor-pointer",
-                                  )}
-                                >
-                                  <TableCell className="font-mono text-sm font-medium">
-                                    {utcFormattedDate}
-                                  </TableCell>
-                                  <TableCell className="text-right">
-                                    <div className="flex items-center justify-end gap-2">
-                                      <span className="text-sm font-medium">
-                                        {log.log_status}
-                                      </span>
-                                      {page !== "history" && (
-                                        <Edit3 className="text-muted-foreground h-3 w-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
-                                      )}
-                                    </div>
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
-                        </TableBody>
-                      </Table>
-                    </div>
+                  {accordionValue !== "item-1" && currentLogs.length > 0 ? (
+                    <p className="text-muted-foreground text-sm">
+                      <span className="text-foreground font-semibold">
+                        Recent log:
+                      </span>{" "}
+                      {currentLogs[currentLogs.length - 1].log_status}
+                    </p>
                   ) : (
-                    <div className="text-muted-foreground from-muted/20 to-muted/10 border-muted-foreground/20 flex items-center justify-center rounded-2xl border border-dashed bg-gradient-to-br p-8 text-sm">
-                      <AlertCircle className="mr-2 h-4 w-4" />
-                      No logs to display.
-                    </div>
+                    <>Activity Logs</>
                   )}
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="pt-4 pb-0">
+                {currentLogs.length > 0 ? (
+                  <div className="border-border/50 from-background/50 to-muted/20 overflow-hidden rounded-2xl border bg-linear-to-br">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="border-border/50 hover:bg-muted/30">
+                          <TableHead className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                            Time
+                          </TableHead>
+                          <TableHead className="text-muted-foreground text-right text-xs font-semibold tracking-wide uppercase">
+                            Activity
+                          </TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {[...currentLogs].reverse().map((log, index, array) => {
+                          const log_time = new Date(log.log_time);
+                          const utcFormattedDate = log_time.toLocaleString(
+                            "en-US",
+                            {
+                              hour: "numeric",
+                              minute: "numeric",
+                              hour12: true,
+                              month: "short",
+                              day: "numeric",
+                            },
+                          );
+
+                          const logAbove = index > 0 ? array[index - 1] : null;
+                          const logBelow =
+                            index < array.length - 1 ? array[index + 1] : null;
+
+                          return (
+                            <TableRow
+                              key={log.id}
+                              onClick={() => {
+                                if (page !== "history") {
+                                  openTimeEditModal({
+                                    log_id: log.id,
+                                    log_dateTime: log.log_time,
+                                    log_dateTime_ahead: logAbove
+                                      ? logAbove.log_time
+                                      : null,
+                                    log_dateTime_behind: logBelow
+                                      ? logBelow.log_time
+                                      : null,
+                                  });
+                                }
+                              }}
+                              className={cn(
+                                "border-border/30 transition-all duration-200",
+                                page !== "history" &&
+                                  "hover:bg-muted/50 group cursor-pointer",
+                              )}
+                            >
+                              <TableCell className="font-mono text-sm font-medium">
+                                {utcFormattedDate}
+                              </TableCell>
+                              <TableCell className="text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                  <span className="text-sm font-medium">
+                                    {log.log_status}
+                                  </span>
+                                  {page !== "history" && (
+                                    <Edit3 className="text-muted-foreground h-3 w-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <div className="text-muted-foreground from-muted/20 to-muted/10 border-muted-foreground/20 flex items-center justify-center rounded-2xl border border-dashed bg-linear-to-br p-8 text-sm">
+                    <AlertCircle className="mr-2 h-4 w-4" />
+                    No logs to display.
+                  </div>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         ) : (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -338,7 +330,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
               </h3>
             </div>
             {currentLogs.length > 0 ? (
-              <div className="border-border/50 from-background/50 to-muted/20 overflow-hidden rounded-2xl border bg-gradient-to-br">
+              <div className="border-border/50 from-background/50 to-muted/20 overflow-hidden rounded-2xl border bg-linear-to-br">
                 <Table>
                   <TableHeader>
                     <TableRow className="border-border/50 hover:bg-muted/30">
@@ -411,7 +403,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                 </Table>
               </div>
             ) : (
-              <div className="text-muted-foreground from-muted/20 to-muted/10 border-muted-foreground/20 flex items-center justify-center rounded-2xl border border-dashed bg-gradient-to-br p-8 text-sm">
+              <div className="text-muted-foreground from-muted/20 to-muted/10 border-muted-foreground/20 flex items-center justify-center rounded-2xl border border-dashed bg-linear-to-br p-8 text-sm">
                 <AlertCircle className="mr-2 h-4 w-4" />
                 No logs to display.
               </div>
@@ -425,7 +417,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
           <Button
             onClick={() => logEntry?.("day end")}
             variant="destructive"
-            className="h-12 w-full rounded-2xl bg-gradient-to-r from-red-500 to-red-600 text-base font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:from-red-600 hover:to-red-700 hover:shadow-xl"
+            className="h-12 w-full rounded-2xl bg-linear-to-r from-red-500 to-red-600 text-base font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:from-red-600 hover:to-red-700 hover:shadow-xl"
             disabled={
               ["exit", null, "day end"].includes(workData.lastLogStatus) ||
               loading ||
