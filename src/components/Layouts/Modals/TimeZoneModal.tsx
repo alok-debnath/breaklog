@@ -32,7 +32,7 @@ import {
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "@/convex/_generated/api";
 import { handleError, handleSuccessToast } from "../../common/CommonCodeBlocks";
 
 // Reusable styled components

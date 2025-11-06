@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "@/convex/_generated/api";
 
 const validationSchema = Yup.object().shape({
   daily_work_required: Yup.number()

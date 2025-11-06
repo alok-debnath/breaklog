@@ -3,9 +3,9 @@ import type { Preloaded } from "convex/react";
 import { useMutation, usePreloadedQuery, useQuery } from "convex/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { api } from "@/convex/_generated/api";
 import { authClient } from "@/lib/auth-client";
 import type { FetchedLogsDataType } from "@/utils/saveFetchedLogsToStore";
-import { api } from "../../../convex/_generated/api";
 import { SaveDataToGlobalStore } from "./SaveDataToGlobalStore";
 
 interface InitialRscFetchProps {

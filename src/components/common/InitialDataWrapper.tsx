@@ -1,6 +1,6 @@
 import { preloadQuery } from "convex/nextjs";
+import { api } from "@/convex/_generated/api";
 import { getConvexToken, isAuthenticated } from "@/lib/auth-server";
-import { api } from "../../../convex/_generated/api";
 import InitialRscFetch from "./InitialRscFetch";
 
 export default async function InitialDataWrapper() {

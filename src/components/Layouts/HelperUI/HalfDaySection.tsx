@@ -3,9 +3,9 @@ import { CheckCircle2, Clock, Undo2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { handleError } from "@/components/common/CommonCodeBlocks";
 import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { api } from "../../../../convex/_generated/api";
 
 interface HalfDaySectionProps {
   isHalfDay: boolean;
@@ -67,7 +67,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
           "relative overflow-hidden rounded-t-2xl border border-b-0 p-4 shadow-sm backdrop-blur-sm transition-all duration-500 -mt-6",
           isHalfDay
             ? "border-emerald-200 bg-linear-to-br from-emerald-50 to-green-100 dark:border-emerald-800/50 dark:from-emerald-950/50 dark:to-green-900/30"
-            : "border-amber-200 bg-linear-to-br from-amber-50 to-orange-100 dark:border-amber-800/50 dark:from-amber-950/50 dark:to-orange-900/30"
+            : "border-amber-200 bg-linear-to-br from-amber-50 to-orange-100 dark:border-amber-800/50 dark:from-amber-950/50 dark:to-orange-900/30",
         )}
       >
         {/* Background decoration */}
@@ -75,13 +75,13 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
           <div
             className={cn(
               "absolute -top-4 -right-4 h-24 w-24 rounded-full",
-              isHalfDay ? "bg-emerald-400" : "bg-amber-400"
+              isHalfDay ? "bg-emerald-400" : "bg-amber-400",
             )}
           />
           <div
             className={cn(
               "absolute -bottom-6 -left-6 h-32 w-32 rounded-full",
-              isHalfDay ? "bg-green-400" : "bg-orange-400"
+              isHalfDay ? "bg-green-400" : "bg-orange-400",
             )}
           />
         </div>
@@ -95,7 +95,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
                     "flex h-6 w-6 items-center justify-center rounded-full transition-colors duration-300",
                     isHalfDay
                       ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400"
-                      : "bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400"
+                      : "bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400",
                   )}
                 >
                   {isHalfDay ? (
@@ -109,7 +109,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
                     "text-base leading-tight font-semibold",
                     isHalfDay
                       ? "text-emerald-800 dark:text-emerald-200"
-                      : "text-amber-800 dark:text-amber-200"
+                      : "text-amber-800 dark:text-amber-200",
                   )}
                 >
                   {!isHalfDay ? "Half Day Option" : "Half Day Marked"}
@@ -120,7 +120,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
                   "text-sm leading-relaxed",
                   isHalfDay
                     ? "text-emerald-700 dark:text-emerald-300"
-                    : "text-amber-700 dark:text-amber-300"
+                    : "text-amber-700 dark:text-amber-300",
                 )}
               >
                 {!isHalfDay
@@ -139,7 +139,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
                 className={cn(
                   "h-9 rounded-full px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   "bg-amber-600 text-white shadow-md hover:bg-amber-700 hover:shadow-lg",
-                  "dark:bg-amber-500 dark:hover:bg-amber-600"
+                  "dark:bg-amber-500 dark:hover:bg-amber-600",
                 )}
               >
                 Mark Half Day
@@ -153,7 +153,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
                 className={cn(
                   "h-9 rounded-full px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   "border-emerald-300 text-emerald-700 hover:border-emerald-400 hover:bg-emerald-50",
-                  "dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20"
+                  "dark:border-emerald-600 dark:text-emerald-300 dark:hover:bg-emerald-900/20",
                 )}
               >
                 <Undo2 className="mr-1 h-3 w-3" />

@@ -2,8 +2,8 @@
 import { useQuery } from "convex/react";
 import { useParams } from "next/navigation";
 import LogsCard from "@/components/Layouts/LogsCard";
+import { api } from "@/convex/_generated/api";
 import { useStore } from "@/stores/store";
-import { api } from "../../../../../convex/_generated/api";
 
 export default function SpecificDayLog() {
   const params = useParams();
