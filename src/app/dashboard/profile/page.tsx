@@ -89,12 +89,6 @@ const ProfilePage = () => {
       });
 
       if (res.status === 200) {
-        useStore.setState({
-          userData: {
-            ...userData,
-            ...values,
-          },
-        });
         handleSuccessToast({
           message: "Data saved successfully",
         });

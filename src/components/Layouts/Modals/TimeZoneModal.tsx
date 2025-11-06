@@ -112,7 +112,7 @@ const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
       const offset = `${parsed.label.split(") ")[0]})`;
       return `${timezone} ${offset}`;
     },
-    [parseTimezone],
+    [parseTimezone]
   );
 
   const handleSubmit = useCallback(async () => {
@@ -124,7 +124,6 @@ const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
 
       useStore.setState({
         isTimeZoneModalOpen: false,
-        userData: { ...userData, default_time_zone: selectedTimeZone },
       });
 
       handleSuccessToast({ message: "Timezone updated successfully" });
@@ -133,14 +132,14 @@ const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
     } finally {
       useStore.setState({ loading: false });
     }
-  }, [selectedTimeZone, updateProfile, userData, router]);
+  }, [selectedTimeZone, updateProfile, router]);
 
   useEffect(() => {
     const userDeviceTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const normalizedDeviceTimezone = userDeviceTimezone.toLowerCase();
 
     const matchingOption = options.find(
-      (option) => option.value.toLowerCase() === normalizedDeviceTimezone,
+      (option) => option.value.toLowerCase() === normalizedDeviceTimezone
     );
 
     if (matchingOption) {
@@ -160,7 +159,7 @@ const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
     <div
       className={cn(
         "space-y-4",
-        !isDesktop && "max-h-[70vh] overflow-y-auto px-4",
+        !isDesktop && "max-h-[70vh] overflow-y-auto px-4"
       )}
     >
       <div className="space-y-3">
