@@ -87,13 +87,10 @@ const LogsCard: React.FC<LogsCardProps> = ({
     unformattedWorkDone >= (userData.daily_work_required * 3600000) / 2 &&
     unformattedWorkDone <= (userData.daily_work_required * 3600000 * 3) / 4;
 
-  // Always show today's date - use state to avoid hydration mismatch
-  const [dateToDisplay, setDateToDisplay] = useState(new Date());
-
-  // Update date on client mount to ensure consistency
-  useEffect(() => {
-    setDateToDisplay(new Date());
-  }, []);
+  const dateToDisplay =
+    currentLogs.length > 0 && currentLogs[0].log_time
+      ? new Date(currentLogs[0].log_time)
+      : new Date();
 
   return (
     <Card
