@@ -4,7 +4,7 @@ import { mutation } from "./_generated/server";
 export const submitLog = mutation({
   args: {
     logtype: v.string(),
-    date: v.optional(v.string()),
+    date: v.optional(v.string()), // Format: DD-MM-YY
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
