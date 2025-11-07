@@ -5,15 +5,12 @@ export default defineSchema({
   // User profiles for app-specific settings
   userProfiles: defineTable({
     userId: v.string(),
-    username: v.optional(v.string()),
     logType: v.string(),
     dailyWorkRequired: v.optional(v.number()), // in hours
     defaultTimeZone: v.optional(v.string()),
     role: v.string(),
-    isVerified: v.boolean(),
   })
-    .index("userId", ["userId"])
-    .index("username", ["username"]),
+    .index("userId", ["userId"]),
 
   // Logs table
   logs: defineTable({

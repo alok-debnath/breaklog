@@ -31,7 +31,7 @@ export const fetch = query({
         id: userId,
         name: authUser.name,
         email: authUser.email,
-        username: profileData.username,
+        username: authUser.name,
         daily_work_required: profileData.dailyWorkRequired,
         log_type: profileData.logType,
         default_time_zone: profileData.defaultTimeZone,
@@ -49,6 +49,9 @@ export const create = mutation({
 
     const userId = authUser._id;
 
+    console.log("authUser: ",authUser);
+    
+
     const existingProfile = await ctx.db
       .query("userProfiles")
       .withIndex("userId", (q) => q.eq("userId", userId))
@@ -60,12 +63,10 @@ export const create = mutation({
 
     const newProfileId = await ctx.db.insert("userProfiles", {
       userId,
-      username: authUser.name || authUser.email?.split("@")[0] || "user",
       logType: "daymode",
       dailyWorkRequired: 0,
       defaultTimeZone: "",
       role: "user",
-      isVerified: false,
     });
 
     return { message: "User profile created", profileId: newProfileId };

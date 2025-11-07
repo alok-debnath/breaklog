@@ -12,7 +12,7 @@ export default function GoogleSignInButton({
   return (
     <div className="mt-5">
       <Button
-        variant="secondary"
+        variant="outline"
         className="w-full"
         onClick={() => authClient.signIn.social({ provider: "google" })}
       >
