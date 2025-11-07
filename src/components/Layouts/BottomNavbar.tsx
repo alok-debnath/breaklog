@@ -84,12 +84,12 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
   return (
     <>
       <LiveBreakCounter />
-      <div className="from-background via-background/80 pointer-events-none fixed right-0 bottom-0 left-0 z-40 h-32 bg-gradient-to-t to-transparent" />
+      <div className="from-background via-background/80 pointer-events-none fixed right-0 bottom-0 left-0 z-40 h-32 bg-linear-to-t to-transparent" />
 
       <div className="fixed bottom-6 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 px-4">
-        <div className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-gradient-to-r shadow-2xl backdrop-blur-xl">
+        <div className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-linear-to-r shadow-2xl backdrop-blur-xl">
           {/* Background decoration */}
-          <div className="from-primary/5 to-primary/5 absolute inset-0 bg-gradient-to-r via-transparent" />
+          <div className="from-primary/5 to-primary/5 absolute inset-0 bg-linear-to-r via-transparent" />
           <div className="bg-primary/10 absolute -top-2 -right-2 h-8 w-8 rounded-full" />
           <div className="bg-primary/5 absolute -bottom-2 -left-2 h-6 w-6 rounded-full" />
 
@@ -128,7 +128,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                 variant="destructive"
                 className={cn(
                   "h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
-                  "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700",
+                  "bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
                 )}
                 disabled={
                   ["exit", null, "day end"].includes(workData.lastLogStatus) ||
@@ -148,11 +148,16 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
               disabled={btnDisabled}
               className={cn(
                 "h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
-                "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-gradient-to-r",
+                "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-linear-to-r"
               )}
             >
               <span
-                className={`${!isIntersecting && !["exit", null, "day end"].includes(workData.lastLogStatus) ? "hidden" : ""}`}
+                className={`${
+                  !isIntersecting &&
+                  !["exit", null, "day end"].includes(workData.lastLogStatus)
+                    ? "hidden"
+                    : ""
+                }`}
               >
                 {icon}
               </span>

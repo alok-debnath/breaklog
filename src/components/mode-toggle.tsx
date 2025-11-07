@@ -46,7 +46,7 @@ export function ModeToggle() {
           onClick={() => setTheme("system")}
           className="cursor-pointer"
         >
-          <div className="from-foreground/20 to-foreground/40 mr-2 h-4 w-4 rounded-sm bg-gradient-to-br" />
+          <div className="from-foreground/20 to-foreground/40 mr-2 h-4 w-4 rounded-sm bg-linear-to-br" />
           System
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -47,7 +47,7 @@ const SettingsForm = ({ className }: { className?: string }) => {
 
   return (
     <div className={cn("grid gap-6 py-6", className)}>
-      <div className="group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg">
+      <div className="group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-linear-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg">
         <div className="flex items-start justify-between space-x-4">
           <div className="flex flex-1 flex-col space-y-2">
             <div className="flex items-center gap-2">
@@ -66,12 +66,12 @@ const SettingsForm = ({ className }: { className?: string }) => {
             checked={breaklogMode}
             onCheckedChange={handleToggleChange}
             disabled={logs.length > 0}
-            className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-green-500 data-[state=checked]:to-emerald-500"
+            className="data-[state=checked]:bg-linear-to-r data-[state=checked]:from-green-500 data-[state=checked]:to-emerald-500"
           />
         </div>
       </div>
 
-      <div className="group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-gradient-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg">
+      <div className="group border-border/50 from-card/50 to-card/30 hover:shadow-primary/5 relative overflow-hidden rounded-2xl border bg-linear-to-br p-6 backdrop-blur-sm transition-all duration-300 hover:shadow-lg">
         <div className="flex items-start justify-between space-x-4">
           <div className="flex flex-1 flex-col space-y-2">
             <div className="flex items-center gap-2">
@@ -120,10 +120,10 @@ const SettingsModal = () => {
         <DialogContent className="bg-background/80 border-border/50 shadow-2xl backdrop-blur-xl sm:max-w-[500px]">
           <DialogHeader className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+              <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
                 <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
-              <DialogTitle className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+              <DialogTitle className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
                 Settings
               </DialogTitle>
             </div>
@@ -135,7 +135,7 @@ const SettingsModal = () => {
           <DialogFooter>
             <Button
               onClick={() => onOpenChange(false)}
-              className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-gradient-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg"
+              className="from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-primary-foreground hover:shadow-primary/25 rounded-xl bg-linear-to-r px-8 py-2 font-medium transition-all duration-300 hover:shadow-lg"
             >
               Close
             </Button>
@@ -150,10 +150,10 @@ const SettingsModal = () => {
       <DrawerContent>
         <DrawerHeader className="space-y-3 text-left">
           <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
+            <div className="rounded-xl bg-linear-to-br from-blue-500/20 to-purple-500/20 p-2 backdrop-blur-sm">
               <Settings className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
-            <DrawerTitleComponent className="from-foreground to-foreground/70 bg-gradient-to-r bg-clip-text text-xl font-semibold">
+            <DrawerTitleComponent className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-semibold">
               Settings
             </DrawerTitleComponent>
           </div>

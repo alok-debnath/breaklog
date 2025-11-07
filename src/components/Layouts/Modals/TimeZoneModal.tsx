@@ -29,10 +29,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { api } from "@/convex/_generated/api";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { api } from "@/convex/_generated/api";
 import { handleError, handleSuccessToast } from "../../common/CommonCodeBlocks";
 
 // Reusable styled components
@@ -112,7 +112,7 @@ const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
       const offset = `${parsed.label.split(") ")[0]})`;
       return `${timezone} ${offset}`;
     },
-    [parseTimezone]
+    [parseTimezone],
   );
 
   const handleSubmit = useCallback(async () => {
@@ -139,7 +139,7 @@ const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
     const normalizedDeviceTimezone = userDeviceTimezone.toLowerCase();
 
     const matchingOption = options.find(
-      (option) => option.value.toLowerCase() === normalizedDeviceTimezone
+      (option) => option.value.toLowerCase() === normalizedDeviceTimezone,
     );
 
     if (matchingOption) {
@@ -159,7 +159,7 @@ const TimeZoneForm = ({ isDesktop }: { isDesktop: boolean }) => {
     <div
       className={cn(
         "space-y-4",
-        !isDesktop && "max-h-[70vh] overflow-y-auto px-4"
+        !isDesktop && "max-h-[70vh] overflow-y-auto px-4",
       )}
     >
       <div className="space-y-3">

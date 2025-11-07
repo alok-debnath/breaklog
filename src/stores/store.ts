@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export interface WorkData {
   firstLogStatus: string | null;
-  lastLogStatus: string | null;
+  lastLogStatus: string | "";
   breakTime: string;
   workDone: string;
   unformattedWorkDone: number;

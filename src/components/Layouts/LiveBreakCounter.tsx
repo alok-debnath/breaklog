@@ -12,6 +12,7 @@ const LiveBreakCounter = () => {
 
   const diffInSeconds = useTimeDifference(currBreak);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: liveBreak and totalBreak are signals
   useEffect(() => {
     if (!currBreak) return;
 
@@ -30,7 +31,6 @@ const LiveBreakCounter = () => {
     const interval = setInterval(updateBreakTime, 1000);
 
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currBreak, diffInSeconds, workData.breakTime]);
 
   const formatTime = (time: TimeData, showSeconds = true) => {
@@ -49,11 +49,13 @@ const LiveBreakCounter = () => {
 
   return (
     <div
-      className={`fixed bottom-28 left-4 z-50 ${currBreak === null ? "hidden" : "flex"} flex-col gap-3`}
+      className={`fixed bottom-28 left-4 z-50 ${
+        currBreak === null ? "hidden" : "flex"
+      } flex-col gap-3`}
     >
-      <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500/90 to-red-500/90 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+      <div className="group relative overflow-hidden rounded-2xl bg-linear-to-r from-orange-500/90 to-red-500/90 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl">
         {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-50" />
         <div className="absolute -top-2 -right-2 h-8 w-8 rounded-full bg-white/20" />
 
         <div className="relative flex items-center gap-3">
@@ -66,9 +68,9 @@ const LiveBreakCounter = () => {
       </div>
 
       {JSON.stringify(liveBreak.value) !== JSON.stringify(totalBreak.value) && (
-        <div className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-500/90 to-purple-500/90 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+        <div className="group relative overflow-hidden rounded-2xl bg-linear-to-r from-blue-500/90 to-purple-500/90 p-4 shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:shadow-2xl">
           {/* Background decoration */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50" />
+          <div className="absolute inset-0 bg-linear-to-br from-white/10 to-transparent opacity-50" />
           <div className="absolute -bottom-2 -left-2 h-6 w-6 rounded-full bg-white/20" />
 
           <div className="relative flex items-center gap-3">
