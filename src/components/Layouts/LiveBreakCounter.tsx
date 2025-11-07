@@ -1,6 +1,5 @@
 "use client";
 import { useSignal } from "@preact/signals-react";
-import { Clock, Coffee } from "lucide-react";
 import { useEffect } from "react";
 import { calculateTimeData, type TimeData } from "@/hooks/timeUtils";
 import useTimeDifference from "@/hooks/useTimeDifference";

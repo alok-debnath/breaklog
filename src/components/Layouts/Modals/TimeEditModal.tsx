@@ -24,10 +24,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { api } from "@/convex/_generated/api";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { api } from "@/convex/_generated/api";
 import { handleError } from "../../common/CommonCodeBlocks";
 
 // ========== Types ==========
@@ -47,7 +47,9 @@ interface TimeEditFormProps {
   limit: TimeLimit;
   localTime: TimeValue;
   localTimeZone: string;
-  editLogMutation: ReturnType<typeof useMutation<typeof api.user.editLog.editLog>>;
+  editLogMutation: ReturnType<
+    typeof useMutation<typeof api.user.editLog.editLog>
+  >;
 }
 
 // ========== Constants ==========
@@ -104,7 +106,7 @@ const getValidationSchema = (limit: TimeLimit) => {
     hour: Yup.number()
       .when(["period"], ([period], schema) => {
         const isSamePeriod = limit.min.period === limit.max.period;
-        
+
         if (period === limit.min.period) {
           return isSamePeriod
             ? schema.min(limit.min.hour).max(limit.max.hour)
@@ -117,11 +119,13 @@ const getValidationSchema = (limit: TimeLimit) => {
         return schema.min(1).max(12);
       })
       .required("Hour is required"),
-    
+
     minute: Yup.number()
       .when(["hour", "period"], ([hour, period], schema) => {
-        const isMinLimit = hour === limit.min.hour && period === limit.min.period;
-        const isMaxLimit = hour === limit.max.hour && period === limit.max.period;
+        const isMinLimit =
+          hour === limit.min.hour && period === limit.min.period;
+        const isMaxLimit =
+          hour === limit.max.hour && period === limit.max.period;
         const isSameHour = limit.min.hour === limit.max.hour;
 
         if (isMinLimit) {
@@ -136,7 +140,7 @@ const getValidationSchema = (limit: TimeLimit) => {
         return schema.min(0).max(59);
       })
       .required("Minute is required"),
-    
+
     period: Yup.string()
       .oneOf([limit.min.period, limit.max.period])
       .required("Period is required"),
@@ -172,12 +176,11 @@ const TimeInput: React.FC<{
       className={cn(
         "border-border/50 from-background/50 to-muted/20 h-12 rounded-xl bg-linear-to-r font-mono text-lg transition-all duration-200",
         "focus:ring-primary/20 focus:border-primary/50 focus:ring-2",
-        error && "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
+        error &&
+          "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
       )}
     />
-    {error && (
-      <p className="px-2 text-xs font-medium text-red-500">{error}</p>
-    )}
+    {error && <p className="px-2 text-xs font-medium text-red-500">{error}</p>}
   </div>
 );
 
@@ -223,7 +226,9 @@ const PeriodSelector: React.FC<{
           <PeriodButton period={limit.min.period} />
         )}
       </div>
-      {error && <p className="px-2 text-xs font-medium text-red-500">{error}</p>}
+      {error && (
+        <p className="px-2 text-xs font-medium text-red-500">{error}</p>
+      )}
     </div>
   );
 };
@@ -240,15 +245,17 @@ const TimeEditForm: React.FC<TimeEditFormProps> = ({
   const handleSubmit = async (values: TimeValue) => {
     try {
       useStore.setState({ loading: true });
-      
-      const originalDateTime = logEditStore.log_dateTime ? new Date(logEditStore.log_dateTime) : new Date();
+
+      const originalDateTime = logEditStore.log_dateTime
+        ? new Date(logEditStore.log_dateTime)
+        : new Date();
       const logDateTime = convertToUTC(values, originalDateTime, localTimeZone);
 
       await editLogMutation({
         logId: logEditStore.log_id,
         logDateTime,
       });
-      
+
       closeModal();
     } catch (error: unknown) {
       handleError({ error, router: null });
@@ -339,7 +346,7 @@ const TimeEditModal: React.FC = () => {
   const { logEditStore, isTimeEditModalOpen } = useStore();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const editLogMutation = useMutation(api.user.editLog.editLog);
-  
+
   const [localTime, setLocalTime] = React.useState<TimeValue>(
     DEFAULT_TIME_LIMIT.min
   );
@@ -417,7 +424,8 @@ const TimeEditModal: React.FC = () => {
               <ModalHeader limit={limit} />
             </DialogTitle>
             <DialogDescription className="sr-only">
-              Edit the time for your log entry between {formatTimeDisplay(limit.min)} and {formatTimeDisplay(limit.max)}
+              Edit the time for your log entry between{" "}
+              {formatTimeDisplay(limit.min)} and {formatTimeDisplay(limit.max)}
             </DialogDescription>
           </DialogHeader>
           <TimeEditForm {...formProps} />
@@ -434,7 +442,8 @@ const TimeEditModal: React.FC = () => {
             <ModalHeader limit={limit} />
           </DrawerTitle>
           <DrawerDescription className="sr-only">
-            Edit the time for your log entry between {formatTimeDisplay(limit.min)} and {formatTimeDisplay(limit.max)}
+            Edit the time for your log entry between{" "}
+            {formatTimeDisplay(limit.min)} and {formatTimeDisplay(limit.max)}
           </DrawerDescription>
         </DrawerHeader>
         <TimeEditForm {...formProps} />

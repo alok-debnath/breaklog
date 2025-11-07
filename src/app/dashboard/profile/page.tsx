@@ -39,9 +39,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { api } from "@/convex/_generated/api";
 
 const validationSchema = Yup.object().shape({
   daily_work_required: Yup.number()
@@ -65,7 +65,7 @@ const ProfilePage = () => {
       log_type: userData.log_type,
       default_time_zone: userData.default_time_zone || "",
     }),
-    [userData]
+    [userData],
   );
 
   const formik = useFormik({
@@ -280,7 +280,7 @@ const ProfilePage = () => {
                               ? options.find(
                                   (option) =>
                                     option.value ===
-                                    formik.values.default_time_zone
+                                    formik.values.default_time_zone,
                                 )?.label
                               : "Select timezone..."}
                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -305,7 +305,7 @@ const ProfilePage = () => {
                                         currentValue ===
                                           formik.values.default_time_zone
                                           ? ""
-                                          : currentValue
+                                          : currentValue,
                                       );
                                       setOpen(false);
                                     }}
@@ -317,7 +317,7 @@ const ProfilePage = () => {
                                         formik.values.default_time_zone ===
                                           option.value
                                           ? "opacity-100"
-                                          : "opacity-0"
+                                          : "opacity-0",
                                       )}
                                     />
                                     {option.label}

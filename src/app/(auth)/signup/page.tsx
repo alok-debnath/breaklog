@@ -1,5 +1,6 @@
 "use client";
 import { useFormik } from "formik";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
@@ -8,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
-import { Eye, EyeOff } from "lucide-react";
 
 // import { sendEmail } from "@/helpers/mailer";
 
@@ -17,7 +17,7 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email address")
     .required("Email is required")
     .test("valid-email", "Invalid email address", (value) =>
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
     ),
   name: Yup.string()
     .matches(/^[a-zA-Z ]*$/, "Name must contain only letters")

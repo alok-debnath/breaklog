@@ -4,8 +4,6 @@ import {
   Coffee,
   Loader2,
   LogIn,
-  LogOut,
-  Menu,
   MoreHorizontal,
   Plus,
   Undo2,

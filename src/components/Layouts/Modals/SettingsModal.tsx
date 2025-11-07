@@ -1,7 +1,6 @@
 "use client";
 import { Palette, Settings, ToggleLeft } from "lucide-react";
 import { useTheme } from "next-themes";
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
