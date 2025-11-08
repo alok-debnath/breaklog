@@ -1,6 +1,8 @@
 "use client";
 import { ErrorMessage, Field, type FieldProps, Form, Formik } from "formik";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import * as Yup from "yup";
 import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 import { handleError } from "@/components/common/CommonCodeBlocks";
@@ -20,7 +22,7 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email address")
     .required("Email is required")
     .test("valid-email", "Invalid email address", (value) =>
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
     ),
   password: Yup.string()
     .min(6, "Password must be at least 6 characters")
@@ -34,10 +36,11 @@ const initialValues: FormValues = {
 
 export default function LoginPage() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(
     values: FormValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) {
     try {
       const res = await authClient.signIn.email({
@@ -126,17 +129,32 @@ export default function LoginPage() {
                     >
                       Password
                     </Label>
-                    <Field name="password">
-                      {({ field }: FieldProps<string>) => (
-                        <Input
-                          {...field}
-                          type="password"
-                          placeholder="Password"
-                          id="password"
-                          className="bg-background/50 border-border/50 hover:bg-background/70 focus:bg-background/80 h-12 rounded-xl backdrop-blur-sm transition-all duration-300"
-                        />
-                      )}
-                    </Field>
+                    <div className="relative">
+                      <Field name="password">
+                        {({ field }: FieldProps<string>) => (
+                          <Input
+                            {...field}
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Password"
+                            id="password"
+                            className="bg-background/50 border-border/50 hover:bg-background/70 focus:bg-background/80 h-12 rounded-xl backdrop-blur-sm transition-all duration-300 pr-10"
+                          />
+                        )}
+                      </Field>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
                     <ErrorMessage
                       name="password"
                       component="div"
