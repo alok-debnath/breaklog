@@ -44,177 +44,183 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-6 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-3xl">
-      <header className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-linear-to-r shadow-2xl backdrop-blur-xl">
-        {/* Background decoration */}
-        <div className="from-primary/5 to-primary/5 absolute inset-0 bg-linear-to-r via-transparent" />
-        <div className="bg-primary/10 absolute -top-2 -right-2 h-8 w-8 rounded-full" />
-        <div className="bg-primary/5 absolute -bottom-2 -left-2 h-6 w-6 rounded-full" />
+    <>
+      <div className="from-background via-background/80 pointer-events-none fixed right-0 top-0 left-0 z-40 h-32 bg-linear-to-b to-transparent" />
+      <div className="fixed top-6 left-1/2 z-50 w-[90%] -translate-x-1/2 md:w-auto md:min-w-3xl">
+        <header className="from-card/95 to-card/80 border-border/50 relative overflow-hidden rounded-3xl border bg-linear-to-r shadow-2xl backdrop-blur-xl">
+          {/* Background decoration */}
+          <div className="from-primary/5 to-primary/5 absolute inset-0 bg-linear-to-r via-transparent" />
+          <div className="bg-primary/10 absolute -top-2 -right-2 h-8 w-8 rounded-full" />
+          <div className="bg-primary/5 absolute -bottom-2 -left-2 h-6 w-6 rounded-full" />
 
-        <div className="relative flex h-16 items-center justify-between px-6">
-          {/* Mobile Menu & Back Button */}
-          <div className="flex items-center md:hidden">
-            {backPath ? (
-              <Link href={backPath} passHref>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
-                >
-                  <ArrowLeft className="h-5 w-5" />
-                </Button>
-              </Link>
-            ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
+          <div className="relative flex h-16 items-center justify-between px-6">
+            {/* Mobile Menu & Back Button */}
+            <div className="flex items-center md:hidden">
+              {backPath ? (
+                <Link href={backPath} passHref>
                   <Button
                     variant="ghost"
                     size="icon"
                     className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
                   >
-                    <Menu className="h-5 w-5" />
+                    <ArrowLeft className="h-5 w-5" />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  side="bottom"
-                  align="start"
-                  className="border-border/50 bg-card/95 min-w-[180px] p-2 rounded-2xl backdrop-blur-xl"
-                >
-                  <DropdownMenuItem
-                    asChild
-                    className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
-                  >
-                    <Link
-                      href="/dashboard/history"
-                      className="flex h-full w-full items-center gap-2"
+                </Link>
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
                     >
-                      <History className="h-4 w-4" />
-                      History
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                      <Menu className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    side="bottom"
+                    align="start"
+                    className="border-border/50 bg-card/95 min-w-[180px] p-2 rounded-2xl backdrop-blur-xl"
                   >
-                    <Link
-                      href="/dashboard/profile"
-                      className="flex h-full w-full items-center gap-2"
+                    <DropdownMenuItem
+                      asChild
+                      className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
                     >
-                      <UserCircle className="h-4 w-4" />
-                      Profile
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-          </div>
-
-          {/* Brand */}
-          <Link href="/dashboard" className="flex items-center gap-3 md:hidden">
-            <div className="from-primary/20 to-primary/10 border-primary/20 flex h-8 w-8 items-center justify-center rounded-xl border bg-linear-to-br">
-              <div className="from-primary to-primary/80 h-4 w-4 rounded-md bg-linear-to-br" />
+                      <Link
+                        href="/dashboard/history"
+                        className="flex h-full w-full items-center gap-2"
+                      >
+                        <History className="h-4 w-4" />
+                        History
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      asChild
+                      className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                    >
+                      <Link
+                        href="/dashboard/profile"
+                        className="flex h-full w-full items-center gap-2"
+                      >
+                        <UserCircle className="h-4 w-4" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
-            <span className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
-              Breaklog
-            </span>
-          </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden items-center gap-8 md:flex">
-            <Link href="/dashboard" className="flex items-center gap-3">
-              <div className="from-primary/20 to-primary/10 border-primary/20 flex h-10 w-10 items-center justify-center rounded-2xl border bg-linear-to-br">
-                <div className="from-primary to-primary/80 h-5 w-5 rounded-lg bg-linear-to-br" />
+            {/* Brand */}
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-3 md:hidden"
+            >
+              <div className="from-primary/20 to-primary/10 border-primary/20 flex h-8 w-8 items-center justify-center rounded-xl border bg-linear-to-br">
+                <div className="from-primary to-primary/80 h-4 w-4 rounded-md bg-linear-to-br" />
               </div>
               <span className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
                 Breaklog
               </span>
             </Link>
-            <nav className="flex items-center gap-6">
-              <Link
-                href="/dashboard/history"
-                className={cn(
-                  "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
-                  pathname.startsWith("/dashboard/history")
-                    ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-linear-to-r"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                )}
-              >
-                <History className="h-4 w-4" />
-                History
-              </Link>
-            </nav>
-          </div>
 
-          {/* Right side */}
-          <div className="flex items-center gap-2">
-            <ModeToggle />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
-                >
-                  {userData.user_image ? (
-                    <Image
-                      src={userData.user_image}
-                      alt="User Avatar"
-                      className="rounded-2xl border-primary/40 border-2"
-                      width={40}
-                      height={40}
-                    />
-                  ) : (
-                    <User className="h-5 w-5" />
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="border-border/50 bg-card/95 min-w-[200px] p-2 rounded-2xl backdrop-blur-xl"
-              >
-                <div className="border-border/50 border-b px-3 py-2">
-                  <p className="text-muted-foreground text-sm font-medium">
-                    Signed in as
-                  </p>
-                  <p className="text-foreground truncate text-sm font-semibold">
-                    {userData.username || "User"}
-                  </p>
+            {/* Desktop Menu */}
+            <div className="hidden items-center gap-8 md:flex">
+              <Link href="/dashboard" className="flex items-center gap-3">
+                <div className="from-primary/20 to-primary/10 border-primary/20 flex h-10 w-10 items-center justify-center rounded-2xl border bg-linear-to-br">
+                  <div className="from-primary to-primary/80 h-5 w-5 rounded-lg bg-linear-to-br" />
                 </div>
-                <DropdownMenuItem
-                  asChild
-                  className="hover:bg-accent/50 mt-1 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                <span className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
+                  Breaklog
+                </span>
+              </Link>
+              <nav className="flex items-center gap-6">
+                <Link
+                  href="/dashboard/history"
+                  className={cn(
+                    "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
+                    pathname.startsWith("/dashboard/history")
+                      ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-linear-to-r"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                  )}
                 >
-                  <Link
-                    href="/dashboard/profile"
-                    className="flex h-full w-full items-center gap-2"
+                  <History className="h-4 w-4" />
+                  History
+                </Link>
+              </nav>
+            </div>
+
+            {/* Right side */}
+            <div className="flex items-center gap-2">
+              <ModeToggle />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
                   >
-                    <UserCircle className="mr-2 h-4 w-4" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() =>
-                    useStore.setState({ isSettingsModalOpen: true })
-                  }
-                  className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                    {userData.user_image ? (
+                      <Image
+                        src={userData.user_image}
+                        alt="User Avatar"
+                        className="rounded-2xl border-primary/40 border-2"
+                        width={40}
+                        height={40}
+                      />
+                    ) : (
+                      <User className="h-5 w-5" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className="border-border/50 bg-card/95 min-w-[200px] p-2 rounded-2xl backdrop-blur-xl"
                 >
-                  <Settings className="mr-2 h-4 w-4" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-border/50" />
-                <DropdownMenuItem
-                  onClick={logout}
-                  className="cursor-pointer p-3 rounded-xl text-red-500 transition-colors duration-200 hover:bg-red-500/10 hover:text-red-600"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <div className="border-border/50 border-b px-3 py-2">
+                    <p className="text-muted-foreground text-sm font-medium">
+                      Signed in as
+                    </p>
+                    <p className="text-foreground truncate text-sm font-semibold">
+                      {userData.username || "User"}
+                    </p>
+                  </div>
+                  <DropdownMenuItem
+                    asChild
+                    className="hover:bg-accent/50 mt-1 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                  >
+                    <Link
+                      href="/dashboard/profile"
+                      className="flex h-full w-full items-center gap-2"
+                    >
+                      <UserCircle className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      useStore.setState({ isSettingsModalOpen: true })
+                    }
+                    className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                  >
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-border/50" />
+                  <DropdownMenuItem
+                    onClick={logout}
+                    className="cursor-pointer p-3 rounded-xl text-red-500 transition-colors duration-200 hover:bg-red-500/10 hover:text-red-600"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-        </div>
-      </header>
-    </div>
+        </header>
+      </div>
+    </>
   );
 };
 
