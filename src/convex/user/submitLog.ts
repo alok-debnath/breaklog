@@ -66,6 +66,7 @@ export const submitLog = mutation({
       .first();
 
     let logToBeSaved = "";
+    let message = "Log submitted successfully";
 
     if (args.logtype === "undo log") {
       if (logDoc && logDoc.logEntries.length > 0) {
@@ -75,6 +76,9 @@ export const submitLog = mutation({
           isHalfDay: false,
           updatedAt: Date.now(),
         });
+        message = "Last log entry deleted successfully";
+      } else {
+        message = "No log entries to delete";
       }
     } else if (args.logtype === "mark-as-half-day") {
       if (logDoc && logDoc.logEntries.length > 1) {
@@ -84,7 +88,12 @@ export const submitLog = mutation({
             isHalfDay: true,
             updatedAt: Date.now(),
           });
+          message = "Marked as half day successfully";
+        } else {
+          message = "Cannot mark as half day: day not ended";
         }
+      } else {
+        message = "Cannot mark as half day: insufficient log entries";
       }
     } else if (args.logtype === "undo-half-day") {
       if (logDoc && logDoc.logEntries.length > 1) {
@@ -94,7 +103,12 @@ export const submitLog = mutation({
             isHalfDay: false,
             updatedAt: Date.now(),
           });
+          message = "Half day marking undone successfully";
+        } else {
+          message = "Cannot undo half day: day not ended";
         }
+      } else {
+        message = "Cannot undo half day: insufficient log entries";
       }
     }
 
@@ -149,7 +163,7 @@ export const submitLog = mutation({
     }
 
     return {
-      message: "Log submitted successfully",
+      message,
       status: 200,
     };
   },

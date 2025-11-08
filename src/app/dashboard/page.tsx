@@ -1,7 +1,10 @@
 "use client";
 import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
-import { handleError } from "@/components/common/CommonCodeBlocks";
+import {
+  handleError,
+  handleSuccessToast,
+} from "@/components/common/CommonCodeBlocks";
 import BottomNavbar from "@/components/Layouts/BottomNavbar";
 import LogsCard from "@/components/Layouts/LogsCard";
 import TimeEditModal from "@/components/Layouts/Modals/TimeEditModal";
@@ -36,6 +39,12 @@ const Index = () => {
 
       useStore.setState(() => ({ loading: true }));
       const res = await submitLogMutation({ logtype: value });
+      if (res.message !== "Log submitted successfully") {
+        handleSuccessToast({
+          message: res.message,
+        });
+      }
+      useStore.setState(() => ({ loading: false }));
     } catch (error: unknown) {
       handleError({ error: error, router: router });
     }
