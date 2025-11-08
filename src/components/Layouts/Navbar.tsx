@@ -80,7 +80,10 @@ const Navbar = () => {
                   align="start"
                   className="border-border/50 bg-card/95 min-w-[180px] p-2 rounded-2xl backdrop-blur-xl"
                 >
-                  <DropdownMenuItem className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200">
+                  <DropdownMenuItem
+                    asChild
+                    className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                  >
                     <Link
                       href="/dashboard/history"
                       className="flex h-full w-full items-center gap-2"
@@ -89,7 +92,10 @@ const Navbar = () => {
                       History
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200">
+                  <DropdownMenuItem
+                    asChild
+                    className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                  >
                     <Link
                       href="/dashboard/profile"
                       className="flex h-full w-full items-center gap-2"
@@ -130,7 +136,7 @@ const Navbar = () => {
                   "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   pathname.startsWith("/dashboard/history")
                     ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-linear-to-r"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                 )}
               >
                 <History className="h-4 w-4" />
@@ -174,7 +180,10 @@ const Navbar = () => {
                     {userData.username || "User"}
                   </p>
                 </div>
-                <DropdownMenuItem className="hover:bg-accent/50 mt-1 p-3 cursor-pointer rounded-xl transition-colors duration-200">
+                <DropdownMenuItem
+                  asChild
+                  className="hover:bg-accent/50 mt-1 p-3 cursor-pointer rounded-xl transition-colors duration-200"
+                >
                   <Link
                     href="/dashboard/profile"
                     className="flex h-full w-full items-center gap-2"
