@@ -108,11 +108,11 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
               <DropdownMenuContent
                 side="top"
                 align="start"
-                className="border-border/50 bg-card/95 mb-2 rounded-2xl backdrop-blur-xl"
+                className="border-border/50 bg-card/95 mb-3 rounded-2xl backdrop-blur-xl"
               >
                 <DropdownMenuItem
                   onClick={() => logEntry("undo log")}
-                  className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200"
+                  className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200 p-3"
                 >
                   <Undo2 className="mr-2 h-4 w-4" />
                   <span>Undo Recent Log</span>

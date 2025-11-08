@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,7 +24,6 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
-import { ModeToggle } from "../mode-toggle";
 
 const Navbar = () => {
   const { userData } = useStore();
@@ -78,9 +78,9 @@ const Navbar = () => {
                 <DropdownMenuContent
                   side="bottom"
                   align="start"
-                  className="border-border/50 bg-card/95 rounded-2xl backdrop-blur-xl"
+                  className="border-border/50 bg-card/95 min-w-[180px] p-2 rounded-2xl backdrop-blur-xl"
                 >
-                  <DropdownMenuItem className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200">
+                  <DropdownMenuItem className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200">
                     <Link
                       href="/dashboard/history"
                       className="flex h-full w-full items-center gap-2"
@@ -89,7 +89,7 @@ const Navbar = () => {
                       History
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200">
+                  <DropdownMenuItem className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200">
                     <Link
                       href="/dashboard/profile"
                       className="flex h-full w-full items-center gap-2"
@@ -130,7 +130,7 @@ const Navbar = () => {
                   "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                   pathname.startsWith("/dashboard/history")
                     ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-linear-to-r"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                 )}
               >
                 <History className="h-4 w-4" />
@@ -147,7 +147,7 @@ const Navbar = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="hover:bg-accent/50 h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
+                  className="h-10 w-10 rounded-2xl transition-all duration-200 hover:scale-105"
                 >
                   {userData.user_image ? (
                     <Image
@@ -164,7 +164,7 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="border-border/50 bg-card/95 min-w-[200px] rounded-2xl backdrop-blur-xl"
+                className="border-border/50 bg-card/95 min-w-[200px] p-2 rounded-2xl backdrop-blur-xl"
               >
                 <div className="border-border/50 border-b px-3 py-2">
                   <p className="text-muted-foreground text-sm font-medium">
@@ -174,7 +174,7 @@ const Navbar = () => {
                     {userData.username || "User"}
                   </p>
                 </div>
-                <DropdownMenuItem className="hover:bg-accent/50 mt-1 cursor-pointer rounded-xl transition-colors duration-200">
+                <DropdownMenuItem className="hover:bg-accent/50 mt-1 p-3 cursor-pointer rounded-xl transition-colors duration-200">
                   <Link
                     href="/dashboard/profile"
                     className="flex h-full w-full items-center gap-2"
@@ -187,7 +187,7 @@ const Navbar = () => {
                   onClick={() =>
                     useStore.setState({ isSettingsModalOpen: true })
                   }
-                  className="hover:bg-accent/50 cursor-pointer rounded-xl transition-colors duration-200"
+                  className="hover:bg-accent/50 p-3 cursor-pointer rounded-xl transition-colors duration-200"
                 >
                   <Settings className="mr-2 h-4 w-4" />
                   Settings
@@ -195,7 +195,7 @@ const Navbar = () => {
                 <DropdownMenuSeparator className="bg-border/50" />
                 <DropdownMenuItem
                   onClick={logout}
-                  className="cursor-pointer rounded-xl text-red-500 transition-colors duration-200 hover:bg-red-500/10 hover:text-red-600"
+                  className="cursor-pointer p-3 rounded-xl text-red-500 transition-colors duration-200 hover:bg-red-500/10 hover:text-red-600"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
