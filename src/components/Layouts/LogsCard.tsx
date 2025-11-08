@@ -9,7 +9,7 @@ import {
   Target,
 } from "lucide-react";
 import type React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -25,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -60,8 +61,10 @@ const LogsCard: React.FC<LogsCardProps> = ({
 }) => {
   const { breaklogMode, logs, workData, userData, loading } = useStore();
   const [accordionValue, setAccordionValue] = useState<string | undefined>(
-    undefined,
+    undefined
   );
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const openTimeEditModal = (value: LogEditData) => {
     useStore.setState(() => ({
@@ -99,7 +102,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
         page === "history" &&
           (isWorkDoneSuccess
             ? "ring-2 shadow-emerald-500/10 ring-emerald-500/20"
-            : "ring-2 shadow-red-500/10 ring-red-500/20"),
+            : "ring-2 shadow-red-500/10 ring-red-500/20")
       )}
     >
       {isHalfDay ? (
@@ -117,16 +120,24 @@ const LogsCard: React.FC<LogsCardProps> = ({
             <Calendar className="text-primary h-6 w-6" />
           </div>
           <div>
-            <CardTitle className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
-              {dateToDisplay.toLocaleDateString("en-US", { weekday: "long" })}
-            </CardTitle>
-            <CardDescription className="text-sm font-medium">
-              {dateToDisplay.toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </CardDescription>
+            {mounted ? (
+              <CardTitle className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent">
+                {dateToDisplay.toLocaleDateString("en-US", { weekday: "long" })}
+              </CardTitle>
+            ) : (
+              <Skeleton className="h-4 w-22 mb-2 bg-linear-to-br from-white/10 to-transparent" />
+            )}
+            {mounted ? (
+              <CardDescription className="text-sm font-medium">
+                {dateToDisplay.toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </CardDescription>
+            ) : (
+              <Skeleton className="h-4 w-32 mb-2 bg-linear-to-br from-white/10 to-transparent" />
+            )}
           </div>
         </div>
       </CardHeader>
@@ -150,7 +161,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                   "font-mono text-lg font-bold transition-colors duration-300",
                   isWorkDoneSuccess
                     ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-foreground",
+                    : "text-foreground"
                 )}
               >
                 {workDone || "00:00:00"}
@@ -261,7 +272,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                               hour12: true,
                               month: "short",
                               day: "numeric",
-                            },
+                            }
                           );
 
                           const logAbove = index > 0 ? array[index - 1] : null;
@@ -288,7 +299,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                               className={cn(
                                 "border-border/30 transition-all duration-200",
                                 page !== "history" &&
-                                  "hover:bg-muted/50 group cursor-pointer",
+                                  "hover:bg-muted/50 group cursor-pointer"
                               )}
                             >
                               <TableCell className="font-mono text-sm font-medium">
@@ -353,7 +364,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                           hour12: true,
                           month: "short",
                           day: "numeric",
-                        },
+                        }
                       );
 
                       const logAbove = index > 0 ? array[index - 1] : null;
@@ -380,7 +391,7 @@ const LogsCard: React.FC<LogsCardProps> = ({
                           className={cn(
                             "border-border/30 transition-all duration-200",
                             page !== "history" &&
-                              "hover:bg-muted/50 group cursor-pointer",
+                              "hover:bg-muted/50 group cursor-pointer"
                           )}
                         >
                           <TableCell className="font-mono text-sm font-medium">
