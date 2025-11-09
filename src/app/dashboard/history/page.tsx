@@ -28,8 +28,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useStore } from "@/stores/store";
 import { api } from "@/convex/_generated/api";
+import { useStore } from "@/stores/store";
 
 interface ConvexSummary {
   totalWorkDone: number;
@@ -187,12 +187,14 @@ const HistoryPage = () => {
 
   // Update store when query result changes
   useEffect(() => {
-    useStore.setState({
-      monthLogs: transformedData.monthLogs,
-      summary: transformedData.summary,
-    });
-    useStore.setState({ loading: false });
-  }, [transformedData]);
+    if (fetchMonthlyLogs) {
+      useStore.setState({
+        monthLogs: transformedData.monthLogs,
+        summary: transformedData.summary,
+      });
+      useStore.setState({ loading: false });
+    }
+  }, [transformedData, fetchMonthlyLogs]);
 
   // Show toast for no logs found
   useEffect(() => {
@@ -202,7 +204,13 @@ const HistoryPage = () => {
   }, [fetchMonthlyLogs]);
 
   const handleSearch = useCallback(() => {
-    useStore.setState({ loading: true });
+    const newArgs = { monthStart, monthEnd };
+    if (
+      newArgs.monthStart !== queryArgs.monthStart ||
+      newArgs.monthEnd !== queryArgs.monthEnd
+    ) {
+      useStore.setState({ loading: true });
+    }
     if (!userData.daily_work_required) {
       handleError({
         error: {
@@ -214,8 +222,8 @@ const HistoryPage = () => {
       return;
     }
 
-    setQueryArgs({ monthStart, monthEnd });
-  }, [userData.daily_work_required, router, monthStart, monthEnd]);
+    setQueryArgs(newArgs);
+  }, [userData.daily_work_required, router, monthStart, monthEnd, queryArgs]);
 
   // Auto-show results if data exists
   useEffect(() => {
