@@ -77,7 +77,7 @@ export const fetchLogs = query({
     let currentBreakTime: number | null = null;
     let firstLog = null;
     let lastLog = null;
-    let recentLog = null;
+    let recentLog = '';
     let isDayStarted = false;
     let isDayEnded = false;
 
@@ -106,7 +106,7 @@ export const fetchLogs = query({
 
     firstLog = logs.length > 0 ? logs[0].log_status : null;
     lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
-    recentLog = lastLog?.log_status || null;
+    recentLog = lastLog?.log_status || '';
 
     if (isDayStarted) {
       if (isDayEnded) {
