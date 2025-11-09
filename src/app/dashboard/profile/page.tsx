@@ -1,7 +1,7 @@
 "use client";
 import { useMutation } from "convex/react";
 import { useFormik } from "formik";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, KeyRound } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { allTimezones, useTimezoneSelect } from "react-timezone-select";
@@ -10,6 +10,7 @@ import {
   handleError,
   handleSuccessToast,
 } from "@/components/common/CommonCodeBlocks";
+import PasswordChangeModal from "@/components/Layouts/Modals/PasswordChangeModal";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -355,8 +356,37 @@ const ProfilePage = () => {
               </div>
             </div>
           </div>
+
+          {/* Password Change Button */}
+          <div className="border-border/50 from-card/80 to-card/40 relative mt-6 overflow-hidden rounded-3xl border bg-linear-to-br shadow-2xl backdrop-blur-xl">
+            <div className="from-primary/5 absolute inset-0 bg-linear-to-br to-transparent" />
+            <div className="relative">
+              <div className="p-8">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="rounded-xl bg-linear-to-br from-red-500/20 to-orange-500/20 p-2 backdrop-blur-sm">
+                    <KeyRound className="h-5 w-5 text-red-600 dark:text-red-400" />
+                  </div>
+                  <h2 className="from-foreground to-foreground/70 bg-linear-to-r bg-clip-text text-xl font-bold">
+                    Security
+                  </h2>
+                </div>
+                <p className="text-muted-foreground mb-4 text-sm">
+                  Update your password to keep your account secure
+                </p>
+                <Button
+                  onClick={() =>
+                    useStore.setState({ isPasswordChangeModalOpen: true })
+                  }
+                  className="from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-primary-foreground hover:shadow-red-500/25 rounded-xl bg-linear-to-r py-3 font-medium transition-all duration-300 hover:shadow-lg"
+                >
+                  Change Password
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <PasswordChangeModal />
     </>
   );
 };

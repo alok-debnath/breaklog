@@ -84,6 +84,7 @@ interface StoreState {
   isSettingsModalOpen: boolean;
   isTimeEditModalOpen: boolean;
   isTimeZoneModalOpen: boolean;
+  isPasswordChangeModalOpen: boolean;
 }
 
 export const useStore = create<StoreState>((_set) => ({
@@ -152,4 +153,5 @@ export const useStore = create<StoreState>((_set) => ({
   isSettingsModalOpen: false,
   isTimeEditModalOpen: false,
   isTimeZoneModalOpen: false,
+  isPasswordChangeModalOpen: false,
 }));
