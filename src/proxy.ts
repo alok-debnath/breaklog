@@ -8,7 +8,10 @@ export function proxy(request: NextRequest) {
   const isPublicPath = path === "/login" || path === "/signup" || path === "/";
 
   // BetterAuth session token
-  const token = request.cookies.get("better-auth.session_token")?.value || "";
+  const token =
+    request.cookies.get("__Secure-better-auth.session_token")?.value ||
+    request.cookies.get("better-auth.session_token")?.value ||
+    "";
 
   if (path === "/home" && token) {
     return NextResponse.rewrite(new URL("/", request.nextUrl));
