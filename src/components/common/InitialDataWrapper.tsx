@@ -1,26 +1,16 @@
+"use server";
 import { preloadQuery } from "convex/nextjs";
 import { api } from "@/convex/_generated/api";
-import { getConvexToken, isAuthenticated } from "@/lib/auth-server";
+import { getToken } from "@/lib/auth-server";
 import InitialRscFetch from "./InitialRscFetch";
 
 export default async function InitialDataWrapper() {
   try {
-    // Check if user is authenticated
-    const authenticated = await isAuthenticated();
-
-    if (!authenticated) {
-      console.log(
-        "User not authenticated, falling back to client-side rendering",
-      );
-      return <InitialRscFetch />;
-    }
-
-    // Get the proper Convex token from Better Auth
-    const token = await getConvexToken();
+    const token = await getToken();
 
     if (!token) {
       console.log(
-        "Could not get Convex token, falling back to client-side rendering",
+        "User not authenticated, falling back to client-side rendering"
       );
       return <InitialRscFetch />;
     }
@@ -29,12 +19,12 @@ export default async function InitialDataWrapper() {
     const preloadedLogs = await preloadQuery(
       api.user.fetchLogs.fetchLogs,
       {},
-      { token },
+      { token }
     );
     const preloadedProfile = await preloadQuery(
       api.user.profile.fetch,
       {},
-      { token },
+      { token }
     );
 
     console.log("Successfully preloaded data server-side");
