@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useRef } from "react";
 import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
 import {
@@ -14,14 +15,38 @@ import useOnScreen from "@/hooks/useOnScreen";
 import { useStore } from "@/stores/store";
 
 const Index = () => {
-  const { workData, userData, initialPageLoadDone } = useStore();
+  const { workData, userData, breaklogMode } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== "undefined";
   const submitLogMutation = useMutation(api.user.submitLog.submitLog);
 
-  const logEntry = async (value: string) => {
-    if (!isClient || !initialPageLoadDone) return;
+  // Store pending log entries if mutation is not ready
+  const pendingLogRef = useRef<{ value: string; time: number } | null>(null);
+
+  useEffect(() => {
+    // If there is a pending log, trigger it once mutation is ready
+    if (userData.username && pendingLogRef.current) {
+      const { value, time } = pendingLogRef.current;
+      pendingLogRef.current = null;
+
+      let finalValue = value;
+      if (["break log", "day log"].includes(value)) {
+        finalValue = breaklogMode ? "break log" : "day log";
+      }
+      logEntry(finalValue, time);
+    }
+  }, [userData.username]);
+
+  const logEntry = async (value: string, customLogTime?: number) => {
+    if (isClient && !userData.username) {
+      // Store the pending log entry if mutation is not ready
+      pendingLogRef.current = { value, time: Date.now() };
+      handleSuccessToast({
+        message: "Offline, Log will be submitted automatically once online",
+      });
+      return;
+    }
     try {
       if (value === "undo log") {
         const isConfirmed = await confirm({
@@ -38,8 +63,8 @@ const Index = () => {
       }
 
       useStore.setState(() => ({ loading: true }));
-      const res = await submitLogMutation({ logtype: value });
-      if (res.message !== "Log submitted successfully") {
+      const res = await submitLogMutation({ logtype: value, customLogTime });
+      if (customLogTime || res.message !== "Log submitted successfully") {
         handleSuccessToast({
           message: res.message,
         });

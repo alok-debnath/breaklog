@@ -5,6 +5,7 @@ export const submitLog = mutation({
   args: {
     logtype: v.string(),
     date: v.optional(v.string()), // Format: DD-MM-YY
+    customLogTime: v.optional(v.number()), // Timestamp in milliseconds
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -141,7 +142,7 @@ export const submitLog = mutation({
       const newLogEntry = {
         uniqueId: crypto.randomUUID(),
         logStatus: logToBeSaved,
-        logTime: Date.now(),
+        logTime: args.customLogTime ?? Date.now(),
         createdAt: Date.now(),
       };
 
