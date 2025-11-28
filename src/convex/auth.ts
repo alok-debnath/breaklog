@@ -6,7 +6,7 @@ import { components } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 
-const siteUrl = process.env.SITE_URL || "http://localhost:3000";
+const siteUrl = process.env.SITE_URL!;
 const appName = process.env.APP_NAME ?? "BreakLog";
 
 // The component client has methods needed for integrating Convex with Better Auth,
