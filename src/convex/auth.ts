@@ -6,24 +6,8 @@ import { components } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 
-const siteUrl = resolveSiteUrl();
+const siteUrl = process.env.SITE_URL || "http://localhost:3000";
 const appName = process.env.APP_NAME ?? "BreakLog";
-
-function resolveSiteUrl() {
-  const inferredFromEnv =
-    process.env.SITE_URL ??
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
-
-  if (!inferredFromEnv) {
-    console.warn(
-      "SITE_URL is not configured. Falling back to http://localhost:3000 for Better Auth baseURL."
-    );
-    return "http://localhost:3000";
-  }
-
-  return inferredFromEnv.replace(/\/$/, "");
-}
 
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
