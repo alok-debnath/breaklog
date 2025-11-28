@@ -2,7 +2,7 @@
 
 import { ErrorMessage, Field, type FieldProps, Form, Formik } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import * as Yup from "yup";
 import {
   handleError,
@@ -41,7 +41,7 @@ const buildRedirectUrl = () => {
   return fallback ? `${fallback}/reset-password` : undefined;
 };
 
-export default function ResetPasswordPage() {
+function ResetPasswordContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -288,5 +288,29 @@ export default function ResetPasswordPage() {
         </Formik>
       )}
     </div>
+  );
+}
+
+function ResetPasswordFallback() {
+  return (
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <div className="h-6 w-40 animate-pulse rounded bg-muted" />
+        <div className="h-4 w-64 animate-pulse rounded bg-muted" />
+      </div>
+      <div className="space-y-3">
+        <div className="h-12 w-full animate-pulse rounded-xl bg-muted" />
+        <div className="h-12 w-full animate-pulse rounded-xl bg-muted" />
+        <div className="h-12 w-full animate-pulse rounded-xl bg-muted" />
+      </div>
+    </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<ResetPasswordFallback />}>
+      <ResetPasswordContent />
+    </Suspense>
   );
 }
