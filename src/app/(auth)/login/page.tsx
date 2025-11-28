@@ -1,6 +1,7 @@
 "use client";
 import { ErrorMessage, Field, type FieldProps, Form, Formik } from "formik";
 import { Eye, EyeOff } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
@@ -160,6 +161,14 @@ export default function LoginPage() {
                       component="div"
                       className="text-sm text-red-500"
                     />
+                    <div className="flex justify-end">
+                      <Link
+                        href="/reset-password"
+                        className="text-primary text-sm font-medium hover:underline"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
                   </div>
 
                   {/* Submit Button */}

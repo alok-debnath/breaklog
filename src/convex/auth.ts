@@ -1,11 +1,29 @@
 import { createClient, type GenericCtx } from "@convex-dev/better-auth";
 import { convex } from "@convex-dev/better-auth/plugins";
 import { betterAuth } from "better-auth";
+import { sendPasswordResetEmail } from "../lib/email";
 import { components } from "./_generated/api";
 import type { DataModel } from "./_generated/dataModel";
 import { query } from "./_generated/server";
 
-const siteUrl = process.env.SITE_URL!;
+const siteUrl = resolveSiteUrl();
+const appName = process.env.APP_NAME ?? "BreakLog";
+
+function resolveSiteUrl() {
+  const inferredFromEnv =
+    process.env.SITE_URL ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
+  if (!inferredFromEnv) {
+    console.warn(
+      "SITE_URL is not configured. Falling back to http://localhost:3000 for Better Auth baseURL."
+    );
+    return "http://localhost:3000";
+  }
+
+  return inferredFromEnv.replace(/\/$/, "");
+}
 
 // The component client has methods needed for integrating Convex with Better Auth,
 // as well as helper methods for general use.
@@ -27,6 +45,16 @@ export const createAuth = (
     emailAndPassword: {
       enabled: true,
       requireEmailVerification: false,
+      sendResetPassword: async ({ user, url }) => {
+        await sendPasswordResetEmail({
+          to: user.email,
+          resetUrl: url,
+          appName,
+        });
+      },
+      onPasswordReset: async ({ user }) => {
+        console.info(`Password reset completed for ${user.email}`);
+      },
     },
     socialProviders: {
       google: {

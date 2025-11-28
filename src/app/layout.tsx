@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body suppressHydrationWarning className={inter.className}>
         {/* Providers is a Client Component, so it’s the only place
               you use SessionProvider / React Context */}
         <Providers>
