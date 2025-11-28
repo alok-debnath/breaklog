@@ -37,7 +37,7 @@ export default function DashboardLayout({
 
         <div className="mt-6 text-center">
           <div className="bg-card/30 border-border/30 rounded-2xl border p-4 backdrop-blur-sm">
-            {pathname === "/login" ? (
+            {pathname === "/login" && (
               <p className="text-muted-foreground">
                 Don&apos;t have an account?{" "}
                 <Link
@@ -47,9 +47,21 @@ export default function DashboardLayout({
                   Sign up here
                 </Link>
               </p>
-            ) : (
+            )}
+            {pathname === "/signup" && (
               <p className="text-muted-foreground">
                 Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="text-primary hover:text-primary/80 font-semibold decoration-2 underline-offset-4 transition-colors duration-200 hover:underline"
+                >
+                  Sign in here
+                </Link>
+              </p>
+            )}
+            {pathname === "/reset-password" && (
+              <p className="text-muted-foreground">
+                Remembered your password?<br />
                 <Link
                   href="/login"
                   className="text-primary hover:text-primary/80 font-semibold decoration-2 underline-offset-4 transition-colors duration-200 hover:underline"

@@ -1,7 +1,6 @@
 "use client";
 
 import { ErrorMessage, Field, type FieldProps, Form, Formik } from "formik";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import * as Yup from "yup";
@@ -60,7 +59,7 @@ export default function ResetPasswordPage() {
 
   async function handleRequestSubmit(
     values: typeof requestInitialValues,
-    { setSubmitting }: { setSubmitting: (value: boolean) => void },
+    { setSubmitting }: { setSubmitting: (value: boolean) => void }
   ) {
     setFeedback(null);
     try {
@@ -105,7 +104,7 @@ export default function ResetPasswordPage() {
 
   async function handleResetSubmit(
     values: typeof resetInitialValues,
-    { setSubmitting }: { setSubmitting: (value: boolean) => void },
+    { setSubmitting }: { setSubmitting: (value: boolean) => void }
   ) {
     setFeedback(null);
     try {
@@ -163,11 +162,11 @@ export default function ResetPasswordPage() {
 
       {(feedback || tokenErrorMessage) && (
         <div
-          className={`rounded-xl border p-4 text-sm font-semibold ${
+          className={`rounded-xl border p-4 text-sm ${
             (feedback && feedback.type === "success") ||
             (!feedback && !tokenErrorMessage)
-              ? "border-green-500/40 bg-green-500/5 text-green-700"
-              : "border-red-500/40 bg-red-500/5 text-red-700"
+              ? "border-green-500/40 bg-green-500/5 text-green-600"
+              : "border-red-500/40 bg-red-500/5 text-red-600"
           }`}
         >
           {feedback?.message ?? tokenErrorMessage}
@@ -288,16 +287,6 @@ export default function ResetPasswordPage() {
           )}
         </Formik>
       )}
-
-      <p className="text-center text-sm text-muted-foreground">
-        Remembered your password?{" "} <br />
-        <Link
-          href="/login"
-          className="text-primary font-medium hover:underline"
-        >
-          Back to sign in
-        </Link>
-      </p>
     </div>
   );
 }
