@@ -413,7 +413,7 @@ const HistoryPage = () => {
                                     : log.workDone >=
                                         (userData.daily_work_required ?? 0) *
                                           3600000
-                                      ? "default"
+                                      ? "success"
                                       : "destructive"
                                 }
                                 size="sm"
