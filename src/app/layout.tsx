@@ -9,7 +9,7 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BreakLog v4",
+  title: "BreakLog",
   description:
     "A place to log your work activities for better time management.",
 };
