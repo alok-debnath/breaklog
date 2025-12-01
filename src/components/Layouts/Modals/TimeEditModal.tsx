@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { api } from "@/convex/_generated/api";
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
 import { handleError } from "../../common/CommonCodeBlocks";
@@ -532,7 +531,6 @@ const ModalHeader: React.FC<{
 // ========== Main Component ==========
 const TimeEditModal: React.FC = () => {
   const { logEditStore, isTimeEditModalOpen, userData } = useStore();
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const editLogMutation = useMutation(api.user.editLog.editLog);
 
   const [initialValues, setInitialValues] =
