@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
     .email("Invalid email address")
     .required("Email is required")
     .test("valid-email", "Invalid email address", (value) =>
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
     ),
   name: Yup.string()
     .matches(/^[a-zA-Z ]*$/, "Name must contain only letters")
@@ -45,7 +45,7 @@ export default function SignupPage() {
 
   async function handleSubmit(
     values: SignupValues,
-    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void },
   ) {
     try {
       const res = await authClient.signUp.email({

@@ -128,7 +128,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
                 variant="destructive"
                 className={cn(
                   "h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
-                  "bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
+                  "bg-linear-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700",
                 )}
                 disabled={
                   ["exit", null, "day end"].includes(workData.lastLogStatus) ||
@@ -148,7 +148,7 @@ const BottomNavbar: React.FC<BottomNavbarProps> = ({
               disabled={btnDisabled}
               className={cn(
                 "h-12 flex-1 rounded-2xl text-sm font-semibold shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl",
-                "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-linear-to-r"
+                "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-linear-to-r",
               )}
             >
               <span

@@ -93,7 +93,10 @@ const PasswordChangeForm = ({ className }: { className?: string }) => {
   }
 
   return (
-    <form onSubmit={formik.handleSubmit} className={cn("grid gap-6 py-6", className)}>
+    <form
+      onSubmit={formik.handleSubmit}
+      className={cn("grid gap-6 py-6", className)}
+    >
       {/* Current Password */}
       <div className="grid w-full items-center gap-2">
         <Label

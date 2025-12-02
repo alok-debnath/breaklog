@@ -61,7 +61,8 @@ export default function DashboardLayout({
             )}
             {pathname === "/reset-password" && (
               <p className="text-muted-foreground">
-                Remembered your password?<br />
+                Remembered your password?
+                <br />
                 <Link
                   href="/login"
                   className="text-primary hover:text-primary/80 font-semibold decoration-2 underline-offset-4 transition-colors duration-200 hover:underline"

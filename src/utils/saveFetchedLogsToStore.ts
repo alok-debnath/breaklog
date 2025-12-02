@@ -10,7 +10,7 @@ export interface FetchedLogsDataType {
 }
 
 export const saveFetchedLogsToStore = (data: FetchedLogsDataType) => {
-  const convertedLogs: LogsData[] = data.data.map(log => ({
+  const convertedLogs: LogsData[] = data.data.map((log) => ({
     ...log,
     log_time: new Date(log.log_time),
   }));

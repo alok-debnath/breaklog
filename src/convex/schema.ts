@@ -9,8 +9,7 @@ export default defineSchema({
     dailyWorkRequired: v.optional(v.number()), // in hours
     defaultTimeZone: v.optional(v.string()),
     role: v.string(),
-  })
-    .index("userId", ["userId"]),
+  }).index("userId", ["userId"]),
 
   // Logs table
   logs: defineTable({
@@ -22,10 +21,9 @@ export default defineSchema({
         logStatus: v.string(),
         logTime: v.number(), // timestamp
         createdAt: v.number(), // timestamp
-      })
+      }),
     ),
     isHalfDay: v.boolean(),
     updatedAt: v.number(), // timestamp
-  })
-    .index("userId_creationTime", ["userId"]),
+  }).index("userId_creationTime", ["userId"]),
 });

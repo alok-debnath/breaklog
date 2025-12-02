@@ -59,7 +59,7 @@ function ResetPasswordContent() {
 
   async function handleRequestSubmit(
     values: typeof requestInitialValues,
-    { setSubmitting }: { setSubmitting: (value: boolean) => void }
+    { setSubmitting }: { setSubmitting: (value: boolean) => void },
   ) {
     setFeedback(null);
     try {
@@ -104,7 +104,7 @@ function ResetPasswordContent() {
 
   async function handleResetSubmit(
     values: typeof resetInitialValues,
-    { setSubmitting }: { setSubmitting: (value: boolean) => void }
+    { setSubmitting }: { setSubmitting: (value: boolean) => void },
   ) {
     setFeedback(null);
     try {

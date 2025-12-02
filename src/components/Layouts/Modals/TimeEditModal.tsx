@@ -58,7 +58,7 @@ const formatDateTimeForZone = (ms: number, zone: string): string => {
 
 const formatRangeForZone = (
   bounds: TimeBounds | null,
-  zone: string
+  zone: string,
 ): string | null => {
   if (!bounds) return null;
   const min = DateTime.fromMillis(bounds.min).setZone(zone);
@@ -67,17 +67,17 @@ const formatRangeForZone = (
   const sameDay = min.hasSame(max, "day");
   if (sameDay) {
     return `${min.toFormat("MMM dd, yyyy")} ${min.toFormat(
-      "hh:mm a"
+      "hh:mm a",
     )} - ${max.toFormat("hh:mm a")}`;
   }
   return `${min.toFormat("MMM dd, yyyy hh:mm a")} - ${max.toFormat(
-    "MMM dd, yyyy hh:mm a"
+    "MMM dd, yyyy hh:mm a",
   )}`;
 };
 
 const buildInitialValues = (
   millis: number,
-  localTimeZone: string
+  localTimeZone: string,
 ): TimeFormValues => {
   const dateTime = DateTime.fromMillis(millis).setZone(localTimeZone);
   return {
@@ -90,7 +90,7 @@ const buildInitialValues = (
 
 const buildCandidateMillis = (
   values: TimeFormValues,
-  localTimeZone: string
+  localTimeZone: string,
 ): number | null => {
   const hourValue = Number(values.hour);
   const minuteValue = Number(values.minute);
@@ -165,27 +165,28 @@ const createValidationSchema = (bounds: TimeBounds, localTimeZone: string) =>
     period: Yup.mixed<"AM" | "PM">()
       .oneOf(["AM", "PM"])
       .required("Select AM or PM"),
-  }).test("within-bounds", function (values) {
-    const candidate = buildCandidateMillis(
-      values as TimeFormValues,
-      localTimeZone
-    );
-    if (candidate === null) {
-      return this.createError({
-        message: "Enter a valid date and time",
-        path: "hour",
-      });
-    }
-    if (candidate < bounds.min || candidate > bounds.max) {
-      const humanRange =
-        formatRangeForZone(bounds, localTimeZone) ?? "the allowed window";
-      return this.createError({
-        message: `Time must be between ${humanRange}`,
-        path: "hour",
-      });
-    }
-    return true;
-  });
+  })
+    .test("within-bounds", function (values) {
+      const candidate = buildCandidateMillis(
+        values as TimeFormValues,
+        localTimeZone,
+      );
+      if (candidate === null) {
+        return this.createError({
+          message: "Enter a valid date and time",
+          path: "hour",
+        });
+      }
+      if (candidate < bounds.min || candidate > bounds.max) {
+        const humanRange =
+          formatRangeForZone(bounds, localTimeZone) ?? "the allowed window";
+        return this.createError({
+          message: `Time must be between ${humanRange}`,
+          path: "hour",
+        });
+      }
+      return true;
+    });
 
 // ========== Components ==========
 const TimeInput: React.FC<{
@@ -227,7 +228,7 @@ const TimeInput: React.FC<{
         "border-border/50 from-background/50 to-muted/20 h-12 rounded-xl bg-linear-to-r font-mono text-lg transition-all duration-200",
         "focus:ring-primary/20 focus:border-primary/50 focus:ring-2",
         error &&
-          "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
+          "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20",
       )}
     />
     {showErrorMessage && error && (
@@ -264,7 +265,7 @@ const DateSelector: React.FC<{
         "border-border/50 from-background/50 to-muted/20 h-12 rounded-xl bg-linear-to-r text-sm transition-all duration-200",
         "focus:ring-primary/20 focus:border-primary/50 focus:ring-2",
         error &&
-          "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20"
+          "border-red-500/50 focus:border-red-500/50 focus:ring-red-500/20",
       )}
     />
     <p className="text-muted-foreground px-2 text-xs">
@@ -288,7 +289,7 @@ const PeriodSelector: React.FC<{
         "h-12 flex-1 rounded-xl font-semibold transition-all duration-200",
         value === period
           ? "from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 bg-linear-to-r shadow-lg"
-          : "border-border/50 hover:bg-muted/50"
+          : "border-border/50 hover:bg-muted/50",
       )}
     >
       {period}
@@ -323,30 +324,30 @@ const TimeEditForm: React.FC<TimeEditFormProps> = ({
   const { loading, logEditStore } = useStore();
   const validationSchema = React.useMemo(
     () => createValidationSchema(bounds, localTimeZone),
-    [bounds, localTimeZone]
+    [bounds, localTimeZone],
   );
 
   const dateRangeLocal = React.useMemo(
     () => formatRangeForZone(bounds, localTimeZone),
-    [bounds, localTimeZone]
+    [bounds, localTimeZone],
   );
   const dateRangeWork = React.useMemo(
     () => formatRangeForZone(bounds, workTimeZone),
-    [bounds, workTimeZone]
+    [bounds, workTimeZone],
   );
 
   const minDateISO = React.useMemo(
     () =>
       DateTime.fromMillis(bounds.min).setZone(localTimeZone).toISODate() ??
       undefined,
-    [bounds, localTimeZone]
+    [bounds, localTimeZone],
   );
 
   const maxDateISO = React.useMemo(
     () =>
       DateTime.fromMillis(bounds.max).setZone(localTimeZone).toISODate() ??
       undefined,
-    [bounds, localTimeZone]
+    [bounds, localTimeZone],
   );
 
   const formik = useFormik<TimeFormValues>({
@@ -364,7 +365,7 @@ const TimeEditForm: React.FC<TimeEditFormProps> = ({
           candidateMillis > bounds.max
         ) {
           throw new Error(
-            "Selected time is outside the allowed editing window"
+            "Selected time is outside the allowed editing window",
           );
         }
 
@@ -384,7 +385,7 @@ const TimeEditForm: React.FC<TimeEditFormProps> = ({
 
   const previewMillis = React.useMemo(
     () => buildCandidateMillis(formik.values, localTimeZone),
-    [formik.values, localTimeZone]
+    [formik.values, localTimeZone],
   );
 
   const previewLocal = previewMillis
@@ -435,7 +436,7 @@ const TimeEditForm: React.FC<TimeEditFormProps> = ({
               onChange={formik.handleChange}
               error={
                 hasSharedTimeRangeError
-                  ? sharedTimeRangeError ?? undefined
+                  ? (sharedTimeRangeError ?? undefined)
                   : formik.errors.minute
               }
               showErrorMessage={!hasSharedTimeRangeError}
@@ -540,7 +541,7 @@ const TimeEditModal: React.FC = () => {
 
   const localTimeZone = React.useMemo(
     () => Intl.DateTimeFormat().resolvedOptions().timeZone,
-    []
+    [],
   );
   const workTimeZone = userData.default_time_zone || localTimeZone;
 
@@ -571,7 +572,7 @@ const TimeEditModal: React.FC = () => {
     if (!computedBounds) {
       setBounds(null);
       setBoundsError(
-        "No editable window is available for this log. Adjust neighboring logs or your timezone settings and try again."
+        "No editable window is available for this log. Adjust neighboring logs or your timezone settings and try again.",
       );
     } else {
       setBounds(computedBounds);

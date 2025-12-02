@@ -32,26 +32,26 @@ export const submitLog = mutation({
       startOfDay = new Date(
         dateObj.getFullYear(),
         dateObj.getMonth(),
-        dateObj.getDate()
+        dateObj.getDate(),
       ).getTime();
       endOfDay =
         new Date(
           dateObj.getFullYear(),
           dateObj.getMonth(),
-          dateObj.getDate() + 1
+          dateObj.getDate() + 1,
         ).getTime() - 1;
     } else {
       const now = new Date();
       startOfDay = new Date(
         now.getFullYear(),
         now.getMonth(),
-        now.getDate()
+        now.getDate(),
       ).getTime();
       endOfDay =
         new Date(
           now.getFullYear(),
           now.getMonth(),
-          now.getDate() + 1
+          now.getDate() + 1,
         ).getTime() - 1;
     }
 
@@ -62,7 +62,7 @@ export const submitLog = mutation({
         q
           .eq("userId", userId)
           .gte("_creationTime", startOfDay)
-          .lte("_creationTime", endOfDay)
+          .lte("_creationTime", endOfDay),
       )
       .first();
 

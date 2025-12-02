@@ -10,7 +10,7 @@ export default async function InitialDataWrapper() {
 
     if (!token) {
       console.log(
-        "User not authenticated, falling back to client-side rendering"
+        "User not authenticated, falling back to client-side rendering",
       );
       return <InitialRscFetch />;
     }
@@ -19,12 +19,12 @@ export default async function InitialDataWrapper() {
     const preloadedLogs = await preloadQuery(
       api.user.fetchLogs.fetchLogs,
       {},
-      { token }
+      { token },
     );
     const preloadedProfile = await preloadQuery(
       api.user.profile.fetch,
       {},
-      { token }
+      { token },
     );
 
     console.log("Successfully preloaded data server-side");

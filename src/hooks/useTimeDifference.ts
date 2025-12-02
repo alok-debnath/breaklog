@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-const useTimeDifference = (startTime: Date | string | number | null): number => {
+const useTimeDifference = (
+  startTime: Date | string | number | null,
+): number => {
   const [diffInSeconds, setDiffInSeconds] = useState<number>(0);
 
   useEffect(() => {
@@ -8,9 +10,11 @@ const useTimeDifference = (startTime: Date | string | number | null): number => 
 
     // converts to date if its type is string or number (timestamp)
     const start =
-      typeof startTime === "string" ? new Date(startTime) :
-      typeof startTime === "number" ? new Date(startTime) :
-      startTime;
+      typeof startTime === "string"
+        ? new Date(startTime)
+        : typeof startTime === "number"
+          ? new Date(startTime)
+          : startTime;
 
     const calculateDiffInSeconds = () => {
       if (!(start instanceof Date) || Number.isNaN(start.getTime())) {

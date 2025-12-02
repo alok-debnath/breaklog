@@ -49,8 +49,7 @@ export const create = mutation({
 
     const userId = authUser._id;
 
-    console.log("authUser: ",authUser);
-    
+    console.log("authUser: ", authUser);
 
     const existingProfile = await ctx.db
       .query("userProfiles")

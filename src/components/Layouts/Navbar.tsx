@@ -141,7 +141,7 @@ const Navbar = () => {
                     "flex items-center gap-2 rounded-2xl px-4 py-2 font-medium transition-all duration-200 hover:scale-105",
                     pathname.startsWith("/dashboard/history")
                       ? "from-primary/10 to-primary/5 text-primary border-primary/20 border bg-linear-to-r"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50",
                   )}
                 >
                   <History className="h-4 w-4" />

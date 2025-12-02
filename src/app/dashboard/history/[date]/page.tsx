@@ -12,7 +12,7 @@ export default function SpecificDayLog() {
   const logsData = useQuery(api.user.fetchLogs.fetchLogs, { date });
   const { userData } = useStore();
 
-  const logs = (logsData?.data || []).map(log => ({
+  const logs = (logsData?.data || []).map((log) => ({
     ...log,
     log_time: new Date(log.log_time),
   }));

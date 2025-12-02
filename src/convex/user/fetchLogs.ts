@@ -28,13 +28,13 @@ export const fetchLogs = query({
       startOfDay = new Date(
         dateObj.getFullYear(),
         dateObj.getMonth(),
-        dateObj.getDate()
+        dateObj.getDate(),
       ).getTime();
       endOfDay =
         new Date(
           dateObj.getFullYear(),
           dateObj.getMonth(),
-          dateObj.getDate() + 1
+          dateObj.getDate() + 1,
         ).getTime() - 1;
     } else {
       // Current day
@@ -42,13 +42,13 @@ export const fetchLogs = query({
       startOfDay = new Date(
         now.getFullYear(),
         now.getMonth(),
-        now.getDate()
+        now.getDate(),
       ).getTime();
       endOfDay =
         new Date(
           now.getFullYear(),
           now.getMonth(),
-          now.getDate() + 1
+          now.getDate() + 1,
         ).getTime() - 1;
     }
 
@@ -58,7 +58,7 @@ export const fetchLogs = query({
         q
           .eq("userId", userId)
           .gte("_creationTime", startOfDay)
-          .lte("_creationTime", endOfDay)
+          .lte("_creationTime", endOfDay),
       )
       .first();
 
@@ -77,7 +77,7 @@ export const fetchLogs = query({
     let currentBreakTime: number | null = null;
     let firstLog = null;
     let lastLog = null;
-    let recentLog = '';
+    let recentLog = "";
     let isDayStarted = false;
     let isDayEnded = false;
 
@@ -106,7 +106,7 @@ export const fetchLogs = query({
 
     firstLog = logs.length > 0 ? logs[0].log_status : null;
     lastLog = logs.length > 0 ? logs[logs.length - 1] : null;
-    recentLog = lastLog?.log_status || '';
+    recentLog = lastLog?.log_status || "";
 
     if (isDayStarted) {
       if (isDayEnded) {
@@ -131,7 +131,7 @@ export const fetchLogs = query({
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
       const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
         2,
-        "0"
+        "0",
       );
       const seconds = String(totalSeconds % 60).padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
@@ -152,7 +152,7 @@ export const fetchLogs = query({
           .split(":")
           .map(Number);
         const endTime = new Date(
-          Date.now() + (hours * 3600 + minutes * 60 + seconds) * 1000
+          Date.now() + (hours * 3600 + minutes * 60 + seconds) * 1000,
         );
         formattedWorkEndTime = endTime.toISOString();
       }
@@ -210,7 +210,7 @@ export const fetchMonthlyLogs = query({
         q
           .eq("userId", userId)
           .gte("_creationTime", startDate.getTime())
-          .lte("_creationTime", endDate.getTime())
+          .lte("_creationTime", endDate.getTime()),
       )
       .collect();
 
@@ -253,7 +253,7 @@ export const fetchMonthlyLogs = query({
       const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, "0");
       const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(
         2,
-        "0"
+        "0",
       );
       const seconds = String(totalSeconds % 60).padStart(2, "0");
       return `${hours}:${minutes}:${seconds}`;
@@ -296,7 +296,7 @@ export const fetchMonthlyLogs = query({
             const logExit = log.logTime;
             const nextLog = logEntries.find(
               (entry) =>
-                entry.logTime > log.logTime && entry.logStatus === "enter"
+                entry.logTime > log.logTime && entry.logStatus === "enter",
             );
             if (nextLog) {
               const logEnter = nextLog.logTime;
