@@ -1,5 +1,5 @@
 "use client";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { type UserData, useStore } from "@/stores/store";
