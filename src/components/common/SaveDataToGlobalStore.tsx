@@ -1,4 +1,5 @@
 "use client";
+import Cookies from 'js-cookie'
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { type UserData, useStore } from "@/stores/store";
@@ -34,7 +35,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
       themeMode: savedTheme || themeMode,
     });
     // Setting theme cookie for proper theme persistence
-    document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
+    Cookies.set("theme", themeMode, { expires: 365, path: "/" });
 
     setIsFirstEffectCompleted(true);
   }, [logDataServer, themeMode, userDataServer]);
@@ -51,7 +52,7 @@ export const SaveDataToGlobalStore: React.FC<SaveDataToGlobalStoreProps> = ({
         useStore.setState({ isTimeZoneModalOpen: true });
       localStorage.setItem("breaklogMode", JSON.stringify(breaklogMode));
       localStorage.setItem("thememode", themeMode);
-      document.cookie = `theme=${themeMode}; path=/; max-age=31536000`;
+      Cookies.set("theme", themeMode, { expires: 365, path: "/" });
       useStore.setState({
         initialPageLoadDone: true,
       });
