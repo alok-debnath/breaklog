@@ -119,10 +119,12 @@ export const submitLog = mutation({
       } else {
         const lastLogStatus =
           logDoc.logEntries[logDoc.logEntries.length - 1].logStatus;
-        logToBeSaved =
-          lastLogStatus === "enter" || lastLogStatus === "day start"
-            ? "exit"
-            : "enter";
+        if (lastLogStatus !== "day end") {
+          logToBeSaved =
+            lastLogStatus === "enter" || lastLogStatus === "day start"
+              ? "exit"
+              : "enter";
+        }
       }
     } else if (args.logtype === "day end") {
       logToBeSaved = "day end";
