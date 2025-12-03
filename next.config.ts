@@ -4,7 +4,13 @@ const nextConfig: NextConfig = {
   /* config options here */
   allowedDevOrigins: ["127.0.0.1", "local-origin.dev", "*.local-origin.dev"],
   images: {
-    remotePatterns: [new URL("https://lh3.googleusercontent.com/**")],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

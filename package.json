@@ -2,11 +2,10 @@
   "name": "breaklog",
   "version": "2.5.0",
   "private": true,
-  "packageManager": "pnpm@10.24.0",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "bun --bun next dev",
+    "build": "bun --bun next build",
+    "start": "bun --bun next start",
     "lint": "biome check",
     "format": "biome format --write",
     "prepare": "husky"
@@ -64,19 +63,6 @@
     "typescript": "5.9.3"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx,json,md,css,scss,html}": ["pnpm biome format --write"]
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@tailwindcss/oxide",
-      "@vercel/speed-insights",
-      "esbuild",
-      "sharp",
-      "unrs-resolver"
-    ],
-    "overrides": {
-      "@types/react": "19.2.7",
-      "@types/react-dom": "19.2.3"
-    }
+    "*.{js,ts,jsx,tsx,json,md,css,scss,html}": ["npx biome format --write"]
   }
 }
