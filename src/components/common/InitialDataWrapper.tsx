@@ -12,7 +12,7 @@ function normalizeToken(value: string | undefined | null) {
 export default async function InitialDataWrapper() {
   try {
     // 1. Try server-side auth token
-    const rawToken = null;
+    const rawToken = await getToken();
     const tokenFromAuth = normalizeToken(rawToken);
 
     let finalToken = tokenFromAuth;
