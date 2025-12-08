@@ -25,6 +25,10 @@ export const createAuth = (
     },
     baseURL: siteUrl,
     database: authComponent.adapter(ctx),
+    // Extend session cookie lifetime to 30 days
+    session: {
+      expiresIn: 60 * 60 * 24 * 30,
+    },
     // Configure simple, non-verified email/password to get started
     emailAndPassword: {
       enabled: true,
@@ -48,7 +52,8 @@ export const createAuth = (
     },
     plugins: [
       // The Convex plugin is required for Convex compatibility
-      convex(),
+      // Keep Convex JWT cookie for 7 days
+      convex({ jwtExpirationSeconds: 60 * 60 * 24 * 7 }),
     ],
   });
 };
