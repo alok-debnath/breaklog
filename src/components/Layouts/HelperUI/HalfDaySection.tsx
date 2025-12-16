@@ -1,9 +1,9 @@
-import axios from "axios";
+import { useMutation } from "convex/react";
 import { CheckCircle2, Clock, Undo2 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 import { handleError } from "@/components/common/CommonCodeBlocks";
 import { Button } from "@/components/ui/button";
+import { api } from "@/convex/_generated/api";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/stores/store";
 
@@ -39,7 +39,7 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
   const { initialPageLoadDone, loading } = useStore();
   const pathname = usePathname();
 
-  const [isHalfDayState, setIsHalfDayState] = useState(null);
+  const submitLogMutation = useMutation(api.user.submitLog.submitLog);
 
   const simpleLogEntry = async (value: string) => {
     if (!isClient || !initialPageLoadDone) return;
@@ -49,33 +49,25 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
         date = getCurrentDateInTimezone(defaultTimeZone);
       }
 
-      const values = {
+      useStore.setState(() => ({ loading: true }));
+      await submitLogMutation({
         logtype: value,
         date: date,
-      };
-
-      useStore.setState(() => ({ loading: true }));
-      const res = await axios.post(
-        "/api/users/submitlog/submitHalfday",
-        values,
-      );
-      setIsHalfDayState(res.data.fetchedLog.workdata.isHalfDay);
+      });
       useStore.setState(() => ({ loading: false }));
-    } catch (error: any) {
+    } catch (error) {
       handleError({ error: error, router: router });
     }
   };
-
-  const isHalfDayActive = isHalfDayState !== null ? isHalfDayState : isHalfDay;
 
   return (
     <>
       <div
         className={cn(
-          "relative overflow-hidden rounded-t-2xl border border-b-0 p-6 shadow-sm backdrop-blur-sm transition-all duration-500",
-          isHalfDayActive
-            ? "border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-100 dark:border-emerald-800/50 dark:from-emerald-950/50 dark:to-green-900/30"
-            : "border-amber-200 bg-gradient-to-br from-amber-50 to-orange-100 dark:border-amber-800/50 dark:from-amber-950/50 dark:to-orange-900/30",
+          "relative overflow-hidden rounded-t-2xl border border-b-0 p-4 shadow-sm backdrop-blur-sm transition-all duration-500 -mt-6",
+          isHalfDay
+            ? "border-emerald-200 bg-linear-to-br from-emerald-50 to-green-100 dark:border-emerald-800/50 dark:from-emerald-950/50 dark:to-green-900/30"
+            : "border-amber-200 bg-linear-to-br from-amber-50 to-orange-100 dark:border-amber-800/50 dark:from-amber-950/50 dark:to-orange-900/30",
         )}
       >
         {/* Background decoration */}
@@ -83,61 +75,63 @@ const HalfDaySection: React.FC<HalfDaySectionProps> = ({
           <div
             className={cn(
               "absolute -top-4 -right-4 h-24 w-24 rounded-full",
-              isHalfDayActive ? "bg-emerald-400" : "bg-amber-400",
+              isHalfDay ? "bg-emerald-400" : "bg-amber-400",
             )}
           />
           <div
             className={cn(
               "absolute -bottom-6 -left-6 h-32 w-32 rounded-full",
-              isHalfDayActive ? "bg-green-400" : "bg-orange-400",
+              isHalfDay ? "bg-green-400" : "bg-orange-400",
             )}
           />
         </div>
 
         <div className="relative flex items-center justify-between gap-4">
           <div className="flex flex-1 items-start gap-3">
-            <div
-              className={cn(
-                "flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-300",
-                isHalfDayActive
-                  ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400"
-                  : "bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400",
-              )}
-            >
-              {isHalfDayActive ? (
-                <CheckCircle2 className="h-5 w-5" />
-              ) : (
-                <Clock className="h-5 w-5" />
-              )}
-            </div>
             <div className="min-w-0 flex-1">
-              <h3
-                className={cn(
-                  "mb-1 text-base leading-tight font-semibold",
-                  isHalfDayActive
-                    ? "text-emerald-800 dark:text-emerald-200"
-                    : "text-amber-800 dark:text-amber-200",
-                )}
-              >
-                {!isHalfDayActive ? "Half Day Option" : "Half Day Marked"}
-              </h3>
+              <div className="flex items-center gap-2 mb-1">
+                <div
+                  className={cn(
+                    "flex h-6 w-6 items-center justify-center rounded-full transition-colors duration-300",
+                    isHalfDay
+                      ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400"
+                      : "bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400",
+                  )}
+                >
+                  {isHalfDay ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : (
+                    <Clock className="h-4 w-4" />
+                  )}
+                </div>
+                <h3
+                  className={cn(
+                    "text-base leading-tight font-semibold",
+                    isHalfDay
+                      ? "text-emerald-800 dark:text-emerald-200"
+                      : "text-amber-800 dark:text-amber-200",
+                  )}
+                >
+                  {!isHalfDay ? "Half Day Option" : "Half Day Marked"}
+                </h3>
+              </div>
               <p
                 className={cn(
                   "text-sm leading-relaxed",
-                  isHalfDayActive
+                  isHalfDay
                     ? "text-emerald-700 dark:text-emerald-300"
                     : "text-amber-700 dark:text-amber-300",
                 )}
               >
-                {!isHalfDayActive
+                {!isHalfDay
                   ? "Mark this log as a half day if you worked reduced hours"
                   : "This log has been successfully marked as a half day"}
               </p>
             </div>
           </div>
 
-          <div className="flex-shrink-0">
-            {!isHalfDayActive ? (
+          <div className="shrink-0">
+            {!isHalfDay ? (
               <Button
                 size="sm"
                 onClick={() => simpleLogEntry("mark-as-half-day")}

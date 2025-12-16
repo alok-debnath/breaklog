@@ -1,37 +1,41 @@
+"use client";
+import { useQuery } from "convex/react";
+import { useParams } from "next/navigation";
 import LogsCard from "@/components/Layouts/LogsCard";
-import fetchRscData from "@/helpers/fetchRscData";
+import { api } from "@/convex/_generated/api";
+import { useStore } from "@/stores/store";
 
-export default async function SpecificDayLog({
-  params,
-}: {
-  params: Promise<{ date: string }>;
-}) {
-  const { date } = await params; // Resolve the params promise
-  const { fetchDynamicLogDataRsc, fetchProfileDataRsc } = fetchRscData();
+export default function SpecificDayLog() {
+  const params = useParams();
+  const date = params.date as string;
 
-  // Fetch logs data with the specific date
-  const {
-    logs,
-    workData,
-    errorMessage: logsError,
-  } = await fetchDynamicLogDataRsc(date);
-  // Fetch profile data independently
-  const { userData, errorMessage: profileError } = await fetchProfileDataRsc();
+  const logsData = useQuery(api.user.fetchLogs.fetchLogs, { date });
+  const { userData } = useStore();
+
+  const logs = (logsData?.data || []).map((log) => ({
+    ...log,
+    log_time: new Date(log.log_time),
+  }));
+  const workData = logsData?.workdata;
+
+  if (!workData || !userData) {
+    return <div>Loading...</div>;
+  }
 
   const isWorkDone =
     workData.unformattedWorkDone >=
     (userData.daily_work_required || 0) * 3600000;
 
-  const isWorkDoneSuccess = isWorkDone && userData.daily_work_required > 0;
+  const isWorkDoneSuccess =
+    isWorkDone && (userData.daily_work_required || 0) > 0;
 
   return (
-    <div className="from-background via-background/95 to-muted/20 bg-gradient-to-br">
+    <div className="from-background via-background/95 to-muted/20 bg-linear-to-br">
       <LogsCard
         page="history"
         isWorkDoneSuccess={isWorkDoneSuccess}
-        logsServer={logs} // logs fetched from server
-        workDataServer={workData} // workData fetched from server
-        // errorMessage={errorMessage} // Uncomment if you want to handle error messages
+        logsServer={logs}
+        workDataServer={workData}
       />
     </div>
   );

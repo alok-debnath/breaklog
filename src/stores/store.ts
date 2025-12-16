@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 export interface WorkData {
   firstLogStatus: string | null;
-  lastLogStatus: string;
+  lastLogStatus: string | "";
   breakTime: string;
   workDone: string;
   unformattedWorkDone: number;
@@ -18,13 +18,16 @@ interface summary {
   numberOfDays: string;
   expectedWorkHours: number;
   halfDayCount: number;
+  monthStart: string;
+  monthEnd: string;
   // actualWorkHours: string;
 }
 export interface UserData {
-  username: string;
-  daily_work_required: number;
+  username: string | undefined;
+  daily_work_required: number | undefined;
   log_type: string;
-  default_time_zone: string;
+  default_time_zone: string | undefined;
+  user_image: string | null;
 }
 interface MonthLogData {
   date: string;
@@ -34,11 +37,11 @@ interface MonthLogData {
   formattedWorkDone: string;
   isHalfDay: boolean;
 }
-interface LogEditData {
+export interface LogEditData {
   log_id: string;
-  log_dateTime: string;
-  log_dateTime_ahead: string;
-  log_dateTime_behind: string;
+  log_dateTime: Date | null;
+  log_dateTime_ahead: Date | null;
+  log_dateTime_behind: Date | null;
 }
 interface DialogModalData {
   modal_body: string;
@@ -59,7 +62,7 @@ interface BreakData {
 
 export interface LogsData {
   id: string;
-  log_time: string;
+  log_time: Date;
   log_status: string;
 }
 
@@ -72,7 +75,7 @@ interface StoreState {
   breaklogMode: boolean;
   workData: WorkData;
   loading: boolean;
-  currBreak: null | Date; // Change 'null' to 'null | Date' for date type
+  currBreak: null | number; // Change to number (timestamp) instead of Date
   breaks: BreakData;
   logEditStore: LogEditData;
   dialogModal: DialogModalData;
@@ -81,9 +84,10 @@ interface StoreState {
   isSettingsModalOpen: boolean;
   isTimeEditModalOpen: boolean;
   isTimeZoneModalOpen: boolean;
+  isPasswordChangeModalOpen: boolean;
 }
 
-export const useStore = create<StoreState>((set) => ({
+export const useStore = create<StoreState>((_set) => ({
   themeMode: "",
   logs: [],
   monthLogs: [
@@ -101,6 +105,7 @@ export const useStore = create<StoreState>((set) => ({
     daily_work_required: 0,
     log_type: "",
     default_time_zone: "",
+    user_image: "",
   },
   summary: {
     totalWorkDone: 0,
@@ -109,6 +114,8 @@ export const useStore = create<StoreState>((set) => ({
     numberOfDays: "",
     expectedWorkHours: 0,
     halfDayCount: 0,
+    monthStart: "",
+    monthEnd: "",
     // actualWorkHours: "",
   },
   breaklogMode: true,
@@ -131,9 +138,9 @@ export const useStore = create<StoreState>((set) => ({
   },
   logEditStore: {
     log_id: "",
-    log_dateTime: "",
-    log_dateTime_ahead: "",
-    log_dateTime_behind: "",
+    log_dateTime: null,
+    log_dateTime_ahead: null,
+    log_dateTime_behind: null,
   },
   dialogModal: {
     modal_body: "",
@@ -146,4 +153,5 @@ export const useStore = create<StoreState>((set) => ({
   isSettingsModalOpen: false,
   isTimeEditModalOpen: false,
   isTimeZoneModalOpen: false,
+  isPasswordChangeModalOpen: false,
 }));

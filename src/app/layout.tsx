@@ -9,7 +9,7 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BreakLog v4",
+  title: "BreakLog",
   description:
     "A place to log your work activities for better time management.",
 };
@@ -21,19 +21,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {/* Providers is a Client Component, so it’s the only place
+      <body suppressHydrationWarning className={inter.className}>
+        {/* Providers is a Client Component, so it’s the only place
               you use SessionProvider / React Context */}
-          <Providers>{children}</Providers>
-          <Analytics />
-          <SpeedInsights />
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            <Analytics />
+            <SpeedInsights />
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

@@ -1,23 +1,52 @@
 "use client";
-import axios from "axios";
+import { useMutation } from "convex/react";
 import { useRouter } from "next/navigation";
-import { handleError } from "@/components/common/CommonCodeBlocks";
+import { useEffect, useRef } from "react";
+import {
+  handleError,
+  handleSuccessToast,
+} from "@/components/common/CommonCodeBlocks";
 import BottomNavbar from "@/components/Layouts/BottomNavbar";
 import LogsCard from "@/components/Layouts/LogsCard";
 import TimeEditModal from "@/components/Layouts/Modals/TimeEditModal";
+import { api } from "@/convex/_generated/api";
 import useConfirm from "@/hooks/useConfirm";
 import useOnScreen from "@/hooks/useOnScreen";
 import { useStore } from "@/stores/store";
-import { saveFetchedLogsToStore } from "@/utils/saveFetchedLogsToStore";
 
 const Index = () => {
-  const { workData, userData, initialPageLoadDone } = useStore();
+  const { workData, userData, breaklogMode } = useStore();
   const router = useRouter();
   const { confirm } = useConfirm();
   const isClient = typeof window !== "undefined";
+  const submitLogMutation = useMutation(api.user.submitLog.submitLog);
 
-  const logEntry = async (value: string) => {
-    if (!isClient || !initialPageLoadDone) return;
+  // Store pending log entries if mutation is not ready
+  const pendingLogRef = useRef<{ value: string; time: number } | null>(null);
+
+  useEffect(() => {
+    // If there is a pending log, trigger it once mutation is ready
+    if (userData.username && pendingLogRef.current) {
+      const { value, time } = pendingLogRef.current;
+      pendingLogRef.current = null;
+
+      let finalValue = value;
+      if (["break log", "day log"].includes(value)) {
+        finalValue = breaklogMode ? "break log" : "day log";
+      }
+      logEntry(finalValue, time);
+    }
+  }, [userData.username]);
+
+  const logEntry = async (value: string, customLogTime?: number) => {
+    if (isClient && !userData.username) {
+      // Store the pending log entry if mutation is not ready
+      pendingLogRef.current = { value, time: Date.now() };
+      handleSuccessToast({
+        message: "Offline, Log will be submitted automatically once online",
+      });
+      return;
+    }
     try {
       if (value === "undo log") {
         const isConfirmed = await confirm({
@@ -33,13 +62,14 @@ const Index = () => {
         }
       }
 
-      const values = {
-        logtype: value,
-      };
-
       useStore.setState(() => ({ loading: true }));
-      const res = await axios.post("/api/users/submitlog", values);
-      saveFetchedLogsToStore(res.data.fetchedLog);
+      const res = await submitLogMutation({ logtype: value, customLogTime });
+      if (customLogTime || res.message !== "Log submitted successfully") {
+        handleSuccessToast({
+          message: res.message,
+        });
+      }
+      useStore.setState(() => ({ loading: false }));
     } catch (error: unknown) {
       handleError({ error: error, router: router });
     }
@@ -54,7 +84,7 @@ const Index = () => {
   const [ref, isIntersecting] = useOnScreen(-100);
 
   return (
-    <div className="from-background via-background/95 to-muted/20 bg-gradient-to-br">
+    <div className="from-background via-background/95 to-muted/20 bg-linear-to-br">
       <LogsCard
         isWorkDoneSuccess={isWorkDoneSuccess}
         isIntersecting={isIntersecting}

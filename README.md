@@ -58,13 +58,13 @@ To start using BreakLog, follow these steps:
 3. Install dependencies:
 
    ```bash
-   pnpm install
+   bun install
    ```
 
 4. Run the development server:
 
    ```bash
-   pnpm run dev
+   bun run dev
    ```
 
 5. Open http://localhost:3000 with your web browser to use BreakLog.
